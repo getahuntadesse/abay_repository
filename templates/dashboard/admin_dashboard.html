@@ -1,0 +1,268 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}Admin Dashboard - Abrehot Library{% endblock %}
+
+{% block extra_css %}
+<style>
+    :root {
+        --primary-gold: #DAA520;
+        --primary-gold-dark: #B8860B;
+        --primary-dark: #2C2C2C;
+        --primary-darker: #1A1A1A;
+        --primary-gray: #4A4A4A;
+    }
+
+    .dashboard-header {
+        background: linear-gradient(135deg, var(--primary-darker) 0%, var(--primary-dark) 100%);
+        border-radius: 20px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .stat-card {
+        background: white;
+        border-radius: 16px;
+        padding: 1.5rem;
+        text-align: center;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        border-bottom: 4px solid var(--primary-gold);
+        transition: all 0.3s ease;
+        height: 100%;
+    }
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+    }
+    .stat-icon {
+        font-size: 2.5rem;
+        color: var(--primary-gold);
+        margin-bottom: 1rem;
+    }
+    .stat-number {
+        font-size: 2rem;
+        font-weight: 800;
+        color: var(--primary-darker);
+        margin-bottom: 0.25rem;
+    }
+    .stat-label {
+        color: var(--primary-gray);
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+
+    .dashboard-card {
+        background: white;
+        border-radius: 16px;
+        padding: 1.5rem;
+        text-align: center;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+        height: 100%;
+    }
+    .dashboard-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+    }
+    .card-icon {
+        width: 70px;
+        height: 70px;
+        background: linear-gradient(135deg, var(--primary-darker), var(--primary-dark));
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+    }
+    .card-icon i {
+        font-size: 2rem;
+        color: var(--primary-gold);
+    }
+    .dashboard-card h4 {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: var(--primary-darker);
+        margin-bottom: 0.5rem;
+    }
+    .dashboard-card p {
+        color: var(--primary-gray);
+        font-size: 0.85rem;
+        margin-bottom: 1rem;
+    }
+
+    .btn-gold {
+        background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark));
+        color: var(--primary-darker);
+        border: none;
+        font-weight: 600;
+        padding: 8px 20px;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+    }
+    .btn-gold:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(218, 165, 32, 0.4);
+        color: var(--primary-darker);
+    }
+    .btn-outline-gold {
+        border: 2px solid var(--primary-gold);
+        color: var(--primary-gold);
+        background: transparent;
+        font-weight: 600;
+        padding: 8px 20px;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+    }
+    .btn-outline-gold:hover {
+        background: var(--primary-gold);
+        color: var(--primary-darker);
+        transform: translateY(-2px);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Header -->
+    <div class="dashboard-header">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="text-white mb-2">
+                    <i class="fas fa-crown me-2" style="color: var(--primary-gold);"></i>
+                    Admin Dashboard
+                </h1>
+                <p class="text-white-50 mb-0">
+                    <i class="fas fa-user-shield me-2"></i>
+                    Welcome back, {{ user.full_name }}. You have full control over Abrehot Library.
+                </p>
+            </div>
+            <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                <a href="/admin/" class="btn btn-gold">
+                    <i class="fas fa-cogs me-2"></i> Full Admin Panel
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Row - Fetching from Database -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-users"></i></div>
+                <div class="stat-number">{{ total_users|default:0|intcomma }}</div>
+                <div class="stat-label">Total Users</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-user-graduate"></i></div>
+                <div class="stat-number">{{ total_authors|default:0|intcomma }}</div>
+                <div class="stat-label">Total Authors</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-book-reader"></i></div>
+                <div class="stat-number">{{ total_readers|default:0|intcomma }}</div>
+                <div class="stat-label">Total Readers</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-book"></i></div>
+                <div class="stat-number">{{ total_books|default:0|intcomma }}</div>
+                <div class="stat-label">Total Books</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Second Statistics Row -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+                <div class="stat-number">{{ published_books|default:0|intcomma }}</div>
+                <div class="stat-label">Published Books</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                <div class="stat-number">{{ pending_review|default:0|intcomma }}</div>
+                <div class="stat-label">Pending Review</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-download"></i></div>
+                <div class="stat-number">{{ total_downloads|default:0|intcomma }}</div>
+                <div class="stat-label">Total Downloads</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-money-bill-wave"></i></div>
+                <div class="stat-number">{{ total_sales|floatformat:0|default:0|intcomma }} ETB</div>
+                <div class="stat-label">Total Revenue</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Management Cards Row 1 -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="dashboard-card">
+                <div class="card-icon"><i class="fas fa-users-cog"></i></div>
+                <h4>User Management</h4>
+                <p>Manage all platform users, roles, and permissions</p>
+                <a href="/admin/accounts/customuser/" class="btn btn-outline-gold btn-sm">Manage Users</a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="dashboard-card">
+                <div class="card-icon"><i class="fas fa-book-open"></i></div>
+                <h4>Book Management</h4>
+                <p>Add, edit, review, and manage book inventory</p>
+                <a href="/admin/books/book/" class="btn btn-outline-gold btn-sm">Manage Books</a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="dashboard-card">
+                <div class="card-icon"><i class="fas fa-tags"></i></div>
+                <h4>Categories & Genres</h4>
+                <p>Manage book categories and genres</p>
+                <a href="/admin/books/genre/" class="btn btn-outline-gold btn-sm">Manage Genres</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Management Cards Row 2 -->
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="dashboard-card">
+                <div class="card-icon"><i class="fas fa-chart-line"></i></div>
+                <h4>Analytics & Reports</h4>
+                <p>View platform analytics and reports</p>
+                <a href="{% url 'admin_analytics' %}" class="btn btn-outline-gold btn-sm">View Reports</a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="dashboard-card">
+                <div class="card-icon"><i class="fas fa-flag-checkered"></i></div>
+                <h4>Content Moderation</h4>
+                <p>Review flagged content and reports</p>
+                <a href="/admin/reviews/qualityreview/" class="btn btn-outline-gold btn-sm">Moderation Queue</a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="dashboard-card">
+                <div class="card-icon"><i class="fas fa-money-bill-wave"></i></div>
+                <h4>Payment Management</h4>
+                <p>Manage transactions and payments</p>
+                <a href="/admin/payments/purchase/" class="btn btn-outline-gold btn-sm">Manage Payments</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

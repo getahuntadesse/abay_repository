@@ -1,0 +1,851 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Author Registration | Abrehot Library{% endblock %}
+
+{% block extra_css %}
+<style>
+    :root {
+        --primary-gold: #DAA520;
+        --primary-gold-dark: #B8860B;
+        --primary-gold-light: #F5D061;
+        --primary-dark: #2C2C2C;
+        --primary-darker: #1A1A1A;
+        --primary-gray: #4A4A4A;
+        --primary-gray-light: #6C6C6C;
+    }
+
+    .register-container {
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+
+    .form-card {
+        background: white;
+        border-radius: 24px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+
+    .form-header {
+        background: linear-gradient(135deg, var(--primary-darker), var(--primary-dark));
+        padding: 2rem;
+        text-align: center;
+        color: white;
+    }
+
+    .form-header i {
+        font-size: 3rem;
+        color: var(--primary-gold);
+        margin-bottom: 1rem;
+    }
+
+    .form-header h2 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-body {
+        padding: 2rem;
+    }
+
+    .section-title {
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: var(--primary-darker);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 1.25rem;
+        border-bottom: 2px solid var(--primary-gold);
+        display: inline-block;
+        padding-bottom: 0.5rem;
+    }
+
+    .requirements {
+        background: #F8F9FA;
+        border-radius: 16px;
+        padding: 1.25rem;
+        margin-top: 1.5rem;
+        border-left: 4px solid var(--primary-gold);
+    }
+
+    .requirements ul {
+        margin-bottom: 0;
+        padding-left: 1.2rem;
+    }
+
+    .requirements li {
+        margin-bottom: 0.5rem;
+    }
+
+    .btn-register {
+        background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark));
+        color: var(--primary-darker);
+        border: none;
+        padding: 14px;
+        border-radius: 12px;
+        font-weight: 700;
+        width: 100%;
+        transition: all 0.3s ease;
+    }
+
+    .btn-register:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(218, 165, 32, 0.3);
+        color: var(--primary-darker);
+    }
+
+    .btn-register:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    .btn-verify {
+        background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark));
+        color: var(--primary-darker);
+        border: none;
+        padding: 0.6rem 1.5rem;
+        border-radius: 10px;
+        font-weight: 600;
+        white-space: nowrap;
+        transition: all 0.3s;
+    }
+
+    .btn-verify:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(218, 165, 32, 0.3);
+    }
+
+    .btn-verify-verified {
+        background: #28a745;
+        color: white;
+    }
+
+    .btn-verify-verified:hover {
+        background: #1e7e34;
+    }
+
+    .national-id-group {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+    }
+
+    .national-id-group .form-control {
+        flex: 1;
+        font-family: monospace;
+        font-size: 1rem;
+        letter-spacing: 1px;
+    }
+
+    .verified-badge {
+        display: inline-block;
+        background: #28a745;
+        color: white;
+        padding: 0.2rem 0.7rem;
+        border-radius: 20px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        margin-left: 0.75rem;
+        vertical-align: middle;
+    }
+
+    .info-fetched {
+        background: #E8F5E9;
+        border-left: 4px solid #4CAF50;
+        padding: 1rem;
+        border-radius: 12px;
+        margin-top: 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    .field-disabled {
+        background-color: #f8f9fa !important;
+        border-color: #dee2e6 !important;
+        color: #6c757d;
+        cursor: not-allowed;
+    }
+
+    .password-strength {
+        height: 4px;
+        margin-top: 0.5rem;
+        border-radius: 2px;
+        background: #e9ecef;
+    }
+
+    .strength-weak { background: #dc3545; width: 25%; }
+    .strength-medium { background: #ffc107; width: 50%; }
+    .strength-strong { background: #28a745; width: 75%; }
+    .strength-very-strong { background: #28a745; width: 100%; }
+
+    .password-match-success {
+        color: #28a745;
+        font-size: 0.75rem;
+        margin-top: 0.25rem;
+    }
+
+    .password-match-error {
+        color: #dc3545;
+        font-size: 0.75rem;
+        margin-top: 0.25rem;
+    }
+
+    .error-message {
+        color: #dc3545;
+        font-size: 0.75rem;
+        margin-top: 0.25rem;
+    }
+
+    .form-control.error {
+        border-color: #dc3545;
+    }
+
+    .form-control:focus {
+        border-color: var(--primary-gold);
+        box-shadow: 0 0 0 0.2rem rgba(218, 165, 32, 0.25);
+    }
+
+    .btn-gold {
+        background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark));
+        color: var(--primary-darker);
+        border: none;
+        border-radius: 8px;
+        padding: 8px 24px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-gold:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(218, 165, 32, 0.3);
+    }
+
+    .terms-link {
+        color: var(--primary-gold);
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .terms-link:hover {
+        text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+        .form-body {
+            padding: 1.5rem;
+        }
+        .national-id-group {
+            flex-direction: column;
+        }
+        .btn-verify {
+            width: 100%;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <div class="register-container">
+        <div class="form-card">
+            <div class="form-header">
+                <i class="fas fa-pen-fancy"></i>
+                <h2>Become an Author</h2>
+                <p class="mb-0 opacity-75">Join our community of Ethiopian authors and share your stories with the world.</p>
+            </div>
+            <div class="form-body">
+                <form method="POST" novalidate id="registerForm">
+                    {% csrf_token %}
+
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {% for error in form.non_field_errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <!-- Display form errors at the top -->
+                    {% if form.errors %}
+                        <div class="alert alert-danger">
+                            <strong>Please correct the following errors:</strong>
+                            <ul>
+                                {% for field, errors in form.errors.items %}
+                                    {% for error in errors %}
+                                        <li>{{ field|title }}: {{ error }}</li>
+                                    {% endfor %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+
+                    <!-- Fayda National ID Verification Section -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">
+                            <i class="fas fa-id-card me-2"></i>Fayda National ID
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="national-id-group">
+                            <input type="text"
+                                   class="form-control"
+                                   id="national_id"
+                                   name="national_id"
+                                   placeholder="1234-5678-9012-3456"
+                                   maxlength="19"
+                                   autocomplete="off"
+                                   value="{{ form.national_id.value|default:'' }}"
+                                   required>
+                            <button type="button" class="btn-verify" id="verifyBtn">
+                                <i class="fas fa-check-circle me-1"></i> Verify with Fayda
+                            </button>
+                        </div>
+                        <small class="text-muted">
+                            <i class="fas fa-info-circle me-1"></i>
+                            Enter your 16-digit Ethiopian National ID (Fayda) for verification. This is required for author registration.
+                        </small>
+                        <div id="verificationStatus" class="mt-2"></div>
+                    </div>
+
+                    <!-- Verified ID Information (Auto-populated) -->
+                    <div id="verifiedInfo" style="display: none;" class="info-fetched mb-4">
+                        <strong><i class="fas fa-check-circle me-1"></i> Verified Fayda Identity</strong>
+                        <div id="verifiedInfoContent" class="mt-2 small"></div>
+                    </div>
+
+                    <!-- Personal Information Section -->
+                    <div class="mb-4">
+                        <h6 class="section-title"><i class="fas fa-user me-2"></i>Personal Information</h6>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">
+                                Full Name <span class="text-danger">*</span>
+                                <span id="verifiedBadge" class="verified-badge" style="display: none;"><i class="fas fa-check"></i> Verified</span>
+                            </label>
+                            <input type="text" name="full_name" id="full_name" class="form-control field-disabled" readonly value="{{ form.full_name.value|default:'' }}">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">
+                                Username <span class="text-danger">*</span>
+                            </label>
+                            <input type="text" name="username" id="username" class="form-control" value="{{ form.username.value|default:'' }}" required>
+                            <small class="text-muted">Letters, digits and @/./+/-/_ only.</small>
+                            <div id="usernameError" class="error-message"></div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">
+                                Email Address <span class="text-danger">*</span>
+                            </label>
+                            <input type="email" name="email" id="email" class="form-control" value="{{ form.email.value|default:'' }}" required>
+                            <div id="emailError" class="error-message"></div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">
+                                Phone Number <span class="text-danger">*</span>
+                            </label>
+                            <input type="tel" name="phone" id="phone" class="form-control" placeholder="09XXXXXXXX" value="{{ form.phone.value|default:'' }}" required>
+                            <small class="text-muted">Format: 09XXXXXXXX</small>
+                            <div id="phoneError" class="error-message"></div>
+                        </div>
+                    </div>
+
+                    <!-- Demographics from Fayda (Read-only) -->
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Date of Birth</label>
+                            <input type="date" class="form-control field-disabled" id="date_of_birth" readonly>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Gender</label>
+                            <input type="text" class="form-control field-disabled" id="gender" readonly>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label fw-bold">Region</label>
+                            <input type="text" class="form-control field-disabled" id="region" readonly>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label fw-bold">Zone / Subcity</label>
+                            <input type="text" class="form-control field-disabled" id="zone" readonly>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label fw-bold">Woreda</label>
+                            <input type="text" class="form-control field-disabled" id="woreda" readonly>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Address</label>
+                        <textarea class="form-control field-disabled" id="address" rows="2" readonly></textarea>
+                    </div>
+
+                    <!-- Author Profile Information -->
+                    <div class="mb-4 mt-4">
+                        <h6 class="section-title"><i class="fas fa-pen-nib me-2"></i>Author Profile</h6>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Bio / About the Author</label>
+                        <textarea name="bio" id="bio" class="form-control" rows="4" placeholder="Tell us about yourself, your writing journey, and what inspires you...">{{ form.bio.value|default:'' }}</textarea>
+                        <small class="text-muted">This will be displayed on your author page.</small>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Author Pseudonym</label>
+                            <input type="text" name="author_pseudonym" id="author_pseudonym" class="form-control" value="{{ form.author_pseudonym.value|default:'' }}" placeholder="Pen name (optional)">
+                            <small class="text-muted">If you want to publish under a different name</small>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Website / Blog</label>
+                            <input type="url" name="website" id="website" class="form-control" value="{{ form.website.value|default:'' }}" placeholder="https://yourwebsite.com">
+                        </div>
+                    </div>
+
+                    <!-- Banking Information -->
+                    <div class="mb-4 mt-4">
+                        <h6 class="section-title"><i class="fas fa-university me-2"></i>Banking Information</h6>
+                        <small class="text-muted">For royalty payments</small>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label fw-bold">Bank Name <span class="text-danger">*</span></label>
+                            <input type="text" name="bank_name" id="bank_name" class="form-control" value="{{ form.bank_name.value|default:'' }}" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label fw-bold">Account Holder Name <span class="text-danger">*</span></label>
+                            <input type="text" name="bank_account_name" id="bank_account_name" class="form-control" value="{{ form.bank_account_name.value|default:'' }}" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label fw-bold">Account Number <span class="text-danger">*</span></label>
+                            <input type="text" name="bank_account_number" id="bank_account_number" class="form-control" value="{{ form.bank_account_number.value|default:'' }}" required>
+                        </div>
+                    </div>
+
+                    <!-- Security Section -->
+                    <div class="mb-4 mt-4">
+                        <h6 class="section-title"><i class="fas fa-lock me-2"></i>Account Security</h6>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">
+                                Password <span class="text-danger">*</span>
+                            </label>
+                            <input type="password" name="password1" id="password" class="form-control" required>
+                            <div id="passwordStrengthBar" class="password-strength"></div>
+                            <small class="text-muted">Minimum 8 characters with uppercase, lowercase, and a number</small>
+                            <div id="passwordError" class="error-message"></div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">
+                                Confirm Password <span class="text-danger">*</span>
+                            </label>
+                            <input type="password" name="password2" id="confirm_password" class="form-control" required>
+                            <div id="passwordMatchMessage" class="password-match-error"></div>
+                        </div>
+                    </div>
+
+                    <!-- Terms and Conditions -->
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" name="agreement_signed" id="agreement_signed" class="form-check-input" required>
+                        <label class="form-check-label" for="agreement_signed">
+                            I agree to the <a href="#" class="terms-link" data-bs-toggle="modal" data-bs-target="#termsModal">Author Terms and Conditions</a>.
+                        </label>
+                    </div>
+
+                    <div class="requirements">
+                        <strong><i class="fas fa-shield-alt me-2"></i>Requirements for Authors:</strong>
+                        <ul class="mt-2 mb-0">
+                            <li><i class="fas fa-check-circle me-2" style="color: var(--primary-gold);"></i> Valid 16-digit Ethiopian Fayda National ID (verified via official API)</li>
+                            <li><i class="fas fa-check-circle me-2" style="color: var(--primary-gold);"></i> You must own the copyright to all content you wish to publish</li>
+                            <li><i class="fas fa-check-circle me-2" style="color: var(--primary-gold);"></i> Agree to our standard royalty (70%) and publishing agreement</li>
+                            <li><i class="fas fa-check-circle me-2" style="color: var(--primary-gold);"></i> Valid Ethiopian bank account for royalty payments</li>
+                        </ul>
+                    </div>
+
+                    <button type="submit" class="btn-register mt-4" id="submitBtn" disabled>
+                        <i class="fas fa-user-plus me-2"></i> Complete Author Registration
+                    </button>
+                </form>
+
+                <hr class="my-4">
+
+                <div class="text-center">
+                    <p class="mb-0">Already have an account? <a href="{% url 'accounts:login' %}" class="terms-link">Sign In</a></p>
+                    <p class="mt-2 mb-0">Prefer to just read? <a href="{% url 'accounts:register_client' %}" class="terms-link">Register as a Reader</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Terms Modal -->
+<div class="modal fade" id="termsModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header" style="background: linear-gradient(135deg, var(--primary-darker), var(--primary-dark)); color: white;">
+                <h5 class="modal-title"><i class="fas fa-file-contract me-2"></i> Author Terms & Publishing Agreement</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <h6>1. Author's Grant of Rights</h6>
+                <p>You retain full copyright of your work. By publishing, you grant Abrehot Library a non-exclusive license to distribute, display, and sell your work through our platform.</p>
+                
+                <h6>2. Royalties & Payments</h6>
+                <p>Authors earn <strong>70% commission</strong> on net sales from their published works. Payments are processed monthly via bank transfer, Telebirr, or Chapa.</p>
+                
+                <h6>3. Content Warranty</h6>
+                <p>You warrant that your work is original, does not infringe any copyright, and complies with Ethiopian laws and our content guidelines.</p>
+                
+                <h6>4. Right to Review & Remove</h6>
+                <p>Abrehot Library reserves the right to review all submissions and remove any content that violates our policies.</p>
+                
+                <h6>5. Data Privacy (Fayda Integration)</h6>
+                <p>Your Fayda ID is used solely for identity verification and will be protected according to our privacy policy.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-gold" data-bs-dismiss="modal">I Understand & Agree</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let isNationalIdVerified = false;
+    let verifiedData = null;
+    let rawNationalIdValue = '';
+
+    // Fayda ID Formatting (xxxx-xxxx-xxxx-xxxx)
+    const nationalIdInput = document.getElementById('national_id');
+    nationalIdInput.addEventListener('input', function(e) {
+        let value = this.value.replace(/\D/g, '');
+        if (value.length > 16) value = value.slice(0, 16);
+        
+        // Store raw value for submission
+        rawNationalIdValue = value;
+        
+        let formatted = '';
+        for (let i = 0; i < value.length; i++) {
+            if (i > 0 && i % 4 === 0) formatted += '-';
+            formatted += value[i];
+        }
+        this.value = formatted;
+
+        if (isNationalIdVerified) {
+            resetVerification();
+        }
+    });
+
+    function resetVerification() {
+        isNationalIdVerified = false;
+        verifiedData = null;
+        rawNationalIdValue = '';
+        document.getElementById('verificationStatus').innerHTML = '';
+        document.getElementById('verifiedInfo').style.display = 'none';
+        document.getElementById('verifiedBadge').style.display = 'none';
+        const verifyBtn = document.getElementById('verifyBtn');
+        verifyBtn.innerHTML = '<i class="fas fa-check-circle me-1"></i> Verify with Fayda';
+        verifyBtn.classList.remove('btn-verify-verified');
+        document.getElementById('submitBtn').disabled = true;
+        
+        // Clear readonly fields
+        document.getElementById('full_name').value = '';
+        document.getElementById('date_of_birth').value = '';
+        document.getElementById('gender').value = '';
+        document.getElementById('region').value = '';
+        document.getElementById('zone').value = '';
+        document.getElementById('woreda').value = '';
+        document.getElementById('address').value = '';
+        
+        // Enable national ID input
+        nationalIdInput.readOnly = false;
+    }
+
+    // Simulated Fayda API Call
+    document.getElementById('verifyBtn').addEventListener('click', async function() {
+        const nationalIdRaw = rawNationalIdValue;
+        if (nationalIdRaw.length !== 16) {
+            showVerificationStatus('error', 'Please enter a valid 16-digit Fayda National ID.');
+            return;
+        }
+
+        const btn = this;
+        const originalHtml = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Contacting Fayda...';
+        btn.disabled = true;
+
+        // Simulate network delay and API response
+        setTimeout(() => {
+            // Basic checksum validation (simulated)
+            if (/^\d+$/.test(nationalIdRaw)) {
+                const lastDigit = parseInt(nationalIdRaw.slice(-1));
+                const gender = lastDigit % 2 === 0 ? 'Female' : 'Male';
+                const nameIndex = parseInt(nationalIdRaw.slice(-4, -2)) % 10;
+                const regionIndex = parseInt(nationalIdRaw.slice(8, 10)) % 13;
+
+                const maleNames = ['Abebe Kebede', 'Alemu Desta', 'Bekele Tadesse', 'Dawit Haile', 'Fikre Mekonnen', 'Girma Assefa', 'Haile Wondimu', 'Kebede Lemma', 'Mekonnen Alemu', 'Solomon Tekle'];
+                const femaleNames = ['Abebech Alemu', 'Alemitu Desta', 'Birtukan Fikre', 'Chaltu Hailu', 'Dinkinesh Kebede', 'Eden Mekonnen', 'Frehiwot Assefa', 'Genet Tadesse', 'Hiwot Wondimu', 'Kalkidan Lemma'];
+                const regions = ['Addis Ababa', 'Afar', 'Amhara', 'Benishangul-Gumuz', 'Dire Dawa', 'Gambela', 'Harari', 'Oromia', 'Sidama', 'Somali', 'South West Ethiopia', 'Southern Nations, Nationalities, and Peoples', 'Tigray'];
+                const zones = ['Bole', 'Kirkos', 'Lideta', 'Gulele', 'Arada', 'Addis Ketema', 'Akaky Kaliti', 'Kolfe Keranio', 'Nifas Silk-Lafto', 'Yeka'];
+
+                const fullName = gender === 'Male' ? maleNames[nameIndex] : femaleNames[nameIndex];
+                const region = regions[regionIndex % regions.length];
+                const zone = zones[parseInt(nationalIdRaw.slice(10, 12)) % zones.length];
+                const woreda = `Woreda ${parseInt(nationalIdRaw.slice(12, 14)) % 21 + 1}`;
+
+                verifiedData = {
+                    full_name: fullName,
+                    date_of_birth: '1985-01-15',
+                    gender: gender,
+                    region: region,
+                    zone: zone,
+                    woreda: woreda,
+                    address: `${zone} Subcity, ${woreda}`
+                };
+
+                isNationalIdVerified = true;
+
+                // Auto-fill the form
+                document.getElementById('full_name').value = verifiedData.full_name;
+                document.getElementById('date_of_birth').value = verifiedData.date_of_birth;
+                document.getElementById('gender').value = verifiedData.gender;
+                document.getElementById('region').value = verifiedData.region;
+                document.getElementById('zone').value = verifiedData.zone;
+                document.getElementById('woreda').value = verifiedData.woreda;
+                document.getElementById('address').value = verifiedData.address;
+
+                showVerificationStatus('success', `Fayda verification successful! Welcome, ${verifiedData.full_name}.`);
+                document.getElementById('verifiedInfo').style.display = 'block';
+                document.getElementById('verifiedInfoContent').innerHTML = `
+                    <strong>Name:</strong> ${verifiedData.full_name}<br>
+                    <strong>Fayda ID:</strong> ${nationalIdInput.value}<br>
+                    <strong>Region:</strong> ${verifiedData.region}<br>
+                    <strong>Date of Birth:</strong> ${verifiedData.date_of_birth}
+                `;
+                document.getElementById('verifiedBadge').style.display = 'inline-block';
+                btn.innerHTML = '<i class="fas fa-check-circle me-1"></i> Verified with Fayda ✓';
+                btn.classList.add('btn-verify-verified');
+                nationalIdInput.readOnly = true;
+                checkFormCompletion();
+            } else {
+                showVerificationStatus('error', 'Invalid Fayda ID format. Verification failed. Please check your ID.');
+                isNationalIdVerified = false;
+                btn.innerHTML = originalHtml;
+                btn.classList.remove('btn-verify-verified');
+            }
+            btn.disabled = false;
+        }, 1500);
+    });
+
+    function showVerificationStatus(type, message) {
+        const statusDiv = document.getElementById('verificationStatus');
+        const alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
+        const icon = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-triangle';
+        statusDiv.innerHTML = `
+            <div class="alert ${alertClass} alert-dismissible fade show mb-0 py-2 small" role="alert">
+                <i class="fas ${icon} me-2"></i> ${message}
+                <button type="button" class="btn-close small" data-bs-dismiss="alert"></button>
+            </div>
+        `;
+        setTimeout(() => {
+            if (type === 'success') {
+                const alertDiv = statusDiv.querySelector('.alert');
+                if (alertDiv) alertDiv.classList.remove('show');
+            }
+        }, 5000);
+    }
+
+    // Password strength and matching
+    const passwordInput = document.getElementById('password');
+    const confirmInput = document.getElementById('confirm_password');
+    const strengthBar = document.getElementById('passwordStrengthBar');
+    const matchMsg = document.getElementById('passwordMatchMessage');
+
+    function checkPasswordStrength(pwd) {
+        let strength = 0;
+        if (pwd.length >= 8) strength++;
+        if (pwd.match(/[a-z]/)) strength++;
+        if (pwd.match(/[A-Z]/)) strength++;
+        if (pwd.match(/[0-9]/)) strength++;
+        if (pwd.match(/[$@#&!%*?]/)) strength++;
+
+        strengthBar.className = 'password-strength';
+        if (strength <= 2) strengthBar.classList.add('strength-weak');
+        else if (strength <= 4) strengthBar.classList.add('strength-medium');
+        else strengthBar.classList.add('strength-strong');
+        if (strength === 5) strengthBar.classList.add('strength-very-strong');
+    }
+
+    function checkPasswordMatch() {
+        if (confirmInput.value.length > 0) {
+            if (passwordInput.value === confirmInput.value) {
+                matchMsg.innerHTML = '<i class="fas fa-check-circle me-1"></i> Passwords match';
+                matchMsg.className = 'password-match-success';
+                return true;
+            } else {
+                matchMsg.innerHTML = '<i class="fas fa-times-circle me-1"></i> Passwords do not match';
+                matchMsg.className = 'password-match-error';
+                return false;
+            }
+        }
+        matchMsg.innerHTML = '';
+        return false;
+    }
+
+    passwordInput.addEventListener('input', function() {
+        checkPasswordStrength(this.value);
+        checkPasswordMatch();
+        checkFormCompletion();
+    });
+    
+    confirmInput.addEventListener('input', function() {
+        checkPasswordMatch();
+        checkFormCompletion();
+    });
+
+    // Form validation functions
+    function validateEmail(email) {
+        return /^[^\s@]+@([^\s@.,]+\.)+[^\s@.,]{2,}$/.test(email);
+    }
+
+    function validatePhone(phone) {
+        return /^09\d{8}$/.test(phone);
+    }
+
+    function validateUsername(username) {
+        return /^[a-zA-Z0-9@.+-_]{3,50}$/.test(username);
+    }
+
+    function checkFormCompletion() {
+        const submitBtn = document.getElementById('submitBtn');
+        const username = document.getElementById('username').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        const bankName = document.getElementById('bank_name').value.trim();
+        const bankAccountName = document.getElementById('bank_account_name').value.trim();
+        const bankAccountNumber = document.getElementById('bank_account_number').value.trim();
+        const password = passwordInput.value;
+        const terms = document.getElementById('agreement_signed').checked;
+
+        const isFormValid = isNationalIdVerified &&
+                            validateUsername(username) &&
+                            validateEmail(email) &&
+                            validatePhone(phone) &&
+                            bankName !== '' &&
+                            bankAccountName !== '' &&
+                            bankAccountNumber !== '' &&
+                            password === confirmInput.value &&
+                            password.length >= 8 &&
+                            terms;
+
+        submitBtn.disabled = !isFormValid;
+    }
+
+    // Input listeners for validation
+    document.getElementById('username').addEventListener('input', checkFormCompletion);
+    document.getElementById('email').addEventListener('input', checkFormCompletion);
+    document.getElementById('phone').addEventListener('input', checkFormCompletion);
+    document.getElementById('bank_name').addEventListener('input', checkFormCompletion);
+    document.getElementById('bank_account_name').addEventListener('input', checkFormCompletion);
+    document.getElementById('bank_account_number').addEventListener('input', checkFormCompletion);
+    document.getElementById('agreement_signed').addEventListener('change', checkFormCompletion);
+
+    // Real-time validation feedback
+    document.getElementById('username').addEventListener('input', function() {
+        const username = this.value.trim();
+        const errorDiv = document.getElementById('usernameError');
+        
+        if (username && !validateUsername(username)) {
+            errorDiv.innerHTML = 'Username must be 3-50 characters using letters, numbers, @, ., +, -, _';
+            this.classList.add('error');
+        } else {
+            errorDiv.innerHTML = '';
+            this.classList.remove('error');
+        }
+    });
+
+    document.getElementById('email').addEventListener('input', function() {
+        const email = this.value.trim();
+        const errorDiv = document.getElementById('emailError');
+        
+        if (email && !validateEmail(email)) {
+            errorDiv.innerHTML = 'Please enter a valid email address';
+            this.classList.add('error');
+        } else {
+            errorDiv.innerHTML = '';
+            this.classList.remove('error');
+        }
+    });
+
+    document.getElementById('phone').addEventListener('input', function() {
+        const phone = this.value.trim();
+        const errorDiv = document.getElementById('phoneError');
+        
+        if (phone && !validatePhone(phone)) {
+            errorDiv.innerHTML = 'Phone number must be 10 digits starting with 09 (e.g., 0912345678)';
+            this.classList.add('error');
+        } else {
+            errorDiv.innerHTML = '';
+            this.classList.remove('error');
+        }
+    });
+
+    // Password validation
+    passwordInput.addEventListener('input', function() {
+        const password = this.value;
+        const errorDiv = document.getElementById('passwordError');
+        
+        if (password && password.length < 8) {
+            errorDiv.innerHTML = 'Password must be at least 8 characters long';
+            this.classList.add('error');
+        } else {
+            errorDiv.innerHTML = '';
+            this.classList.remove('error');
+        }
+    });
+
+    // Final form submission guard - FIXED: Set the raw national ID value before submit
+    document.getElementById('registerForm').addEventListener('submit', function(e) {
+        if (!isNationalIdVerified) {
+            e.preventDefault();
+            alert('Please verify your Fayda National ID before registering.');
+            return false;
+        }
+        
+        const password = passwordInput.value;
+        const confirm = confirmInput.value;
+        
+        if (password !== confirm) {
+            e.preventDefault();
+            alert('Passwords do not match. Please re-enter.');
+            return false;
+        }
+        
+        if (password.length < 8) {
+            e.preventDefault();
+            alert('Password must be at least 8 characters long.');
+            return false;
+        }
+        
+        // IMPORTANT: Set the national ID input value to the raw digits without hyphens
+        // This ensures the form submits the correct 16-digit value
+        nationalIdInput.value = rawNationalIdValue;
+        
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Creating your author account...';
+        
+        return true;
+    });
+</script>
+{% endblock %}

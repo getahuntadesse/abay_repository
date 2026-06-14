@@ -1,0 +1,730 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Upload Book - Abay Repository{% endblock %}
+
+{% block extra_css %}
+<style>
+    :root {
+        --primary-gold: #DAA520;
+        --primary-gold-dark: #B8860B;
+        --primary-dark: #2C2C2C;
+        --primary-darker: #1A1A1A;
+        --primary-gray: #4A4A4A;
+    }
+    
+    .upload-container {
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+    
+    .upload-card {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+    
+    .upload-header {
+        background: linear-gradient(135deg, var(--primary-darker), var(--primary-dark));
+        padding: 2rem;
+        text-align: center;
+        color: white;
+    }
+    
+    .upload-header i {
+        font-size: 3rem;
+        color: var(--primary-gold);
+        margin-bottom: 1rem;
+    }
+    
+    .upload-body {
+        padding: 2rem;
+    }
+    
+    .form-section {
+        background: #f8f9fa;
+        border-radius: 15px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        border: 1px solid #e9ecef;
+    }
+    
+    .form-section-title {
+        color: var(--primary-gold);
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid var(--primary-gold);
+    }
+    
+    .form-label {
+        font-weight: 600;
+        color: var(--primary-darker);
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+    
+    .form-label .required {
+        color: #dc3545;
+        margin-left: 3px;
+    }
+    
+    .form-control, .form-select {
+        border-radius: 10px;
+        border: 1px solid #dee2e6;
+        padding: 0.75rem 1rem;
+        width: 100%;
+        transition: all 0.3s ease;
+    }
+    
+    .form-control:focus, .form-select:focus {
+        border-color: var(--primary-gold);
+        box-shadow: 0 0 0 0.2rem rgba(218, 165, 32, 0.25);
+        outline: none;
+    }
+    
+    .file-upload-area {
+        border: 2px dashed #dee2e6;
+        border-radius: 10px;
+        padding: 1.5rem;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: #f8f9fa;
+    }
+    
+    .file-upload-area:hover {
+        border-color: var(--primary-gold);
+        background: rgba(218, 165, 32, 0.05);
+    }
+    
+    .file-info {
+        font-size: 0.85rem;
+        margin-top: 0.5rem;
+        color: var(--primary-gray);
+    }
+    
+    .preview-image {
+        max-width: 150px;
+        max-height: 150px;
+        border-radius: 10px;
+        margin-top: 1rem;
+        border: 2px solid var(--primary-gold);
+        padding: 3px;
+    }
+    
+    .btn-gold {
+        background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark));
+        color: var(--primary-darker);
+        border: none;
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-weight: 600;
+        width: 100%;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-gold:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(218, 165, 32, 0.4);
+        color: var(--primary-darker);
+    }
+    
+    .btn-gold:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    
+    .btn-secondary-custom {
+        background: var(--primary-gray);
+        color: white;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-secondary-custom:hover {
+        background: var(--primary-gray-light);
+        transform: translateY(-2px);
+    }
+    
+    .terms-checkbox {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 1rem;
+        background: #f8f9fa;
+        border-radius: 10px;
+        margin: 1rem 0;
+    }
+    
+    .terms-checkbox input {
+        margin-top: 3px;
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+    }
+    
+    .terms-checkbox label {
+        font-size: 0.9rem;
+        color: var(--primary-gray);
+        cursor: pointer;
+    }
+    
+    .terms-checkbox a {
+        color: var(--primary-gold);
+        text-decoration: none;
+    }
+    
+    .terms-checkbox a:hover {
+        text-decoration: underline;
+    }
+    
+    .royalty-info {
+        background: linear-gradient(135deg, #e8f4fd, #d1ecf1);
+        border-left: 4px solid var(--primary-gold);
+        padding: 1rem;
+        border-radius: 10px;
+        margin-top: 1rem;
+    }
+    
+    .error-feedback {
+        color: #dc3545;
+        font-size: 0.8rem;
+        margin-top: 0.25rem;
+    }
+    
+    .is-invalid {
+        border-color: #dc3545 !important;
+    }
+    
+    .char-count {
+        font-size: 0.75rem;
+        color: var(--primary-gray);
+        text-align: right;
+        margin-top: 0.25rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4 mb-5">
+    <div class="upload-container">
+        <div class="upload-card">
+            <div class="upload-header">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <h2 class="mb-0">Publish Your Book</h2>
+                <p class="mb-0 mt-2">Share your knowledge with readers worldwide</p>
+            </div>
+            <div class="upload-body">
+                <form method="POST" enctype="multipart/form-data" id="uploadForm">
+                    {% csrf_token %}
+                    
+                    <!-- Book Information Section -->
+                    <div class="form-section">
+                        <h5 class="form-section-title">
+                            <i class="fas fa-info-circle me-2"></i>Book Information
+                        </h5>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Title <span class="required">*</span></label>
+                            <input type="text" name="title" class="form-control" required 
+                                   placeholder="Enter your book title" id="bookTitle" maxlength="255">
+                            <div class="char-count"><span id="titleCount">0</span>/255 characters</div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Subtitle</label>
+                            <input type="text" name="subtitle" class="form-control" 
+                                   placeholder="Optional subtitle or tagline" id="bookSubtitle" maxlength="255">
+                            <div class="char-count"><span id="subtitleCount">0</span>/255 characters</div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Description <span class="required">*</span></label>
+                            <textarea name="description" class="form-control" rows="6" required 
+                                      placeholder="Provide a compelling description of your book..." id="bookDescription"></textarea>
+                            <div class="char-count"><span id="descCount">0</span> characters (minimum 100 recommended)</div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Genre <span class="required">*</span></label>
+                                <select name="genre" class="form-select" required id="bookGenre">
+                                    <option value="">-- Select Genre --</option>
+                                    {% for genre in genres %}
+                                        <option value="{{ genre.id }}">{{ genre.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Language <span class="required">*</span></label>
+                                <select name="language" class="form-select" required id="bookLanguage">
+                                    <option value="English">English</option>
+                                    <option value="Amharic">አማርኛ (Amharic)</option>
+                                    <option value="Afaan Oromo">Afaan Oromoo</option>
+                                    <option value="Tigrinya">ትግርኛ (Tigrinya)</option>
+                                    <option value="Somali">Soomaali (Somali)</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Edition</label>
+                                <input type="text" name="edition" class="form-control" 
+                                       placeholder="e.g., 1st Edition, 2nd Edition" value="1" id="bookEdition">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Page Count</label>
+                                <input type="number" name="page_count" class="form-control" 
+                                       placeholder="Number of pages" value="0" id="bookPageCount" min="0">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Publication Year</label>
+                                <input type="number" name="publication_year" class="form-control" 
+                                       placeholder="Year" value="2024" id="bookYear" min="1900" max="2025">
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Keywords</label>
+                            <input type="text" name="keywords" class="form-control" 
+                                   placeholder="Separate keywords with commas (e.g., fiction, novel, adventure)" id="bookKeywords">
+                            <small class="text-muted">Helps readers discover your book</small>
+                        </div>
+                    </div>
+                    
+                    <!-- Pricing Section -->
+                    <div class="form-section">
+                        <h5 class="form-section-title">
+                            <i class="fas fa-tags me-2"></i>Pricing & Royalties
+                        </h5>
+                        
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input type="checkbox" name="is_free" class="form-check-input" id="isFreeCheckbox">
+                                <label class="form-check-label" for="isFreeCheckbox">
+                                    Make this book FREE
+                                </label>
+                            </div>
+                            <small class="text-muted">Free books reach more readers but earn no royalties</small>
+                        </div>
+                        
+                        <div class="mb-3" id="priceSection">
+                            <label class="form-label">Price (ETB) <span class="required">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text">ETB</span>
+                                <input type="number" name="price" class="form-control" step="0.01" min="0" 
+                                       placeholder="29.99" id="bookPrice" value="29.99">
+                            </div>
+                        </div>
+                        
+                        <div class="royalty-info">
+                            <i class="fas fa-chart-line me-2"></i>
+                            <strong>Royalty Breakdown:</strong><br>
+                            Sale Price: <span id="salePriceDisplay">29.99</span> ETB<br>
+                            Platform Fee (10%): <span id="platformFeeDisplay">3.00</span> ETB<br>
+                            Your Earnings (70% of net): <span id="earningsDisplay">18.89</span> ETB
+                        </div>
+                    </div>
+                    
+                    <!-- Files Section -->
+                    <div class="form-section">
+                        <h5 class="form-section-title">
+                            <i class="fas fa-file-upload me-2"></i>Files
+                        </h5>
+                        
+                        <div class="mb-4">
+                            <label class="form-label">eBook File <span class="required">*</span></label>
+                            <div class="file-upload-area" id="ebookUploadArea">
+                                <i class="fas fa-file-pdf fa-3x mb-2" style="color: var(--primary-gold);"></i>
+                                <p class="mb-1">Click or drag to upload</p>
+                                <small class="text-muted">PDF, EPUB, MOBI (Max 50MB)</small>
+                                <input type="file" name="book_file" class="d-none" accept=".pdf,.epub,.mobi" required id="ebookFile">
+                            </div>
+                            <div id="ebookFileName" class="file-info"></div>
+                            <div id="fileError" class="error-feedback"></div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="form-label">Cover Image <span class="required">*</span></label>
+                            <div class="file-upload-area" id="coverUploadArea">
+                                <i class="fas fa-image fa-3x mb-2" style="color: var(--primary-gold);"></i>
+                                <p class="mb-1">Click or drag to upload</p>
+                                <small class="text-muted">JPG, PNG (Recommended: 500x800px, Max 10MB)</small>
+                                <input type="file" name="cover_image" class="d-none" accept=".jpg,.jpeg,.png" required id="coverFile">
+                            </div>
+                            <div id="coverFileName" class="file-info"></div>
+                            <div id="coverPreview" class="mt-2"></div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Sample File (Optional)</label>
+                            <div class="file-upload-area" id="sampleUploadArea">
+                                <i class="fas fa-file-alt fa-3x mb-2" style="color: var(--primary-gold);"></i>
+                                <p class="mb-1">Click or drag to upload</p>
+                                <small class="text-muted">PDF, EPUB (Preview for readers, Max 5MB)</small>
+                                <input type="file" name="sample_file" class="d-none" accept=".pdf,.epub" id="sampleFile">
+                            </div>
+                            <div id="sampleFileName" class="file-info"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Legal Agreement Section -->
+                    <div class="form-section">
+                        <h5 class="form-section-title">
+                            <i class="fas fa-file-signature me-2"></i>Legal Agreement
+                        </h5>
+                        
+                        <div class="terms-checkbox">
+                            <input type="checkbox" id="copyrightDeclaration" required>
+                            <label for="copyrightDeclaration">
+                                I confirm that I am the sole author/copyright holder of this work OR I have obtained 
+                                proper authorization to publish it.
+                            </label>
+                        </div>
+                        
+                        <div class="terms-checkbox">
+                            <input type="checkbox" id="originalityDeclaration" required>
+                            <label for="originalityDeclaration">
+                                I confirm that this work is original and does not plagiarize any other work.
+                            </label>
+                        </div>
+                        
+                        <div class="terms-checkbox">
+                            <input type="checkbox" id="termsAgreement" required>
+                            <label for="termsAgreement">
+                                I agree to the <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">Terms and Conditions</a> 
+                                and understand that my book will undergo quality review.
+                            </label>
+                        </div>
+                        
+                        <div class="terms-checkbox">
+                            <input type="checkbox" id="royaltyAgreement" required>
+                            <label for="royaltyAgreement">
+                                I understand and agree to the <a href="#" data-bs-toggle="modal" data-bs-target="#royaltyModal">Royalty Agreement</a> 
+                                (70% commission on net sales).
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- Submit Buttons -->
+                    <div class="d-flex gap-3 mt-4">
+                        <button type="button" class="btn-secondary-custom flex-grow-1" onclick="window.history.back()">
+                            <i class="fas fa-times me-2"></i> Cancel
+                        </button>
+                        <button type="submit" class="btn-gold flex-grow-1" id="submitBtn" disabled>
+                            <i class="fas fa-cloud-upload-alt me-2"></i> Publish Book
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Terms Modal -->
+<div class="modal fade" id="termsModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header" style="background: linear-gradient(135deg, var(--primary-darker), var(--primary-dark)); color: white;">
+                <h5 class="modal-title">Terms and Conditions for Publishing</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <h6>1. Copyright and Ownership</h6>
+                <p>You retain full copyright ownership of your work. By uploading, you grant Abay Repository a non-exclusive license to distribute and sell your work.</p>
+                
+                <h6>2. Quality Standards</h6>
+                <p>All submitted works undergo quality review by our checker and maker teams. Books are scored on content quality (0-10), editorial quality (0-10), and technical quality (0-10). Minimum passing score is 7.0.</p>
+                
+                <h6>3. Royalties</h6>
+                <p>Standard royalty rate is 70% of net sales after platform fees (10%). Payments are processed monthly on the 15th for the previous month's sales. Minimum payout is 100 ETB.</p>
+                
+                <h6>4. Prohibited Content</h6>
+                <p>We do not accept plagiarized content, hate speech, illegal materials, or explicit content without proper context.</p>
+                
+                <h6>5. Review Process</h6>
+                <p>Books are first reviewed by checkers, then by makers for final approval. You will be notified of the decision via email and dashboard notifications.</p>
+                
+                <h6>6. Revisions</h6>
+                <p>If your book needs revision, you will receive feedback. You have up to 3 revision attempts before the book may be rejected.</p>
+                
+                <h6>7. Removal</h6>
+                <p>You may request removal of your book at any time, subject to existing sales and refunds.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-gold" data-bs-dismiss="modal">I Understand</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Royalty Modal -->
+<div class="modal fade" id="royaltyModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header" style="background: linear-gradient(135deg, var(--primary-darker), var(--primary-dark)); color: white;">
+                <h5 class="modal-title">Royalty Agreement</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <h6>1. Commission Structure</h6>
+                <p>Authors receive 70% of net sales after platform fees. The platform fee is 10% of the gross sale price.</p>
+                
+                <h6>2. Calculation Example</h6>
+                <p>If your book sells for 100 ETB:<br>
+                - Platform Fee (10%): 10 ETB<br>
+                - Net Sale: 90 ETB<br>
+                - Your Royalty (70%): 63 ETB</p>
+                
+                <h6>3. Payment Schedule</h6>
+                <p>Royalties are calculated monthly on the 1st of each month. Payments are processed on the 15th for the previous month's sales.</p>
+                
+                <h6>4. Minimum Payout</h6>
+                <p>The minimum payout amount is 100 ETB. Royalties below this amount will accumulate until the threshold is met.</p>
+                
+                <h6>5. Payment Methods</h6>
+                <p>Payments can be made via bank transfer, Telebirr, or Chapa based on your preference.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-gold" data-bs-dismiss="modal">I Understand</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Character counters
+    document.getElementById('bookTitle').addEventListener('input', function() {
+        document.getElementById('titleCount').innerText = this.value.length;
+    });
+    
+    document.getElementById('bookSubtitle').addEventListener('input', function() {
+        document.getElementById('subtitleCount').innerText = this.value.length;
+    });
+    
+    document.getElementById('bookDescription').addEventListener('input', function() {
+        const len = this.value.length;
+        document.getElementById('descCount').innerHTML = len + ' characters' + (len < 100 ? ' (minimum 100 recommended)' : '');
+        if (len >= 100) {
+            document.getElementById('descCount').style.color = '#28a745';
+        } else {
+            document.getElementById('descCount').style.color = '#dc3545';
+        }
+    });
+    
+    // Royalty calculator
+    function updateRoyaltyCalculator() {
+        const price = parseFloat(document.getElementById('bookPrice').value) || 0;
+        const isFree = document.getElementById('isFreeCheckbox').checked;
+        
+        if (isFree) {
+            document.getElementById('salePriceDisplay').innerText = '0';
+            document.getElementById('platformFeeDisplay').innerText = '0';
+            document.getElementById('earningsDisplay').innerText = '0';
+        } else {
+            const platformFee = price * 0.10;
+            const netAfterFee = price - platformFee;
+            const earnings = netAfterFee * 0.70;
+            
+            document.getElementById('salePriceDisplay').innerText = price.toFixed(2);
+            document.getElementById('platformFeeDisplay').innerText = platformFee.toFixed(2);
+            document.getElementById('earningsDisplay').innerText = earnings.toFixed(2);
+        }
+    }
+    
+    // Toggle price section for free books
+    const isFreeCheckbox = document.getElementById('isFreeCheckbox');
+    const priceSection = document.getElementById('priceSection');
+    const priceInput = document.getElementById('bookPrice');
+    
+    isFreeCheckbox.addEventListener('change', function() {
+        if (this.checked) {
+            priceSection.style.display = 'none';
+            priceInput.value = 0;
+        } else {
+            priceSection.style.display = 'block';
+            priceInput.value = 29.99;
+        }
+        updateRoyaltyCalculator();
+    });
+    
+    priceInput.addEventListener('input', updateRoyaltyCalculator);
+    
+    // File upload handlers
+    function setupFileUpload(areaId, inputId, displayId, isImage = false) {
+        const area = document.getElementById(areaId);
+        const input = document.getElementById(inputId);
+        const display = document.getElementById(displayId);
+        
+        if (!area || !input) return;
+        
+        area.addEventListener('click', () => input.click());
+        
+        area.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            area.style.borderColor = '#DAA520';
+            area.style.background = 'rgba(218, 165, 32, 0.05)';
+        });
+        
+        area.addEventListener('dragleave', () => {
+            area.style.borderColor = '#dee2e6';
+            area.style.background = '#f8f9fa';
+        });
+        
+        area.addEventListener('drop', (e) => {
+            e.preventDefault();
+            area.style.borderColor = '#dee2e6';
+            area.style.background = '#f8f9fa';
+            input.files = e.dataTransfer.files;
+            updateFileDisplay(input, display, isImage);
+            checkFormCompletion();
+        });
+        
+        input.addEventListener('change', () => {
+            updateFileDisplay(input, display, isImage);
+            checkFormCompletion();
+        });
+    }
+    
+    function updateFileDisplay(input, display, isImage) {
+        if (input.files && input.files[0]) {
+            const file = input.files[0];
+            display.innerHTML = `<i class="fas fa-check-circle text-success me-1"></i> ${file.name} (${formatFileSize(file.size)})`;
+            
+            if (isImage && input.id === 'coverFile') {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('coverPreview');
+                    preview.innerHTML = `<img src="${e.target.result}" class="preview-image" alt="Cover Preview">`;
+                };
+                reader.readAsDataURL(file);
+            }
+        } else {
+            display.innerHTML = '';
+            if (isImage && input.id === 'coverFile') {
+                document.getElementById('coverPreview').innerHTML = '';
+            }
+        }
+    }
+    
+    function formatFileSize(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+    
+    // Validate file size and type
+    document.getElementById('ebookFile').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        const fileError = document.getElementById('fileError');
+        
+        if (file) {
+            const fileName = file.name.toLowerCase();
+            const isValid = fileName.endsWith('.pdf') || fileName.endsWith('.epub') || fileName.endsWith('.mobi');
+            const maxSize = 50 * 1024 * 1024;
+            
+            if (!isValid) {
+                fileError.textContent = 'Invalid file type. Please upload PDF, EPUB, or MOBI files only.';
+                fileError.style.display = 'block';
+                this.value = '';
+                display.innerHTML = '';
+            } else if (file.size > maxSize) {
+                fileError.textContent = 'File too large. Maximum size is 50MB.';
+                fileError.style.display = 'block';
+                this.value = '';
+                display.innerHTML = '';
+            } else {
+                fileError.style.display = 'none';
+            }
+        }
+        checkFormCompletion();
+    });
+    
+    // Check if all required fields are complete
+    function checkFormCompletion() {
+        const title = document.getElementById('bookTitle').value.trim();
+        const description = document.getElementById('bookDescription').value.trim();
+        const genre = document.getElementById('bookGenre').value;
+        const ebookFile = document.getElementById('ebookFile').files[0];
+        const coverFile = document.getElementById('coverFile').files[0];
+        const copyright = document.getElementById('copyrightDeclaration').checked;
+        const originality = document.getElementById('originalityDeclaration').checked;
+        const terms = document.getElementById('termsAgreement').checked;
+        const royalty = document.getElementById('royaltyAgreement').checked;
+        
+        const isComplete = title && description.length >= 100 && genre && ebookFile && coverFile && 
+                          copyright && originality && terms && royalty;
+        
+        document.getElementById('submitBtn').disabled = !isComplete;
+    }
+    
+    // Add event listeners for form validation
+    document.getElementById('bookTitle').addEventListener('input', checkFormCompletion);
+    document.getElementById('bookDescription').addEventListener('input', checkFormCompletion);
+    document.getElementById('bookGenre').addEventListener('change', checkFormCompletion);
+    document.getElementById('copyrightDeclaration').addEventListener('change', checkFormCompletion);
+    document.getElementById('originalityDeclaration').addEventListener('change', checkFormCompletion);
+    document.getElementById('termsAgreement').addEventListener('change', checkFormCompletion);
+    document.getElementById('royaltyAgreement').addEventListener('change', checkFormCompletion);
+    
+    // Setup file uploads
+    setupFileUpload('ebookUploadArea', 'ebookFile', 'ebookFileName', false);
+    setupFileUpload('coverUploadArea', 'coverFile', 'coverFileName', true);
+    setupFileUpload('sampleUploadArea', 'sampleFile', 'sampleFileName', false);
+    
+    // Initial calculation
+    updateRoyaltyCalculator();
+    
+    // Form submission
+    document.getElementById('uploadForm').addEventListener('submit', function(e) {
+        const title = document.getElementById('bookTitle').value.trim();
+        const description = document.getElementById('bookDescription').value.trim();
+        const genre = document.getElementById('bookGenre').value;
+        const ebookFile = document.getElementById('ebookFile').files[0];
+        const coverFile = document.getElementById('coverFile').files[0];
+        
+        let errors = [];
+        if (!title) errors.push('Please enter a book title');
+        if (description.length < 100) errors.push('Please provide a more detailed description (minimum 100 characters)');
+        if (!genre) errors.push('Please select a genre');
+        if (!ebookFile) errors.push('Please upload your eBook file');
+        if (!coverFile) errors.push('Please upload a cover image');
+        
+        if (errors.length > 0) {
+            e.preventDefault();
+            alert('Please complete all required fields:\n\n' + errors.join('\n'));
+            return false;
+        }
+        
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Publishing Your Book...';
+        return true;
+    });
+</script>
+
+<style>
+    .btn-gold {
+        background: linear-gradient(135deg, #DAA520, #B8860B);
+        color: #1A1A1A;
+        border: none;
+    }
+    .btn-gold:hover {
+        background: linear-gradient(135deg, #B8860B, #9B6F0B);
+        color: #1A1A1A;
+    }
+    .input-group-text {
+        background: #f0f0f0;
+        border: 1px solid #dee2e6;
+    }
+</style>
+{% endblock %}

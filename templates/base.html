@@ -1,0 +1,483 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Abrehot Library - Abay Repository{% endblock %}</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-gold: #DAA520;
+            --primary-gold-dark: #B8860B;
+            --primary-gold-light: #F5D061;
+            --primary-dark: #2C2C2C;
+            --primary-darker: #1A1A1A;
+            --primary-gray: #4A4A4A;
+            --primary-gray-light: #6C6C6C;
+            --light-bg: #F8F9FA;
+            --card-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            background: var(--light-bg);
+            color: var(--primary-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Navbar Styles */
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-darker) 0%, var(--primary-dark) 100%);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.15);
+            padding: 0.75rem 0;
+        }
+        
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+        
+        .navbar-brand img {
+            height: 50px;
+            width: auto;
+            transition: transform 0.3s ease;
+        }
+        
+        .navbar-brand:hover img {
+            transform: scale(1.05);
+        }
+        
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .brand-name {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-gold);
+            letter-spacing: -0.5px;
+            line-height: 1.2;
+        }
+        
+        .brand-tagline {
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.6);
+            letter-spacing: 0.5px;
+        }
+        
+        .brand-motto {
+            font-size: 0.65rem;
+            color: var(--primary-gold-light);
+            font-style: italic;
+        }
+        
+        .nav-link {
+            color: #D4D4D4 !important;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .nav-link:hover {
+            color: var(--primary-gold) !important;
+        }
+        
+        .dropdown-menu {
+            background: var(--primary-dark);
+            border: 1px solid var(--primary-gray);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .dropdown-item {
+            color: #D4D4D4;
+            transition: all 0.3s ease;
+        }
+        
+        .dropdown-item:hover {
+            background: var(--primary-gold);
+            color: var(--primary-darker);
+        }
+        
+        /* Footer Styles */
+        footer {
+            background: linear-gradient(135deg, var(--primary-darker) 0%, var(--primary-dark) 100%);
+            color: white;
+            margin-top: auto;
+        }
+        
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-brand img {
+            height: 45px;
+            width: auto;
+        }
+        
+        .footer-brand .brand-name {
+            font-size: 1.3rem;
+        }
+        
+        footer a {
+            color: #B4B4B4;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        footer a:hover {
+            color: var(--primary-gold);
+        }
+        
+        .footer-gold {
+            color: var(--primary-gold);
+        }
+        
+        /* Alert Styles */
+        .alert {
+            border-radius: 12px;
+            border: none;
+        }
+        
+        .alert-success {
+            background: linear-gradient(135deg, #E8F5E9, #C8E6C9);
+            color: #2E7D32;
+            border-left: 4px solid #4CAF50;
+        }
+        
+        .alert-danger {
+            background: linear-gradient(135deg, #FFEBEE, #FFCDD2);
+            color: #C62828;
+            border-left: 4px solid #F44336;
+        }
+        
+        .alert-info {
+            background: linear-gradient(135deg, #E3F2FD, #BBDEFB);
+            color: #1565C0;
+            border-left: 4px solid #2196F3;
+        }
+        
+        .alert-warning {
+            background: linear-gradient(135deg, #FFF3E0, #FFE0B2);
+            color: #E65100;
+            border-left: 4px solid #FF9800;
+        }
+        
+        /* Card Styles */
+        .card {
+            border: none;
+            border-radius: 16px;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+        }
+        
+        /* Button Styles */
+        .btn-gold {
+            background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark));
+            color: var(--primary-darker);
+            border: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-gold:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(218, 165, 32, 0.4);
+            color: var(--primary-darker);
+        }
+        
+        .btn-outline-gold {
+            border: 2px solid var(--primary-gold);
+            color: var(--primary-gold);
+            background: transparent;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-outline-gold:hover {
+            background: var(--primary-gold);
+            color: var(--primary-darker);
+            transform: translateY(-2px);
+        }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--primary-gray-light);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-gold);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-gold-dark);
+        }
+        
+        /* Utility Classes */
+        .text-gold {
+            color: var(--primary-gold) !important;
+        }
+        
+        .bg-gold {
+            background: var(--primary-gold);
+        }
+        
+        .bg-dark-gradient {
+            background: linear-gradient(135deg, var(--primary-darker) 0%, var(--primary-dark) 100%);
+        }
+        
+        /* Animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar-brand img {
+                height: 40px;
+            }
+            .brand-name {
+                font-size: 1.2rem;
+            }
+            .brand-tagline, .brand-motto {
+                font-size: 0.55rem;
+            }
+            .footer-brand img {
+                height: 35px;
+            }
+        }
+    </style>
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+    <div class="container">
+        <a class="navbar-brand" href="/">
+            <img src="{% static 'images/logo.png' %}" alt="Abrehot Library Logo" onerror="this.src='https://via.placeholder.com/50x50/DAA520/1A1A1A?text=AL'">
+            <div class="brand-text">
+                <span class="brand-name">Abrehot Library</span>
+                <span class="brand-tagline">Abay Repository</span>
+                <span class="brand-motto"><i class="fas fa-lightbulb me-1"></i>Enlightenment for Ethiopia</span>
+            </div>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">
+                        <i class="fas fa-home me-1"></i> Home
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/books/browse/">
+                        <i class="fas fa-search me-1"></i> Browse Books
+                    </a>
+                </li>
+                
+                {% if user.is_authenticated %}
+                    {% if user.role == 'author' %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/books/my_books/">
+                                <i class="fas fa-book me-1"></i> My Books
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/books/upload/">
+                                <i class="fas fa-upload me-1"></i> Upload Book
+                            </a>
+                        </li>
+                    {% endif %}
+                    
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-1"></i> {{ user.full_name|default:user.username }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li>
+                                <a class="dropdown-item" href="/accounts/dashboard/">
+                                    <i class="fas fa-tachometer-alt me-2"></i> Dashboard
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="/accounts/profile/">
+                                    <i class="fas fa-id-card me-2"></i> Profile
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item" href="/accounts/logout/">
+                                    <i class="fas fa-sign-out-alt me-2"></i> Logout
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/accounts/login/">
+                            <i class="fas fa-sign-in-alt me-1"></i> Login
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-plus me-1"></i> Register
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="dropdown-item" href="/accounts/register/author/">
+                                    <i class="fas fa-pen-fancy me-2"></i> As Author
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="/accounts/register/">
+                                    <i class="fas fa-book-reader me-2"></i> As Reader
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Messages -->
+<div class="container mt-3">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show fade-in" role="alert">
+                <i class="fas fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-circle{% elif message.tags == 'warning' %}exclamation-triangle{% else %}info-circle{% endif %} me-2"></i>
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>
+
+<!-- Main Content -->
+<main>
+    {% block content %}{% endblock %}
+</main>
+
+<!-- Footer -->
+<footer class="mt-5 pt-4 pb-3">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="footer-brand">
+                    <img src="{% static 'images/logo.png' %}" alt="Abrehot Library Logo" onerror="this.src='https://via.placeholder.com/45x45/DAA520/1A1A1A?text=AL'">
+                    <div>
+                        <div class="brand-name" style="font-size: 1.3rem;">Abrehot Library</div>
+                        <div class="brand-tagline" style="font-size: 0.7rem;">Abay Repository</div>
+                        <div class="brand-motto" style="font-size: 0.65rem;"><i class="fas fa-lightbulb me-1"></i>Enlightenment for Ethiopia</div>
+                    </div>
+                </div>
+                <p class="text-white-50 small">Ethiopia's premier digital library platform connecting readers with authentic Ethiopian literature and global knowledge.</p>
+                <div class="mt-3">
+                    <a href="#" class="text-white-50 me-3"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="text-white-50 me-3"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-white-50 me-3"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="text-white-50"><i class="fab fa-telegram"></i></a>
+                </div>
+            </div>
+            <div class="col-md-2 mb-4">
+                <h6 class="footer-gold">Quick Links</h6>
+                <ul class="list-unstyled small">
+                    <li class="mb-2"><a href="/">Home</a></li>
+                    <li class="mb-2"><a href="/books/browse/">Browse Books</a></li>
+                    <li class="mb-2"><a href="#">About Us</a></li>
+                    <li class="mb-2"><a href="#">Contact</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3 mb-4">
+                <h6 class="footer-gold">Support</h6>
+                <ul class="list-unstyled small">
+                    <li class="mb-2"><a href="#">Privacy Policy</a></li>
+                    <li class="mb-2"><a href="#">Terms of Service</a></li>
+                    <li class="mb-2"><a href="#">Refund Policy</a></li>
+                    <li class="mb-2"><a href="#">FAQ</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3 mb-4">
+                <h6 class="footer-gold">Contact</h6>
+                <ul class="list-unstyled small text-white-50">
+                    <li class="mb-2"><i class="fas fa-envelope me-2"></i> info@abrehotlibrary.com</li>
+                    <li class="mb-2"><i class="fas fa-phone me-2"></i> +251-111-234-567</li>
+                    <li class="mb-2"><i class="fas fa-map-marker-alt me-2"></i> Addis Ababa, Ethiopia</li>
+                </ul>
+            </div>
+        </div>
+        <hr class="bg-secondary">
+        <div class="text-center">
+            <p class="mb-0 text-white-50 small">&copy; {% now "Y" %} Abrehot Library - Abay Repository. All rights reserved.</p>
+            <p class="text-white-50 small mt-1"><i class="fas fa-lightbulb me-1"></i> Enlightenment for Ethiopia</p>
+        </div>
+    </div>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // Auto-dismiss alerts after 5 seconds
+    setTimeout(function() {
+        document.querySelectorAll('.alert').forEach(function(alert) {
+            var bsAlert = new bootstrap.Alert(alert);
+            bsAlert.close();
+        });
+    }, 5000);
+</script>
+
+{% block extra_js %}{% endblock %}
+</body>
+</html>

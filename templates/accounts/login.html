@@ -1,0 +1,519 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Login - Abrehot Library{% endblock %}
+
+{% block extra_css %}
+<style>
+    :root {
+        --primary-gold: #DAA520;
+        --primary-gold-dark: #B8860B;
+        --primary-gold-light: #F5D061;
+        --primary-dark: #2C2C2C;
+        --primary-darker: #1A1A1A;
+        --primary-gray: #4A4A4A;
+        --primary-gray-light: #6C6C6C;
+    }
+
+    .login-wrapper {
+        min-height: calc(100vh - 300px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem 0;
+    }
+
+    .login-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        width: 100%;
+    }
+
+    .login-card {
+        background: white;
+        border-radius: 24px;
+        overflow: hidden;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .login-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.15);
+    }
+
+    .login-left {
+        background: linear-gradient(135deg, var(--primary-darker) 0%, var(--primary-dark) 100%);
+        padding: 3rem;
+        color: white;
+        height: 100%;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .login-left::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(218, 165, 32, 0.1) 0%, transparent 70%);
+        transform: rotate(45deg);
+    }
+
+    .login-left-content {
+        position: relative;
+        z-index: 1;
+    }
+
+    .login-logo {
+        width: 80px;
+        height: auto;
+        margin-bottom: 1.5rem;
+    }
+
+    .login-left h2 {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+
+    .login-left p {
+        font-size: 1rem;
+        opacity: 0.9;
+        line-height: 1.6;
+        margin-bottom: 2rem;
+    }
+
+    .feature-list {
+        list-style: none;
+        padding: 0;
+        margin-top: 2rem;
+    }
+
+    .feature-list li {
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .feature-list li i {
+        color: var(--primary-gold);
+        font-size: 1.2rem;
+    }
+
+    .login-right {
+        padding: 3rem;
+    }
+
+    .login-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .login-header h3 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: var(--primary-darker);
+        margin-bottom: 0.5rem;
+    }
+
+    .login-header p {
+        color: var(--primary-gray);
+        font-size: 0.9rem;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+        font-weight: 600;
+        color: var(--primary-darker);
+        margin-bottom: 0.5rem;
+        display: block;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .input-group-custom {
+        position: relative;
+    }
+
+    .input-group-custom i {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--primary-gray);
+        font-size: 1.1rem;
+        transition: color 0.3s ease;
+    }
+
+    .input-group-custom input {
+        width: 100%;
+        padding: 12px 15px 12px 45px;
+        border: 2px solid #e9ecef;
+        border-radius: 12px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: #f8f9fa;
+    }
+
+    .input-group-custom input:focus {
+        outline: none;
+        border-color: var(--primary-gold);
+        background: white;
+        box-shadow: 0 0 0 4px rgba(218, 165, 32, 0.1);
+    }
+
+    .input-group-custom input:hover {
+        border-color: var(--primary-gold);
+    }
+
+    .form-options {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .checkbox-label {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+        font-size: 0.85rem;
+        color: var(--primary-gray);
+    }
+
+    .checkbox-label input {
+        width: 16px;
+        height: 16px;
+        cursor: pointer;
+        accent-color: var(--primary-gold);
+    }
+
+    .forgot-link {
+        color: var(--primary-gold);
+        text-decoration: none;
+        font-size: 0.85rem;
+        font-weight: 500;
+        transition: color 0.3s ease;
+    }
+
+    .forgot-link:hover {
+        color: var(--primary-gold-dark);
+        text-decoration: underline;
+    }
+
+    .btn-login {
+        width: 100%;
+        padding: 14px;
+        background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark));
+        border: none;
+        border-radius: 12px;
+        color: var(--primary-darker);
+        font-weight: 700;
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .btn-login:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(218, 165, 32, 0.3);
+        color: var(--primary-darker);
+    }
+
+    .btn-login:active {
+        transform: translateY(0);
+    }
+
+    .divider {
+        text-align: center;
+        margin: 2rem 0;
+        position: relative;
+    }
+
+    .divider::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        width: 100%;
+        height: 1px;
+        background: #e9ecef;
+    }
+
+    .divider span {
+        background: white;
+        padding: 0 1rem;
+        position: relative;
+        color: var(--primary-gray);
+        font-size: 0.85rem;
+    }
+
+    .register-link {
+        text-align: center;
+        margin-top: 1.5rem;
+    }
+
+    .register-link p {
+        color: var(--primary-gray);
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .register-link a {
+        color: var(--primary-gold);
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.3s ease;
+    }
+
+    .register-link a:hover {
+        color: var(--primary-gold-dark);
+        text-decoration: underline;
+    }
+
+    .author-link {
+        text-align: center;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #e9ecef;
+    }
+
+    .author-link a {
+        color: var(--primary-gold);
+        text-decoration: none;
+        font-size: 0.85rem;
+        font-weight: 500;
+        transition: color 0.3s ease;
+    }
+
+    .author-link a:hover {
+        color: var(--primary-gold-dark);
+        text-decoration: underline;
+    }
+
+    .alert-custom {
+        padding: 1rem;
+        border-radius: 12px;
+        margin-bottom: 1.5rem;
+        border-left: 4px solid;
+        font-size: 0.85rem;
+    }
+
+    .alert-error {
+        background: #fef2f2;
+        border-left-color: #dc2626;
+        color: #991b1b;
+    }
+
+    .alert-success {
+        background: #ecfdf5;
+        border-left-color: #10b981;
+        color: #065f46;
+    }
+
+    .alert-info {
+        background: #eff6ff;
+        border-left-color: #3b82f6;
+        color: #1e40af;
+    }
+
+    @media (max-width: 768px) {
+        .login-left {
+            padding: 2rem;
+        }
+        .login-right {
+            padding: 2rem;
+        }
+        .login-left h2 {
+            font-size: 1.5rem;
+        }
+        .login-header h3 {
+            font-size: 1.5rem;
+        }
+        .login-logo {
+            width: 60px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="login-wrapper">
+    <div class="container login-container">
+        <div class="row g-0 login-card">
+            <!-- Left Side - Branding -->
+            <div class="col-lg-6 login-left">
+                <div class="login-left-content">
+                    <img src="{% static 'images/logo.png' %}" alt="Abrehot Library Logo" class="login-logo" onerror="this.src='https://placehold.co/80x80/DAA520/1A1A1A?text=AL'">
+                    <h2>Abrehot Library</h2>
+                    <p>Ethiopia's premier digital library platform connecting readers with authentic Ethiopian literature, academic resources, and cultural heritage.</p>
+                    
+                    <ul class="feature-list">
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>Access thousands of Ethiopian books</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>Support local authors and publishers</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>Secure payments with Telebirr & Chapa</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>Read on any device, anytime</span>
+                        </li>
+                    </ul>
+
+                    <div class="mt-4">
+                        <small style="opacity: 0.7;">
+                            <i class="fas fa-shield-alt me-1"></i> 
+                            Trusted by 10,000+ readers across Ethiopia
+                        </small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side - Login Form -->
+            <div class="col-lg-6 login-right">
+                <div class="login-header">
+                    <h3>Welcome Back</h3>
+                    <p>Sign in to continue your journey</p>
+                </div>
+
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert-custom alert-{{ message.tags }}">
+                            <i class="fas fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-circle{% else %}info-circle{% endif %} me-2"></i>
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    
+                    <div class="form-group">
+                        <label for="username">EMAIL OR USERNAME</label>
+                        <div class="input-group-custom">
+                            <i class="fas fa-envelope"></i>
+                            <input type="text" 
+                                   name="username" 
+                                   id="username" 
+                                   class="{% if form.username.errors %}is-invalid{% endif %}"
+                                   value="{{ form.username.value|default:'' }}"
+                                   placeholder="Enter your email or username"
+                                   required autofocus>
+                        </div>
+                        {% if form.username.errors %}
+                            <small class="text-danger mt-1 d-block">
+                                {% for error in form.username.errors %}{{ error }}{% endfor %}
+                            </small>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">PASSWORD</label>
+                        <div class="input-group-custom">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" 
+                                   name="password" 
+                                   id="password" 
+                                   class="{% if form.password.errors %}is-invalid{% endif %}"
+                                   placeholder="Enter your password"
+                                   required>
+                        </div>
+                        {% if form.password.errors %}
+                            <small class="text-danger mt-1 d-block">
+                                {% for error in form.password.errors %}{{ error }}{% endfor %}
+                            </small>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-options">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="remember" id="remember">
+                            <span>Remember me</span>
+                        </label>
+                        <a href="{% url 'password_reset' %}" class="forgot-link">Forgot Password?</a>
+                    </div>
+
+                    {% if form.non_field_errors %}
+                        <div class="alert-custom alert-error mb-3">
+                            {% for error in form.non_field_errors %}
+                                <i class="fas fa-exclamation-triangle me-2"></i>{{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <button type="submit" class="btn-login">
+                        <i class="fas fa-sign-in-alt me-2"></i> Sign In
+                    </button>
+
+                    <div class="divider">
+                        <span>New to Abrehot Library?</span>
+                    </div>
+
+                    <div class="register-link">
+                        <p>Create an account to start reading</p>
+                        <a href="{% url 'accounts:register' %}">
+                            <i class="fas fa-user-plus me-2"></i>Create New Account
+                        </a>
+                    </div>
+
+                    <div class="author-link">
+                        <a href="{% url 'accounts:register_author' %}">
+                            <i class="fas fa-pen-fancy me-2"></i>Are you an Author? Register here
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Password visibility toggle
+    document.addEventListener('DOMContentLoaded', function() {
+        const passwordInput = document.getElementById('password');
+        if (passwordInput) {
+            const wrapper = passwordInput.closest('.input-group-custom');
+            if (wrapper) {
+                const toggleBtn = document.createElement('i');
+                toggleBtn.className = 'fas fa-eye';
+                toggleBtn.style.cssText = `
+                    position: absolute;
+                    right: 15px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    cursor: pointer;
+                    color: #6c757d;
+                    z-index: 10;
+                `;
+                toggleBtn.addEventListener('click', function() {
+                    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passwordInput.setAttribute('type', type);
+                    this.className = type === 'password' ? 'fas fa-eye' : 'fas fa-eye-slash';
+                });
+                wrapper.appendChild(toggleBtn);
+                passwordInput.style.paddingRight = '45px';
+            }
+        }
+    });
+</script>
+{% endblock %}

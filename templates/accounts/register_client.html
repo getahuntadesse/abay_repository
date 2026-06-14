@@ -1,0 +1,610 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Reader Registration | Abrehot Library{% endblock %}
+
+{% block extra_css %}
+<style>
+    :root {
+        --primary-gold: #DAA520;
+        --primary-gold-dark: #B8860B;
+        --primary-gold-light: #F5D061;
+        --primary-dark: #2C2C2C;
+        --primary-darker: #1A1A1A;
+        --primary-gray: #4A4A4A;
+        --primary-gray-light: #6C6C6C;
+    }
+
+    .register-container {
+        max-width: 950px;
+        margin: 0 auto;
+    }
+
+    .form-card {
+        background: white;
+        border-radius: 24px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        transition: transform 0.3s ease;
+    }
+
+    .form-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .form-header {
+        background: linear-gradient(135deg, var(--primary-darker), var(--primary-dark));
+        padding: 2.5rem;
+        text-align: center;
+        color: white;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .form-header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(218, 165, 32, 0.1) 0%, transparent 70%);
+        transform: rotate(45deg);
+    }
+
+    .form-header i {
+        font-size: 3.5rem;
+        color: var(--primary-gold);
+        margin-bottom: 1rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    .form-header h2 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    .form-header p {
+        position: relative;
+        z-index: 1;
+        opacity: 0.85;
+    }
+
+    .form-body {
+        padding: 2.5rem;
+    }
+
+    .section-title {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: var(--primary-darker);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 1.25rem;
+        border-bottom: 2px solid var(--primary-gold);
+        display: inline-block;
+        padding-bottom: 0.5rem;
+    }
+
+    .benefits {
+        background: linear-gradient(135deg, #F8F9FA, #F0F1F3);
+        border-radius: 16px;
+        padding: 1.5rem;
+        margin-top: 1.5rem;
+        border-left: 4px solid var(--primary-gold);
+    }
+
+    .benefits ul {
+        margin-bottom: 0;
+        padding-left: 1.2rem;
+    }
+
+    .benefits li {
+        font-size: 0.85rem;
+        margin-bottom: 0.5rem;
+        color: var(--primary-gray);
+        transition: all 0.3s ease;
+    }
+
+    .benefits li:hover {
+        color: var(--primary-darker);
+        transform: translateX(5px);
+    }
+
+    .btn-register {
+        background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark));
+        color: var(--primary-darker);
+        border: none;
+        padding: 14px 28px;
+        border-radius: 12px;
+        font-weight: 700;
+        width: 100%;
+        transition: all 0.3s ease;
+        font-size: 1rem;
+    }
+
+    .btn-register:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(218, 165, 32, 0.35);
+        color: var(--primary-darker);
+    }
+
+    .btn-register:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    .terms-link {
+        color: var(--primary-gold);
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.3s ease;
+    }
+
+    .terms-link:hover {
+        color: var(--primary-gold-dark);
+        text-decoration: underline;
+    }
+
+    .password-strength {
+        height: 4px;
+        margin-top: 0.5rem;
+        border-radius: 2px;
+        background: #e9ecef;
+        transition: all 0.3s ease;
+    }
+
+    .strength-weak { background: #dc3545; width: 25%; }
+    .strength-medium { background: #ffc107; width: 50%; }
+    .strength-strong { background: #28a745; width: 75%; }
+    .strength-very-strong { background: #28a745; width: 100%; }
+
+    .password-match-success {
+        color: #28a745;
+        font-size: 0.75rem;
+        margin-top: 0.25rem;
+    }
+
+    .password-match-error {
+        color: #dc3545;
+        font-size: 0.75rem;
+        margin-top: 0.25rem;
+    }
+
+    .error-message {
+        color: #dc3545;
+        font-size: 0.75rem;
+        margin-top: 0.25rem;
+    }
+
+    .form-control.error {
+        border-color: #dc3545;
+    }
+
+    .form-control:focus {
+        border-color: var(--primary-gold);
+        box-shadow: 0 0 0 0.2rem rgba(218, 165, 32, 0.25);
+    }
+
+    .btn-gold {
+        background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark));
+        color: var(--primary-darker);
+        border: none;
+        padding: 8px 24px;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-gold:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(218, 165, 32, 0.3);
+        color: var(--primary-darker);
+    }
+
+    @media (max-width: 768px) {
+        .form-body {
+            padding: 1.5rem;
+        }
+        .form-header {
+            padding: 1.5rem;
+        }
+        .form-header i {
+            font-size: 2.5rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <div class="register-container">
+        <div class="form-card">
+            <div class="form-header">
+                <i class="fas fa-book-reader"></i>
+                <h2>Become a Reader</h2>
+                <p class="mb-0">Join Abrehot Library and start your reading journey today</p>
+            </div>
+            <div class="form-body">
+                <form method="POST" novalidate id="registerForm">
+                    {% csrf_token %}
+
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {% for error in form.non_field_errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <!-- Personal Information Section -->
+                    <div class="mb-4">
+                        <h6 class="section-title"><i class="fas fa-user me-2"></i>Personal Information</h6>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="full_name" class="form-label fw-bold">
+                                Full Name <span class="text-danger">*</span>
+                            </label>
+                            <input type="text" name="full_name" id="full_name" class="form-control" value="{{ form.full_name.value|default:'' }}" required>
+                            {% if form.full_name.errors %}
+                                <div class="text-danger small mt-1">{{ form.full_name.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            <label for="username" class="form-label fw-bold">
+                                Username <span class="text-danger">*</span>
+                            </label>
+                            <input type="text" name="username" id="username" class="form-control" value="{{ form.username.value|default:'' }}" required>
+                            <small class="text-muted">Letters, digits and @/./+/-/_ only.</small>
+                            <div id="usernameError" class="error-message"></div>
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mt-2">
+                        <div class="col-md-6">
+                            <label for="email" class="form-label fw-bold">
+                                Email Address <span class="text-danger">*</span>
+                            </label>
+                            <input type="email" name="email" id="email" class="form-control" value="{{ form.email.value|default:'' }}" required>
+                            <div id="emailError" class="error-message"></div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="phone" class="form-label fw-bold">
+                                Phone Number <span class="text-danger">*</span>
+                            </label>
+                            <input type="tel" name="phone" id="phone" class="form-control" placeholder="09XXXXXXXX" value="{{ form.phone.value|default:'' }}" required>
+                            <small class="text-muted">For Telebirr/Chapa payments (Format: 09XXXXXXXX)</small>
+                            <div id="phoneError" class="error-message"></div>
+                        </div>
+                    </div>
+
+                    <!-- Demographics Section -->
+                    <div class="mb-4 mt-4">
+                        <h6 class="section-title"><i class="fas fa-map-marker-alt me-2"></i>Demographics (Optional)</h6>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label for="date_of_birth" class="form-label fw-bold">Date of Birth</label>
+                            <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" value="{{ form.date_of_birth.value|default:'' }}">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="gender" class="form-label fw-bold">Gender</label>
+                            <select class="form-select" id="gender" name="gender">
+                                <option value="">Select Gender</option>
+                                <option value="M" {% if form.gender.value == 'M' %}selected{% endif %}>Male</option>
+                                <option value="F" {% if form.gender.value == 'F' %}selected{% endif %}>Female</option>
+                                <option value="O" {% if form.gender.value == 'O' %}selected{% endif %}>Other</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="region" class="form-label fw-bold">Region</label>
+                            <input type="text" class="form-control" id="region" name="region" placeholder="e.g., Addis Ababa" value="{{ form.region.value|default:'' }}">
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mt-2">
+                        <div class="col-md-6">
+                            <label for="zone" class="form-label fw-bold">Zone / Subcity</label>
+                            <input type="text" class="form-control" id="zone" name="zone" placeholder="e.g., Bole" value="{{ form.zone.value|default:'' }}">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="woreda" class="form-label fw-bold">Woreda</label>
+                            <input type="text" class="form-control" id="woreda" name="woreda" placeholder="e.g., Woreda 03" value="{{ form.woreda.value|default:'' }}">
+                        </div>
+                    </div>
+
+                    <div class="mt-3">
+                        <label for="address" class="form-label fw-bold">Address</label>
+                        <textarea class="form-control" id="address" name="address" rows="2" placeholder="Your residential address">{{ form.address.value|default:'' }}</textarea>
+                    </div>
+
+                    <!-- Security Section -->
+                    <div class="mb-4 mt-4">
+                        <h6 class="section-title"><i class="fas fa-lock me-2"></i>Account Security</h6>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="password" class="form-label fw-bold">
+                                Password <span class="text-danger">*</span>
+                            </label>
+                            <input type="password" name="password1" id="password" class="form-control" required>
+                            <div id="passwordStrengthBar" class="password-strength"></div>
+                            <small class="text-muted">Minimum 8 characters with uppercase, lowercase, and a number</small>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="confirm_password" class="form-label fw-bold">
+                                Confirm Password <span class="text-danger">*</span>
+                            </label>
+                            <input type="password" name="password2" id="confirm_password" class="form-control" required>
+                            <div id="passwordMatchMessage" class="password-match-error"></div>
+                        </div>
+                    </div>
+
+                    <!-- Preferences -->
+                    <div class="mt-4">
+                        <div class="form-check mb-2">
+                            <input type="checkbox" name="newsletter_subscribed" id="newsletter_subscribed" class="form-check-input" {% if form.newsletter_subscribed.value %}checked{% else %}checked{% endif %}>
+                            <label class="form-check-label" for="newsletter_subscribed">
+                                <i class="fas fa-envelope me-1 text-gold"></i> Subscribe to newsletter for personalized book recommendations
+                            </label>
+                        </div>
+
+                        <div class="form-check">
+                            <input type="checkbox" name="terms_accepted" id="terms_accepted" class="form-check-input" required>
+                            <label class="form-check-label" for="terms_accepted">
+                                I agree to the <a href="#" class="terms-link" data-bs-toggle="modal" data-bs-target="#termsModal">Terms of Service</a> and
+                                <a href="#" class="terms-link" data-bs-toggle="modal" data-bs-target="#privacyModal">Privacy Policy</a>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="benefits">
+                        <strong><i class="fas fa-gift me-2" style="color: var(--primary-gold);"></i>What you get as a Reader:</strong>
+                        <ul class="mt-2">
+                            <li><i class="fas fa-check-circle me-2" style="color: #28a745; font-size: 0.7rem;"></i> Access to hundreds of Ethiopian eBooks</li>
+                            <li><i class="fas fa-check-circle me-2" style="color: #28a745; font-size: 0.7rem;"></i> Easy payments with Telebirr & Chapa</li>
+                            <li><i class="fas fa-check-circle me-2" style="color: #28a745; font-size: 0.7rem;"></i> Read on any device (phone, tablet, computer)</li>
+                            <li><i class="fas fa-check-circle me-2" style="color: #28a745; font-size: 0.7rem;"></i> Secure account with 2FA option</li>
+                            <li><i class="fas fa-check-circle me-2" style="color: #28a745; font-size: 0.7rem;"></i> Personalized book recommendations</li>
+                        </ul>
+                    </div>
+
+                    <button type="submit" class="btn-register mt-4" id="submitBtn" disabled>
+                        <i class="fas fa-user-plus me-2"></i> Create Free Account
+                    </button>
+                </form>
+
+                <hr class="my-4">
+
+                <div class="text-center">
+                    <p class="mb-0">Already have an account? <a href="{% url 'accounts:login' %}" class="terms-link">Sign In</a></p>
+                    <p class="mt-2 mb-0">Want to publish your own books? <a href="{% url 'accounts:register_author' %}" class="terms-link">Register as an Author</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Terms of Service Modal -->
+<div class="modal fade" id="termsModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header" style="background: linear-gradient(135deg, var(--primary-darker), var(--primary-dark)); color: white;">
+                <h5 class="modal-title"><i class="fas fa-file-contract me-2"></i>Terms of Service</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <h6>1. Account Usage</h6>
+                <p>You are responsible for maintaining the confidentiality of your account credentials.</p>
+                <h6 class="mt-3">2. Purchases & Refunds</h6>
+                <p>Digital products are non-refundable after download.</p>
+                <h6 class="mt-3">3. Content Usage Rights</h6>
+                <p>Purchased books are for personal use only.</p>
+                <h6 class="mt-3">4. User Conduct</h6>
+                <p>You agree to use the platform lawfully and respectfully.</p>
+                <h6 class="mt-3">5. Account Termination</h6>
+                <p>We reserve the right to suspend or terminate accounts that violate our terms.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-gold" data-bs-dismiss="modal">I Agree</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Privacy Policy Modal -->
+<div class="modal fade" id="privacyModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header" style="background: linear-gradient(135deg, var(--primary-darker), var(--primary-dark)); color: white;">
+                <h5 class="modal-title"><i class="fas fa-shield-alt me-2"></i>Privacy Policy</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <h6>Information We Collect</h6>
+                <p>We collect your name, email, phone number, and reading preferences.</p>
+                <h6 class="mt-3">How We Use Your Data</h6>
+                <p>Your information is used for account management and personalized recommendations.</p>
+                <h6 class="mt-3">Data Security</h6>
+                <p>We implement industry-standard security measures to protect your data.</p>
+                <h6 class="mt-3">Your Rights</h6>
+                <p>You can access, correct, or delete your personal data at any time.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-gold" data-bs-dismiss="modal">I Understand</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Password strength checker
+    const passwordInput = document.getElementById('password');
+    const confirmInput = document.getElementById('confirm_password');
+    const strengthBar = document.getElementById('passwordStrengthBar');
+    const matchMessage = document.getElementById('passwordMatchMessage');
+
+    function checkPasswordStrength(password) {
+        let strength = 0;
+        if (password.length >= 8) strength++;
+        if (password.match(/[a-z]+/)) strength++;
+        if (password.match(/[A-Z]+/)) strength++;
+        if (password.match(/[0-9]+/)) strength++;
+        if (password.match(/[$@#&!%*?]+/)) strength++;
+
+        strengthBar.className = 'password-strength';
+        if (strength <= 2) strengthBar.classList.add('strength-weak');
+        else if (strength <= 4) strengthBar.classList.add('strength-medium');
+        else strengthBar.classList.add('strength-strong');
+        if (strength === 5) strengthBar.classList.add('strength-very-strong');
+    }
+
+    function checkPasswordMatch() {
+        const password = passwordInput.value;
+        const confirm = confirmInput.value;
+
+        if (confirm.length > 0) {
+            if (password === confirm) {
+                matchMessage.innerHTML = '<i class="fas fa-check-circle me-1"></i> Passwords match';
+                matchMessage.className = 'password-match-success';
+                return true;
+            } else {
+                matchMessage.innerHTML = '<i class="fas fa-times-circle me-1"></i> Passwords do not match';
+                matchMessage.className = 'password-match-error';
+                return false;
+            }
+        }
+        matchMessage.innerHTML = '';
+        return false;
+    }
+
+    function validateEmail(email) {
+        return /^[^\s@]+@([^\s@.,]+\.)+[^\s@.,]{2,}$/.test(email);
+    }
+
+    function validatePhone(phone) {
+        return /^09\d{8}$/.test(phone);
+    }
+
+    function validateUsername(username) {
+        return /^[a-zA-Z0-9@.+-_]{3,50}$/.test(username);
+    }
+
+    function enableSubmitButton() {
+        const submitBtn = document.getElementById('submitBtn');
+        const fullName = document.getElementById('full_name')?.value.trim();
+        const username = document.getElementById('username')?.value.trim();
+        const email = document.getElementById('email')?.value.trim();
+        const phone = document.getElementById('phone')?.value.trim();
+        const password = passwordInput?.value;
+        const confirm = confirmInput?.value;
+        const termsChecked = document.getElementById('terms_accepted')?.checked;
+
+        const isFormValid = fullName !== '' &&
+                            validateUsername(username) &&
+                            validateEmail(email) &&
+                            validatePhone(phone) &&
+                            password === confirm &&
+                            password && password.length >= 8 &&
+                            termsChecked;
+
+        submitBtn.disabled = !isFormValid;
+    }
+
+    // Event listeners
+    passwordInput?.addEventListener('input', function() {
+        checkPasswordStrength(this.value);
+        checkPasswordMatch();
+        enableSubmitButton();
+    });
+
+    confirmInput?.addEventListener('input', function() {
+        checkPasswordMatch();
+        enableSubmitButton();
+    });
+
+    document.getElementById('full_name')?.addEventListener('input', enableSubmitButton);
+
+    document.getElementById('username')?.addEventListener('input', function() {
+        const username = this.value.trim();
+        const errorDiv = document.getElementById('usernameError');
+
+        if (username && !validateUsername(username)) {
+            errorDiv.innerHTML = 'Username must be 3-50 characters using letters, numbers, @, ., +, -, _';
+            this.classList.add('error');
+        } else {
+            errorDiv.innerHTML = '';
+            this.classList.remove('error');
+        }
+        enableSubmitButton();
+    });
+
+    document.getElementById('email')?.addEventListener('input', function() {
+        const email = this.value.trim();
+        const errorDiv = document.getElementById('emailError');
+
+        if (email && !validateEmail(email)) {
+            errorDiv.innerHTML = 'Please enter a valid email address';
+            this.classList.add('error');
+        } else {
+            errorDiv.innerHTML = '';
+            this.classList.remove('error');
+        }
+        enableSubmitButton();
+    });
+
+    document.getElementById('phone')?.addEventListener('input', function() {
+        const phone = this.value.trim();
+        const errorDiv = document.getElementById('phoneError');
+
+        if (phone && !validatePhone(phone)) {
+            errorDiv.innerHTML = 'Phone number must be 10 digits starting with 09 (e.g., 0912345678)';
+            this.classList.add('error');
+        } else {
+            errorDiv.innerHTML = '';
+            this.classList.remove('error');
+        }
+        enableSubmitButton();
+    });
+
+    document.getElementById('terms_accepted')?.addEventListener('change', enableSubmitButton);
+
+    document.getElementById('registerForm')?.addEventListener('submit', function(e) {
+        const username = document.getElementById('username').value.trim();
+        if (!validateUsername(username)) {
+            e.preventDefault();
+            alert('Please enter a valid username (3-50 characters, letters, numbers, @.+-_)');
+            return false;
+        }
+
+        const email = document.getElementById('email').value.trim();
+        if (!validateEmail(email)) {
+            e.preventDefault();
+            alert('Please enter a valid email address');
+            return false;
+        }
+
+        const phone = document.getElementById('phone').value.trim();
+        if (!validatePhone(phone)) {
+            e.preventDefault();
+            alert('Please enter a valid phone number (10 digits starting with 09)');
+            return false;
+        }
+
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Creating your account...';
+
+        return true;
+    });
+</script>
+{% endblock %}

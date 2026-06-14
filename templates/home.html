@@ -1,0 +1,684 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}Abrehot Library - Enlightenment for Ethiopia{% endblock %}
+
+{% block extra_css %}
+<style>
+    :root {
+        --primary-gold: #DAA520;
+        --primary-gold-dark: #B8860B;
+        --primary-gold-light: #F5D061;
+        --primary-dark: #2C2C2C;
+        --primary-darker: #1A1A1A;
+        --primary-gray: #4A4A4A;
+    }
+
+    /* Hero Section */
+    .hero-section {
+        background: linear-gradient(135deg, var(--primary-darker) 0%, var(--primary-dark) 100%);
+        padding: 80px 0;
+        color: white;
+        margin-top: -1.5rem;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .hero-section::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(218, 165, 32, 0.08) 0%, transparent 70%);
+        transform: rotate(45deg);
+    }
+    
+    .hero-title {
+        font-size: 3.2rem;
+        font-weight: 800;
+        margin-bottom: 1rem;
+        letter-spacing: -1px;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .hero-title span {
+        color: var(--primary-gold);
+    }
+    
+    .hero-motto {
+        font-size: 1.1rem;
+        font-style: italic;
+        color: var(--primary-gold-light);
+        margin-bottom: 1rem;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .hero-subtitle {
+        font-size: 1rem;
+        opacity: 0.85;
+        margin-bottom: 2rem;
+        line-height: 1.6;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .hero-image {
+        max-width: 100%;
+        height: auto;
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .hero-image:hover {
+        transform: scale(1.02);
+        box-shadow: 0 25px 50px rgba(0,0,0,0.4);
+    }
+    
+    /* Stat Cards */
+    .stat-card {
+        background: white;
+        border-radius: 20px;
+        padding: 1.8rem;
+        text-align: center;
+        box-shadow: var(--card-shadow);
+        border-bottom: 4px solid var(--primary-gold);
+        transition: all 0.3s ease;
+        height: 100%;
+    }
+    
+    .stat-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+    }
+    
+    .stat-icon {
+        font-size: 2.5rem;
+        color: var(--primary-gold);
+        margin-bottom: 1rem;
+    }
+    
+    .stat-number {
+        font-size: 2rem;
+        font-weight: 800;
+        color: var(--primary-darker);
+        margin-bottom: 0.25rem;
+    }
+    
+    .stat-label {
+        color: var(--primary-gray);
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+    
+    /* Feature Cards */
+    .feature-card {
+        background: white;
+        border-radius: 20px;
+        padding: 2rem;
+        text-align: center;
+        height: 100%;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        border: 1px solid #E8E8E8;
+    }
+    
+    .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        border-color: var(--primary-gold-light);
+    }
+    
+    .feature-icon {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, #F5F5F5, #E8E8E8);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+    }
+    
+    .feature-icon i {
+        font-size: 2.2rem;
+        color: var(--primary-gold);
+    }
+    
+    .feature-card h4 {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: var(--primary-darker);
+        margin-bottom: 0.75rem;
+    }
+    
+    .feature-card p {
+        color: var(--primary-gray);
+        font-size: 0.9rem;
+        line-height: 1.5;
+    }
+    
+    /* Section Title */
+    .section-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--primary-darker);
+        margin-bottom: 1rem;
+        position: relative;
+        display: inline-block;
+    }
+    
+    .section-title:after {
+        content: '';
+        position: absolute;
+        bottom: -12px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 70px;
+        height: 3px;
+        background: var(--primary-gold);
+        border-radius: 2px;
+    }
+    
+    /* Book Cards */
+    .book-card {
+        background: white;
+        border-radius: 16px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        height: 100%;
+    }
+    
+    .book-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+    }
+    
+    .book-cover {
+        height: 220px;
+        background-size: cover;
+        background-position: center;
+        background-color: #f0f0f0;
+        position: relative;
+    }
+    
+    .book-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+    
+    .book-card:hover .book-overlay {
+        opacity: 1;
+    }
+    
+    .download-count {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        background: rgba(0,0,0,0.6);
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 0.7rem;
+        color: white;
+    }
+    
+    /* Step Cards */
+    .step-card {
+        text-align: center;
+        padding: 1.5rem;
+    }
+    
+    .step-number {
+        width: 50px;
+        height: 50px;
+        background: var(--primary-gold);
+        color: var(--primary-darker);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        font-weight: 800;
+        margin: 0 auto 1rem;
+    }
+    
+    /* CTA Section */
+    .cta-section {
+        background: linear-gradient(135deg, var(--primary-darker) 0%, var(--primary-dark) 100%);
+        padding: 60px 0;
+        border-radius: 24px;
+        margin: 40px 0;
+    }
+    
+    /* Testimonial Cards */
+    .testimonial-card {
+        background: white;
+        border-radius: 20px;
+        padding: 1.8rem;
+        margin: 0.5rem;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        border-left: 4px solid var(--primary-gold);
+    }
+    
+    .testimonial-text {
+        font-style: italic;
+        color: var(--primary-gray);
+        line-height: 1.6;
+    }
+    
+    .avatar-circle {
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, var(--primary-darker), var(--primary-dark));
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .avatar-circle i {
+        font-size: 1.5rem;
+        color: var(--primary-gold);
+    }
+    
+    /* Animations */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .fade-in-up {
+        animation: fadeInUp 0.6s ease-out;
+    }
+    
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
+    
+    .btn-gold {
+        background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark));
+        color: var(--primary-darker);
+        border: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-gold:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(218, 165, 32, 0.4);
+        color: var(--primary-darker);
+    }
+    
+    .btn-outline-gold {
+        border: 2px solid var(--primary-gold);
+        color: var(--primary-gold);
+        background: transparent;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-outline-gold:hover {
+        background: var(--primary-gold);
+        color: var(--primary-darker);
+        transform: translateY(-2px);
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+        .hero-title {
+            font-size: 2rem;
+            text-align: center;
+        }
+        .hero-motto {
+            font-size: 0.9rem;
+            text-align: center;
+        }
+        .hero-subtitle {
+            font-size: 0.85rem;
+            text-align: center;
+        }
+        .section-title {
+            font-size: 1.6rem;
+        }
+        .hero-buttons {
+            text-align: center;
+        }
+        .hero-image {
+            max-width: 80%;
+            margin-top: 2rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-7 fade-in-up">
+                <h1 class="hero-title">Welcome to <span>Abrehot Library</span></h1>
+                <p class="hero-motto"><i class="fas fa-lightbulb me-2"></i>"Enlightenment for Ethiopia"</p>
+                <p class="hero-subtitle">Ethiopia's premier digital library platform where knowledge meets innovation. Discover, read, and publish Ethiopian literature.</p>
+                <div class="hero-buttons mt-4">
+                    <a href="/books/browse/" class="btn btn-gold me-3 px-4 py-2">
+                        <i class="fas fa-book-open me-2"></i> Browse Books
+                    </a>
+                    <a href="/accounts/register/author/" class="btn btn-outline-gold px-4 py-2">
+                        <i class="fas fa-pen-fancy me-2"></i> Publish as Author
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-5 text-center fade-in-up delay-1">
+                <img src="{% static 'images/Abrehot.jpg' %}" alt="Abrehot Library" class="hero-image" onerror="this.src='https://via.placeholder.com/400x400/DAA520/1A1A1A?text=Abrehot+Library'">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Statistics Section -->
+<div class="container mt-5">
+    <div class="row g-4">
+        <div class="col-md-3 fade-in-up delay-1">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-book"></i></div>
+                <div class="stat-number">{{ total_books|default:0|intcomma }}+</div>
+                <div class="stat-label">Books Available</div>
+            </div>
+        </div>
+        <div class="col-md-3 fade-in-up delay-2">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-users"></i></div>
+                <div class="stat-number">{{ total_readers|default:0|intcomma }}+</div>
+                <div class="stat-label">Active Readers</div>
+            </div>
+        </div>
+        <div class="col-md-3 fade-in-up delay-3">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-pen-fancy"></i></div>
+                <div class="stat-number">{{ total_authors|default:0|intcomma }}+</div>
+                <div class="stat-label">Published Authors</div>
+            </div>
+        </div>
+        <div class="col-md-3 fade-in-up delay-3">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-download"></i></div>
+                <div class="stat-number">{{ total_downloads|default:0|intcomma }}+</div>
+                <div class="stat-label">Total Downloads</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Featured Books Section - Display Published Books from Database -->
+<div class="container mt-5">
+    <div class="text-center mb-5">
+        <h2 class="section-title">Featured  Books</h2>
+        <p class="text-muted mt-4">Discover some of our most popular titles</p>
+    </div>
+    
+    {% if featured_books %}
+    <div class="row g-4">
+        {% for book in featured_books %}
+        <div class="col-md-4 col-lg-3 fade-in-up delay-{{ forloop.counter|add:"0"|slice:"-1" }}">
+            <div class="book-card">
+                <div class="book-cover" style="background-image: url('{% if book.cover_image %}{{ book.cover_image.url }}{% else %}https://via.placeholder.com/300x400/2C2C2C/DAA520?text=No+Cover{% endif %}'); background-size: cover;">
+                    <div class="book-overlay">
+                        <a href="/books/{{ book.id }}/" class="btn btn-gold btn-sm">View Details</a>
+                    </div>
+                    <div class="download-count">
+                        <i class="fas fa-download me-1"></i> {{ book.downloads_count|default:0|intcomma }}
+                    </div>
+                </div>
+                <div class="p-3">
+                    <h6 class="mb-0 text-truncate">{{ book.title|truncatechars:35 }}</h6>
+                    <small class="text-muted">by {{ book.author.full_name|default:"Unknown" }}</small>
+                    <div class="mt-2 d-flex justify-content-between align-items-center">
+                        {% if book.is_free %}
+                            <span class="badge bg-success">FREE</span>
+                        {% else %}
+                            <span class="badge" style="background: var(--primary-gold); color: var(--primary-darker);">{{ book.price }} ETB</span>
+                        {% endif %}
+                        <small class="text-muted">
+                            <i class="fas fa-download me-1"></i> {{ book.downloads_count|default:0|intcomma }}
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <div class="text-center mt-4">
+        <a href="/books/browse/" class="btn btn-gold px-5 py-2">
+            <i class="fas fa-search me-2"></i> Browse All Books
+        </a>
+    </div>
+    {% else %}
+    <div class="alert alert-info text-center">
+        <i class="fas fa-info-circle me-2"></i> No books available yet. Check back soon!
+    </div>
+    {% endif %}
+</div>
+
+<!-- Features Section -->
+<div class="container mt-5">
+    <div class="text-center mb-5">
+        <h2 class="section-title">Why Choose Abrehot Library?</h2>
+        <p class="text-muted mt-4">Discover the features that make us Ethiopia's leading digital library platform</p>
+    </div>
+    
+    <div class="row g-4">
+        <div class="col-md-4 fade-in-up delay-1">
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-rocket"></i></div>
+                <h4>Easy Publishing</h4>
+                <p>Upload your eBook in minutes and start earning royalties. Our simple publishing process gets your work to readers fast.</p>
+            </div>
+        </div>
+        <div class="col-md-4 fade-in-up delay-2">
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+                <h4>Track Earnings</h4>
+                <p>Real-time dashboard showing your sales, downloads, and royalties. Know exactly what you're earning.</p>
+            </div>
+        </div>
+        <div class="col-md-4 fade-in-up delay-3">
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+                <h4>Quality Assurance</h4>
+                <p>Professional quality review process ensures only the best content reaches our readers.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row g-4 mt-2">
+        <div class="col-md-4 fade-in-up delay-1">
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-mobile-alt"></i></div>
+                <h4>Read Anywhere</h4>
+                <p>Access your library on any device - phone, tablet, or computer. Read online or download for offline reading.</p>
+            </div>
+        </div>
+        <div class="col-md-4 fade-in-up delay-2">
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-coins"></i></div>
+                <h4>Fair Royalties</h4>
+                <p>Authors earn 70% commission on every sale. Monthly payouts via Telebirr, Chapa, or bank transfer.</p>
+            </div>
+        </div>
+        <div class="col-md-4 fade-in-up delay-3">
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-headset"></i></div>
+                <h4>24/7 Support</h4>
+                <p>Dedicated support team available around the clock to help with any questions or issues.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- How It Works -->
+<div class="container mt-5">
+    <div class="text-center mb-5">
+        <h2 class="section-title">How It Works</h2>
+        <p class="text-muted mt-4">Simple steps to start your publishing journey</p>
+    </div>
+    
+    <div class="row g-4">
+        <div class="col-md-3 text-center fade-in-up delay-1">
+            <div class="step-card">
+                <div class="step-number">1</div>
+                <h5>Register</h5>
+                <p class="text-muted small">Create your author account with National ID verification</p>
+            </div>
+        </div>
+        <div class="col-md-3 text-center fade-in-up delay-2">
+            <div class="step-card">
+                <div class="step-number">2</div>
+                <h5>Upload</h5>
+                <p class="text-muted small">Upload your eBook and cover image</p>
+            </div>
+        </div>
+        <div class="col-md-3 text-center fade-in-up delay-3">
+            <div class="step-card">
+                <div class="step-number">3</div>
+                <h5>Review</h5>
+                <p class="text-muted small">Quality check by our expert team (2-3 days)</p>
+            </div>
+        </div>
+        <div class="col-md-3 text-center fade-in-up delay-3">
+            <div class="step-card">
+                <div class="step-number">4</div>
+                <h5>Earn</h5>
+                <p class="text-muted small">Start earning royalties from sales</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Call to Action -->
+<div class="container mt-5">
+    <div class="cta-section text-center">
+        <div class="container">
+            <h2 class="text-white mb-3">Ready to Start Your Journey?</h2>
+            <p class="text-white-50 mb-4">Join thousands of readers and authors on Abrehot Library today</p>
+            {% if not user.is_authenticated %}
+                <div class="d-flex justify-content-center gap-3 flex-wrap">
+                    <a href="/accounts/register/author/" class="btn btn-gold px-4 py-2">
+                        <i class="fas fa-pen-fancy me-2"></i> Become an Author
+                    </a>
+                    <a href="/accounts/register/" class="btn btn-outline-gold px-4 py-2">
+                        <i class="fas fa-book-reader me-2"></i> Start Reading
+                    </a>
+                </div>
+            {% else %}
+                <div class="d-flex justify-content-center gap-3 flex-wrap">
+                    <a href="/accounts/dashboard/" class="btn btn-gold px-4 py-2">
+                        <i class="fas fa-tachometer-alt me-2"></i> Go to Dashboard
+                    </a>
+                    <a href="/books/browse/" class="btn btn-outline-gold px-4 py-2">
+                        <i class="fas fa-search me-2"></i> Browse Books
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Testimonials -->
+<div class="container mt-5 mb-5">
+    <div class="text-center mb-5">
+        <h2 class="section-title">What Our Users Say</h2>
+        <p class="text-muted mt-4">Join thousands of satisfied readers and authors</p>
+    </div>
+    
+    <div class="row g-4">
+        <div class="col-md-4 fade-in-up delay-1">
+            <div class="testimonial-card">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="avatar-circle me-3">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div>
+                        <h6 class="mb-0">Dr. Almaz T.</h6>
+                        <small class="text-muted">Author</small>
+                    </div>
+                </div>
+                <p class="testimonial-text mb-0">"Abrehot Library has transformed my publishing experience. The platform is easy to use, and I've reached readers across Ethiopia."</p>
+                <div class="mt-2">
+                    <i class="fas fa-star" style="color: var(--primary-gold);"></i>
+                    <i class="fas fa-star" style="color: var(--primary-gold);"></i>
+                    <i class="fas fa-star" style="color: var(--primary-gold);"></i>
+                    <i class="fas fa-star" style="color: var(--primary-gold);"></i>
+                    <i class="fas fa-star" style="color: var(--primary-gold);"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 fade-in-up delay-2">
+            <div class="testimonial-card">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="avatar-circle me-3">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div>
+                        <h6 class="mb-0">Michael D.</h6>
+                        <small class="text-muted">Reader</small>
+                    </div>
+                </div>
+                <p class="testimonial-text mb-0">"The best digital library in Ethiopia! Wide selection of books and easy payment with Telebirr. Highly recommended!"</p>
+                <div class="mt-2">
+                    <i class="fas fa-star" style="color: var(--primary-gold);"></i>
+                    <i class="fas fa-star" style="color: var(--primary-gold);"></i>
+                    <i class="fas fa-star" style="color: var(--primary-gold);"></i>
+                    <i class="fas fa-star" style="color: var(--primary-gold);"></i>
+                    <i class="fas fa-star" style="color: var(--primary-gold);"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 fade-in-up delay-3">
+            <div class="testimonial-card">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="avatar-circle me-3">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div>
+                        <h6 class="mb-0">Yonas A.</h6>
+                        <small class="text-muted">Author</small>
+                    </div>
+                </div>
+                <p class="testimonial-text mb-0">"Royalty payments are prompt, and the support team is very responsive. Great platform for Ethiopian writers!"</p>
+                <div class="mt-2">
+                    <i class="fas fa-star" style="color: var(--primary-gold);"></i>
+                    <i class="fas fa-star" style="color: var(--primary-gold);"></i>
+                    <i class="fas fa-star" style="color: var(--primary-gold);"></i>
+                    <i class="fas fa-star" style="color: var(--primary-gold);"></i>
+                    <i class="fas fa-star" style="color: var(--primary-gold);"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

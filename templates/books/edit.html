@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Edit Book - Abrehot Library{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="form-container" style="max-width: 800px; margin: 0 auto;">
+        <div class="card shadow-sm">
+            <div class="card-header" style="background: linear-gradient(135deg, #1A1A1A, #2C2C2C); color: white;">
+                <h4 class="mb-0"><i class="fas fa-edit me-2"></i>Edit Book</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Title</label>
+                        <input type="text" name="title" class="form-control" value="{{ book.title }}" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Subtitle</label>
+                        <input type="text" name="subtitle" class="form-control" value="{{ book.subtitle }}">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        <textarea name="description" class="form-control" rows="5" required>{{ book.description }}</textarea>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Genre</label>
+                            <select name="genre" class="form-select" required>
+                                <option value="">Select Genre</option>
+                                {% for genre in genres %}
+                                <option value="{{ genre.id }}" {% if book.genre.id == genre.id %}selected{% endif %}>{{ genre.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Language</label>
+                            <select name="language" class="form-select" required>
+                                <option value="English" {% if book.language == 'English' %}selected{% endif %}>English</option>
+                                <option value="Amharic" {% if book.language == 'Amharic' %}selected{% endif %}>Amharic</option>
+                                <option value="Arabic" {% if book.language == 'Arabic' %}selected{% endif %}>Arabic</option>
+                                <option value="French" {% if book.language == 'French' %}selected{% endif %}>French</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Edition</label>
+                            <input type="text" name="edition" class="form-control" value="{{ book.edition }}">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Page Count</label>
+                            <input type="number" name="page_count" class="form-control" value="{{ book.page_count }}">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Publication Year</label>
+                            <input type="number" name="publication_year" class="form-control" value="{{ book.publication_year }}">
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Price (ETB)</label>
+                            <input type="number" name="price" class="form-control" step="0.01" value="{{ book.price }}">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-check mt-4">
+                                <input type="checkbox" name="is_free" class="form-check-input" id="is_free" {% if book.is_free %}checked{% endif %}>
+                                <label class="form-check-label" for="is_free">Make this book FREE</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Keywords</label>
+                        <input type="text" name="keywords" class="form-control" value="{{ book.keywords }}">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">ISBN</label>
+                        <input type="text" name="isbn" class="form-control" value="{{ book.isbn }}">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Current Book File</label>
+                        {% if book.file %}
+                            <p class="text-muted">Current file: <a href="{{ book.file.url }}" target="_blank">{{ book.file.name }}</a></p>
+                        {% else %}
+                            <p class="text-muted">No file uploaded</p>
+                        {% endif %}
+                        <input type="file" name="file" class="form-control" accept=".pdf,.epub">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Current Cover Image</label>
+                        {% if book.cover_image %}
+                            <div class="mb-2">
+                                <img src="{{ book.cover_image.url }}" alt="Current cover" style="height: 100px;">
+                            </div>
+                        {% endif %}
+                        <input type="file" name="cover_image" class="form-control" accept="image/*">
+                    </div>
+                    
+                    <hr>
+                    <div class="d-flex gap-2">
+                        <a href="{% url 'books:my_books' %}" class="btn btn-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-gold">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .btn-gold {
+        background: linear-gradient(135deg, #DAA520, #B8860B);
+        color: #1A1A1A;
+        border: none;
+        font-weight: 600;
+        padding: 10px 25px;
+    }
+    .btn-gold:hover {
+        transform: translateY(-2px);
+        color: #1A1A1A;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,464 @@
+{% extends 'admin/base_site.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}Analytics Dashboard | Abrehot Library Admin{% endblock %}
+
+{% block extrastyle %}
+<style>
+    :root {
+        --primary-gold: #DAA520;
+        --primary-gold-dark: #B8860B;
+        --primary-dark: #2C2C2C;
+        --primary-darker: #1A1A1A;
+    }
+    
+    .analytics-container {
+        padding: 20px;
+    }
+    
+    .stat-card {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        border-left: 4px solid var(--primary-gold);
+        transition: transform 0.2s;
+    }
+    
+    .stat-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+    
+    .stat-number {
+        font-size: 2rem;
+        font-weight: bold;
+        color: var(--primary-darker);
+        margin-bottom: 5px;
+    }
+    
+    .stat-label {
+        color: #6c757d;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .stat-icon {
+        font-size: 2rem;
+        color: var(--primary-gold);
+        opacity: 0.7;
+    }
+    
+    .section-title {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: var(--primary-darker);
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid var(--primary-gold);
+    }
+    
+    .table-analytics {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+    
+    .table-analytics thead {
+        background: linear-gradient(135deg, var(--primary-darker), var(--primary-dark));
+        color: white;
+    }
+    
+    .table-analytics th, .table-analytics td {
+        padding: 12px 15px;
+    }
+    
+    .badge-gold {
+        background: var(--primary-gold);
+        color: var(--primary-darker);
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+    
+    .progress {
+        height: 8px;
+        border-radius: 4px;
+    }
+    
+    .progress-bar {
+        background: var(--primary-gold);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="analytics-container">
+    <h1 class="mb-4">
+        <i class="fas fa-chart-line me-2" style="color: var(--primary-gold);"></i>
+        Analytics Dashboard
+    </h1>
+    
+    <!-- User Statistics -->
+    <div class="section-title">User Statistics</div>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <div class="stat-number">{{ total_users|default:0|intcomma }}</div>
+                        <div class="stat-label">Total Users</div>
+                    </div>
+                    <div class="stat-icon"><i class="fas fa-users"></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <div class="stat-number">{{ total_authors|default:0|intcomma }}</div>
+                        <div class="stat-label">Authors</div>
+                    </div>
+                    <div class="stat-icon"><i class="fas fa-pen-fancy"></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <div class="stat-number">{{ total_readers|default:0|intcomma }}</div>
+                        <div class="stat-label">Readers</div>
+                    </div>
+                    <div class="stat-icon"><i class="fas fa-book-reader"></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <div class="stat-number">{{ total_checkers|default:0|intcomma }}</div>
+                        <div class="stat-label">Checkers</div>
+                    </div>
+                    <div class="stat-icon"><i class="fas fa-search"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-3">
+        <div class="col-md-4">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <div class="stat-number">{{ new_users_month|default:0|intcomma }}</div>
+                        <div class="stat-label">New Users (30 Days)</div>
+                    </div>
+                    <div class="stat-icon"><i class="fas fa-user-plus"></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <div class="stat-number">{{ new_authors_month|default:0|intcomma }}</div>
+                        <div class="stat-label">New Authors (30 Days)</div>
+                    </div>
+                    <div class="stat-icon"><i class="fas fa-user-graduate"></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <div class="stat-number">{{ new_readers_month|default:0|intcomma }}</div>
+                        <div class="stat-label">New Readers (30 Days)</div>
+                    </div>
+                    <div class="stat-icon"><i class="fas fa-user-check"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Book Statistics -->
+    <div class="section-title mt-4">Book Statistics</div>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <div class="stat-number">{{ total_books|default:0|intcomma }}</div>
+                        <div class="stat-label">Total Books</div>
+                    </div>
+                    <div class="stat-icon"><i class="fas fa-book"></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <div class="stat-number">{{ published_books|default:0|intcomma }}</div>
+                        <div class="stat-label">Published</div>
+                    </div>
+                    <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <div class="stat-number">{{ pending_review|default:0|intcomma }}</div>
+                        <div class="stat-label">Pending Review</div>
+                    </div>
+                    <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <div class="stat-number">{{ books_published_month|default:0|intcomma }}</div>
+                        <div class="stat-label">Published (30 Days)</div>
+                    </div>
+                    <div class="stat-icon"><i class="fas fa-calendar-alt"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-3">
+        <div class="col-md-6">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <div class="stat-number">{{ free_books|default:0|intcomma }}</div>
+                        <div class="stat-label">Free Books</div>
+                    </div>
+                    <div class="stat-icon"><i class="fas fa-gift"></i></div>
+                </div>
+                <div class="progress mt-2">
+                    <div class="progress-bar" style="width: {% widthratio free_books published_books 100 %}%"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <div class="stat-number">{{ paid_books|default:0|intcomma }}</div>
+                        <div class="stat-label">Paid Books</div>
+                    </div>
+                    <div class="stat-icon"><i class="fas fa-tag"></i></div>
+                </div>
+                <div class="progress mt-2">
+                    <div class="progress-bar" style="width: {% widthratio paid_books published_books 100 %}%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Download & View Statistics -->
+    <div class="section-title mt-4">Usage Statistics</div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <div class="stat-number">{{ total_downloads|default:0|intcomma }}</div>
+                        <div class="stat-label">Total Downloads</div>
+                    </div>
+                    <div class="stat-icon"><i class="fas fa-download"></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <div class="stat-number">{{ downloads_month|default:0|intcomma }}</div>
+                        <div class="stat-label">Downloads (30 Days)</div>
+                    </div>
+                    <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <div class="stat-number">{{ total_views|default:0|intcomma }}</div>
+                        <div class="stat-label">Total Views</div>
+                    </div>
+                    <div class="stat-icon"><i class="fas fa-eye"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Financial Statistics -->
+    <div class="section-title mt-4">Financial Statistics</div>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <div class="stat-number">{{ total_sales|floatformat:0|intcomma }} ETB</div>
+                        <div class="stat-label">Total Sales</div>
+                    </div>
+                    <div class="stat-icon"><i class="fas fa-money-bill-wave"></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <div class="stat-number">{{ sales_month|floatformat:0|intcomma }} ETB</div>
+                        <div class="stat-label">Sales (30 Days)</div>
+                    </div>
+                    <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <div class="stat-number">{{ completed_transactions|default:0|intcomma }}</div>
+                        <div class="stat-label">Completed Transactions</div>
+                    </div>
+                    <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <div class="stat-number">{{ avg_checker_score|floatformat:1|default:0 }}</div>
+                        <div class="stat-label">Avg Quality Score</div>
+                    </div>
+                    <div class="stat-icon"><i class="fas fa-star"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Top Books -->
+    <div class="section-title mt-4">Top Selling Books</div>
+    <div class="table-analytics">
+        <table class="table">
+            <thead>
+                <tr><th>Title</th><th>Author</th><th>Price</th><th>Sales</th><th>Downloads</th></thead>
+            <tbody>
+                {% for book in top_books %}
+                <tr>
+                    <td><strong>{{ book.title|truncatechars:50 }}</strong></td>
+                    <td>{{ book.author.full_name|default:"Unknown" }}</td>
+                    <td>{% if book.is_free %}FREE{% else %}{{ book.price }} ETB{% endif %}</td>
+                    <td>{{ book.purchase_count|default:0|intcomma }}</td>
+                    <td>{{ book.downloads_count|default:0|intcomma }}</td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="5" class="text-center">No data available</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- Top Downloaded Books -->
+    <div class="section-title mt-4">Top Downloaded Books</div>
+    <div class="table-analytics">
+        <table class="table">
+            <thead>
+                <tr><th>Title</th><th>Author</th><th>Downloads</th><th>Views</th></thead>
+            <tbody>
+                {% for book in top_downloaded %}
+                <tr>
+                    <td><strong>{{ book.title|truncatechars:50 }}</strong></td>
+                    <td>{{ book.author.full_name|default:"Unknown" }}</td>
+                    <td>{{ book.downloads_count|default:0|intcomma }}</td>
+                    <td>{{ book.views_count|default:0|intcomma }}</td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="4" class="text-center">No data available</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- Popular Genres -->
+    <div class="section-title mt-4">Popular Genres</div>
+    <div class="table-analytics">
+        <table class="table">
+            <thead><tr><th>Genre</th><th>Books Count</th><th>Percentage</th></tr></thead>
+            <tbody>
+                {% for genre in genres %}
+                <tr>
+                    <td>{{ genre.name }}</td>
+                    <td>{{ genre.book_count|default:0|intcomma }}</td>
+                    <td>
+                        <div class="progress" style="width: 150px;">
+                            <div class="progress-bar" style="width: {% widthratio genre.book_count published_books 100 %}%"></div>
+                        </div>
+                        <span class="ms-2">{% widthratio genre.book_count published_books 100 %}%</span>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="3" class="text-center">No data available</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- Recent Activity -->
+    <div class="section-title mt-4">Recent Activity</div>
+    <div class="row">
+        <div class="col-md-6">
+            <h6 class="mb-3">Recently Published Books</h6>
+            <div class="table-analytics">
+                <table class="table">
+                    <thead><tr><th>Title</th><th>Published Date</th></tr></thead>
+                    <tbody>
+                        {% for book in recent_books %}
+                        <tr><td>{{ book.title|truncatechars:40 }}</td><td>{{ book.published_at|date:"M d, Y" }}</td></tr>
+                        {% empty %}
+                        <tr><td colspan="2" class="text-center">No recent books</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <h6 class="mb-3">Recent Users</h6>
+            <div class="table-analytics">
+                <table class="table">
+                    <thead><tr><th>Name</th><th>Role</th><th>Joined</th></tr></thead>
+                    <tbody>
+                        {% for user in recent_users %}
+                        <tr>
+                            <td>{{ user.full_name|default:user.username|truncatechars:25 }}</td>
+                            <td><span class="badge-gold">{{ user.role|title }}</span></td>
+                            <td>{{ user.date_joined|date:"M d, Y" }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="3" class="text-center">No recent users</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

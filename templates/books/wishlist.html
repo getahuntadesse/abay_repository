@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}My Wishlist - Abrehot Library{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header" style="background: linear-gradient(135deg, #1A1A1A, #2C2C2C); color: white;">
+            <h4 class="mb-0"><i class="fas fa-heart me-2"></i>My Wishlist ({{ wishlist_count }})</h4>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Book</th>
+                            <th>Author</th>
+                            <th>Price</th>
+                            <th>Added Date</th>
+                            <th>Actions</th>
+                        </thead>
+                    <tbody>
+                        {% for item in wishlist_items %}
+                        <tr>
+                            <td><strong>{{ item.book.title|truncatechars:50 }}</strong></td>
+                            <td>{{ item.book.author.full_name|default:"Unknown" }}</td>
+                            <td>{% if item.book.is_free %}FREE{% else %}{{ item.book.price }} ETB{% endif %}</td>
+                            <td>{{ item.created_at|date:"M d, Y" }}</td>
+                            <td>
+                                <a href="{% url 'books:detail' item.book.id %}" class="btn btn-sm btn-outline-info">View</a>
+                                <a href="{% url 'books:remove_from_wishlist' item.book.id %}" class="btn btn-sm btn-outline-danger">Remove</a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center py-4">
+                                <i class="fas fa-heart-broken fa-3x text-muted mb-2"></i>
+                                <p>Your wishlist is empty.</p>
+                                <a href="{% url 'books:browse' %}" class="btn btn-gold btn-sm">Browse Books</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .btn-gold {
+        background: linear-gradient(135deg, #DAA520, #B8860B);
+        color: #1A1A1A;
+        border: none;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Upload Book - Abrehot Library{% endblock %}
+
+{% block extra_css %}
+<style>
+    .form-container {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    .required-field::after {
+        content: '*';
+        color: red;
+        margin-left: 4px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="form-container">
+        <div class="card shadow-sm">
+            <div class="card-header" style="background: linear-gradient(135deg, #1A1A1A, #2C2C2C); color: white;">
+                <h4 class="mb-0"><i class="fas fa-upload me-2"></i>Upload New Book</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label class="form-label required-field">Title</label>
+                        <input type="text" name="title" class="form-control" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Subtitle</label>
+                        <input type="text" name="subtitle" class="form-control">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label required-field">Description</label>
+                        <textarea name="description" class="form-control" rows="5" required></textarea>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label required-field">Genre</label>
+                            <select name="genre" class="form-select" required>
+                                <option value="">Select Genre</option>
+                                {% for genre in genres %}
+                                <option value="{{ genre.id }}">{{ genre.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label required-field">Language</label>
+                            <select name="language" class="form-select" required>
+                                <option value="English">English</option>
+                                <option value="Amharic">Amharic</option>
+                                <option value="Arabic">Arabic</option>
+                                <option value="French">French</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Edition</label>
+                            <input type="text" name="edition" class="form-control" value="1">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Page Count</label>
+                            <input type="number" name="page_count" class="form-control" min="0">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Publication Year</label>
+                            <input type="number" name="publication_year" class="form-control" value="2024">
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Price (ETB)</label>
+                            <input type="number" name="price" class="form-control" step="0.01" min="0" value="0">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-check mt-4">
+                                <input type="checkbox" name="is_free" class="form-check-input" id="is_free">
+                                <label class="form-check-label" for="is_free">Make this book FREE</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Keywords (comma separated)</label>
+                        <input type="text" name="keywords" class="form-control" placeholder="fiction, novel, bestseller">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">ISBN</label>
+                        <input type="text" name="isbn" class="form-control" placeholder="978-3-16-148410-0">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Book File (PDF/EPUB)</label>
+                        <input type="file" name="file" class="form-control" accept=".pdf,.epub">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Cover Image</label>
+                        <input type="file" name="cover_image" class="form-control" accept="image/*">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Sample File (Optional)</label>
+                        <input type="file" name="sample_file" class="form-control" accept=".pdf">
+                    </div>
+                    
+                    <hr>
+                    <button type="submit" class="btn btn-gold w-100">Submit for Review</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .btn-gold {
+        background: linear-gradient(135deg, #DAA520, #B8860B);
+        color: #1A1A1A;
+        border: none;
+        font-weight: 600;
+        padding: 10px;
+    }
+    .btn-gold:hover {
+        transform: translateY(-2px);
+        color: #1A1A1A;
+    }
+</style>
+{% endblock %}

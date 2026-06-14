@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block title %}My Library - Abay Repository{% endblock %}
+
+{% block extra_css %}
+<style>
+    .stat-card {
+        background: white;
+        border-radius: 15px;
+        padding: 1.5rem;
+        text-align: center;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        border-bottom: 4px solid #DAA520;
+        height: 100%;
+    }
+    .stat-number {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #1A1A1A;
+    }
+    .book-card {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        transition: transform 0.3s ease;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        height: 100%;
+    }
+    .book-card:hover {
+        transform: translateY(-5px);
+    }
+    .book-cover {
+        height: 200px;
+        background-size: cover;
+        background-position: center;
+        background-color: #f0f0f0;
+    }
+    .btn-gold {
+        background: linear-gradient(135deg, #DAA520, #B8860B);
+        color: #1A1A1A;
+        border: none;
+    }
+    .btn-gold:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(218, 165, 32, 0.4);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <!-- Welcome Card -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h3>Welcome to Your Library, {{ request.user.full_name }}! 📚</h3>
+                    <p class="text-muted">Discover, read, and enjoy thousands of books.</p>
+                    <a href="/books/" class="btn btn-gold">
+                        <i class="fas fa-search me-2"></i> Browse Books
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Stats -->
+            <div class="row mb-4">
+                <div class="col-md-4 mb-3">
+                    <div class="stat-card">
+                        <i class="fas fa-shopping-bag fa-2x" style="color: #DAA520;"></i>
+                        <h3 class="mt-2">{{ total_purchases }}</h3>
+                        <p class="text-muted mb-0">Books Purchased</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="stat-card">
+                        <i class="fas fa-heart fa-2x" style="color: #DAA520;"></i>
+                        <h3 class="mt-2">{{ wishlist_count }}</h3>
+                        <p class="text-muted mb-0">Wishlist Items</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="stat-card">
+                        <i class="fas fa-money-bill-wave fa-2x" style="color: #DAA520;"></i>
+                        <h3 class="mt-2">{{ total_spent|floatformat:0 }} ETB</h3>
+                        <p class="text-muted mb-0">Total Spent</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Recent Purchases -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0"><i class="fas fa-clock me-2"></i>Recent Purchases</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Book Title</th>
+                                    <th>Amount</th>
+                                    <th>Purchase Date</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for purchase in recent_purchases %}
+                                <tr>
+                                    <td><strong>{{ purchase.title|truncatechars:50 }}</strong></td>
+                                    <td>{% if purchase.amount > 0 %}{{ purchase.amount }} ETB{% else %}FREE{% endif %}</td>
+                                    <td>{{ purchase.completed_at|date:"M d, Y" }}</td>
+                                    <td>
+                                        <a href="/books/{{ purchase.book_id }}/" class="btn btn-sm btn-gold">
+                                            <i class="fas fa-book-open"></i> View
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="4" class="text-center py-4">
+                                        <p class="text-muted">No purchases yet.</p>
+                                        <a href="/books/" class="btn btn-gold btn-sm">Browse Books</a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,533 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}Checker Dashboard | Abrehot Library{% endblock %}
+
+{% block extra_css %}
+<style>
+    :root {
+        --primary-gold: #DAA520;
+        --primary-gold-dark: #B8860B;
+        --primary-gold-light: #F5D061;
+        --primary-dark: #2C2C2C;
+        --primary-darker: #1A1A1A;
+        --primary-gray: #4A4A4A;
+        --primary-gray-light: #6C6C6C;
+    }
+
+    .dashboard-header {
+        background: linear-gradient(135deg, var(--primary-darker) 0%, var(--primary-dark) 100%);
+        border-radius: 20px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .dashboard-header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(218, 165, 32, 0.08) 0%, transparent 70%);
+        transform: rotate(45deg);
+    }
+
+    .stat-card {
+        background: white;
+        border-radius: 16px;
+        padding: 1.5rem;
+        text-align: center;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        border-bottom: 4px solid var(--primary-gold);
+        transition: all 0.3s ease;
+        height: 100%;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+    }
+
+    .stat-icon {
+        font-size: 2.5rem;
+        color: var(--primary-gold);
+        margin-bottom: 1rem;
+    }
+
+    .stat-number {
+        font-size: 2rem;
+        font-weight: 800;
+        color: var(--primary-darker);
+        margin-bottom: 0.25rem;
+    }
+
+    .stat-label {
+        color: var(--primary-gray);
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+
+    .review-card {
+        background: white;
+        border-radius: 16px;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+        border-left: 4px solid var(--primary-gold);
+    }
+
+    .review-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+    }
+
+    .rating-input {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .rating-input input {
+        width: 100px;
+        text-align: center;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        padding: 0.5rem;
+    }
+
+    .criteria-label {
+        font-weight: 600;
+        min-width: 180px;
+    }
+
+    .score-display {
+        font-size: 2rem;
+        font-weight: bold;
+        padding: 0.5rem 1rem;
+        border-radius: 10px;
+        display: inline-block;
+    }
+
+    .score-pass {
+        background: linear-gradient(135deg, #28a74520, #28a74510);
+        color: #28a745;
+    }
+
+    .score-fail {
+        background: linear-gradient(135deg, #dc354520, #dc354510);
+        color: #dc3545;
+    }
+
+    .btn-gold {
+        background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark));
+        color: var(--primary-darker);
+        border: none;
+        font-weight: 600;
+        padding: 8px 20px;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-gold:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(218, 165, 32, 0.4);
+        color: var(--primary-darker);
+    }
+
+    .btn-outline-gold {
+        border: 2px solid var(--primary-gold);
+        color: var(--primary-gold);
+        background: transparent;
+        font-weight: 600;
+        padding: 8px 20px;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-outline-gold:hover {
+        background: var(--primary-gold);
+        color: var(--primary-darker);
+        transform: translateY(-2px);
+    }
+
+    .status-badge {
+        padding: 0.35rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+
+    .status-approved { background: #28a745; color: white; }
+    .status-rejected { background: #dc3545; color: white; }
+    .status-pending { background: #ffc107; color: var(--primary-dark); }
+    .status-revision { background: #fd7e14; color: white; }
+
+    .form-control:focus, .form-select:focus {
+        border-color: var(--primary-gold);
+        box-shadow: 0 0 0 0.2rem rgba(218, 165, 32, 0.25);
+    }
+
+    .guidance-card {
+        background: white;
+        border-radius: 16px;
+        padding: 1.5rem;
+        height: 100%;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    }
+
+    .guidance-card h5 {
+        color: var(--primary-gold);
+        margin-bottom: 1rem;
+    }
+
+    @media (max-width: 768px) {
+        .rating-input {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .criteria-label {
+            min-width: auto;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Header Section -->
+    <div class="dashboard-header">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="text-white mb-2">
+                    <i class="fas fa-search me-2" style="color: var(--primary-gold);"></i>
+                    Quality Checker Dashboard
+                </h1>
+                <p class="text-white-50 mb-0">
+                    <i class="fas fa-clipboard-list me-2"></i>
+                    Welcome back, <strong>{{ user.full_name }}</strong>. Review and validate book submissions for quality assurance.
+                </p>
+            </div>
+            <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                <a href="/books/browse/" class="btn btn-gold">
+                    <i class="fas fa-book-open me-2"></i> Browse Library
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Row -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                <div class="stat-number">{{ total_pending|default:0 }}</div>
+                <div class="stat-label">Pending Reviews</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+                <div class="stat-number">{{ total_reviewed|default:0 }}</div>
+                <div class="stat-label">Total Reviewed</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-star"></i></div>
+                <div class="stat-number">{{ avg_score|floatformat:1|default:0 }}</div>
+                <div class="stat-label">Average Score</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-calendar-week"></i></div>
+                <div class="stat-number">{{ reviewed_this_month|default:0 }}</div>
+                <div class="stat-label">Reviewed This Month</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pending Reviews Section -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-white border-0 py-3">
+            <h5 class="mb-0">
+                <i class="fas fa-hourglass-half me-2" style="color: var(--primary-gold);"></i>
+                Books Pending Review ({{ total_pending|default:0 }})
+            </h5>
+        </div>
+        <div class="card-body">
+            {% if pending_books %}
+                {% for book in pending_books %}
+                <div class="review-card">
+                    <form method="POST" action="{% url 'accounts:process_checker_review' %}" id="reviewForm{{ book.id }}">
+                        {% csrf_token %}
+                        <input type="hidden" name="book_id" value="{{ book.id }}">
+                        
+                        <div class="row">
+                            <div class="col-lg-6 mb-4 mb-lg-0">
+                                <h4>{{ book.title }}</h4>
+                                <p class="text-muted">by {{ book.author.full_name|default:"Unknown Author" }}</p>
+                                
+                                <div class="mb-2">
+                                    <strong><i class="fas fa-tag me-1"></i> Genre:</strong> {{ book.genre.name|default:"Uncategorized" }}
+                                </div>
+                                <div class="mb-2">
+                                    <strong><i class="fas fa-language me-1"></i> Language:</strong> {{ book.language|default:"English" }}
+                                </div>
+                                <div class="mb-2">
+                                    <strong><i class="fas fa-money-bill me-1"></i> Price:</strong> 
+                                    {% if book.is_free %}FREE{% else %}{{ book.price }} ETB{% endif %}
+                                </div>
+                                <div class="mb-3">
+                                    <strong><i class="fas fa-align-left me-1"></i> Description:</strong>
+                                    <p class="mt-2 text-muted small">{{ book.description|truncatechars:300 }}</p>
+                                </div>
+                                
+                                {% if book.file %}
+                                <div class="mb-3">
+                                    <a href="{{ book.file.url }}" class="btn btn-outline-gold btn-sm" target="_blank">
+                                        <i class="fas fa-file-pdf me-1"></i> Preview Manuscript
+                                    </a>
+                                </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-lg-6">
+                                <div class="card bg-light">
+                                    <div class="card-body">
+                                        <h5 class="card-title" style="color: var(--primary-gold);">
+                                            <i class="fas fa-star me-2"></i>Quality Assessment (Rate 0-10)
+                                        </h5>
+                                        
+                                        <div class="mb-3">
+                                            <div class="rating-input">
+                                                <span class="criteria-label">📚 Content Quality:</span>
+                                                <input type="number" name="content_quality" class="form-control" step="0.1" min="0" max="10" required onchange="calculateOverall(this.form)">
+                                                <span>/10</span>
+                                            </div>
+                                            <small class="text-muted">Accuracy, depth, originality, value</small>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <div class="rating-input">
+                                                <span class="criteria-label">✍️ Editorial Quality:</span>
+                                                <input type="number" name="editorial_quality" class="form-control" step="0.1" min="0" max="10" required onchange="calculateOverall(this.form)">
+                                                <span>/10</span>
+                                            </div>
+                                            <small class="text-muted">Grammar, structure, readability, flow</small>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <div class="rating-input">
+                                                <span class="criteria-label">🔧 Technical Quality:</span>
+                                                <input type="number" name="technical_quality" class="form-control" step="0.1" min="0" max="10" required onchange="calculateOverall(this.form)">
+                                                <span>/10</span>
+                                            </div>
+                                            <small class="text-muted">Formatting, file quality, metadata</small>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <div class="rating-input">
+                                                <span class="criteria-label">⚖️ Copyright Compliance:</span>
+                                                <input type="number" name="copyright_compliance" class="form-control" step="0.1" min="0" max="10" required>
+                                                <span>/10</span>
+                                            </div>
+                                            <small class="text-muted">Original work, proper citations</small>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <div class="rating-input">
+                                                <span class="criteria-label">🌍 Community Guidelines:</span>
+                                                <input type="number" name="community_guidelines" class="form-control" step="0.1" min="0" max="10" required>
+                                                <span>/10</span>
+                                            </div>
+                                            <small class="text-muted">Appropriate content, no violations</small>
+                                        </div>
+                                        
+                                        <hr>
+                                        
+                                        <div class="mb-3 text-center">
+                                            <strong>Overall Score:</strong>
+                                            <div class="score-display" id="overallScore{{ book.id }}">0.0</div>
+                                            <small class="text-muted">Passing threshold: <strong>7.0/10</strong></small>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label class="form-label">Review Comments</label>
+                                            <textarea name="comments" class="form-control" rows="4" 
+                                                      placeholder="Provide detailed feedback for the author. What's good? What needs improvement?"></textarea>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label class="form-label">Recommendation</label>
+                                            <select name="recommendation" class="form-select" required>
+                                                <option value="">Select Recommendation</option>
+                                                <option value="approved">✅ Pass to Maker - Send to Maker for Publication</option>
+                                                <option value="needs_revision">🔄 Request Revision - Needs Improvements</option>
+                                                <option value="rejected">❌ Reject - Not Suitable for Platform</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <button type="submit" class="btn btn-gold w-100">
+                                            <i class="fas fa-paper-plane me-2"></i> Submit Review
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="text-center py-5">
+                    <i class="fas fa-check-circle fa-4x text-success mb-3"></i>
+                    <h5>All Caught Up!</h5>
+                    <p class="text-muted">No books pending review at this moment.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Recently Reviewed Books -->
+    {% if reviewed_books %}
+    <div class="card shadow-sm">
+        <div class="card-header bg-white border-0 py-3">
+            <h5 class="mb-0">
+                <i class="fas fa-history me-2" style="color: var(--primary-gold);"></i>
+                Recently Reviewed Books
+            </h5>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead style="background: var(--primary-darker); color: white;">
+                        <tr>
+                            <th>Title</th>
+                            <th>Author</th>
+                            <th>Score</th>
+                            <th>Status</th>
+                            <th>Reviewed Date</th>
+                            <th>Action</th>
+                         </thead>
+                    <tbody>
+                        {% for review in reviewed_books %}
+                        <tr>
+                            <td><strong>{{ review.book.title|truncatechars:50 }}</strong></td>
+                            <td>{{ review.book.author.full_name|default:"Unknown" }}</td>
+                            <td>
+                                <span class="score-display {% if review.overall_score >= 7 %}score-pass{% else %}score-fail{% endif %}" style="font-size: 1rem; padding: 0.25rem 0.5rem;">
+                                    {{ review.overall_score|floatformat:1 }}/10
+                                </span>
+                            </td>
+                            <td>
+                                <span class="status-badge status-{% if review.recommendation == 'approved' %}approved{% elif review.recommendation == 'needs_revision' %}revision{% else %}rejected{% endif %}">
+                                    {% if review.recommendation == 'approved' %}✅ Approved
+                                    {% elif review.recommendation == 'needs_revision' %}🔄 Revision
+                                    {% else %}❌ Rejected{% endif %}
+                                </span>
+                            </td>
+                            <td>{{ review.created_at|date:"M d, Y" }}</td>
+                            <td>
+                                <a href="/books/{{ review.book.id }}/" class="btn btn-sm btn-gold">
+                                    <i class="fas fa-eye"></i> View
+                                </a>
+                            </td>
+                         </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Guidelines Section -->
+    <div class="row g-4 mt-3">
+        <div class="col-md-6">
+            <div class="guidance-card">
+                <h5><i class="fas fa-chart-line me-2"></i>Scoring Criteria</h5>
+                <div class="mb-3">
+                    <strong>9-10 (Excellent)</strong>
+                    <p class="text-muted small">Exceptional quality, ready for publication with no issues</p>
+                </div>
+                <div class="mb-3">
+                    <strong>7-8 (Good)</strong>
+                    <p class="text-muted small">Good quality, minor improvements recommended</p>
+                </div>
+                <div class="mb-3">
+                    <strong>5-6 (Average)</strong>
+                    <p class="text-muted small">Acceptable but needs significant improvements</p>
+                </div>
+                <div class="mb-3">
+                    <strong>3-4 (Below Average)</strong>
+                    <p class="text-muted small">Major issues, needs substantial revision</p>
+                </div>
+                <div>
+                    <strong>0-2 (Poor)</strong>
+                    <p class="text-muted small">Unacceptable quality, recommend rejection</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="guidance-card">
+                <h5><i class="fas fa-check-circle me-2"></i>Recommendations Guide</h5>
+                <div class="mb-3">
+                    <strong>✅ Pass to Maker</strong>
+                    <p class="text-muted small">Score ≥ 7.0, meets all quality standards</p>
+                </div>
+                <div class="mb-3">
+                    <strong>🔄 Request Revision</strong>
+                    <p class="text-muted small">Score 5.0-6.9, needs improvements but has potential</p>
+                </div>
+                <div>
+                    <strong>❌ Reject</strong>
+                    <p class="text-muted small">Score &lt; 5.0, serious quality issues or guideline violations</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function calculateOverall(form) {
+    // Find the overall score display within the same form
+    var content = parseFloat(form.querySelector('[name="content_quality"]').value) || 0;
+    var editorial = parseFloat(form.querySelector('[name="editorial_quality"]').value) || 0;
+    var technical = parseFloat(form.querySelector('[name="technical_quality"]').value) || 0;
+    
+    var overall = (content + editorial + technical) / 3;
+    var overallDisplay = form.querySelector('.score-display');
+    if (overallDisplay) {
+        overallDisplay.textContent = overall.toFixed(1);
+        if (overall >= 7) {
+            overallDisplay.className = 'score-display score-pass';
+        } else {
+            overallDisplay.className = 'score-display score-fail';
+        }
+    }
+}
+
+// Add auto-calculation for all forms
+document.addEventListener('DOMContentLoaded', function() {
+    var forms = document.querySelectorAll('form[id^="reviewForm"]');
+    forms.forEach(function(form) {
+        var inputs = form.querySelectorAll('input[type="number"]');
+        inputs.forEach(function(input) {
+            input.addEventListener('change', function() {
+                calculateOverall(form);
+            });
+            input.addEventListener('input', function() {
+                calculateOverall(form);
+            });
+        });
+    });
+});
+</script>
+{% endblock %}

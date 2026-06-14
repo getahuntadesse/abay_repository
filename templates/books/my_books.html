@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block title %}My Books - Abay Repository{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>My Books</h2>
+        <a href="{% url 'books:upload' %}" class="btn btn-gold">
+            <i class="fas fa-upload me-2"></i> Upload New Book
+        </a>
+    </div>
+    
+    {% if books %}
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Status</th>
+                    <th>Price</th>
+                    <th>Downloads</th>
+                    <th>Created</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for book in books %}
+                <tr>
+                    <td><strong>{{ book.title|truncatechars:50 }}</strong></td>
+                    <td>
+                        <span class="badge bg-{% if book.status == 'published' %}success{% elif book.status == 'pending_review' %}warning{% elif book.status == 'rejected' %}danger{% else %}secondary{% endif %}">
+                            {{ book.get_status_display }}
+                        </span>
+                    </td>
+                    <td>{% if book.is_free %}FREE{% else %}{{ book.price }} ETB{% endif %}</td>
+                    <td>{{ book.downloads_count }}</td>
+                    <td>{{ book.created_at|date:"M d, Y" }}</td>
+                    <td>
+                        <a href="{% url 'books:detail' book.id %}" class="btn btn-sm btn-outline-secondary">View</a>
+                        {% if book.status == 'needs_revision' %}
+                        <a href="{% url 'books:edit' book.id %}" class="btn btn-sm btn-warning">Edit</a>
+                        {% endif %}
+                        <a href="{% url 'books:delete' book.id %}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="alert alert-info text-center py-5">
+        <i class="fas fa-inbox fa-3x mb-3 d-block"></i>
+        <p>No books uploaded yet.</p>
+        <a href="{% url 'books:upload' %}" class="btn btn-gold">Upload Your First Book</a>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+    .btn-gold {
+        background: linear-gradient(135deg, #DAA520, #B8860B);
+        color: #1A1A1A;
+        border: none;
+    }
+    .btn-gold:hover {
+        background: linear-gradient(135deg, #B8860B, #9B6F0B);
+        color: #1A1A1A;
+    }
+</style>
+{% endblock %}
