@@ -232,6 +232,38 @@
         text-decoration: underline;
     }
 
+    /* Loading spinner overlay */
+    .spinner-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 9999;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .spinner-overlay.active {
+        display: flex;
+    }
+
+    .spinner-box {
+        background: white;
+        padding: 2rem;
+        border-radius: 16px;
+        text-align: center;
+        max-width: 400px;
+    }
+
+    .spinner-box .spinner-border {
+        width: 3rem;
+        height: 3rem;
+        color: var(--primary-gold);
+    }
+
     @media (max-width: 768px) {
         .form-body {
             padding: 1.5rem;
@@ -247,6 +279,15 @@
 {% endblock %}
 
 {% block content %}
+<!-- Loading Spinner Overlay -->
+<div class="spinner-overlay" id="loadingOverlay">
+    <div class="spinner-box">
+        <div class="spinner-border mb-3" role="status"></div>
+        <h5>Verifying with Fayda...</h5>
+        <p class="text-muted small">Please wait while we confirm your identity</p>
+    </div>
+</div>
+
 <div class="container mt-5 mb-5">
     <div class="register-container">
         <div class="form-card">
@@ -521,6 +562,22 @@
 </div>
 
 <script>
+    // Get the CSRF token from the cookie
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
     let isNationalIdVerified = false;
     let verifiedData = null;
     let rawNationalIdValue = '';
@@ -571,7 +628,28 @@
         nationalIdInput.readOnly = false;
     }
 
-    // Simulated Fayda API Call
+    function showVerificationStatus(type, message) {
+        const statusDiv = document.getElementById('verificationStatus');
+        const alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
+        const icon = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-triangle';
+        statusDiv.innerHTML = `
+            <div class="alert ${alertClass} alert-dismissible fade show mb-0 py-2 small" role="alert">
+                <i class="fas ${icon} me-2"></i> ${message}
+                <button type="button" class="btn-close small" data-bs-dismiss="alert"></button>
+            </div>
+        `;
+    }
+
+    function showLoading(show) {
+        const overlay = document.getElementById('loadingOverlay');
+        if (show) {
+            overlay.classList.add('active');
+        } else {
+            overlay.classList.remove('active');
+        }
+    }
+
+    // Real Fayda API Verification
     document.getElementById('verifyBtn').addEventListener('click', async function() {
         const nationalIdRaw = rawNationalIdValue;
         if (nationalIdRaw.length !== 16) {
@@ -583,87 +661,106 @@
         const originalHtml = btn.innerHTML;
         btn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Contacting Fayda...';
         btn.disabled = true;
+        showLoading(true);
 
-        // Simulate network delay and API response
-        setTimeout(() => {
-            // Basic checksum validation (simulated)
-            if (/^\d+$/.test(nationalIdRaw)) {
-                const lastDigit = parseInt(nationalIdRaw.slice(-1));
-                const gender = lastDigit % 2 === 0 ? 'Female' : 'Male';
-                const nameIndex = parseInt(nationalIdRaw.slice(-4, -2)) % 10;
-                const regionIndex = parseInt(nationalIdRaw.slice(8, 10)) % 13;
+        try {
+            // Get CSRF token for the POST request
+            const csrftoken = getCookie('csrftoken');
 
-                const maleNames = ['Abebe Kebede', 'Alemu Desta', 'Bekele Tadesse', 'Dawit Haile', 'Fikre Mekonnen', 'Girma Assefa', 'Haile Wondimu', 'Kebede Lemma', 'Mekonnen Alemu', 'Solomon Tekle'];
-                const femaleNames = ['Abebech Alemu', 'Alemitu Desta', 'Birtukan Fikre', 'Chaltu Hailu', 'Dinkinesh Kebede', 'Eden Mekonnen', 'Frehiwot Assefa', 'Genet Tadesse', 'Hiwot Wondimu', 'Kalkidan Lemma'];
-                const regions = ['Addis Ababa', 'Afar', 'Amhara', 'Benishangul-Gumuz', 'Dire Dawa', 'Gambela', 'Harari', 'Oromia', 'Sidama', 'Somali', 'South West Ethiopia', 'Southern Nations, Nationalities, and Peoples', 'Tigray'];
-                const zones = ['Bole', 'Kirkos', 'Lideta', 'Gulele', 'Arada', 'Addis Ketema', 'Akaky Kaliti', 'Kolfe Keranio', 'Nifas Silk-Lafto', 'Yeka'];
+            // Call your Django backend endpoint that securely communicates with Fayda API
+            const response = await fetch('/api/fayda/verify/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken
+                },
+                body: JSON.stringify({
+                    national_id: nationalIdRaw
+                })
+            });
 
-                const fullName = gender === 'Male' ? maleNames[nameIndex] : femaleNames[nameIndex];
-                const region = regions[regionIndex % regions.length];
-                const zone = zones[parseInt(nationalIdRaw.slice(10, 12)) % zones.length];
-                const woreda = `Woreda ${parseInt(nationalIdRaw.slice(12, 14)) % 21 + 1}`;
+            showLoading(false);
 
-                verifiedData = {
-                    full_name: fullName,
-                    date_of_birth: '1985-01-15',
-                    gender: gender,
-                    region: region,
-                    zone: zone,
-                    woreda: woreda,
-                    address: `${zone} Subcity, ${woreda}`
-                };
-
-                isNationalIdVerified = true;
-
-                // Auto-fill the form
-                document.getElementById('full_name').value = verifiedData.full_name;
-                document.getElementById('date_of_birth').value = verifiedData.date_of_birth;
-                document.getElementById('gender').value = verifiedData.gender;
-                document.getElementById('region').value = verifiedData.region;
-                document.getElementById('zone').value = verifiedData.zone;
-                document.getElementById('woreda').value = verifiedData.woreda;
-                document.getElementById('address').value = verifiedData.address;
-
-                showVerificationStatus('success', `Fayda verification successful! Welcome, ${verifiedData.full_name}.`);
-                document.getElementById('verifiedInfo').style.display = 'block';
-                document.getElementById('verifiedInfoContent').innerHTML = `
-                    <strong>Name:</strong> ${verifiedData.full_name}<br>
-                    <strong>Fayda ID:</strong> ${nationalIdInput.value}<br>
-                    <strong>Region:</strong> ${verifiedData.region}<br>
-                    <strong>Date of Birth:</strong> ${verifiedData.date_of_birth}
-                `;
-                document.getElementById('verifiedBadge').style.display = 'inline-block';
-                btn.innerHTML = '<i class="fas fa-check-circle me-1"></i> Verified with Fayda ✓';
-                btn.classList.add('btn-verify-verified');
-                nationalIdInput.readOnly = true;
-                checkFormCompletion();
-            } else {
-                showVerificationStatus('error', 'Invalid Fayda ID format. Verification failed. Please check your ID.');
-                isNationalIdVerified = false;
-                btn.innerHTML = originalHtml;
-                btn.classList.remove('btn-verify-verified');
+            if (!response.ok) {
+                let errorMessage = 'Verification failed. Please try again.';
+                try {
+                    const errorData = await response.json();
+                    errorMessage = errorData.message || errorData.error || errorMessage;
+                } catch (e) {
+                    // If response is not JSON
+                    if (response.status === 401) {
+                        errorMessage = 'Authentication failed. Please contact support.';
+                    } else if (response.status === 429) {
+                        errorMessage = 'Too many requests. Please wait and try again.';
+                    } else if (response.status === 503) {
+                        errorMessage = 'Fayda service is temporarily unavailable. Please try again later.';
+                    }
+                }
+                throw new Error(errorMessage);
             }
+
+            const data = await response.json();
+
+            // Check if verification was successful
+            if (!data.success) {
+                throw new Error(data.message || 'Verification failed. Please check your National ID.');
+            }
+
+            // Process the verified data from the API
+            // Adjust these field names based on your actual API response structure
+            const userData = data.data || data.user || {};
+            
+            verifiedData = {
+                full_name: userData.full_name || userData.fullName || userData.name || '',
+                date_of_birth: userData.date_of_birth || userData.dateOfBirth || userData.dob || '',
+                gender: userData.gender || '',
+                region: userData.region || userData.region_name || '',
+                zone: userData.zone || userData.zone_name || '',
+                woreda: userData.woreda || userData.woreda_name || '',
+                address: userData.address || ''
+            };
+
+            // Validate that we got the minimum required data
+            if (!verifiedData.full_name) {
+                throw new Error('Could not retrieve full name from Fayda. Please try again.');
+            }
+
+            isNationalIdVerified = true;
+
+            // Auto-populate the form with the real data
+            document.getElementById('full_name').value = verifiedData.full_name;
+            document.getElementById('date_of_birth').value = verifiedData.date_of_birth;
+            document.getElementById('gender').value = verifiedData.gender;
+            document.getElementById('region').value = verifiedData.region;
+            document.getElementById('zone').value = verifiedData.zone;
+            document.getElementById('woreda').value = verifiedData.woreda;
+            document.getElementById('address').value = verifiedData.address || 
+                `${verifiedData.zone || ''} Subcity, ${verifiedData.woreda || ''}`.trim();
+
+            showVerificationStatus('success', `Fayda verification successful! Welcome, ${verifiedData.full_name}.`);
+            document.getElementById('verifiedInfo').style.display = 'block';
+            document.getElementById('verifiedInfoContent').innerHTML = `
+                <strong>Name:</strong> ${verifiedData.full_name}<br>
+                <strong>Fayda ID:</strong> ${nationalIdInput.value}<br>
+                <strong>Region:</strong> ${verifiedData.region || 'N/A'}<br>
+                <strong>Date of Birth:</strong> ${verifiedData.date_of_birth || 'N/A'}
+            `;
+            document.getElementById('verifiedBadge').style.display = 'inline-block';
+            btn.innerHTML = '<i class="fas fa-check-circle me-1"></i> Verified with Fayda ✓';
+            btn.classList.add('btn-verify-verified');
+            nationalIdInput.readOnly = true;
+            checkFormCompletion();
+
+        } catch (error) {
+            showLoading(false);
+            showVerificationStatus('error', `Fayda verification failed: ${error.message || 'Please try again.'}`);
+            isNationalIdVerified = false;
+            btn.innerHTML = originalHtml;
+            btn.classList.remove('btn-verify-verified');
+        } finally {
             btn.disabled = false;
-        }, 1500);
+        }
     });
-
-    function showVerificationStatus(type, message) {
-        const statusDiv = document.getElementById('verificationStatus');
-        const alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
-        const icon = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-triangle';
-        statusDiv.innerHTML = `
-            <div class="alert ${alertClass} alert-dismissible fade show mb-0 py-2 small" role="alert">
-                <i class="fas ${icon} me-2"></i> ${message}
-                <button type="button" class="btn-close small" data-bs-dismiss="alert"></button>
-            </div>
-        `;
-        setTimeout(() => {
-            if (type === 'success') {
-                const alertDiv = statusDiv.querySelector('.alert');
-                if (alertDiv) alertDiv.classList.remove('show');
-            }
-        }, 5000);
-    }
 
     // Password strength and matching
     const passwordInput = document.getElementById('password');
@@ -814,7 +911,7 @@
         }
     });
 
-    // Final form submission guard - FIXED: Set the raw national ID value before submit
+    // Final form submission guard
     document.getElementById('registerForm').addEventListener('submit', function(e) {
         if (!isNationalIdVerified) {
             e.preventDefault();
@@ -838,7 +935,6 @@
         }
         
         // IMPORTANT: Set the national ID input value to the raw digits without hyphens
-        // This ensures the form submits the correct 16-digit value
         nationalIdInput.value = rawNationalIdValue;
         
         const submitBtn = document.getElementById('submitBtn');
@@ -846,6 +942,19 @@
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Creating your author account...';
         
         return true;
+    });
+
+    // Handle Enter key on national ID field to trigger verification
+    nationalIdInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            document.getElementById('verifyBtn').click();
+        }
+    });
+
+    // Initialize - check if form is complete on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        checkFormCompletion();
     });
 </script>
 {% endblock %}
