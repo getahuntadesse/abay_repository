@@ -21,10 +21,6 @@ urlpatterns = [
     
     # Checker Actions
     path('checker/process-review/', views.process_checker_review, name='process_checker_review'),
-    path('checker/review-book/<int:book_id>/', views.view_book_for_review, name='view_book_for_review'),
-    
-    # Maker Actions
-    path('maker/publish/<int:book_id>/', views.publish_book, name='publish_book'),
     
     # Profile
     path('profile/', views.profile_view, name='profile'),

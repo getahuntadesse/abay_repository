@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from accounts.models import CustomUser
 
+
 class Genre(models.Model):
     name = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(max_length=50, unique=True)
@@ -21,6 +22,7 @@ class Book(models.Model):
         ('pending_review', 'Pending Review'),
         ('in_review', 'In Review'),
         ('needs_revision', 'Needs Revision'),
+        ('checker_approved', 'Checker Approved'),
         ('published', 'Published'),
         ('rejected', 'Rejected'),
         ('archived', 'Archived'),
@@ -39,7 +41,7 @@ class Book(models.Model):
     title = models.CharField(max_length=255)
     subtitle = models.CharField(max_length=255, blank=True, default='')
     description = models.TextField(blank=True, default='')
-    isbn = models.CharField(max_length=20, unique=True)
+    isbn = models.CharField(max_length=20, unique=True, null=True, blank=True)
     
     # Classification
     author = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='books')
@@ -69,6 +71,9 @@ class Book(models.Model):
     views_count = models.IntegerField(default=0)
     avg_rating = models.DecimalField(max_digits=3, decimal_places=2, default=0.00)
     total_reviews = models.IntegerField(default=0)
+    
+    # Checker Score
+    checker_score = models.DecimalField(max_digits=3, decimal_places=1, null=True, blank=True)
     
     # Status and Workflow
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending_review')

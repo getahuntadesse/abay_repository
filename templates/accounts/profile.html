@@ -1,0 +1,328 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}My Profile - Abrehot Library{% endblock %}
+
+{% block extra_css %}
+<style>
+    :root {
+        --primary-gold: #DAA520;
+        --primary-gold-dark: #B8860B;
+        --primary-dark: #2C2C2C;
+        --primary-darker: #1A1A1A;
+        --primary-gray: #4A4A4A;
+    }
+
+    .profile-header {
+        background: linear-gradient(135deg, var(--primary-darker) 0%, var(--primary-dark) 100%);
+        border-radius: 20px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .profile-avatar {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 4px solid var(--primary-gold);
+    }
+
+    .info-card {
+        background: white;
+        border-radius: 16px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    }
+
+    .info-label {
+        font-weight: 600;
+        color: var(--primary-gray);
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 0.25rem;
+    }
+
+    .info-value {
+        font-size: 1rem;
+        color: var(--primary-darker);
+        font-weight: 500;
+    }
+
+    .stat-badge {
+        background: #f8f9fa;
+        border-radius: 12px;
+        padding: 1rem;
+        text-align: center;
+    }
+
+    .stat-number {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--primary-gold);
+    }
+
+    .btn-gold {
+        background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark));
+        color: var(--primary-darker);
+        border: none;
+        font-weight: 600;
+        padding: 10px 25px;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-gold:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(218, 165, 32, 0.4);
+        color: var(--primary-darker);
+    }
+
+    .btn-outline-gold {
+        border: 2px solid var(--primary-gold);
+        color: var(--primary-gold);
+        background: transparent;
+        font-weight: 600;
+        padding: 8px 20px;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-outline-gold:hover {
+        background: var(--primary-gold);
+        color: var(--primary-darker);
+        transform: translateY(-2px);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Profile Header -->
+    <div class="profile-header">
+        <div class="row align-items-center">
+            <div class="col-md-2 text-center text-md-start">
+                {% if user.profile_image %}
+                    <img src="{{ user.profile_image.url }}" alt="{{ user.full_name }}" class="profile-avatar">
+                {% else %}
+                    <div class="profile-avatar bg-secondary d-flex align-items-center justify-content-center mx-auto mx-md-0" style="background: linear-gradient(135deg, var(--primary-darker), var(--primary-dark));">
+                        <i class="fas fa-user fa-3x text-white"></i>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-md-7 text-center text-md-start mt-3 mt-md-0">
+                <h1 class="text-white mb-1">{{ user.full_name|default:user.username }}</h1>
+                <p class="text-white-50 mb-2">@{{ user.username }}</p>
+                <div class="d-flex flex-wrap gap-2 justify-content-center justify-content-md-start">
+                    <span class="badge bg-gold p-2">{{ user.get_role_display|default:user.role|title }}</span>
+                    {% if user.email_verified %}
+                        <span class="badge bg-success p-2"><i class="fas fa-check-circle me-1"></i> Verified</span>
+                    {% else %}
+                        <span class="badge bg-warning p-2"><i class="fas fa-clock me-1"></i> Pending Verification</span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-3 text-center text-md-end mt-3 mt-md-0">
+                <a href="{% url 'accounts:profile_edit' %}" class="btn btn-gold">
+                    <i class="fas fa-edit me-2"></i> Edit Profile
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Left Column - Personal Information -->
+        <div class="col-md-6">
+            <div class="info-card">
+                <h5 class="mb-3">
+                    <i class="fas fa-user me-2" style="color: var(--primary-gold);"></i>
+                    Personal Information
+                </h5>
+                <div class="row">
+                    <div class="col-sm-6 mb-3">
+                        <div class="info-label">Full Name</div>
+                        <div class="info-value">{{ user.full_name|default:"Not provided" }}</div>
+                    </div>
+                    <div class="col-sm-6 mb-3">
+                        <div class="info-label">Username</div>
+                        <div class="info-value">{{ user.username }}</div>
+                    </div>
+                    <div class="col-sm-6 mb-3">
+                        <div class="info-label">Email Address</div>
+                        <div class="info-value">{{ user.email }}</div>
+                    </div>
+                    <div class="col-sm-6 mb-3">
+                        <div class="info-label">Phone Number</div>
+                        <div class="info-value">{{ user.phone|default:"Not provided" }}</div>
+                    </div>
+                    <div class="col-sm-6 mb-3">
+                        <div class="info-label">Gender</div>
+                        <div class="info-value">{{ user.get_gender_display|default:"Not specified" }}</div>
+                    </div>
+                    <div class="col-sm-6 mb-3">
+                        <div class="info-label">Date of Birth</div>
+                        <div class="info-value">{{ user.date_of_birth|date:"F d, Y"|default:"Not provided" }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-card">
+                <h5 class="mb-3">
+                    <i class="fas fa-map-marker-alt me-2" style="color: var(--primary-gold);"></i>
+                    Address Information
+                </h5>
+                <div class="row">
+                    <div class="col-sm-6 mb-3">
+                        <div class="info-label">Region</div>
+                        <div class="info-value">{{ user.region|default:"Not provided" }}</div>
+                    </div>
+                    <div class="col-sm-6 mb-3">
+                        <div class="info-label">Zone / Subcity</div>
+                        <div class="info-value">{{ user.zone|default:"Not provided" }}</div>
+                    </div>
+                    <div class="col-sm-6 mb-3">
+                        <div class="info-label">Woreda</div>
+                        <div class="info-value">{{ user.woreda|default:"Not provided" }}</div>
+                    </div>
+                    <div class="col-12 mb-3">
+                        <div class="info-label">Address</div>
+                        <div class="info-value">{{ user.address|default:"Not provided" }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column - Account Information -->
+        <div class="col-md-6">
+            <div class="info-card">
+                <h5 class="mb-3">
+                    <i class="fas fa-shield-alt me-2" style="color: var(--primary-gold);"></i>
+                    Account Information
+                </h5>
+                <div class="row">
+                    <div class="col-sm-6 mb-3">
+                        <div class="info-label">Role</div>
+                        <div class="info-value">{{ user.get_role_display|default:user.role|title }}</div>
+                    </div>
+                    <div class="col-sm-6 mb-3">
+                        <div class="info-label">Account Status</div>
+                        <div class="info-value">
+                            {% if user.is_active %}
+                                <span class="text-success">Active</span>
+                            {% else %}
+                                <span class="text-danger">Inactive</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-sm-6 mb-3">
+                        <div class="info-label">Member Since</div>
+                        <div class="info-value">{{ user.date_joined|date:"F d, Y" }}</div>
+                    </div>
+                    <div class="col-sm-6 mb-3">
+                        <div class="info-label">Last Login</div>
+                        <div class="info-value">{{ user.last_login|date:"F d, Y H:i"|default:"Never" }}</div>
+                    </div>
+                    <div class="col-sm-6 mb-3">
+                        <div class="info-label">Two-Factor Auth</div>
+                        <div class="info-value">
+                            {% if user.two_factor_enabled %}
+                                <span class="text-success">Enabled</span>
+                            {% else %}
+                                <span class="text-muted">Disabled</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-sm-6 mb-3">
+                        <div class="info-label">Email Verification</div>
+                        <div class="info-value">
+                            {% if user.email_verified %}
+                                <span class="text-success">Verified</span>
+                            {% else %}
+                                <span class="text-warning">Pending</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bio Section -->
+            <div class="info-card">
+                <h5 class="mb-3">
+                    <i class="fas fa-align-left me-2" style="color: var(--primary-gold);"></i>
+                    Bio
+                </h5>
+                <p class="text-muted mb-0">
+                    {{ user.bio|default:"No bio provided yet."|linebreaks }}
+                </p>
+            </div>
+
+            <!-- Statistics for Author Role -->
+            {% if user.role == 'author' %}
+            <div class="info-card">
+                <h5 class="mb-3">
+                    <i class="fas fa-chart-line me-2" style="color: var(--primary-gold);"></i>
+                    Author Statistics
+                </h5>
+                <div class="row">
+                    <div class="col-4">
+                        <div class="stat-badge">
+                            <div class="stat-number">{{ author_stats.total_books|default:0 }}</div>
+                            <small class="text-muted">Books</small>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="stat-badge">
+                            <div class="stat-number">{{ author_stats.total_downloads|default:0|intcomma }}</div>
+                            <small class="text-muted">Downloads</small>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="stat-badge">
+                            <div class="stat-number">{{ author_stats.total_earned|default:0|floatformat:0 }} ETB</div>
+                            <small class="text-muted">Earned</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Statistics for Client Role -->
+            {% if user.role == 'client' %}
+            <div class="info-card">
+                <h5 class="mb-3">
+                    <i class="fas fa-shopping-bag me-2" style="color: var(--primary-gold);"></i>
+                    Reading Statistics
+                </h5>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="stat-badge">
+                            <div class="stat-number">{{ client_stats.purchases_count|default:0 }}</div>
+                            <small class="text-muted">Books Purchased</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="stat-badge">
+                            <div class="stat-number">{{ client_stats.total_spent|default:0|floatformat:0 }} ETB</div>
+                            <small class="text-muted">Total Spent</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-gold {
+        background: linear-gradient(135deg, #DAA520, #B8860B);
+        color: #1A1A1A;
+    }
+    .text-gold {
+        color: #DAA520;
+    }
+</style>
+{% endblock %}

@@ -1,78 +1,194 @@
 {% extends 'base.html' %}
+{% load static %}
 {% load humanize %}
 
-{% block title %}Author Dashboard - Abay Repository{% endblock %}
+{% block title %}Author Dashboard - Abrehot Library{% endblock %}
 
 {% block extra_css %}
 <style>
+    :root {
+        --primary-gold: #DAA520;
+        --primary-gold-dark: #B8860B;
+        --primary-gold-light: #F5D061;
+        --primary-dark: #2C2C2C;
+        --primary-darker: #1A1A1A;
+        --primary-gray: #4A4A4A;
+        --primary-gray-light: #6C6C6C;
+    }
+
     .dashboard-container {
         max-width: 1400px;
         margin: 0 auto;
     }
+
     .welcome-card {
-        background: linear-gradient(135deg, #1a472a, #0d2818);
+        background: linear-gradient(135deg, var(--primary-darker), var(--primary-dark));
         border-radius: 20px;
         padding: 2rem;
         color: white;
         margin-bottom: 2rem;
+        position: relative;
+        overflow: hidden;
     }
+
+    .welcome-card::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(218, 165, 32, 0.08) 0%, transparent 70%);
+        transform: rotate(45deg);
+    }
+
     .stat-card {
         background: white;
-        border-radius: 15px;
+        border-radius: 16px;
         padding: 1.5rem;
         text-align: center;
         box-shadow: 0 5px 20px rgba(0,0,0,0.08);
         transition: transform 0.3s ease;
-        border-bottom: 4px solid #c5a028;
+        border-bottom: 4px solid var(--primary-gold);
         height: 100%;
     }
+
     .stat-card:hover {
         transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.12);
     }
+
     .stat-icon {
         font-size: 2rem;
-        color: #c5a028;
+        color: var(--primary-gold);
         margin-bottom: 0.5rem;
     }
+
     .stat-number {
         font-size: 1.8rem;
-        font-weight: bold;
-        color: #1a472a;
+        font-weight: 800;
+        color: var(--primary-darker);
     }
+
     .status-badge {
         padding: 0.25rem 0.75rem;
         border-radius: 20px;
         font-size: 0.75rem;
         font-weight: 600;
+        display: inline-block;
     }
+
     .status-published { background: #28a745; color: white; }
-    .status-pending_review { background: #ffc107; color: #1a472a; }
+    .status-pending_review { background: #ffc107; color: #1A1A1A; }
     .status-in_review { background: #17a2b8; color: white; }
     .status-needs_revision { background: #fd7e14; color: white; }
     .status-rejected { background: #dc3545; color: white; }
+    .status-checker_approved { background: #6f42c1; color: white; }
+
     .btn-gold {
-        background: linear-gradient(135deg, #c5a028, #a07818);
-        color: white;
+        background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark));
+        color: var(--primary-darker);
         border: none;
         padding: 10px 25px;
         border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
     }
+
     .btn-gold:hover {
         transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(197, 160, 40, 0.4);
-        color: white;
+        box-shadow: 0 5px 15px rgba(218, 165, 32, 0.4);
+        color: var(--primary-darker);
     }
+
+    .btn-outline-gold {
+        border: 2px solid var(--primary-gold);
+        color: var(--primary-gold);
+        background: transparent;
+        font-weight: 600;
+        padding: 8px 20px;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-outline-gold:hover {
+        background: var(--primary-gold);
+        color: var(--primary-darker);
+        transform: translateY(-2px);
+    }
+
     .section-title {
         font-size: 1.3rem;
-        font-weight: 600;
-        color: #1a472a;
+        font-weight: 700;
+        color: var(--primary-darker);
         margin-bottom: 1rem;
         padding-bottom: 0.5rem;
-        border-bottom: 2px solid #c5a028;
+        border-bottom: 2px solid var(--primary-gold);
+        display: inline-block;
     }
-    .score-high { color: #28a745; }
-    .score-medium { color: #ffc107; }
-    .score-low { color: #dc3545; }
+
+    .score-high { 
+        color: #28a745; 
+        font-weight: 700;
+        background: #d4edda;
+        padding: 4px 10px;
+        border-radius: 20px;
+        display: inline-block;
+    }
+    .score-medium { 
+        color: #856404; 
+        font-weight: 700;
+        background: #fff3cd;
+        padding: 4px 10px;
+        border-radius: 20px;
+        display: inline-block;
+    }
+    .score-low { 
+        color: #721c24; 
+        font-weight: 700;
+        background: #f8d7da;
+        padding: 4px 10px;
+        border-radius: 20px;
+        display: inline-block;
+    }
+    .score-pending { 
+        color: #6c757d; 
+        font-style: italic;
+        background: #e9ecef;
+        padding: 4px 10px;
+        border-radius: 20px;
+        display: inline-block;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #f8f9fa;
+    }
+
+    .recent-table thead {
+        background: var(--primary-darker);
+        color: white;
+    }
+
+    .recent-table th {
+        padding: 1rem;
+        font-weight: 600;
+    }
+
+    .recent-table td {
+        padding: 1rem;
+        vertical-align: middle;
+    }
+
+    .action-buttons .btn {
+        margin: 0 2px;
+        padding: 5px 10px;
+        font-size: 0.75rem;
+    }
+
+    .progress {
+        height: 4px;
+        border-radius: 2px;
+    }
 </style>
 {% endblock %}
 
@@ -83,11 +199,14 @@
         <div class="welcome-card">
             <div class="row align-items-center">
                 <div class="col-md-8">
-                    <h2 class="mb-2">Welcome back, {{ user.full_name }}! ✍️</h2>
+                    <h2 class="mb-2">
+                        <i class="fas fa-pen-fancy me-2" style="color: var(--primary-gold);"></i>
+                        Welcome back, {{ user.full_name }}!
+                    </h2>
                     <p class="mb-0 opacity-75">Track your books, earnings, and publishing journey.</p>
                 </div>
                 <div class="col-md-4 text-md-end mt-3 mt-md-0">
-                    <a href="/books/upload/" class="btn btn-light">
+                    <a href="{% url 'books:upload' %}" class="btn btn-gold">
                         <i class="fas fa-upload me-2"></i> Upload New Book
                     </a>
                 </div>
@@ -129,27 +248,42 @@
         <!-- Book Status Summary -->
         <div class="row mb-4">
             <div class="col-md-12">
-                <div class="card shadow-sm">
-                    <div class="card-header bg-white">
-                        <h5 class="mb-0"><i class="fas fa-chart-pie me-2"></i>Book Status Summary</h5>
+                <div class="card shadow-sm border-0">
+                    <div class="card-header bg-white border-0 py-3">
+                        <h5 class="mb-0">
+                            <i class="fas fa-chart-pie me-2" style="color: var(--primary-gold);"></i>
+                            Book Status Summary
+                        </h5>
                     </div>
                     <div class="card-body">
                         <div class="row text-center">
                             <div class="col-md-3">
                                 <div class="stat-number text-success">{{ published_books|default:0 }}</div>
                                 <small class="text-muted">Published</small>
+                                <div class="progress mt-2">
+                                    <div class="progress-bar bg-success" style="width: {% widthratio published_books total_books 100 %}%"></div>
+                                </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="stat-number text-warning">{{ pending_review|default:0 }}</div>
                                 <small class="text-muted">Pending Review</small>
+                                <div class="progress mt-2">
+                                    <div class="progress-bar bg-warning" style="width: {% widthratio pending_review total_books 100 %}%"></div>
+                                </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="stat-number text-info">{{ in_review|default:0 }}</div>
                                 <small class="text-muted">In Review</small>
+                                <div class="progress mt-2">
+                                    <div class="progress-bar bg-info" style="width: {% widthratio in_review total_books 100 %}%"></div>
+                                </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="stat-number text-danger">{{ needs_revision|default:0 }}</div>
                                 <small class="text-muted">Needs Revision</small>
+                                <div class="progress mt-2">
+                                    <div class="progress-bar bg-danger" style="width: {% widthratio needs_revision total_books 100 %}%"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -157,76 +291,144 @@
             </div>
         </div>
         
-        <!-- Recent Books -->
-        <div>
-            <h3 class="section-title">
-                <i class="fas fa-book me-2"></i> Recent Books
-            </h3>
-            <div class="table-responsive">
-                <table class="table table-hover">
-                    <thead class="table-light">
-                        <tr>
-                            <th>Title</th>
-                            <th>Status</th>
-                            <th>Price</th>
-                            <th>Downloads</th>
-                            <th>Quality Score</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for book in recent_books %}
-                        <tr>
-                            <td>
-                                <strong>{{ book.title|truncatechars:50 }}</strong>
-                            </td>
-                            <td>
-                                <span class="status-badge status-{{ book.status }}">
-                                    {{ book.get_status_display }}
-                                </span>
-                            </td>
-                            <td>
-                                {% if book.is_free %}
-                                    FREE
-                                {% else %}
-                                    {{ book.price }} ETB
-                                {% endif %}
-                            </td>
-                            <td>{{ book.downloads_count|default:0|intcomma }}</td>
-                            <td>
-                                {% if book.checker_score %}
-                                    <span class="fw-bold 
-                                        {% if book.checker_score >= 7 %}score-high
-                                        {% elif book.checker_score >= 5 %}score-medium
-                                        {% else %}score-low{% endif %}">
-                                        {{ book.checker_score|floatformat:1 }}/10
+        <!-- Recent Books Table -->
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-white border-0 py-3">
+                <h5 class="mb-0">
+                    <i class="fas fa-book me-2" style="color: var(--primary-gold);"></i>
+                    Recent Books
+                </h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0 recent-table">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Status</th>
+                                <th>Price</th>
+                                <th>Downloads</th>
+                                <th>Quality Score</th>
+                                <th>Submitted Date</th>
+                                <th>Actions</th>
+                            </thead>
+                        <tbody>
+                            {% for book in recent_books %}
+                            <tr>
+                                <td>
+                                    <strong>{{ book.title|truncatechars:50 }}</strong>
+                                    <br>
+                                    <small class="text-muted">ISBN: {{ book.isbn|default:"N/A" }}</small>
+                                 </td>
+                                <td>
+                                    <span class="status-badge status-{{ book.status }}">
+                                        {{ book.get_status_display|default:book.status|title }}
                                     </span>
-                                {% else %}
-                                    <span class="text-muted">Pending</span>
-                                {% endif %}
-                            </td>
-                            <td>
-                                <a href="/books/{{ book.id }}/" class="btn btn-sm btn-outline-secondary">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                                {% if book.status == 'needs_revision' %}
-                                    <a href="/books/{{ book.id }}/edit/" class="btn btn-sm btn-warning">
-                                        <i class="fas fa-edit"></i>
+                                 </td>
+                                <td>
+                                    {% if book.is_free %}
+                                        <span class="badge bg-success">FREE</span>
+                                    {% else %}
+                                        <strong>{{ book.price }} ETB</strong>
+                                    {% endif %}
+                                 </td>
+                                <td>
+                                    <i class="fas fa-download me-1 text-muted"></i>
+                                    {{ book.downloads_count|default:0|intcomma }}
+                                 </td>
+                                <td>
+                                    {% if book.quality_review_score %}
+                                        <span class="
+                                            {% if book.quality_review_score >= 7 %}score-high
+                                            {% elif book.quality_review_score >= 5 %}score-medium
+                                            {% else %}score-low{% endif %}">
+                                            <i class="fas fa-star me-1"></i>
+                                            {{ book.quality_review_score|floatformat:1 }}/10
+                                        </span>
+                                    {% elif book.checker_score %}
+                                        <span class="
+                                            {% if book.checker_score >= 7 %}score-high
+                                            {% elif book.checker_score >= 5 %}score-medium
+                                            {% else %}score-low{% endif %}">
+                                            <i class="fas fa-star me-1"></i>
+                                            {{ book.checker_score|floatformat:1 }}/10
+                                        </span>
+                                    {% elif book.status == 'pending_review' %}
+                                        <span class="score-pending">
+                                            <i class="fas fa-clock me-1"></i> Awaiting Review
+                                        </span>
+                                    {% elif book.status == 'in_review' %}
+                                        <span class="score-pending">
+                                            <i class="fas fa-spinner fa-spin me-1"></i> In Progress
+                                        </span>
+                                    {% else %}
+                                        <span class="score-pending">
+                                            <i class="fas fa-minus-circle me-1"></i> Not Available
+                                        </span>
+                                    {% endif %}
+                                 </td>
+                                <td>
+                                    <small>{{ book.created_at|date:"M d, Y" }}</small>
+                                 </td>
+                                <td class="action-buttons">
+                                    <a href="{% url 'books:detail' book.id %}" class="btn btn-sm btn-outline-gold" title="View Book">
+                                        <i class="fas fa-eye"></i>
                                     </a>
-                                {% endif %}
-                            </td>
-                        </tr>
-                        {% empty %}
-                        <tr>
-                            <td colspan="6" class="text-center py-4">
-                                <i class="fas fa-inbox fa-2x mb-2 d-block text-muted"></i>
-                                <p class="text-muted">No books uploaded yet.</p>
-                                <a href="/books/upload/" class="btn btn-gold btn-sm">Upload Your First Book</a>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                                    {% if book.status == 'needs_revision' %}
+                                        <a href="{% url 'books:edit' book.id %}" class="btn btn-sm btn-warning" title="Edit Book">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                    {% endif %}
+                                    {% if book.status == 'published' and book.file %}
+                                        <a href="{% url 'books:download' book.id %}" class="btn btn-sm btn-success" title="Download Book">
+                                            <i class="fas fa-download"></i>
+                                        </a>
+                                    {% endif %}
+                                    {% if book.status != 'published' and book.status != 'rejected' %}
+                                        <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ book.id }}" title="Delete Book">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    {% endif %}
+                                </td>
+                             </tr>
+
+                            <!-- Delete Modal -->
+                            <div class="modal fade" id="deleteModal{{ book.id }}" tabindex="-1">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header" style="background: linear-gradient(135deg, var(--primary-darker), var(--primary-dark)); color: white;">
+                                            <h5 class="modal-title">Confirm Deletion</h5>
+                                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Are you sure you want to delete <strong>"{{ book.title }}"</strong>?</p>
+                                            <p class="text-muted small">This action cannot be undone.</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                            <form method="POST" action="{% url 'books:delete' book.id %}" style="display: inline;">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% empty %}
+                            <tr>
+                                <td colspan="7" class="text-center py-5">
+                                    <i class="fas fa-inbox fa-3x mb-3 d-block text-muted"></i>
+                                    <h5>No Books Yet</h5>
+                                    <p class="text-muted">You haven't uploaded any books yet.</p>
+                                    <a href="{% url 'books:upload' %}" class="btn btn-gold mt-2">
+                                        <i class="fas fa-upload me-2"></i> Upload Your First Book
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

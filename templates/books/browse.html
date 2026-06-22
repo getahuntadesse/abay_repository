@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load humanize %}
 
-{% block title %}Browse Books - Abay Repository{% endblock %}
+{% block title %}Browse Books - Abrehot Library{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -231,6 +231,22 @@
         color: var(--primary-gray-light);
         margin-bottom: 1rem;
     }
+    
+    .btn-gold {
+        background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark));
+        color: var(--primary-darker);
+        border: none;
+        padding: 10px 25px;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-gold:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(218, 165, 32, 0.4);
+        color: var(--primary-darker);
+    }
 </style>
 {% endblock %}
 
@@ -245,7 +261,7 @@
             <!-- Search Box -->
             <div class="search-box">
                 <form method="GET" action="{% url 'books:browse' %}">
-                    <input type="text" name="q" placeholder="Search by title, author, or keyword..." value="{{ search_query|default:'' }}">
+                    <input type="text" name="q" placeholder="Search by title, author, or keyword..." value="{{ query|default:'' }}">
                     <button type="submit"><i class="fas fa-search me-1"></i> Search</button>
                 </form>
             </div>
@@ -265,11 +281,11 @@
                 <div class="mb-4">
                     <h6 class="fw-bold mb-2">Genres</h6>
                     <ul class="genre-list">
-                        <li><a href="{% url 'books:browse' %}" class="{% if not request.GET.genre %}active{% endif %}">All Books</a></li>
+                        <li><a href="?{% if query %}q={{ query }}&{% endif %}" class="{% if not selected_genre %}active{% endif %}">All Books</a></li>
                         {% for genre in genres %}
                             <li>
-                                <a href="?genre={{ genre.slug }}{% if search_query %}&q={{ search_query }}{% endif %}" 
-                                   class="{% if request.GET.genre == genre.slug %}active{% endif %}">
+                                <a href="?{% if query %}q={{ query }}&{% endif %}genre={{ genre.id }}" 
+                                   class="{% if selected_genre == genre.id|stringformat:"s" %}active{% endif %}">
                                     {{ genre.name }}
                                 </a>
                             </li>
@@ -280,8 +296,8 @@
                 <div class="mb-4">
                     <h6 class="fw-bold mb-2">Price Range</h6>
                     <ul class="genre-list">
-                        <li><a href="?{% if request.GET.genre %}genre={{ request.GET.genre }}&{% endif %}price=free">Free Books</a></li>
-                        <li><a href="?{% if request.GET.genre %}genre={{ request.GET.genre }}&{% endif %}price=paid">Paid Books</a></li>
+                        <li><a href="?{% if query %}q={{ query }}&{% endif %}{% if selected_genre %}genre={{ selected_genre }}&{% endif %}price=free">Free Books</a></li>
+                        <li><a href="?{% if query %}q={{ query }}&{% endif %}{% if selected_genre %}genre={{ selected_genre }}&{% endif %}price=paid">Paid Books</a></li>
                     </ul>
                 </div>
                 
@@ -307,10 +323,10 @@
                             <i class="fas fa-sort me-1"></i> Sort by
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="?sort=newest{% if request.GET.genre %}&genre={{ request.GET.genre }}{% endif %}">Newest First</a></li>
-                            <li><a class="dropdown-item" href="?sort=popular{% if request.GET.genre %}&genre={{ request.GET.genre }}{% endif %}">Most Popular</a></li>
-                            <li><a class="dropdown-item" href="?sort=price_low{% if request.GET.genre %}&genre={{ request.GET.genre }}{% endif %}">Price: Low to High</a></li>
-                            <li><a class="dropdown-item" href="?sort=price_high{% if request.GET.genre %}&genre={{ request.GET.genre }}{% endif %}">Price: High to Low</a></li>
+                            <li><a class="dropdown-item" href="?{% if query %}q={{ query }}&{% endif %}{% if selected_genre %}genre={{ selected_genre }}&{% endif %}sort=newest">Newest First</a></li>
+                            <li><a class="dropdown-item" href="?{% if query %}q={{ query }}&{% endif %}{% if selected_genre %}genre={{ selected_genre }}&{% endif %}sort=popular">Most Popular</a></li>
+                            <li><a class="dropdown-item" href="?{% if query %}q={{ query }}&{% endif %}{% if selected_genre %}genre={{ selected_genre }}&{% endif %}sort=price_low">Price: Low to High</a></li>
+                            <li><a class="dropdown-item" href="?{% if query %}q={{ query }}&{% endif %}{% if selected_genre %}genre={{ selected_genre }}&{% endif %}sort=price_high">Price: High to Low</a></li>
                         </ul>
                     </div>
                 </div>
@@ -356,7 +372,7 @@
                         <ul class="pagination justify-content-center">
                             {% if books.has_previous %}
                                 <li class="page-item">
-                                    <a class="page-link" href="?page={{ books.previous_page_number }}{% if request.GET.genre %}&genre={{ request.GET.genre }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}">
+                                    <a class="page-link" href="?page={{ books.previous_page_number }}{% if query %}&q={{ query }}{% endif %}{% if selected_genre %}&genre={{ selected_genre }}{% endif %}{% if selected_price %}&price={{ selected_price }}{% endif %}">
                                         <i class="fas fa-chevron-left"></i> Previous
                                     </a>
                                 </li>
@@ -371,14 +387,14 @@
                                     <li class="page-item active"><span class="page-link">{{ num }}</span></li>
                                 {% elif num > books.number|add:'-3' and num < books.number|add:'3' %}
                                     <li class="page-item">
-                                        <a class="page-link" href="?page={{ num }}{% if request.GET.genre %}&genre={{ request.GET.genre }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}">{{ num }}</a>
+                                        <a class="page-link" href="?page={{ num }}{% if query %}&q={{ query }}{% endif %}{% if selected_genre %}&genre={{ selected_genre }}{% endif %}{% if selected_price %}&price={{ selected_price }}{% endif %}">{{ num }}</a>
                                     </li>
                                 {% endif %}
                             {% endfor %}
                             
                             {% if books.has_next %}
                                 <li class="page-item">
-                                    <a class="page-link" href="?page={{ books.next_page_number }}{% if request.GET.genre %}&genre={{ request.GET.genre }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}">
+                                    <a class="page-link" href="?page={{ books.next_page_number }}{% if query %}&q={{ query }}{% endif %}{% if selected_genre %}&genre={{ selected_genre }}{% endif %}{% if selected_price %}&price={{ selected_price }}{% endif %}">
                                         Next <i class="fas fa-chevron-right"></i>
                                     </a>
                                 </li>
@@ -404,21 +420,4 @@
         </div>
     </div>
 </div>
-
-<style>
-    .btn-gold {
-        background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark));
-        color: var(--primary-darker);
-        border: none;
-        padding: 10px 25px;
-        border-radius: 25px;
-        font-weight: 600;
-        transition: all 0.3s ease;
-    }
-    .btn-gold:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(218, 165, 32, 0.4);
-        color: var(--primary-darker);
-    }
-</style>
 {% endblock %}

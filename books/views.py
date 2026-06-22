@@ -10,10 +10,6 @@ from accounts.models import CustomUser
 from payments.models import Purchase
 
 
-# =====================================================
-# HOME VIEW - For the homepage
-# =====================================================
-
 class HomeView(TemplateView):
     """Home page view with featured books and statistics"""
     template_name = 'home.html'
@@ -37,17 +33,18 @@ class HomeView(TemplateView):
         return context
 
 
-# =====================================================
-# BOOK VIEWS
-# =====================================================
-
 def browse_books(request):
     """Browse all published books with search and filter"""
     books = Book.objects.filter(status='published').select_related('author', 'genre').order_by('-created_at')
     genres = Genre.objects.filter(is_active=True)
     
+    # Get filter parameters
+    query = request.GET.get('q', '')
+    genre_param = request.GET.get('genre')
+    price_filter = request.GET.get('price')
+    sort_by = request.GET.get('sort', 'newest')
+    
     # Search functionality
-    query = request.GET.get('q')
     if query:
         books = books.filter(
             Q(title__icontains=query) |
@@ -56,23 +53,38 @@ def browse_books(request):
             Q(keywords__icontains=query)
         )
     
-    # Filter by genre
-    genre_id = request.GET.get('genre')
-    if genre_id:
-        books = books.filter(genre_id=genre_id)
+    # Filter by genre - handle both ID and slug
+    genre_id = None
+    if genre_param:
+        try:
+            # Check if it's a number (ID)
+            if genre_param.isdigit():
+                genre_id = int(genre_param)
+                books = books.filter(genre_id=genre_id)
+            else:
+                # It's a slug, try to find genre by slug
+                genre = Genre.objects.filter(slug=genre_param, is_active=True).first()
+                if genre:
+                    genre_id = genre.id
+                    books = books.filter(genre=genre)
+        except (ValueError, TypeError):
+            pass
     
-    # Filter by price (free or paid)
-    price_filter = request.GET.get('price')
+    # Filter by price
     if price_filter == 'free':
         books = books.filter(is_free=True)
     elif price_filter == 'paid':
         books = books.filter(is_free=False)
     
     # Sort options
-    sort_by = request.GET.get('sort', '-created_at')
-    valid_sorts = ['title', '-title', 'price', '-price', 'downloads_count', '-downloads_count', 'created_at', '-created_at']
-    if sort_by in valid_sorts:
-        books = books.order_by(sort_by)
+    if sort_by == 'newest':
+        books = books.order_by('-created_at')
+    elif sort_by == 'popular':
+        books = books.order_by('-downloads_count', '-views_count')
+    elif sort_by == 'price_low':
+        books = books.order_by('price')
+    elif sort_by == 'price_high':
+        books = books.order_by('-price')
     else:
         books = books.order_by('-created_at')
     
@@ -128,6 +140,19 @@ def book_detail(request, book_id):
             book=book
         ).exists()
     
+    # Get quality review score if available
+    quality_score = None
+    try:
+        from reviews.models import QualityReview
+        quality_review = QualityReview.objects.filter(
+            book=book,
+            review_type='checker'
+        ).first()
+        if quality_review and quality_review.overall_score:
+            quality_score = quality_review.overall_score
+    except ImportError:
+        pass
+    
     # Get related books (same genre)
     related_books = Book.objects.filter(
         genre=book.genre, 
@@ -138,6 +163,7 @@ def book_detail(request, book_id):
         'book': book,
         'has_purchased': has_purchased,
         'in_wishlist': in_wishlist,
+        'quality_score': quality_score,
         'related_books': related_books,
     }
     return render(request, 'books/detail.html', context)
@@ -213,6 +239,21 @@ def my_books(request):
         return redirect('home')
     
     books = Book.objects.filter(author=request.user).select_related('genre').order_by('-created_at')
+    
+    # Annotate books with quality review scores
+    try:
+        from reviews.models import QualityReview
+        for book in books:
+            quality_review = QualityReview.objects.filter(
+                book=book,
+                review_type='checker'
+            ).first()
+            if quality_review and quality_review.overall_score:
+                book.quality_review_score = quality_review.overall_score
+            else:
+                book.quality_review_score = None
+    except ImportError:
+        pass
     
     # Statistics
     total_books = books.count()
@@ -332,7 +373,6 @@ def publish_book(request, book_id):
     if request.method == 'POST':
         book.status = 'published'
         book.published_at = timezone.now()
-        book.maker_approved_by = request.user
         book.maker_approved_at = timezone.now()
         book.save()
         
@@ -350,11 +390,14 @@ def my_publications(request):
         return redirect('home')
     
     books = Book.objects.filter(
-        status='published',
-        maker_approved_by=request.user
+        status='published'
     ).select_related('author', 'genre').order_by('-published_at')
     
-    return render(request, 'books/my_publications.html', {'books': books})
+    context = {
+        'books': books,
+        'total_publications': books.count(),
+    }
+    return render(request, 'books/my_publications.html', context)
 
 
 def published_books(request):
@@ -434,17 +477,6 @@ def download_book(request, book_id):
     # Increment download count
     book.downloads_count += 1
     book.save()
-    
-    # Create download record
-    try:
-        from .models import Download
-        Download.objects.create(
-            user=request.user,
-            book=book,
-            downloaded_at=timezone.now()
-        )
-    except ImportError:
-        pass
     
     if book.file:
         return redirect(book.file.url)

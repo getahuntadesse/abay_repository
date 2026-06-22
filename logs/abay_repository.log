@@ -13822,3 +13822,11 @@ Not Found: /admin/analytics/
 "GET /admin/analytics/ HTTP/1.1" 404 6296
 C:\abay_repository\config\settings.py changed, reloading.
 C:\abay_repository\config\settings.py changed, reloading.
+Watching for file changes with StatReloader
+C:\abay_repository\config\settings.py changed, reloading.
+Watching for file changes with StatReloader
+Not Found: /favicon.ico
+C:\abay_repository\config\settings.py changed, reloading.
+Watching for file changes with StatReloader
+C:\abay_repository\config\settings.py changed, reloading.
+Watching for file changes with StatReloader

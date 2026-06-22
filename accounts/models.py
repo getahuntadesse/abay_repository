@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
 
+
 class CustomUser(AbstractUser):
     ROLE_CHOICES = (
         ('admin', 'Admin'),
@@ -14,29 +15,28 @@ class CustomUser(AbstractUser):
     GENDER_CHOICES = (
         ('M', 'Male'),
         ('F', 'Female'),
-        ('O', 'Other'),
     )
     
     # Personal Information
-    full_name = models.CharField(max_length=255)
+    full_name = models.CharField(max_length=255, blank=True, default='')
     national_id = models.CharField(max_length=16, unique=True, null=True, blank=True)
     national_id_verified = models.BooleanField(default=False)
-    phone = models.CharField(max_length=20, default='')
+    phone = models.CharField(max_length=20, blank=True, default='')
     phone_verified = models.BooleanField(default=False)
     address = models.TextField(blank=True, default='')
     date_of_birth = models.DateField(null=True, blank=True)
-    gender = models.CharField(max_length=10, choices=GENDER_CHOICES, default='M')
+    gender = models.CharField(max_length=10, choices=GENDER_CHOICES, blank=True, default='')
     
     # Location
-    region = models.CharField(max_length=100, default='')
-    zone = models.CharField(max_length=100, default='')
-    woreda = models.CharField(max_length=100, default='')
+    region = models.CharField(max_length=100, blank=True, default='')
+    zone = models.CharField(max_length=100, blank=True, default='')
+    woreda = models.CharField(max_length=100, blank=True, default='')
     
     # Role and Status
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='client')
     is_active = models.BooleanField(default=True)
     email_verified = models.BooleanField(default=False)
-    email_verification_token = models.CharField(max_length=255, default='')
+    email_verification_token = models.CharField(max_length=255, blank=True, default='')
     verification_token_expires = models.DateTimeField(null=True, blank=True)
     
     # Tracking
@@ -53,7 +53,7 @@ class CustomUser(AbstractUser):
     locked_until = models.DateTimeField(null=True, blank=True)
     login_attempts = models.IntegerField(default=0)
     two_factor_enabled = models.BooleanField(default=False)
-    two_factor_secret = models.CharField(max_length=255, default='')
+    two_factor_secret = models.CharField(max_length=255, blank=True, default='')
     
     class Meta:
         db_table = 'users'
@@ -65,6 +65,14 @@ class CustomUser(AbstractUser):
     
     def __str__(self):
         return self.full_name or self.username
+    
+    def get_role_display(self):
+        role_display = dict(self.ROLE_CHOICES)
+        return role_display.get(self.role, self.role)
+    
+    def get_gender_display(self):
+        gender_display = dict(self.GENDER_CHOICES)
+        return gender_display.get(self.gender, '')
 
 
 class AuthorProfile(models.Model):

@@ -1,0 +1,218 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Edit Profile - Abrehot Library{% endblock %}
+
+{% block extra_css %}
+<style>
+    :root {
+        --primary-gold: #DAA520;
+        --primary-gold-dark: #B8860B;
+        --primary-dark: #2C2C2C;
+        --primary-darker: #1A1A1A;
+        --primary-gray: #4A4A4A;
+    }
+
+    .form-container {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .form-card {
+        background: white;
+        border-radius: 24px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+
+    .form-header {
+        background: linear-gradient(135deg, var(--primary-darker) 0%, var(--primary-dark) 100%);
+        padding: 2rem;
+        text-align: center;
+        color: white;
+    }
+
+    .form-header i {
+        font-size: 3rem;
+        color: var(--primary-gold);
+        margin-bottom: 1rem;
+    }
+
+    .form-header h2 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-body {
+        padding: 2rem;
+    }
+
+    .section-title {
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--primary-darker);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 1.25rem;
+        border-bottom: 2px solid var(--primary-gold);
+        display: inline-block;
+        padding-bottom: 0.5rem;
+    }
+
+    .btn-gold {
+        background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark));
+        color: var(--primary-darker);
+        border: none;
+        font-weight: 600;
+        padding: 10px 25px;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-gold:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(218, 165, 32, 0.4);
+        color: var(--primary-darker);
+    }
+
+    .btn-outline-gold {
+        border: 2px solid var(--primary-gold);
+        color: var(--primary-gold);
+        background: transparent;
+        font-weight: 600;
+        padding: 10px 25px;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-outline-gold:hover {
+        background: var(--primary-gold);
+        color: var(--primary-darker);
+        transform: translateY(-2px);
+    }
+
+    .current-avatar {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid var(--primary-gold);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <div class="form-container">
+        <div class="form-card">
+            <div class="form-header">
+                <i class="fas fa-user-edit"></i>
+                <h2>Edit Profile</h2>
+                <p class="mb-0 opacity-75">Update your personal information</p>
+            </div>
+            <div class="form-body">
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <!-- Personal Information Section -->
+                    <div class="mb-4">
+                        <h6 class="section-title"><i class="fas fa-user me-2"></i>Personal Information</h6>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="full_name" class="form-label fw-bold">Full Name *</label>
+                        <input type="text" name="full_name" id="full_name" class="form-control" value="{{ user.full_name }}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="phone" class="form-label fw-bold">Phone Number</label>
+                        <input type="tel" name="phone" id="phone" class="form-control" value="{{ user.phone }}">
+                        <small class="text-muted">Format: 09XXXXXXXX</small>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="date_of_birth" class="form-label fw-bold">Date of Birth</label>
+                            <input type="date" name="date_of_birth" id="date_of_birth" class="form-control" value="{{ user.date_of_birth|date:'Y-m-d' }}">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="gender" class="form-label fw-bold">Gender</label>
+                            <select name="gender" id="gender" class="form-select">
+                                <option value="">Select Gender</option>
+                                <option value="M" {% if user.gender == 'M' %}selected{% endif %}>Male</option>
+                                <option value="F" {% if user.gender == 'F' %}selected{% endif %}>Female</option>
+                                <option value="O" {% if user.gender == 'O' %}selected{% endif %}>Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Location Section -->
+                    <div class="mb-4 mt-4">
+                        <h6 class="section-title"><i class="fas fa-map-marker-alt me-2"></i>Location</h6>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label for="region" class="form-label fw-bold">Region</label>
+                            <input type="text" name="region" id="region" class="form-control" value="{{ user.region }}">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="zone" class="form-label fw-bold">Zone / Subcity</label>
+                            <input type="text" name="zone" id="zone" class="form-control" value="{{ user.zone }}">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="woreda" class="form-label fw-bold">Woreda</label>
+                            <input type="text" name="woreda" id="woreda" class="form-control" value="{{ user.woreda }}">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="address" class="form-label fw-bold">Address</label>
+                        <textarea name="address" id="address" class="form-control" rows="3">{{ user.address }}</textarea>
+                    </div>
+
+                    <!-- Profile Picture Section -->
+                    <div class="mb-4 mt-4">
+                        <h6 class="section-title"><i class="fas fa-image me-2"></i>Profile Picture</h6>
+                    </div>
+
+                    <div class="mb-3 text-center">
+                        {% if user.profile_image %}
+                            <img src="{{ user.profile_image.url }}" alt="Current avatar" class="current-avatar mb-3">
+                            <p class="text-muted small">Current avatar</p>
+                        {% else %}
+                            <div class="current-avatar bg-secondary d-flex align-items-center justify-content-center mx-auto mb-3" style="background: linear-gradient(135deg, var(--primary-darker), var(--primary-dark));">
+                                <i class="fas fa-user fa-3x text-white"></i>
+                            </div>
+                            <p class="text-muted small">No avatar uploaded</p>
+                        {% endif %}
+                        <input type="file" name="profile_image" id="profile_image" class="form-control" accept="image/*">
+                        <small class="text-muted">Upload a new profile picture (JPG, PNG, GIF)</small>
+                    </div>
+
+                    <!-- Bio Section -->
+                    <div class="mb-4 mt-4">
+                        <h6 class="section-title"><i class="fas fa-align-left me-2"></i>Bio</h6>
+                    </div>
+
+                    <div class="mb-3">
+                        <textarea name="bio" id="bio" class="form-control" rows="4" placeholder="Tell us something about yourself...">{{ user.bio }}</textarea>
+                    </div>
+
+                    <hr>
+
+                    <div class="d-flex justify-content-between gap-3">
+                        <a href="{% url 'accounts:profile' %}" class="btn btn-outline-gold">
+                            <i class="fas fa-times me-2"></i> Cancel
+                        </a>
+                        <button type="submit" class="btn btn-gold">
+                            <i class="fas fa-save me-2"></i> Save Changes
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
