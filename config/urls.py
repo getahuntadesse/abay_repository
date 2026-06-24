@@ -45,6 +45,24 @@ urlpatterns = [
          name='password_reset_complete'),
 ]
 
+# Debug Toolbar - only when DEBUG is True
+if settings.DEBUG:
+    try:
+        import debug_toolbar
+        urlpatterns = [
+            path('__debug__/', include(debug_toolbar.urls)),
+        ] + urlpatterns
+    except ImportError:
+        # debug_toolbar is not installed, skip
+        pass
+
+# Static and media file serving in development
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+# Custom error handlers for production
+if not settings.DEBUG:
+    handler404 = 'config.views.handler404'
+    handler500 = 'config.views.handler500'
+    handler403 = 'config.views.handler403'
