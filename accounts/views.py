@@ -18,7 +18,7 @@ import base64
 import time
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.backends import default_backend
-from cryptography.hazmat.primitives.asymmetric import rsa, padding
+from cryptography.hazmat.primitives.asymmetric import rsa
 from decouple import config
 
 from .forms import LoginForm, ClientRegistrationForm, AuthorRegistrationForm
@@ -30,33 +30,131 @@ from reviews.models import QualityReview
 logger = logging.getLogger(__name__)
 
 
-def decode_private_key_from_b64(private_key_b64):
+def get_private_key_from_b64(private_key_b64):
     """
-    Decode the Base64 encoded private key from the Fayda UAT credentials.
-    The private key is stored as a Base64 encoded JSON string containing RSA key components.
+    Convert the Base64 encoded JWK to a PEM private key.
+    This function reconstructs the RSA private key from its components.
     """
+    if not private_key_b64:
+        logger.error("Private key is empty or None")
+        return None
+    
     try:
+        logger.info(f"Private key length: {len(private_key_b64)} characters")
+        
         # Decode Base64
         decoded = base64.b64decode(private_key_b64)
-        key_data = json.loads(decoded.decode('utf-8'))
+        decoded_str = decoded.decode('utf-8')
+        logger.info(f"Decoded JSON length: {len(decoded_str)}")
         
-        # Reconstruct the private key from components
-        private_key = rsa.RSAPrivateNumbers(
-            p=int(key_data['p'], 36),
-            q=int(key_data['q'], 36),
-            d=int(key_data['d'], 36),
-            dmp1=int(key_data['dp'], 36),
-            dmq1=int(key_data['dq'], 36),
-            iqmp=int(key_data['qi'], 36),
-            public_numbers=rsa.RSAPublicNumbers(
-                e=int(key_data['e'], 36),
-                n=int(key_data['n'], 36)
+        # Parse JSON
+        key_data = json.loads(decoded_str)
+        logger.info(f"Private key components found: {list(key_data.keys())}")
+        
+        # Validate required components
+        required_keys = ['d', 'dp', 'dq', 'e', 'n', 'p', 'q', 'qi']
+        for key in required_keys:
+            if key not in key_data:
+                logger.error(f"Missing required key component: {key}")
+                return None
+        
+        # Convert values from base36 to int
+        try:
+            p = int(key_data['p'], 36)
+            q = int(key_data['q'], 36)
+            d = int(key_data['d'], 36)
+            dp = int(key_data['dp'], 36)
+            dq = int(key_data['dq'], 36)
+            qi = int(key_data['qi'], 36)
+            e = int(key_data['e'], 36)
+            n = int(key_data['n'], 36)
+            
+            logger.info(f"Successfully converted all components from base36")
+            
+        except ValueError as ve:
+            logger.error(f"ValueError when converting base36: {str(ve)}")
+            return None
+        
+        # Reconstruct the private key
+        try:
+            private_key = rsa.RSAPrivateNumbers(
+                p=p,
+                q=q,
+                d=d,
+                dmp1=dp,
+                dmq1=dq,
+                iqmp=qi,
+                public_numbers=rsa.RSAPublicNumbers(
+                    e=e,
+                    n=n
+                )
+            ).private_key(default_backend())
+            
+            logger.info("Private key successfully reconstructed")
+            
+            # Convert to PEM for PyJWT
+            pem = private_key.private_bytes(
+                encoding=serialization.Encoding.PEM,
+                format=serialization.PrivateFormat.PKCS8,
+                encryption_algorithm=serialization.NoEncryption()
             )
-        ).private_key(default_backend())
-        
-        return private_key
+            
+            logger.info("Private key converted to PEM successfully")
+            return pem
+            
+        except Exception as e:
+            logger.error(f"Failed to reconstruct private key: {str(e)}")
+            import traceback
+            traceback.print_exc()
+            return None
+            
+    except json.JSONDecodeError as e:
+        logger.error(f"JSON decode error: {str(e)}")
+        return None
     except Exception as e:
         logger.error(f"Failed to decode private key: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return None
+
+
+def generate_client_assertion(client_id, token_url, private_key_b64):
+    """
+    Generate a client assertion JWT for OIDC client authentication.
+    """
+    try:
+        # Get the private key
+        private_key = get_private_key_from_b64(private_key_b64)
+        if not private_key:
+            logger.error("Failed to get private key")
+            return None
+        
+        # Generate the JWT payload
+        now = datetime.utcnow()
+        payload = {
+            'iss': client_id,
+            'sub': client_id,
+            'aud': token_url,
+            'iat': int(now.timestamp()),
+            'exp': int((now + timedelta(minutes=5)).timestamp()),
+            'jti': str(int(time.time() * 1000))
+        }
+        
+        # Encode the JWT
+        client_assertion = jwt.encode(
+            payload,
+            private_key,
+            algorithm='RS256',
+            headers={'kid': '0b194df4-7149-4146-97c5-78fdf0d4fb1d'}
+        )
+        
+        logger.info(f"Client assertion generated successfully (length: {len(client_assertion)})")
+        return client_assertion
+        
+    except Exception as e:
+        logger.error(f"Failed to generate client assertion: {str(e)}")
+        import traceback
+        traceback.print_exc()
         return None
 
 
@@ -146,6 +244,9 @@ def register_author(request):
     if request.user.is_authenticated:
         return redirect('accounts:dashboard')
     
+    # Check if we have verified data from session (set by callback)
+    verified_data = request.session.pop('fayda_verified_data', None)
+    
     if request.method == 'POST':
         form = AuthorRegistrationForm(request.POST, request.FILES)
         if form.is_valid():
@@ -157,8 +258,172 @@ def register_author(request):
             messages.error(request, 'Please correct the errors below.')
     else:
         form = AuthorRegistrationForm()
+        if verified_data:
+            # Pre-populate the form with verified data
+            form.initial = {
+                'full_name': verified_data.get('full_name', ''),
+                'national_id': verified_data.get('national_id', ''),
+            }
     
-    return render(request, 'accounts/register_author.html', {'form': form})
+    context = {
+        'form': form,
+        'verified_data': verified_data,
+        'debug': settings.DEBUG,
+    }
+    return render(request, 'accounts/register_author.html', context)
+
+
+@csrf_exempt
+def oidc_callback_view(request):
+    """
+    Handle OIDC callback from Fayda.
+    This view receives the authorization code from Fayda after authentication.
+    """
+    # Get parameters from the URL
+    code = request.GET.get('code')
+    state = request.GET.get('state')
+    error = request.GET.get('error')
+    error_description = request.GET.get('error_description')
+    
+    # Check for errors from Fayda
+    if error:
+        messages.error(request, f'Fayda authentication error: {error_description or error}')
+        return redirect('accounts:register_author')
+    
+    # Validate required parameters
+    if not code or not state:
+        messages.error(request, 'Missing authorization code or state parameter.')
+        return redirect('accounts:register_author')
+    
+    # Verify state matches session (CSRF protection)
+    session_state = request.session.get('fayda_state')
+    if state != session_state:
+        logger.warning(f"OIDC state mismatch: received {state}, expected {session_state}")
+        messages.error(request, 'Invalid state parameter. Please try again.')
+        return redirect('accounts:register_author')
+    
+    try:
+        # Get OIDC configuration from environment (UAT)
+        client_id = config('FAYDA_CLIENT_ID')
+        token_url = config('FAYDA_TOKEN_URL')
+        userinfo_url = config('FAYDA_USERINFO_URL')
+        redirect_uri = config('FAYDA_REDIRECT_URI')
+        private_key_b64 = config('FAYDA_PRIVATE_KEY_B64')
+        
+        logger.info(f"=== Starting OIDC Callback Processing ===")
+        logger.info(f"Client ID: {client_id[:10]}...")
+        logger.info(f"Token URL: {token_url}")
+        logger.info(f"Redirect URI: {redirect_uri}")
+        
+        # Generate client assertion JWT
+        client_assertion = generate_client_assertion(client_id, token_url, private_key_b64)
+        
+        if not client_assertion:
+            logger.error("Failed to generate client assertion")
+            messages.error(request, 'Failed to generate authentication token. Please contact support.')
+            return redirect('accounts:register_author')
+        
+        logger.info("Client assertion generated successfully")
+        
+        # Step 1: Exchange code for access token using client assertion
+        token_data = {
+            'grant_type': 'authorization_code',
+            'code': code,
+            'client_id': client_id,
+            'client_assertion_type': 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
+            'client_assertion': client_assertion,
+            'redirect_uri': redirect_uri
+        }
+        
+        logger.info(f"Sending token exchange request to: {token_url}")
+        
+        token_response = requests.post(
+            token_url,
+            data=token_data,
+            timeout=30
+        )
+        
+        if not token_response.ok:
+            logger.error(f"Token exchange failed: {token_response.status_code}")
+            logger.error(f"Response: {token_response.text}")
+            messages.error(request, f'Failed to exchange authorization code. Status: {token_response.status_code}')
+            return redirect('accounts:register_author')
+        
+        token_response_data = token_response.json()
+        access_token = token_response_data.get('access_token')
+        
+        if not access_token:
+            logger.error(f"No access token received: {token_response_data}")
+            messages.error(request, 'No access token received from Fayda.')
+            return redirect('accounts:register_author')
+        
+        logger.info("Access token received successfully")
+        
+        # Step 2: Get user information using access token
+        logger.info(f"Fetching userinfo from: {userinfo_url}")
+        
+        userinfo_response = requests.get(
+            userinfo_url,
+            headers={
+                'Authorization': f'Bearer {access_token}',
+                'Content-Type': 'application/json'
+            },
+            timeout=10
+        )
+        
+        if not userinfo_response.ok:
+            logger.error(f"Userinfo request failed: {userinfo_response.status_code}")
+            logger.error(f"Response: {userinfo_response.text}")
+            messages.error(request, 'Failed to retrieve user information from Fayda.')
+            return redirect('accounts:register_author')
+        
+        userinfo = userinfo_response.json()
+        logger.info("Userinfo received successfully")
+        
+        # Step 3: Map userinfo to our format
+        user_data = {
+            'full_name': userinfo.get('name', userinfo.get('full_name', '')),
+            'date_of_birth': userinfo.get('birthdate', userinfo.get('date_of_birth', '')),
+            'gender': userinfo.get('gender', ''),
+            'region': userinfo.get('region', userinfo.get('region_name', '')),
+            'zone': userinfo.get('zone', userinfo.get('zone_name', '')),
+            'woreda': userinfo.get('woreda', userinfo.get('woreda_name', '')),
+            'address': userinfo.get('address', ''),
+            'national_id': request.session.get('fayda_national_id', '')
+        }
+        
+        # Validate that we got the required data
+        if not user_data['full_name']:
+            logger.error(f"Missing full_name in userinfo: {userinfo}")
+            messages.error(request, 'Could not retrieve full name from Fayda.')
+            return redirect('accounts:register_author')
+        
+        logger.info(f"OIDC callback successful for user: {user_data['full_name']}")
+        
+        # Store verified data in session for the registration form
+        request.session['fayda_verified_data'] = user_data
+        
+        # Clear session data
+        request.session.pop('fayda_state', None)
+        request.session.pop('fayda_national_id', None)
+        request.session.pop('fayda_nonce', None)
+        
+        messages.success(request, f'Fayda verification successful! Welcome {user_data["full_name"]}. Please complete your registration.')
+        return redirect('accounts:register_author')
+        
+    except requests.exceptions.Timeout:
+        logger.error("Fayda service timeout")
+        messages.error(request, 'Fayda service timeout. Please try again.')
+    except requests.exceptions.ConnectionError:
+        logger.error("Could not connect to Fayda service")
+        messages.error(request, 'Could not connect to Fayda service. Please try again later.')
+    except Exception as e:
+        logger.error(f"Callback processing error: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        messages.error(request, f'Authentication failed: {str(e)}')
+    
+    return redirect('accounts:register_author')
 
 
 @csrf_exempt
@@ -257,6 +522,7 @@ def oidc_callback(request):
     """
     Handle OIDC callback from Fayda using UAT credentials.
     Exchanges the authorization code for user information.
+    This is the API endpoint called by the frontend JavaScript.
     """
     if request.method != 'POST':
         return JsonResponse({
@@ -303,35 +569,15 @@ def oidc_callback(request):
         userinfo_url = config('FAYDA_USERINFO_URL')
         redirect_uri = config('FAYDA_REDIRECT_URI')
         private_key_b64 = config('FAYDA_PRIVATE_KEY_B64')
-        algorithm = config('FAYDA_ALGORITHM', default='RS256')
-        client_assertion_type = config('FAYDA_CLIENT_ASSERTION_TYPE', default='urn:ietf:params:oauth:client-assertion-type:jwt-bearer')
         
-        # Decode private key
-        private_key = decode_private_key_from_b64(private_key_b64)
-        if not private_key:
+        # Generate client assertion using the helper function
+        client_assertion = generate_client_assertion(client_id, token_url, private_key_b64)
+        
+        if not client_assertion:
             return JsonResponse({
                 'success': False,
-                'message': 'Failed to load private key for authentication.'
+                'message': 'Failed to generate client assertion.'
             }, status=500)
-        
-        # Generate client assertion JWT
-        now = datetime.utcnow()
-        assertion_payload = {
-            'iss': client_id,
-            'sub': client_id,
-            'aud': token_url,
-            'iat': int(now.timestamp()),
-            'exp': int((now + timedelta(minutes=5)).timestamp()),
-            'jti': str(int(time.time() * 1000))
-        }
-        
-        # Sign the JWT with the private key
-        client_assertion = jwt.encode(
-            assertion_payload,
-            private_key,
-            algorithm=algorithm,
-            headers={'kid': '0b194df4-7149-4146-97c5-78fdf0d4fb1d'}
-        )
         
         # Step 1: Exchange code for access token using client assertion
         token_response = requests.post(
@@ -340,7 +586,7 @@ def oidc_callback(request):
                 'grant_type': 'authorization_code',
                 'code': code,
                 'client_id': client_id,
-                'client_assertion_type': client_assertion_type,
+                'client_assertion_type': 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
                 'client_assertion': client_assertion,
                 'redirect_uri': redirect_uri
             },
@@ -356,7 +602,6 @@ def oidc_callback(request):
         
         token_data = token_response.json()
         access_token = token_data.get('access_token')
-        id_token = token_data.get('id_token')
         
         if not access_token:
             return JsonResponse({

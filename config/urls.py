@@ -5,6 +5,7 @@ from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
 from books.views import HomeView
 from . import views as config_views
+from accounts import views as accounts_views
 
 urlpatterns = [
     # Custom Admin URLs (must come before the default admin pattern)
@@ -15,6 +16,10 @@ urlpatterns = [
     
     # Home Page
     path('', HomeView.as_view(), name='home'),
+    
+    # OIDC Callback - Handles the callback from Fayda at /callback
+    # This MUST come before accounts/ include
+    path('callback/', accounts_views.oidc_callback_view, name='oidc_callback'),
     
     # App URL Includes
     path('accounts/', include('accounts.urls')),
@@ -53,7 +58,6 @@ if settings.DEBUG:
             path('__debug__/', include(debug_toolbar.urls)),
         ] + urlpatterns
     except ImportError:
-        # debug_toolbar is not installed, skip
         pass
 
 # Static and media file serving in development
