@@ -14,6 +14,8 @@
         --primary-darker: #1A1A1A;
         --primary-gray: #4A4A4A;
         --primary-gray-light: #6C6C6C;
+        --fayda-blue: #1a237e;
+        --fayda-blue-light: #e3f2fd;
     }
 
     .register-container {
@@ -45,6 +47,11 @@
         font-size: 1.75rem;
         font-weight: 700;
         margin-bottom: 0.5rem;
+    }
+
+    .form-header p {
+        opacity: 0.8;
+        margin-bottom: 0;
     }
 
     .form-body {
@@ -103,8 +110,8 @@
     }
 
     .btn-verify {
-        background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark));
-        color: var(--primary-darker);
+        background: linear-gradient(135deg, var(--fayda-blue), #0d1442);
+        color: white;
         border: none;
         padding: 0.6rem 1.5rem;
         border-radius: 10px;
@@ -115,7 +122,13 @@
 
     .btn-verify:hover:not(:disabled) {
         transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(218, 165, 32, 0.3);
+        box-shadow: 0 5px 15px rgba(26, 35, 126, 0.3);
+        color: white;
+    }
+
+    .btn-verify:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
     }
 
     .btn-verify-verified {
@@ -125,22 +138,6 @@
 
     .btn-verify-verified:hover {
         background: #1e7e34;
-    }
-
-    .btn-fayda {
-        background: linear-gradient(135deg, #1a237e, #0d1442);
-        color: white;
-        border: none;
-        padding: 0.6rem 1.5rem;
-        border-radius: 10px;
-        font-weight: 600;
-        white-space: nowrap;
-        transition: all 0.3s;
-    }
-
-    .btn-fayda:hover:not(:disabled) {
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(26, 35, 126, 0.3);
         color: white;
     }
 
@@ -190,6 +187,7 @@
         margin-top: 0.5rem;
         border-radius: 2px;
         background: #e9ecef;
+        overflow: hidden;
     }
 
     .strength-weak { background: #dc3545; width: 25%; }
@@ -283,8 +281,8 @@
 
     /* OIDC Redirect notice */
     .oidc-notice {
-        background: #E3F2FD;
-        border: 1px solid #1a237e;
+        background: var(--fayda-blue-light);
+        border: 1px solid var(--fayda-blue);
         border-radius: 12px;
         padding: 1rem;
         margin-bottom: 1.5rem;
@@ -292,7 +290,7 @@
     }
 
     .oidc-notice i {
-        color: #1a237e;
+        color: var(--fayda-blue);
     }
 
     .fayda-info-box {
@@ -324,6 +322,22 @@
         flex-shrink: 0;
     }
 
+    /* Test mode badge */
+    .test-mode-badge {
+        background: #FFF3CD;
+        border: 1px solid #FFC107;
+        border-radius: 8px;
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+        color: #856404;
+        display: inline-block;
+        margin-bottom: 1rem;
+    }
+
+    .test-mode-badge i {
+        color: #FFC107;
+    }
+
     @media (max-width: 768px) {
         .form-body {
             padding: 1.5rem;
@@ -345,6 +359,10 @@
         <div class="spinner-border mb-3" role="status"></div>
         <h5>Redirecting to Fayda...</h5>
         <p class="text-muted small">You will be redirected to Fayda's secure authentication portal.</p>
+        <p class="text-muted small mt-2">
+            <i class="fas fa-shield-alt me-1"></i>
+            If you're not redirected automatically, <a href="#" id="redirectManualLink">click here</a>.
+        </p>
     </div>
 </div>
 
@@ -357,6 +375,14 @@
                 <p class="mb-0 opacity-75">Join our community of Ethiopian authors and share your stories with the world.</p>
             </div>
             <div class="form-body">
+                <!-- Test Mode Badge -->
+                {% if debug %}
+                <div class="test-mode-badge">
+                    <i class="fas fa-flask me-2"></i>
+                    <strong>UAT Test Mode</strong> — Use test FIN: <code>3126894653473958</code> or <code>6230247319356120</code> with OTP: <code>111111</code>
+                </div>
+                {% endif %}
+
                 <!-- OIDC Notice -->
                 <div class="oidc-notice" id="oidcNotice">
                     <i class="fas fa-shield-alt me-2"></i>
@@ -694,6 +720,7 @@
     let rawNationalIdValue = '';
     let oidcState = '';
     let oidcNonce = '';
+    let redirectUrl = '';
 
     // Fayda ID Formatting (xxxx-xxxx-xxxx-xxxx)
     const nationalIdInput = document.getElementById('national_id');
@@ -739,6 +766,7 @@
         
         // Enable national ID input
         nationalIdInput.readOnly = false;
+        document.getElementById('oidcNotice').style.display = 'none';
     }
 
     function showVerificationStatus(type, message) {
@@ -753,16 +781,20 @@
         `;
     }
 
-    function showLoading(show) {
+    function showLoading(show, message) {
         const overlay = document.getElementById('loadingOverlay');
+        const msgElement = overlay.querySelector('.text-muted.small');
         if (show) {
             overlay.classList.add('active');
+            if (message && msgElement) {
+                msgElement.textContent = message;
+            }
         } else {
             overlay.classList.remove('active');
         }
     }
 
-    // OIDC-based Fayda Verification using the official oidc-project pattern
+    // OIDC-based Fayda Verification
     document.getElementById('verifyBtn').addEventListener('click', async function() {
         const nationalIdRaw = rawNationalIdValue;
         if (nationalIdRaw.length !== 16) {
@@ -774,7 +806,7 @@
         const originalHtml = btn.innerHTML;
         btn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Contacting Fayda...';
         btn.disabled = true;
-        showLoading(true);
+        showLoading(true, 'Contacting Fayda authentication service...');
 
         try {
             // Generate OIDC state and nonce for security
@@ -799,8 +831,6 @@
                 })
             });
 
-            showLoading(false);
-
             if (!initResponse.ok) {
                 let errorMessage = 'Failed to initiate Fayda verification.';
                 try {
@@ -822,14 +852,21 @@
                 throw new Error(initData.message || 'Failed to get authorization URL from Fayda.');
             }
 
+            // Store the redirect URL for manual fallback
+            redirectUrl = initData.authorization_url;
+
             // Step 2: Show OIDC notice
             document.getElementById('oidcNotice').style.display = 'block';
 
             // Step 3: Redirect to Fayda for authentication
-            showLoading(true);
+            showLoading(true, 'Redirecting to Fayda secure authentication portal...');
+            
+            // Set up manual redirect link
+            document.getElementById('redirectManualLink').href = redirectUrl;
+            
             setTimeout(() => {
-                window.location.href = initData.authorization_url;
-            }, 1000);
+                window.location.href = redirectUrl;
+            }, 1500);
 
         } catch (error) {
             showLoading(false);
@@ -865,7 +902,7 @@
 
     function processOIDCCallback(code, state) {
         // Show loading
-        showLoading(true);
+        showLoading(true, 'Processing Fayda authentication...');
 
         const csrftoken = getCookie('csrftoken');
 
@@ -1134,6 +1171,14 @@
         if (e.key === 'Enter') {
             e.preventDefault();
             document.getElementById('verifyBtn').click();
+        }
+    });
+
+    // Handle manual redirect fallback
+    document.getElementById('redirectManualLink').addEventListener('click', function(e) {
+        e.preventDefault();
+        if (redirectUrl) {
+            window.location.href = redirectUrl;
         }
     });
 </script>
