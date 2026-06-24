@@ -40,12 +40,14 @@ def get_private_key_from_b64(private_key_b64):
         return None
     
     try:
-        logger.info(f"Private key length: {len(private_key_b64)} characters")
+        logger.info(f"Private key length: {len(private_key_b64)}")
+        logger.info(f"Private key first 30 chars: {private_key_b64[:30]}...")
         
         # Decode Base64
         decoded = base64.b64decode(private_key_b64)
         decoded_str = decoded.decode('utf-8')
         logger.info(f"Decoded JSON length: {len(decoded_str)}")
+        logger.info(f"Decoded first 50 chars: {decoded_str[:50]}...")
         
         # Parse JSON
         key_data = json.loads(decoded_str)
@@ -73,6 +75,9 @@ def get_private_key_from_b64(private_key_b64):
             
         except ValueError as ve:
             logger.error(f"ValueError when converting base36: {str(ve)}")
+            return None
+        except Exception as e:
+            logger.error(f"Error converting base36: {str(e)}")
             return None
         
         # Reconstruct the private key
@@ -139,6 +144,8 @@ def generate_client_assertion(client_id, token_url, private_key_b64):
             'exp': int((now + timedelta(minutes=5)).timestamp()),
             'jti': str(int(time.time() * 1000))
         }
+        
+        logger.info(f"JWT payload: {json.dumps(payload, default=str)}")
         
         # Encode the JWT
         client_assertion = jwt.encode(
@@ -314,6 +321,7 @@ def oidc_callback_view(request):
         logger.info(f"Client ID: {client_id[:10]}...")
         logger.info(f"Token URL: {token_url}")
         logger.info(f"Redirect URI: {redirect_uri}")
+        logger.info(f"Private key length: {len(private_key_b64) if private_key_b64 else 0}")
         
         # Generate client assertion JWT
         client_assertion = generate_client_assertion(client_id, token_url, private_key_b64)
@@ -378,7 +386,7 @@ def oidc_callback_view(request):
             return redirect('accounts:register_author')
         
         userinfo = userinfo_response.json()
-        logger.info("Userinfo received successfully")
+        logger.info(f"Userinfo received: {json.dumps(userinfo, indent=2)}")
         
         # Step 3: Map userinfo to our format
         user_data = {
@@ -570,7 +578,7 @@ def oidc_callback(request):
         redirect_uri = config('FAYDA_REDIRECT_URI')
         private_key_b64 = config('FAYDA_PRIVATE_KEY_B64')
         
-        # Generate client assertion using the helper function
+        # Generate client assertion
         client_assertion = generate_client_assertion(client_id, token_url, private_key_b64)
         
         if not client_assertion:
