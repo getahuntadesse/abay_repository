@@ -127,6 +127,23 @@
         background: #1e7e34;
     }
 
+    .btn-fayda {
+        background: linear-gradient(135deg, #1a237e, #0d1442);
+        color: white;
+        border: none;
+        padding: 0.6rem 1.5rem;
+        border-radius: 10px;
+        font-weight: 600;
+        white-space: nowrap;
+        transition: all 0.3s;
+    }
+
+    .btn-fayda:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(26, 35, 126, 0.3);
+        color: white;
+    }
+
     .national-id-group {
         display: flex;
         gap: 12px;
@@ -266,8 +283,8 @@
 
     /* OIDC Redirect notice */
     .oidc-notice {
-        background: #FFF3CD;
-        border: 1px solid #FFC107;
+        background: #E3F2FD;
+        border: 1px solid #1a237e;
         border-radius: 12px;
         padding: 1rem;
         margin-bottom: 1.5rem;
@@ -275,7 +292,36 @@
     }
 
     .oidc-notice i {
-        color: #856404;
+        color: #1a237e;
+    }
+
+    .fayda-info-box {
+        background: #F5F5F5;
+        border-radius: 12px;
+        padding: 1.25rem;
+        margin-top: 1rem;
+        border: 1px solid #E0E0E0;
+    }
+
+    .fayda-info-box .step {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .fayda-info-box .step-number {
+        background: var(--primary-gold);
+        color: white;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        font-weight: 700;
+        flex-shrink: 0;
     }
 
     @media (max-width: 768px) {
@@ -313,7 +359,7 @@
             <div class="form-body">
                 <!-- OIDC Notice -->
                 <div class="oidc-notice" id="oidcNotice">
-                    <i class="fas fa-info-circle me-2"></i>
+                    <i class="fas fa-shield-alt me-2"></i>
                     <strong>Fayda Verification Required:</strong> You will be redirected to Fayda's secure portal to verify your identity.
                 </div>
 
@@ -369,6 +415,29 @@
                         <div id="verificationStatus" class="mt-2"></div>
                     </div>
 
+                    <!-- Fayda Info Box -->
+                    <div class="fayda-info-box">
+                        <strong><i class="fas fa-info-circle me-2"></i>How Fayda Verification Works:</strong>
+                        <div class="mt-2">
+                            <div class="step">
+                                <span class="step-number">1</span>
+                                <span>Click "Verify with Fayda" to initiate secure identity verification</span>
+                            </div>
+                            <div class="step">
+                                <span class="step-number">2</span>
+                                <span>You'll be redirected to the official Fayda authentication portal</span>
+                            </div>
+                            <div class="step">
+                                <span class="step-number">3</span>
+                                <span>Complete the verification process using your Fayda credentials</span>
+                            </div>
+                            <div class="step">
+                                <span class="step-number">4</span>
+                                <span>Your verified identity information will be auto-filled in this form</span>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- OIDC State (hidden) -->
                     <input type="hidden" id="oidc_state" name="oidc_state" value="">
 
@@ -379,7 +448,7 @@
                     </div>
 
                     <!-- Personal Information Section -->
-                    <div class="mb-4">
+                    <div class="mb-4 mt-4">
                         <h6 class="section-title"><i class="fas fa-user me-2"></i>Personal Information</h6>
                     </div>
 
@@ -390,6 +459,7 @@
                                 <span id="verifiedBadge" class="verified-badge" style="display: none;"><i class="fas fa-check"></i> Verified</span>
                             </label>
                             <input type="text" name="full_name" id="full_name" class="form-control field-disabled" readonly value="{{ form.full_name.value|default:'' }}">
+                            <small class="text-muted">Auto-filled from Fayda verification</small>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-bold">
@@ -424,10 +494,12 @@
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-bold">Date of Birth</label>
                             <input type="date" class="form-control field-disabled" id="date_of_birth" readonly>
+                            <small class="text-muted">Auto-filled from Fayda</small>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-bold">Gender</label>
                             <input type="text" class="form-control field-disabled" id="gender" readonly>
+                            <small class="text-muted">Auto-filled from Fayda</small>
                         </div>
                     </div>
 
@@ -435,20 +507,24 @@
                         <div class="col-md-4 mb-3">
                             <label class="form-label fw-bold">Region</label>
                             <input type="text" class="form-control field-disabled" id="region" readonly>
+                            <small class="text-muted">Auto-filled from Fayda</small>
                         </div>
                         <div class="col-md-4 mb-3">
                             <label class="form-label fw-bold">Zone / Subcity</label>
                             <input type="text" class="form-control field-disabled" id="zone" readonly>
+                            <small class="text-muted">Auto-filled from Fayda</small>
                         </div>
                         <div class="col-md-4 mb-3">
                             <label class="form-label fw-bold">Woreda</label>
                             <input type="text" class="form-control field-disabled" id="woreda" readonly>
+                            <small class="text-muted">Auto-filled from Fayda</small>
                         </div>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label fw-bold">Address</label>
                         <textarea class="form-control field-disabled" id="address" rows="2" readonly></textarea>
+                        <small class="text-muted">Auto-filled from Fayda</small>
                     </div>
 
                     <!-- Author Profile Information -->
@@ -607,10 +683,17 @@
                Math.random().toString(36).substring(2, 15);
     }
 
+    // Generate a random nonce for OIDC
+    function generateNonce() {
+        return Math.random().toString(36).substring(2, 15) + 
+               Math.random().toString(36).substring(2, 15);
+    }
+
     let isNationalIdVerified = false;
     let verifiedData = null;
     let rawNationalIdValue = '';
     let oidcState = '';
+    let oidcNonce = '';
 
     // Fayda ID Formatting (xxxx-xxxx-xxxx-xxxx)
     const nationalIdInput = document.getElementById('national_id');
@@ -679,7 +762,7 @@
         }
     }
 
-    // OIDC-based Fayda Verification
+    // OIDC-based Fayda Verification using the official oidc-project pattern
     document.getElementById('verifyBtn').addEventListener('click', async function() {
         const nationalIdRaw = rawNationalIdValue;
         if (nationalIdRaw.length !== 16) {
@@ -694,15 +777,16 @@
         showLoading(true);
 
         try {
-            // Generate OIDC state for security
+            // Generate OIDC state and nonce for security
             oidcState = generateState();
+            oidcNonce = generateNonce();
             document.getElementById('oidc_state').value = oidcState;
 
             // Get CSRF token for the POST request
             const csrftoken = getCookie('csrftoken');
 
             // Step 1: Initiate OIDC flow - get authorization URL
-            const initResponse = await fetch('/api/fayda/oidc/initiate/', {
+            const initResponse = await fetch('/accounts/api/fayda/oidc/initiate/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -710,7 +794,8 @@
                 },
                 body: JSON.stringify({
                     national_id: nationalIdRaw,
-                    state: oidcState
+                    state: oidcState,
+                    nonce: oidcNonce
                 })
             });
 
@@ -763,9 +848,10 @@
         const code = urlParams.get('code');
         const state = urlParams.get('state');
         const error = urlParams.get('error');
+        const errorDescription = urlParams.get('error_description');
 
         if (error) {
-            showVerificationStatus('error', `Fayda authentication failed: ${error}. Please try again.`);
+            showVerificationStatus('error', `Fayda authentication failed: ${errorDescription || error}. Please try again.`);
             return;
         }
 
@@ -783,7 +869,7 @@
 
         const csrftoken = getCookie('csrftoken');
 
-        fetch('/api/fayda/oidc/callback/', {
+        fetch('/accounts/api/fayda/oidc/callback/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -803,16 +889,16 @@
                 return;
             }
 
-            // Process verified data
+            // Process verified data from the OIDC userinfo endpoint
             const userData = data.data || {};
 
             verifiedData = {
                 full_name: userData.full_name || userData.name || '',
-                date_of_birth: userData.date_of_birth || userData.dob || '',
+                date_of_birth: userData.date_of_birth || userData.dob || userData.birthdate || '',
                 gender: userData.gender || '',
-                region: userData.region || '',
-                zone: userData.zone || '',
-                woreda: userData.woreda || '',
+                region: userData.region || userData.region_name || '',
+                zone: userData.zone || userData.zone_name || '',
+                woreda: userData.woreda || userData.woreda_name || '',
                 address: userData.address || ''
             };
 

@@ -13,6 +13,10 @@ from datetime import timedelta
 import json
 import requests
 import logging
+import jwt
+import base64
+from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.backends import default_backend
 from decouple import config
 
 from .forms import LoginForm, ClientRegistrationForm, AuthorRegistrationForm
@@ -130,6 +134,7 @@ def oidc_initiate(request):
     """
     Initiate OIDC flow with Fayda eSignet.
     This endpoint generates the authorization URL for redirecting to Fayda.
+    Based on the official oidc-project implementation.
     """
     if request.method != 'POST':
         return JsonResponse({
@@ -149,6 +154,7 @@ def oidc_initiate(request):
         
         national_id = data.get('national_id')
         state = data.get('state')
+        nonce = data.get('nonce')
         
         # Validate national ID format
         if not national_id:
@@ -171,6 +177,13 @@ def oidc_initiate(request):
                 'message': 'Invalid state parameter.'
             }, status=400)
         
+        # Validate nonce (optional but recommended)
+        if not nonce or len(nonce) < 10:
+            return JsonResponse({
+                'success': False,
+                'message': 'Invalid nonce parameter.'
+            }, status=400)
+        
         # Get OIDC configuration from environment
         client_id = config('FAYDA_CLIENT_ID', default=None)
         client_secret = config('FAYDA_CLIENT_SECRET', default=None)
@@ -191,21 +204,23 @@ def oidc_initiate(request):
                     'message': 'Fayda service is not configured. Please contact support.'
                 }, status=503)
         
-        # Store national_id and state in session for callback verification
+        # Store national_id, state, and nonce in session for callback verification
         request.session['fayda_national_id'] = national_id_clean
         request.session['fayda_state'] = state
+        request.session['fayda_nonce'] = nonce
         
-        # Build the authorization URL
+        # Build the authorization URL with all required parameters
         authorization_url = (
             f"{auth_url}"
             f"?response_type=code"
             f"&client_id={client_id}"
             f"&redirect_uri={redirect_uri}"
             f"&state={state}"
+            f"&nonce={nonce}"
             f"&scope=openid profile eKYC"
         )
         
-        logger.info(f"OIDC initiated for national_id: {national_id_clean[:4]}****")
+        logger.info(f"OIDC initiated for national_id: {national_id_clean[:4]}****, state: {state[:8]}...")
         
         return JsonResponse({
             'success': True,
@@ -226,6 +241,7 @@ def oidc_callback(request):
     """
     Handle OIDC callback from Fayda after user authentication.
     Exchanges the authorization code for user information.
+    Based on the official oidc-project implementation.
     """
     if request.method != 'POST':
         return JsonResponse({
@@ -252,7 +268,7 @@ def oidc_callback(request):
                 'message': 'Missing code or state parameter.'
             }, status=400)
         
-        # Verify state matches session
+        # Verify state matches session (CSRF protection)
         session_state = request.session.get('fayda_state')
         if state != session_state:
             logger.warning(f"OIDC state mismatch: received {state}, expected {session_state}")
@@ -272,6 +288,7 @@ def oidc_callback(request):
         token_url = config('FAYDA_TOKEN_URL', default='https://id.et/oauth2/token')
         userinfo_url = config('FAYDA_USERINFO_URL', default='https://id.et/oauth2/userinfo')
         redirect_uri = config('FAYDA_REDIRECT_URI', default=settings.SITE_URL + '/accounts/register/author/')
+        private_key_str = config('FAYDA_PRIVATE_KEY', default=None)
         
         if not client_id or not client_secret:
             return JsonResponse({
@@ -280,17 +297,42 @@ def oidc_callback(request):
             }, status=503)
         
         # Step 1: Exchange code for access token
-        token_response = requests.post(
-            token_url,
-            data={
-                'grant_type': 'authorization_code',
-                'code': code,
-                'client_id': client_id,
-                'client_secret': client_secret,
-                'redirect_uri': redirect_uri
-            },
-            timeout=15
-        )
+        token_data = {}
+        
+        # Check if using client assertion (private key JWT) or client secret
+        if private_key_str:
+            # Generate client assertion JWT
+            client_assertion = generate_client_assertion(
+                client_id=client_id,
+                token_endpoint=token_url,
+                private_key_str=private_key_str
+            )
+            
+            token_response = requests.post(
+                token_url,
+                data={
+                    'grant_type': 'authorization_code',
+                    'code': code,
+                    'client_id': client_id,
+                    'client_assertion_type': 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
+                    'client_assertion': client_assertion,
+                    'redirect_uri': redirect_uri
+                },
+                timeout=15
+            )
+        else:
+            # Use client secret (simpler flow)
+            token_response = requests.post(
+                token_url,
+                data={
+                    'grant_type': 'authorization_code',
+                    'code': code,
+                    'client_id': client_id,
+                    'client_secret': client_secret,
+                    'redirect_uri': redirect_uri
+                },
+                timeout=15
+            )
         
         if not token_response.ok:
             logger.error(f"Token exchange failed: {token_response.status_code} - {token_response.text}")
@@ -351,6 +393,7 @@ def oidc_callback(request):
         # Clear session data
         request.session.pop('fayda_state', None)
         request.session.pop('fayda_national_id', None)
+        request.session.pop('fayda_nonce', None)
         
         return JsonResponse({
             'success': True,
@@ -374,6 +417,42 @@ def oidc_callback(request):
             'success': False,
             'message': f'An error occurred: {str(e)}'
         }, status=500)
+
+
+def generate_client_assertion(client_id, token_endpoint, private_key_str):
+    """
+    Generate a client assertion JWT for OIDC client authentication.
+    Used when the provider requires private key JWT authentication.
+    """
+    import jwt
+    from datetime import datetime, timedelta
+    
+    now = datetime.utcnow()
+    payload = {
+        'iss': client_id,
+        'sub': client_id,
+        'aud': token_endpoint,
+        'iat': now,
+        'exp': now + timedelta(minutes=5),
+        'jti': str(timezone.now().timestamp())
+    }
+    
+    # Load private key
+    try:
+        private_key = serialization.load_pem_private_key(
+            private_key_str.encode('utf-8'),
+            password=None,
+            backend=default_backend()
+        )
+    except Exception as e:
+        logger.error(f"Failed to load private key: {str(e)}")
+        # Fallback: use PyJWT with RSA
+        return jwt.encode(payload, private_key_str, algorithm='RS256')
+    
+    # Sign with private key
+    from jwt import PyJWT
+    jwt_instance = PyJWT()
+    return jwt_instance.encode(payload, private_key, algorithm='RS256')
 
 
 @csrf_exempt
