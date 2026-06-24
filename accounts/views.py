@@ -9,14 +9,16 @@ from django.db import models
 from django.db.models import Avg, Count, Q, Sum
 from django.http import JsonResponse
 from django.conf import settings
-from datetime import timedelta
+from datetime import timedelta, datetime
 import json
 import requests
 import logging
 import jwt
 import base64
+import time
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives.asymmetric import rsa, padding
 from decouple import config
 
 from .forms import LoginForm, ClientRegistrationForm, AuthorRegistrationForm
@@ -26,6 +28,36 @@ from reviews.models import QualityReview
 
 # Set up logger
 logger = logging.getLogger(__name__)
+
+
+def decode_private_key_from_b64(private_key_b64):
+    """
+    Decode the Base64 encoded private key from the Fayda UAT credentials.
+    The private key is stored as a Base64 encoded JSON string containing RSA key components.
+    """
+    try:
+        # Decode Base64
+        decoded = base64.b64decode(private_key_b64)
+        key_data = json.loads(decoded.decode('utf-8'))
+        
+        # Reconstruct the private key from components
+        private_key = rsa.RSAPrivateNumbers(
+            p=int(key_data['p'], 36),
+            q=int(key_data['q'], 36),
+            d=int(key_data['d'], 36),
+            dmp1=int(key_data['dp'], 36),
+            dmq1=int(key_data['dq'], 36),
+            iqmp=int(key_data['qi'], 36),
+            public_numbers=rsa.RSAPublicNumbers(
+                e=int(key_data['e'], 36),
+                n=int(key_data['n'], 36)
+            )
+        ).private_key(default_backend())
+        
+        return private_key
+    except Exception as e:
+        logger.error(f"Failed to decode private key: {str(e)}")
+        return None
 
 
 @sensitive_post_parameters()
@@ -132,9 +164,8 @@ def register_author(request):
 @csrf_exempt
 def oidc_initiate(request):
     """
-    Initiate OIDC flow with Fayda eSignet.
+    Initiate OIDC flow with Fayda eSignet using UAT credentials.
     This endpoint generates the authorization URL for redirecting to Fayda.
-    Based on the official oidc-project implementation.
     """
     if request.method != 'POST':
         return JsonResponse({
@@ -177,34 +208,19 @@ def oidc_initiate(request):
                 'message': 'Invalid state parameter.'
             }, status=400)
         
-        # Validate nonce (optional but recommended)
+        # Validate nonce
         if not nonce or len(nonce) < 10:
             return JsonResponse({
                 'success': False,
                 'message': 'Invalid nonce parameter.'
             }, status=400)
         
-        # Get OIDC configuration from environment
-        client_id = config('FAYDA_CLIENT_ID', default=None)
-        client_secret = config('FAYDA_CLIENT_SECRET', default=None)
-        auth_url = config('FAYDA_AUTH_URL', default='https://id.et/oauth2/authorize')
-        redirect_uri = config('FAYDA_REDIRECT_URI', default=settings.SITE_URL + '/accounts/register/author/')
+        # Get OIDC configuration from environment (UAT)
+        client_id = config('FAYDA_CLIENT_ID')
+        auth_url = config('FAYDA_AUTH_URL')
+        redirect_uri = config('FAYDA_REDIRECT_URI')
         
-        if not client_id or not client_secret:
-            if settings.DEBUG:
-                # In development, return mock authorization URL
-                return JsonResponse({
-                    'success': True,
-                    'authorization_url': f'/accounts/register/author/?code=mock_code&state={state}',
-                    'message': 'Development mode - mock OIDC flow'
-                })
-            else:
-                return JsonResponse({
-                    'success': False,
-                    'message': 'Fayda service is not configured. Please contact support.'
-                }, status=503)
-        
-        # Store national_id, state, and nonce in session for callback verification
+        # Store in session for callback verification
         request.session['fayda_national_id'] = national_id_clean
         request.session['fayda_state'] = state
         request.session['fayda_nonce'] = nonce
@@ -239,9 +255,8 @@ def oidc_initiate(request):
 @csrf_exempt
 def oidc_callback(request):
     """
-    Handle OIDC callback from Fayda after user authentication.
+    Handle OIDC callback from Fayda using UAT credentials.
     Exchanges the authorization code for user information.
-    Based on the official oidc-project implementation.
     """
     if request.method != 'POST':
         return JsonResponse({
@@ -279,60 +294,58 @@ def oidc_callback(request):
         
         # For development mock mode
         if code == 'mock_code' and settings.DEBUG:
-            national_id = request.session.get('fayda_national_id', '1234567890123456')
+            national_id = request.session.get('fayda_national_id', '3126894653473958')
             return mock_fayda_verification(national_id)
         
-        # Get OIDC configuration from environment
-        client_id = config('FAYDA_CLIENT_ID', default=None)
-        client_secret = config('FAYDA_CLIENT_SECRET', default=None)
-        token_url = config('FAYDA_TOKEN_URL', default='https://id.et/oauth2/token')
-        userinfo_url = config('FAYDA_USERINFO_URL', default='https://id.et/oauth2/userinfo')
-        redirect_uri = config('FAYDA_REDIRECT_URI', default=settings.SITE_URL + '/accounts/register/author/')
-        private_key_str = config('FAYDA_PRIVATE_KEY', default=None)
+        # Get OIDC configuration from environment (UAT)
+        client_id = config('FAYDA_CLIENT_ID')
+        token_url = config('FAYDA_TOKEN_URL')
+        userinfo_url = config('FAYDA_USERINFO_URL')
+        redirect_uri = config('FAYDA_REDIRECT_URI')
+        private_key_b64 = config('FAYDA_PRIVATE_KEY_B64')
+        algorithm = config('FAYDA_ALGORITHM', default='RS256')
+        client_assertion_type = config('FAYDA_CLIENT_ASSERTION_TYPE', default='urn:ietf:params:oauth:client-assertion-type:jwt-bearer')
         
-        if not client_id or not client_secret:
+        # Decode private key
+        private_key = decode_private_key_from_b64(private_key_b64)
+        if not private_key:
             return JsonResponse({
                 'success': False,
-                'message': 'Fayda service is not configured.'
-            }, status=503)
+                'message': 'Failed to load private key for authentication.'
+            }, status=500)
         
-        # Step 1: Exchange code for access token
-        token_data = {}
+        # Generate client assertion JWT
+        now = datetime.utcnow()
+        assertion_payload = {
+            'iss': client_id,
+            'sub': client_id,
+            'aud': token_url,
+            'iat': int(now.timestamp()),
+            'exp': int((now + timedelta(minutes=5)).timestamp()),
+            'jti': str(int(time.time() * 1000))
+        }
         
-        # Check if using client assertion (private key JWT) or client secret
-        if private_key_str:
-            # Generate client assertion JWT
-            client_assertion = generate_client_assertion(
-                client_id=client_id,
-                token_endpoint=token_url,
-                private_key_str=private_key_str
-            )
-            
-            token_response = requests.post(
-                token_url,
-                data={
-                    'grant_type': 'authorization_code',
-                    'code': code,
-                    'client_id': client_id,
-                    'client_assertion_type': 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
-                    'client_assertion': client_assertion,
-                    'redirect_uri': redirect_uri
-                },
-                timeout=15
-            )
-        else:
-            # Use client secret (simpler flow)
-            token_response = requests.post(
-                token_url,
-                data={
-                    'grant_type': 'authorization_code',
-                    'code': code,
-                    'client_id': client_id,
-                    'client_secret': client_secret,
-                    'redirect_uri': redirect_uri
-                },
-                timeout=15
-            )
+        # Sign the JWT with the private key
+        client_assertion = jwt.encode(
+            assertion_payload,
+            private_key,
+            algorithm=algorithm,
+            headers={'kid': '0b194df4-7149-4146-97c5-78fdf0d4fb1d'}
+        )
+        
+        # Step 1: Exchange code for access token using client assertion
+        token_response = requests.post(
+            token_url,
+            data={
+                'grant_type': 'authorization_code',
+                'code': code,
+                'client_id': client_id,
+                'client_assertion_type': client_assertion_type,
+                'client_assertion': client_assertion,
+                'redirect_uri': redirect_uri
+            },
+            timeout=15
+        )
         
         if not token_response.ok:
             logger.error(f"Token exchange failed: {token_response.status_code} - {token_response.text}")
@@ -417,42 +430,6 @@ def oidc_callback(request):
             'success': False,
             'message': f'An error occurred: {str(e)}'
         }, status=500)
-
-
-def generate_client_assertion(client_id, token_endpoint, private_key_str):
-    """
-    Generate a client assertion JWT for OIDC client authentication.
-    Used when the provider requires private key JWT authentication.
-    """
-    import jwt
-    from datetime import datetime, timedelta
-    
-    now = datetime.utcnow()
-    payload = {
-        'iss': client_id,
-        'sub': client_id,
-        'aud': token_endpoint,
-        'iat': now,
-        'exp': now + timedelta(minutes=5),
-        'jti': str(timezone.now().timestamp())
-    }
-    
-    # Load private key
-    try:
-        private_key = serialization.load_pem_private_key(
-            private_key_str.encode('utf-8'),
-            password=None,
-            backend=default_backend()
-        )
-    except Exception as e:
-        logger.error(f"Failed to load private key: {str(e)}")
-        # Fallback: use PyJWT with RSA
-        return jwt.encode(payload, private_key_str, algorithm='RS256')
-    
-    # Sign with private key
-    from jwt import PyJWT
-    jwt_instance = PyJWT()
-    return jwt_instance.encode(payload, private_key, algorithm='RS256')
 
 
 @csrf_exempt
