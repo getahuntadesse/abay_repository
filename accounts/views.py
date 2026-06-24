@@ -9,14 +9,19 @@ from django.db import models
 from django.db.models import Avg, Count, Q, Sum
 from django.http import JsonResponse
 from django.conf import settings
+from datetime import timedelta
 import json
 import requests
+import logging
 from decouple import config
 
 from .forms import LoginForm, ClientRegistrationForm, AuthorRegistrationForm
 from .models import CustomUser, AuthorProfile, ClientProfile
 from books.models import Book, Genre
 from reviews.models import QualityReview
+
+# Set up logger
+logger = logging.getLogger(__name__)
 
 
 @sensitive_post_parameters()
@@ -118,6 +123,257 @@ def register_author(request):
         form = AuthorRegistrationForm()
     
     return render(request, 'accounts/register_author.html', {'form': form})
+
+
+@csrf_exempt
+def oidc_initiate(request):
+    """
+    Initiate OIDC flow with Fayda eSignet.
+    This endpoint generates the authorization URL for redirecting to Fayda.
+    """
+    if request.method != 'POST':
+        return JsonResponse({
+            'success': False,
+            'message': 'Method not allowed. Use POST.'
+        }, status=405)
+    
+    try:
+        # Parse the request body
+        try:
+            data = json.loads(request.body)
+        except json.JSONDecodeError:
+            return JsonResponse({
+                'success': False,
+                'message': 'Invalid JSON payload.'
+            }, status=400)
+        
+        national_id = data.get('national_id')
+        state = data.get('state')
+        
+        # Validate national ID format
+        if not national_id:
+            return JsonResponse({
+                'success': False,
+                'message': 'National ID is required.'
+            }, status=400)
+        
+        national_id_clean = national_id.replace('-', '').replace(' ', '')
+        if len(national_id_clean) != 16 or not national_id_clean.isdigit():
+            return JsonResponse({
+                'success': False,
+                'message': 'Invalid National ID format. Must be 16 digits.'
+            }, status=400)
+        
+        # Validate state
+        if not state or len(state) < 10:
+            return JsonResponse({
+                'success': False,
+                'message': 'Invalid state parameter.'
+            }, status=400)
+        
+        # Get OIDC configuration from environment
+        client_id = config('FAYDA_CLIENT_ID', default=None)
+        client_secret = config('FAYDA_CLIENT_SECRET', default=None)
+        auth_url = config('FAYDA_AUTH_URL', default='https://id.et/oauth2/authorize')
+        redirect_uri = config('FAYDA_REDIRECT_URI', default=settings.SITE_URL + '/accounts/register/author/')
+        
+        if not client_id or not client_secret:
+            if settings.DEBUG:
+                # In development, return mock authorization URL
+                return JsonResponse({
+                    'success': True,
+                    'authorization_url': f'/accounts/register/author/?code=mock_code&state={state}',
+                    'message': 'Development mode - mock OIDC flow'
+                })
+            else:
+                return JsonResponse({
+                    'success': False,
+                    'message': 'Fayda service is not configured. Please contact support.'
+                }, status=503)
+        
+        # Store national_id and state in session for callback verification
+        request.session['fayda_national_id'] = national_id_clean
+        request.session['fayda_state'] = state
+        
+        # Build the authorization URL
+        authorization_url = (
+            f"{auth_url}"
+            f"?response_type=code"
+            f"&client_id={client_id}"
+            f"&redirect_uri={redirect_uri}"
+            f"&state={state}"
+            f"&scope=openid profile eKYC"
+        )
+        
+        logger.info(f"OIDC initiated for national_id: {national_id_clean[:4]}****")
+        
+        return JsonResponse({
+            'success': True,
+            'authorization_url': authorization_url,
+            'message': 'Redirect to Fayda for authentication'
+        })
+        
+    except Exception as e:
+        logger.error(f"OIDC initiate error: {str(e)}")
+        return JsonResponse({
+            'success': False,
+            'message': f'An error occurred: {str(e)}'
+        }, status=500)
+
+
+@csrf_exempt
+def oidc_callback(request):
+    """
+    Handle OIDC callback from Fayda after user authentication.
+    Exchanges the authorization code for user information.
+    """
+    if request.method != 'POST':
+        return JsonResponse({
+            'success': False,
+            'message': 'Method not allowed. Use POST.'
+        }, status=405)
+    
+    try:
+        # Parse the request body
+        try:
+            data = json.loads(request.body)
+        except json.JSONDecodeError:
+            return JsonResponse({
+                'success': False,
+                'message': 'Invalid JSON payload.'
+            }, status=400)
+        
+        code = data.get('code')
+        state = data.get('state')
+        
+        if not code or not state:
+            return JsonResponse({
+                'success': False,
+                'message': 'Missing code or state parameter.'
+            }, status=400)
+        
+        # Verify state matches session
+        session_state = request.session.get('fayda_state')
+        if state != session_state:
+            logger.warning(f"OIDC state mismatch: received {state}, expected {session_state}")
+            return JsonResponse({
+                'success': False,
+                'message': 'Invalid state parameter. Possible CSRF attack.'
+            }, status=400)
+        
+        # For development mock mode
+        if code == 'mock_code' and settings.DEBUG:
+            national_id = request.session.get('fayda_national_id', '1234567890123456')
+            return mock_fayda_verification(national_id)
+        
+        # Get OIDC configuration from environment
+        client_id = config('FAYDA_CLIENT_ID', default=None)
+        client_secret = config('FAYDA_CLIENT_SECRET', default=None)
+        token_url = config('FAYDA_TOKEN_URL', default='https://id.et/oauth2/token')
+        userinfo_url = config('FAYDA_USERINFO_URL', default='https://id.et/oauth2/userinfo')
+        redirect_uri = config('FAYDA_REDIRECT_URI', default=settings.SITE_URL + '/accounts/register/author/')
+        
+        if not client_id or not client_secret:
+            return JsonResponse({
+                'success': False,
+                'message': 'Fayda service is not configured.'
+            }, status=503)
+        
+        # Step 1: Exchange code for access token
+        token_response = requests.post(
+            token_url,
+            data={
+                'grant_type': 'authorization_code',
+                'code': code,
+                'client_id': client_id,
+                'client_secret': client_secret,
+                'redirect_uri': redirect_uri
+            },
+            timeout=15
+        )
+        
+        if not token_response.ok:
+            logger.error(f"Token exchange failed: {token_response.status_code} - {token_response.text}")
+            return JsonResponse({
+                'success': False,
+                'message': 'Failed to exchange authorization code. Please try again.'
+            }, status=400)
+        
+        token_data = token_response.json()
+        access_token = token_data.get('access_token')
+        id_token = token_data.get('id_token')
+        
+        if not access_token:
+            return JsonResponse({
+                'success': False,
+                'message': 'No access token received from Fayda.'
+            }, status=400)
+        
+        # Step 2: Get user information using access token
+        userinfo_response = requests.get(
+            userinfo_url,
+            headers={
+                'Authorization': f'Bearer {access_token}',
+                'Content-Type': 'application/json'
+            },
+            timeout=10
+        )
+        
+        if not userinfo_response.ok:
+            logger.error(f"Userinfo request failed: {userinfo_response.status_code} - {userinfo_response.text}")
+            return JsonResponse({
+                'success': False,
+                'message': 'Failed to retrieve user information from Fayda.'
+            }, status=400)
+        
+        userinfo = userinfo_response.json()
+        
+        # Step 3: Map userinfo to our format
+        user_data = {
+            'full_name': userinfo.get('name', userinfo.get('full_name', '')),
+            'date_of_birth': userinfo.get('birthdate', userinfo.get('date_of_birth', '')),
+            'gender': userinfo.get('gender', ''),
+            'region': userinfo.get('region', userinfo.get('region_name', '')),
+            'zone': userinfo.get('zone', userinfo.get('zone_name', '')),
+            'woreda': userinfo.get('woreda', userinfo.get('woreda_name', '')),
+            'address': userinfo.get('address', '')
+        }
+        
+        # Validate that we got the required data
+        if not user_data['full_name']:
+            return JsonResponse({
+                'success': False,
+                'message': 'Could not retrieve full name from Fayda.'
+            }, status=400)
+        
+        logger.info(f"OIDC callback successful for user: {user_data['full_name']}")
+        
+        # Clear session data
+        request.session.pop('fayda_state', None)
+        request.session.pop('fayda_national_id', None)
+        
+        return JsonResponse({
+            'success': True,
+            'message': 'Verification successful',
+            'data': user_data
+        })
+        
+    except requests.exceptions.Timeout:
+        return JsonResponse({
+            'success': False,
+            'message': 'Fayda service timeout. Please try again.'
+        }, status=503)
+    except requests.exceptions.ConnectionError:
+        return JsonResponse({
+            'success': False,
+            'message': 'Could not connect to Fayda service. Please try again later.'
+        }, status=503)
+    except Exception as e:
+        logger.error(f"OIDC callback error: {str(e)}")
+        return JsonResponse({
+            'success': False,
+            'message': f'An error occurred: {str(e)}'
+        }, status=500)
 
 
 @csrf_exempt
@@ -264,6 +520,7 @@ def verify_fayda_id(request):
             'message': 'Could not connect to Fayda service. Please try again later.'
         }, status=503)
     except Exception as e:
+        logger.error(f"Fayda verification error: {str(e)}")
         return JsonResponse({
             'success': False,
             'message': f'An unexpected error occurred: {str(e)}'
@@ -332,10 +589,73 @@ def dashboard_redirect(request):
 
 @login_required
 def admin_dashboard(request):
-    """Admin dashboard view"""
+    """
+    Admin dashboard view with comprehensive analytics and payment data.
+    """
     if request.user.role != 'admin':
         messages.error(request, 'You do not have permission to access this page.')
         return redirect('accounts:dashboard')
+    
+    # Date ranges for analytics
+    today = timezone.now().date()
+    week_start = today - timedelta(days=7)
+    month_start = today.replace(day=1)
+    
+    # Initialize payment data with defaults
+    telebirr_sales = 0
+    cbe_sales = 0
+    total_sales = 0
+    today_sales = 0
+    week_sales = 0
+    month_sales = 0
+    monthly_sales = 0
+    
+    # Try to import payment models and get real data
+    try:
+        from payments.models import Purchase, PaymentTransaction
+        
+        completed_purchases = Purchase.objects.filter(status='completed')
+        
+        def sum_amount(qs):
+            result = qs.aggregate(total=Sum('amount'))['total']
+            return result if result is not None else 0
+        
+        total_sales = sum_amount(completed_purchases)
+        
+        today_purchases = completed_purchases.filter(created_at__date=today)
+        today_sales = sum_amount(today_purchases)
+        
+        week_purchases = completed_purchases.filter(
+            created_at__date__gte=week_start,
+            created_at__date__lte=today
+        )
+        week_sales = sum_amount(week_purchases)
+        
+        month_purchases = completed_purchases.filter(
+            created_at__date__gte=month_start,
+            created_at__date__lte=today
+        )
+        month_sales = sum_amount(month_purchases)
+        monthly_sales = month_sales
+        
+        if hasattr(Purchase, 'payment_method'):
+            telebirr_purchases = completed_purchases.filter(payment_method__icontains='telebirr')
+            telebirr_sales = sum_amount(telebirr_purchases)
+            
+            cbe_purchases = completed_purchases.filter(
+                Q(payment_method__icontains='cbe') | Q(payment_method__icontains='cbe_birr')
+            )
+            cbe_sales = sum_amount(cbe_purchases)
+        elif hasattr(PaymentTransaction, 'payment_method'):
+            completed_transactions = PaymentTransaction.objects.filter(status='completed')
+            telebirr_sales = sum_amount(completed_transactions.filter(payment_method__icontains='telebirr'))
+            cbe_sales = sum_amount(completed_transactions.filter(
+                Q(payment_method__icontains='cbe') | Q(payment_method__icontains='cbe_birr')
+            ))
+    except ImportError:
+        pass
+    except Exception as e:
+        logger.error(f"Error fetching payment data: {str(e)}")
     
     context = {
         'user': request.user,
@@ -346,7 +666,14 @@ def admin_dashboard(request):
         'published_books': Book.objects.filter(status='published').count(),
         'pending_books': Book.objects.filter(status='pending_review').count(),
         'total_downloads': Book.objects.aggregate(total=Sum('downloads_count'))['total'] or 0,
-        'total_revenue': 0,
+        'total_revenue': total_sales,
+        'total_sales': total_sales,
+        'monthly_sales': monthly_sales,
+        'telebirr_sales': telebirr_sales,
+        'cbe_sales': cbe_sales,
+        'today_sales': today_sales,
+        'week_sales': week_sales,
+        'month_sales': month_sales,
     }
     return render(request, 'dashboard/admin_dashboard.html', context)
 
@@ -382,21 +709,17 @@ def checker_dashboard(request):
         messages.error(request, 'You do not have permission to access this page.')
         return redirect('accounts:dashboard')
     
-    # Get books pending checker review (status = 'pending_review')
     pending_books = Book.objects.filter(status='pending_review').order_by('created_at')
     
-    # Get already reviewed books by this checker
     reviewed_books = QualityReview.objects.filter(
         reviewer=request.user, 
         review_type='checker'
     ).select_related('book', 'book__author').order_by('-created_at')[:20]
     
-    # Calculate statistics
     total_pending = pending_books.count()
     total_reviewed = reviewed_books.count()
     avg_score = reviewed_books.aggregate(avg=Avg('overall_score'))['avg'] or 0
     
-    # Reviewed this month
     current_month = timezone.now().month
     current_year = timezone.now().year
     reviewed_this_month = QualityReview.objects.filter(
@@ -406,7 +729,6 @@ def checker_dashboard(request):
         created_at__month=current_month
     ).count()
     
-    # Get review guidelines and scoring criteria
     scoring_criteria = {
         'excellent': {'min': 9, 'max': 10, 'label': 'Excellent', 'description': 'Exceptional quality, ready for publication with no issues'},
         'good': {'min': 7, 'max': 8, 'label': 'Good', 'description': 'Good quality, minor improvements recommended'},
@@ -415,7 +737,6 @@ def checker_dashboard(request):
         'poor': {'min': 0, 'max': 2, 'label': 'Poor', 'description': 'Unacceptable quality, recommend rejection'},
     }
     
-    # Recommendation guide
     recommendation_guide = {
         'approved': {'min_score': 7.0, 'label': '✅ Pass to Maker', 'description': 'Score ≥ 7.0, meets all quality standards'},
         'needs_revision': {'min_score': 5.0, 'max_score': 6.9, 'label': '🔄 Request Revision', 'description': 'Score 5.0-6.9, needs improvements but has potential'},
@@ -453,7 +774,6 @@ def process_checker_review(request):
         comments = request.POST.get('comments')
         recommendation = request.POST.get('recommendation')
         
-        # Validate inputs
         if not all([book_id, content_quality, editorial_quality, technical_quality, recommendation]):
             messages.error(request, 'Please fill in all required fields.')
             return redirect('accounts:checker_dashboard')
@@ -461,7 +781,6 @@ def process_checker_review(request):
         try:
             book = Book.objects.get(id=book_id)
             
-            # Calculate overall score (average of 5 criteria)
             scores = [
                 float(content_quality),
                 float(editorial_quality),
@@ -471,7 +790,6 @@ def process_checker_review(request):
             ]
             overall_score = sum(scores) / len(scores)
             
-            # Update book status based on recommendation
             if recommendation == 'approved':
                 book.status = 'checker_approved'
             elif recommendation == 'needs_revision':
@@ -482,7 +800,6 @@ def process_checker_review(request):
             book.checker_reviewed_at = timezone.now()
             book.save()
             
-            # Create or update quality review
             quality_review, created = QualityReview.objects.update_or_create(
                 book=book,
                 reviewer=request.user,
@@ -535,22 +852,15 @@ def maker_dashboard(request):
         messages.error(request, 'You do not have permission to access this page.')
         return redirect('accounts:dashboard')
     
-    # Get books pending maker approval (status = 'checker_approved')
     pending_books = Book.objects.filter(status='checker_approved').order_by('checker_reviewed_at')
     
-    # Get recently published books
     published_books = Book.objects.filter(
         status='published',
         published_at__month=timezone.now().month
     ).order_by('-published_at')[:10]
     
-    # Calculate statistics
     pending_count = pending_books.count()
-    approved_count = Book.objects.filter(
-        status='published',
-        published_at__month=timezone.now().month
-    ).count()
-    published_count = approved_count
+    approved_count = Book.objects.filter(status='published', published_at__month=timezone.now().month).count()
     total_published = Book.objects.filter(status='published').count()
     
     context = {
@@ -559,7 +869,7 @@ def maker_dashboard(request):
         'published_books': published_books,
         'pending_count': pending_count,
         'approved_count': approved_count,
-        'published_count': published_count,
+        'published_count': approved_count,
         'total_published': total_published,
     }
     return render(request, 'dashboard/maker_dashboard.html', context)

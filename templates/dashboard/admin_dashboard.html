@@ -2,436 +2,684 @@
 {% load static %}
 {% load humanize %}
 
-{% block title %}Admin Dashboard - Abrehot Library{% endblock %}
+{% block title %}Admin Dashboard - Abay Repository{% endblock %}
 
 {% block extra_css %}
 <style>
     :root {
         --primary-gold: #DAA520;
         --primary-gold-dark: #B8860B;
-        --primary-dark: #2C2C2C;
-        --primary-darker: #1A1A1A;
+        --primary-dark: #1A1A1A;
         --primary-gray: #4A4A4A;
+        --primary-gray-light: #6C6C6C;
     }
 
-    .dashboard-header {
-        background: linear-gradient(135deg, var(--primary-darker) 0%, var(--primary-dark) 100%);
+    .dashboard-container {
+        padding: 1.5rem;
+        background: #f8f9fa;
+        min-height: 100vh;
+    }
+
+    .welcome-section {
+        background: linear-gradient(135deg, var(--primary-dark), #2C2C2C);
         border-radius: 20px;
         padding: 2rem;
+        color: white;
         margin-bottom: 2rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .welcome-section::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -10%;
+        width: 400px;
+        height: 400px;
+        background: rgba(218, 165, 32, 0.1);
+        border-radius: 50%;
+    }
+
+    .welcome-section h1 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+
+    .welcome-section p {
+        opacity: 0.8;
+        margin-bottom: 0;
+    }
+
+    .welcome-section .status-badge {
+        background: rgba(40, 167, 69, 0.2);
+        color: #28a745;
+        padding: 0.5rem 1.25rem;
+        border-radius: 50px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        border: 1px solid rgba(40, 167, 69, 0.3);
     }
 
     .stat-card {
         background: white;
         border-radius: 16px;
         padding: 1.5rem;
-        text-align: center;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-        border-bottom: 4px solid var(--primary-gold);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
         transition: all 0.3s ease;
         height: 100%;
-    }
-    .stat-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 35px rgba(0,0,0,0.12);
-    }
-    .stat-icon {
-        font-size: 2.5rem;
-        color: var(--primary-gold);
-        margin-bottom: 1rem;
-    }
-    .stat-number {
-        font-size: 2rem;
-        font-weight: 800;
-        color: var(--primary-darker);
-        margin-bottom: 0.25rem;
-    }
-    .stat-label {
-        color: var(--primary-gray);
-        font-size: 0.85rem;
-        font-weight: 500;
+        border: 1px solid rgba(0, 0, 0, 0.05);
     }
 
-    .dashboard-card {
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+        border-color: var(--primary-gold);
+    }
+
+    .stat-icon {
+        width: 52px;
+        height: 52px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        flex-shrink: 0;
+    }
+
+    .stat-number {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: #1a1a1a;
+        line-height: 1.2;
+    }
+
+    .stat-number .currency {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--primary-gray-light);
+        margin-right: 2px;
+    }
+
+    .stat-label {
+        color: var(--primary-gray-light);
+        font-size: 0.875rem;
+        font-weight: 500;
+        margin-top: 0.25rem;
+    }
+
+    .stat-change {
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 0.125rem 0.5rem;
+        border-radius: 20px;
+    }
+
+    .stat-change.positive {
+        background: #d4edda;
+        color: #155724;
+    }
+
+    .stat-change.negative {
+        background: #f8d7da;
+        color: #721c24;
+    }
+
+    .chart-container {
         background: white;
         border-radius: 16px;
         padding: 1.5rem;
-        text-align: center;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-        transition: all 0.3s ease;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
         height: 100%;
+        border: 1px solid rgba(0, 0, 0, 0.05);
     }
-    .dashboard-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+
+    .chart-container h5 {
+        font-weight: 600;
+        color: var(--primary-dark);
+        margin-bottom: 1.25rem;
     }
-    .card-icon {
-        width: 70px;
-        height: 70px;
-        background: linear-gradient(135deg, var(--primary-darker), var(--primary-dark));
-        border-radius: 50%;
+
+    .chart-container h5 i {
+        color: var(--primary-gold);
+        margin-right: 0.5rem;
+    }
+
+    .progress {
+        height: 28px;
+        border-radius: 8px;
+        background-color: #e9ecef;
+        overflow: hidden;
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    .progress-bar {
+        border-radius: 8px;
         display: flex;
         align-items: center;
         justify-content: center;
-        margin: 0 auto 1rem;
-    }
-    .card-icon i {
-        font-size: 2rem;
-        color: var(--primary-gold);
-    }
-    .dashboard-card h4 {
-        font-size: 1.2rem;
-        font-weight: 700;
-        color: var(--primary-darker);
-        margin-bottom: 0.5rem;
-    }
-    .dashboard-card p {
-        color: var(--primary-gray);
-        font-size: 0.85rem;
-        margin-bottom: 1rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #fff;
+        transition: width 0.6s ease;
     }
 
-    .btn-gold {
+    .progress-bar.bg-info {
+        background: linear-gradient(135deg, #17a2b8, #138496);
+    }
+
+    .progress-bar.bg-primary {
         background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark));
-        color: var(--primary-darker);
-        border: none;
-        font-weight: 600;
-        padding: 8px 20px;
-        border-radius: 25px;
-        transition: all 0.3s ease;
-    }
-    .btn-gold:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(218, 165, 32, 0.4);
-        color: var(--primary-darker);
-    }
-    .btn-outline-gold {
-        border: 2px solid var(--primary-gold);
-        color: var(--primary-gold);
-        background: transparent;
-        font-weight: 600;
-        padding: 8px 20px;
-        border-radius: 25px;
-        transition: all 0.3s ease;
-    }
-    .btn-outline-gold:hover {
-        background: var(--primary-gold);
-        color: var(--primary-darker);
-        transform: translateY(-2px);
     }
 
-    .activity-log {
-        max-height: 400px;
-        overflow-y: auto;
+    .progress-bar.bg-secondary {
+        background: var(--primary-gray-light);
     }
-    .log-item {
-        padding: 12px 15px;
-        border-bottom: 1px solid #e9ecef;
-        transition: background 0.2s;
-    }
-    .log-item:hover {
+
+    .revenue-mini-card {
         background: #f8f9fa;
+        border-radius: 12px;
+        padding: 1rem;
+        text-align: center;
+        border: 1px solid #e9ecef;
+        transition: all 0.2s;
     }
-    .log-icon {
-        width: 35px;
-        height: 35px;
+
+    .revenue-mini-card:hover {
+        background: white;
+        border-color: var(--primary-gold);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .revenue-mini-card .label {
+        font-size: 0.75rem;
+        color: var(--primary-gray-light);
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .revenue-mini-card .value {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--primary-dark);
+        margin-top: 0.25rem;
+    }
+
+    .stat-list-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid #f1f3f5;
+    }
+
+    .stat-list-item:last-child {
+        border-bottom: none;
+    }
+
+    .stat-list-item .label {
+        color: var(--primary-gray-light);
+        font-size: 0.875rem;
+    }
+
+    .stat-list-item .value {
+        font-weight: 600;
+        color: var(--primary-dark);
+    }
+
+    .stat-list-item .value.text-warning {
+        color: #ffc107;
+    }
+
+    .payment-legend {
+        display: flex;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+        margin-top: 0.75rem;
+    }
+
+    .payment-legend .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.875rem;
+        color: var(--primary-gray);
+    }
+
+    .payment-legend .legend-color {
+        width: 12px;
+        height: 12px;
+        border-radius: 4px;
+    }
+
+    .legend-color.telebirr { background: linear-gradient(135deg, #17a2b8, #138496); }
+    .legend-color.cbe { background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark)); }
+
+    .activity-item {
+        padding: 0.75rem 0;
+        border-bottom: 1px solid #f1f3f5;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .activity-item:last-child {
+        border-bottom: none;
+    }
+
+    .activity-icon {
+        width: 36px;
+        height: 36px;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        background: #f8f9fa;
+        flex-shrink: 0;
+        font-size: 0.875rem;
     }
-    .log-icon i {
-        font-size: 1rem;
+
+    .activity-content {
+        flex: 1;
     }
-    .log-title {
-        font-weight: 600;
+
+    .activity-content .title {
+        font-weight: 500;
+        color: var(--primary-dark);
+        margin-bottom: 0.125rem;
+    }
+
+    .activity-content .time {
+        font-size: 0.75rem;
+        color: var(--primary-gray-light);
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 2rem 1rem;
+        color: var(--primary-gray-light);
+    }
+
+    .empty-state i {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        opacity: 0.5;
+    }
+
+    .empty-state p {
         margin-bottom: 0;
     }
-    .log-time {
-        font-size: 0.7rem;
-        color: #6c757d;
+
+    /* Quick Action Buttons */
+    .quick-actions {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 0.75rem;
+        margin-top: 1rem;
     }
-    .log-type {
-        font-size: 0.7rem;
-        font-weight: 600;
+
+    .quick-action-btn {
+        background: #f8f9fa;
+        border: 1px solid #e9ecef;
+        border-radius: 12px;
+        padding: 0.75rem;
+        text-align: center;
+        text-decoration: none;
+        color: var(--primary-dark);
+        transition: all 0.2s;
+        font-size: 0.875rem;
     }
-    .log-type.purchase { color: #28a745; }
-    .log-type.user { color: #17a2b8; }
-    .log-type.book { color: #fd7e14; }
-    .log-type.review { color: #6f42c1; }
+
+    .quick-action-btn:hover {
+        background: white;
+        border-color: var(--primary-gold);
+        color: var(--primary-dark);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    .quick-action-btn i {
+        display: block;
+        font-size: 1.25rem;
+        margin-bottom: 0.25rem;
+        color: var(--primary-gold);
+    }
+
+    @media (max-width: 768px) {
+        .welcome-section {
+            padding: 1.5rem;
+        }
+
+        .welcome-section h1 {
+            font-size: 1.25rem;
+        }
+
+        .stat-number {
+            font-size: 1.25rem;
+        }
+
+        .dashboard-container {
+            padding: 1rem;
+        }
+
+        .quick-actions {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <!-- Header -->
-    <div class="dashboard-header">
+<div class="dashboard-container">
+    <!-- Welcome Section -->
+    <div class="welcome-section">
         <div class="row align-items-center">
             <div class="col-md-8">
-                <h1 class="text-white mb-2">
-                    <i class="fas fa-crown me-2" style="color: var(--primary-gold);"></i>
-                    Admin Dashboard
+                <h1>
+                    <i class="fas fa-tachometer-alt me-2" style="color: var(--primary-gold);"></i>
+                    Welcome back, {{ user.full_name|default:user.username }}!
                 </h1>
-                <p class="text-white-50 mb-0">
-                    <i class="fas fa-user-shield me-2"></i>
-                    Welcome back, {{ user.full_name|default:user.username }}. You have full control over Abrehot Library.
-                </p>
+                <p>Here's a comprehensive overview of your repository's performance and activity.</p>
+                <div class="mt-3">
+                    <span class="status-badge">
+                        <i class="fas fa-circle me-1" style="font-size: 0.5rem;"></i>
+                        System Online
+                    </span>
+                    <span class="status-badge ms-2" style="background: rgba(218, 165, 32, 0.15); border-color: rgba(218, 165, 32, 0.3); color: var(--primary-gold);">
+                        <i class="fas fa-calendar-alt me-1"></i>
+                        {% now "F j, Y" %}
+                    </span>
+                </div>
             </div>
             <div class="col-md-4 text-md-end mt-3 mt-md-0">
-                <a href="/admin/" class="btn btn-gold">
-                    <i class="fas fa-cogs me-2"></i> Full Admin Panel
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <!-- Statistics Row 1 -->
-    <div class="row g-4 mb-4">
-        <div class="col-md-3">
-            <div class="stat-card">
-                <div class="stat-icon"><i class="fas fa-users"></i></div>
-                <div class="stat-number">{{ total_users|default:0|intcomma }}</div>
-                <div class="stat-label">Total Users</div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="stat-card">
-                <div class="stat-icon"><i class="fas fa-user-graduate"></i></div>
-                <div class="stat-number">{{ total_authors|default:0|intcomma }}</div>
-                <div class="stat-label">Total Authors</div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="stat-card">
-                <div class="stat-icon"><i class="fas fa-book-reader"></i></div>
-                <div class="stat-number">{{ total_readers|default:0|intcomma }}</div>
-                <div class="stat-label">Total Readers</div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="stat-card">
-                <div class="stat-icon"><i class="fas fa-book"></i></div>
-                <div class="stat-number">{{ total_books|default:0|intcomma }}</div>
-                <div class="stat-label">Total Books</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Statistics Row 2 -->
-    <div class="row g-4 mb-4">
-        <div class="col-md-3">
-            <div class="stat-card">
-                <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
-                <div class="stat-number">{{ published_books|default:0|intcomma }}</div>
-                <div class="stat-label">Published Books</div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="stat-card">
-                <div class="stat-icon"><i class="fas fa-clock"></i></div>
-                <div class="stat-number">{{ pending_review|default:0|intcomma }}</div>
-                <div class="stat-label">Pending Review</div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="stat-card">
-                <div class="stat-icon"><i class="fas fa-download"></i></div>
-                <div class="stat-number">{{ total_downloads|default:0|intcomma }}</div>
-                <div class="stat-label">Total Downloads</div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="stat-card">
-                <div class="stat-icon"><i class="fas fa-money-bill-wave"></i></div>
-                <div class="stat-number">{{ total_sales|floatformat:0|default:0|intcomma }} ETB</div>
-                <div class="stat-label">Total Revenue</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Payment Statistics Row -->
-    <div class="row g-4 mb-4">
-        <div class="col-md-4">
-            <div class="stat-card">
-                <div class="stat-icon"><i class="fas fa-credit-card"></i></div>
-                <div class="stat-number">{{ total_transactions|default:0|intcomma }}</div>
-                <div class="stat-label">Total Transactions</div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="stat-card">
-                <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
-                <div class="stat-number">{{ completed_transactions|default:0|intcomma }}</div>
-                <div class="stat-label">Completed Payments</div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="stat-card">
-                <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
-                <div class="stat-number">{{ monthly_sales|floatformat:0|default:0|intcomma }} ETB</div>
-                <div class="stat-label">Sales (Last 30 Days)</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Management Cards Row 1 -->
-    <div class="row g-4 mb-4">
-        <div class="col-md-4">
-            <div class="dashboard-card">
-                <div class="card-icon"><i class="fas fa-users-cog"></i></div>
-                <h4>User Management</h4>
-                <p>Manage all platform users, roles, and permissions</p>
-                <a href="/admin/accounts/customuser/" class="btn btn-outline-gold btn-sm">Manage Users</a>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="dashboard-card">
-                <div class="card-icon"><i class="fas fa-book-open"></i></div>
-                <h4>Book Management</h4>
-                <p>Add, edit, review, and manage book inventory</p>
-                <a href="/admin/books/book/" class="btn btn-outline-gold btn-sm">Manage Books</a>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="dashboard-card">
-                <div class="card-icon"><i class="fas fa-tags"></i></div>
-                <h4>Categories & Genres</h4>
-                <p>Manage book categories and genres</p>
-                <a href="/admin/books/genre/" class="btn btn-outline-gold btn-sm">Manage Genres</a>
-            </div>
-        </div>
-    </div>
-
-    <!-- Management Cards Row 2 -->
-    <div class="row g-4 mb-4">
-        <div class="col-md-4">
-            <div class="dashboard-card">
-                <div class="card-icon"><i class="fas fa-chart-line"></i></div>
-                <h4>Analytics & Reports</h4>
-                <p>View platform analytics and reports</p>
-                <a href="{% url 'admin_analytics' %}" class="btn btn-outline-gold btn-sm">View Reports</a>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="dashboard-card">
-                <div class="card-icon"><i class="fas fa-flag-checkered"></i></div>
-                <h4>Content Moderation</h4>
-                <p>Review flagged content and reports</p>
-                <a href="/admin/reviews/qualityreview/" class="btn btn-outline-gold btn-sm">Moderation Queue</a>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="dashboard-card">
-                <div class="card-icon"><i class="fas fa-money-bill-wave"></i></div>
-                <h4>Payment Management</h4>
-                <p>Manage transactions and payments</p>
-                <a href="/admin/payments/purchase/" class="btn btn-outline-gold btn-sm">Manage Payments</a>
-            </div>
-        </div>
-    </div>
-
-    <!-- Activity Log and Payment Summary Section -->
-    <div class="row g-4 mt-2">
-        <div class="col-md-6">
-            <div class="card shadow-sm">
-                <div class="card-header bg-white border-0 py-3">
-                    <h5 class="mb-0">
-                        <i class="fas fa-history me-2" style="color: var(--primary-gold);"></i>
-                        Recent Activity
-                    </h5>
+                <div class="quick-actions">
+                    <a href="{% url 'admin:index' %}" class="quick-action-btn">
+                        <i class="fas fa-cog"></i>
+                        Admin Panel
+                    </a>
+                    <a href="#" class="quick-action-btn">
+                        <i class="fas fa-plus-circle"></i>
+                        Add Book
+                    </a>
                 </div>
-                <div class="card-body p-0">
-                    <div class="activity-log">
-                        {% for log in recent_activity %}
-                        <div class="log-item">
-                            <div class="d-flex align-items-center">
-                                <div class="log-icon me-3">
-                                    <i class="fas {{ log.icon|default:'fa-bell' }}"></i>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <p class="log-title mb-0">{{ log.title }}</p>
-                                    <p class="log-time mb-0">
-                                        {{ log.time|timesince }} ago
-                                        <span class="log-type {{ log.type }}">• {{ log.type|title }}</span>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        {% empty %}
-                        <div class="text-center py-5">
-                            <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
-                            <p class="text-muted">No recent activity to display</p>
-                        </div>
-                        {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Cards Row 1 - Users & Books -->
+    <div class="row g-4 mb-4">
+        <div class="col-xl-3 col-lg-6 col-md-6">
+            <div class="stat-card">
+                <div class="d-flex align-items-center">
+                    <div class="stat-icon bg-primary bg-opacity-10 text-primary me-3">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div>
+                        <div class="stat-number">{{ total_users|default:0|intcomma }}</div>
+                        <div class="stat-label">Total Users</div>
                     </div>
                 </div>
-                <div class="card-footer bg-white border-0 py-2 text-center">
-                    <a href="/admin/" class="text-gold text-decoration-none small">View all activity in Admin Panel →</a>
+            </div>
+        </div>
+        <div class="col-xl-3 col-lg-6 col-md-6">
+            <div class="stat-card">
+                <div class="d-flex align-items-center">
+                    <div class="stat-icon bg-success bg-opacity-10 text-success me-3">
+                        <i class="fas fa-user-edit"></i>
+                    </div>
+                    <div>
+                        <div class="stat-number">{{ total_authors|default:0|intcomma }}</div>
+                        <div class="stat-label">Authors</div>
+                    </div>
                 </div>
             </div>
         </div>
-
-        <div class="col-md-6">
-            <div class="card shadow-sm">
-                <div class="card-header bg-white border-0 py-3">
-                    <h5 class="mb-0">
-                        <i class="fas fa-chart-pie me-2" style="color: var(--primary-gold);"></i>
-                        Payment Summary
-                    </h5>
+        <div class="col-xl-3 col-lg-6 col-md-6">
+            <div class="stat-card">
+                <div class="d-flex align-items-center">
+                    <div class="stat-icon bg-info bg-opacity-10 text-info me-3">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div>
+                        <div class="stat-number">{{ total_readers|default:0|intcomma }}</div>
+                        <div class="stat-label">Readers</div>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <div class="row text-center mb-4">
-                        <div class="col-6">
-                            <div class="border rounded p-3">
-                                <i class="fas fa-mobile-alt fa-2x text-info mb-2"></i>
-                                <h4 class="mb-0">{{ telebirr_sales|default:0|intcomma }} ETB</h4>
-                                <small class="text-muted">Telebirr</small>
-                            </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-lg-6 col-md-6">
+            <div class="stat-card">
+                <div class="d-flex align-items-center">
+                    <div class="stat-icon bg-warning bg-opacity-10 text-warning me-3">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <div>
+                        <div class="stat-number">{{ total_books|default:0|intcomma }}</div>
+                        <div class="stat-label">Total Books</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Cards Row 2 - Books Status & Revenue -->
+    <div class="row g-4 mb-4">
+        <div class="col-xl-3 col-lg-6 col-md-6">
+            <div class="stat-card">
+                <div class="d-flex align-items-center">
+                    <div class="stat-icon bg-success bg-opacity-10 text-success me-3">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div>
+                        <div class="stat-number">{{ published_books|default:0|intcomma }}</div>
+                        <div class="stat-label">Published Books</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-lg-6 col-md-6">
+            <div class="stat-card">
+                <div class="d-flex align-items-center">
+                    <div class="stat-icon bg-warning bg-opacity-10 text-warning me-3">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div>
+                        <div class="stat-number">{{ pending_books|default:0|intcomma }}</div>
+                        <div class="stat-label">Pending Review</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-lg-6 col-md-6">
+            <div class="stat-card">
+                <div class="d-flex align-items-center">
+                    <div class="stat-icon bg-primary bg-opacity-10 text-primary me-3">
+                        <i class="fas fa-download"></i>
+                    </div>
+                    <div>
+                        <div class="stat-number">{{ total_downloads|default:0|intcomma }}</div>
+                        <div class="stat-label">Total Downloads</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-lg-6 col-md-6">
+            <div class="stat-card">
+                <div class="d-flex align-items-center">
+                    <div class="stat-icon bg-gold bg-opacity-10 text-gold me-3" style="background: rgba(218, 165, 32, 0.1); color: var(--primary-gold);">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div>
+                        <div class="stat-number">
+                            <span class="currency">$</span>{{ total_sales|default:0|floatformat:2|intcomma }}
                         </div>
-                        <div class="col-6">
-                            <div class="border rounded p-3">
-                                <i class="fas fa-university fa-2x text-primary mb-2"></i>
-                                <h4 class="mb-0">{{ cbe_sales|default:0|intcomma }} ETB</h4>
-                                <small class="text-muted">CBE Birr</small>
-                            </div>
+                        <div class="stat-label">Total Revenue</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Revenue Overview & Payment Breakdown -->
+    <div class="row g-4 mb-4">
+        <div class="col-xl-8 col-lg-7">
+            <div class="chart-container">
+                <h5><i class="fas fa-credit-card"></i> Revenue Overview</h5>
+                <div class="row g-3 mb-4">
+                    <div class="col-md-4">
+                        <div class="revenue-mini-card">
+                            <div class="label">Today</div>
+                            <div class="value">${{ today_sales|default:0|floatformat:2 }}</div>
                         </div>
                     </div>
-                    
-                    <div class="progress mb-3" style="height: 10px;">
-                        {% with total=telebirr_sales|add:cbe_sales %}
+                    <div class="col-md-4">
+                        <div class="revenue-mini-card">
+                            <div class="label">This Week</div>
+                            <div class="value">${{ week_sales|default:0|floatformat:2 }}</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="revenue-mini-card">
+                            <div class="label">This Month</div>
+                            <div class="value">${{ monthly_sales|default:0|floatformat:2 }}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Method Breakdown - FIXED -->
+                <div>
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="fw-bold">Payment Method Breakdown</span>
+                        <span class="text-muted">Total: ${{ total_sales|default:0|floatformat:2 }}</span>
+                    </div>
+
+                    <!-- FIX: Use default filters and check total before widthratio -->
+                    {% with total=telebirr_sales|default:0|add:cbe_sales|default:0 %}
+                        <div class="progress">
                             {% if total > 0 %}
-                                <div class="progress-bar bg-info" style="width: {% widthratio telebirr_sales total 100 %}%"></div>
-                                <div class="progress-bar bg-primary" style="width: {% widthratio cbe_sales total 100 %}%"></div>
+                                <div class="progress-bar bg-info" style="width: {% widthratio telebirr_sales|default:0 total 100 %}%;">
+                                    Telebirr ${{ telebirr_sales|default:0|floatformat:2 }}
+                                </div>
+                                <div class="progress-bar bg-primary" style="width: {% widthratio cbe_sales|default:0 total 100 %}%;">
+                                    CBE ${{ cbe_sales|default:0|floatformat:2 }}
+                                </div>
                             {% else %}
-                                <div class="progress-bar bg-secondary" style="width: 100%"></div>
+                                <div class="progress-bar bg-secondary" style="width: 100%;">
+                                    No sales data available
+                                </div>
                             {% endif %}
-                        {% endwith %}
+                        </div>
+                        <div class="payment-legend">
+                            <span class="legend-item">
+                                <span class="legend-color telebirr"></span>
+                                Telebirr: ${{ telebirr_sales|default:0|floatformat:2 }}
+                            </span>
+                            <span class="legend-item">
+                                <span class="legend-color cbe"></span>
+                                CBE Birr: ${{ cbe_sales|default:0|floatformat:2 }}
+                            </span>
+                            {% if total == 0 %}
+                                <span class="legend-item text-muted">No payments recorded yet</span>
+                            {% endif %}
+                        </div>
+                    {% endwith %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Stats Sidebar -->
+        <div class="col-xl-4 col-lg-5">
+            <div class="chart-container">
+                <h5><i class="fas fa-chart-pie"></i> Quick Stats</h5>
+                <div class="stat-list">
+                    <div class="stat-list-item">
+                        <span class="label"><i class="fas fa-users me-2"></i>Total Users</span>
+                        <span class="value">{{ total_users|default:0|intcomma }}</span>
                     </div>
-                    
-                    <div class="mt-3">
-                        <div class="d-flex justify-content-between mb-2">
-                            <span><i class="fas fa-chart-line me-1"></i> Today's Sales:</span>
-                            <strong>{{ today_sales|floatformat:0|default:0|intcomma }} ETB</strong>
-                        </div>
-                        <div class="d-flex justify-content-between mb-2">
-                            <span><i class="fas fa-calendar-week me-1"></i> This Week:</span>
-                            <strong>{{ week_sales|floatformat:0|default:0|intcomma }} ETB</strong>
-                        </div>
-                        <div class="d-flex justify-content-between">
-                            <span><i class="fas fa-calendar-alt me-1"></i> This Month:</span>
-                            <strong>{{ month_sales|floatformat:0|default:0|intcomma }} ETB</strong>
-                        </div>
+                    <div class="stat-list-item">
+                        <span class="label"><i class="fas fa-user-edit me-2"></i>Authors</span>
+                        <span class="value">{{ total_authors|default:0|intcomma }}</span>
                     </div>
-                    
-                    <hr>
-                    
-                    <div class="text-center">
-                        <a href="/payments/history/" class="btn btn-outline-gold btn-sm">View All Transactions</a>
+                    <div class="stat-list-item">
+                        <span class="label"><i class="fas fa-user me-2"></i>Readers</span>
+                        <span class="value">{{ total_readers|default:0|intcomma }}</span>
+                    </div>
+                    <div class="stat-list-item">
+                        <span class="label"><i class="fas fa-book me-2"></i>Books Published</span>
+                        <span class="value">{{ published_books|default:0|intcomma }}</span>
+                    </div>
+                    <div class="stat-list-item">
+                        <span class="label"><i class="fas fa-clock me-2"></i>Pending Review</span>
+                        <span class="value text-warning">{{ pending_books|default:0|intcomma }}</span>
+                    </div>
+                    <div class="stat-list-item">
+                        <span class="label"><i class="fas fa-download me-2"></i>Total Downloads</span>
+                        <span class="value">{{ total_downloads|default:0|intcomma }}</span>
+                    </div>
+                    <div class="stat-list-item">
+                        <span class="label"><i class="fas fa-chart-line me-2"></i>Monthly Revenue</span>
+                        <span class="value" style="color: var(--primary-gold);">${{ monthly_sales|default:0|floatformat:2 }}</span>
+                    </div>
+                    <div class="stat-list-item">
+                        <span class="label"><i class="fas fa-credit-card me-2"></i>Total Revenue</span>
+                        <span class="value" style="color: var(--primary-gold);">${{ total_sales|default:0|floatformat:2 }}</span>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Activity Section -->
+    <div class="row g-4">
+        <div class="col-12">
+            <div class="chart-container">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="mb-0"><i class="fas fa-bell me-2"></i>Recent Activity</h5>
+                    <a href="#" class="text-decoration-none" style="color: var(--primary-gold);">View All <i class="fas fa-arrow-right ms-1"></i></a>
+                </div>
+                <div class="empty-state">
+                    <i class="fas fa-inbox"></i>
+                    <p class="mb-0">No recent activity to display</p>
+                    <small class="text-muted">Activities will appear here as users interact with the platform.</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Info -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="text-center text-muted small">
+                <i class="fas fa-database me-1"></i>
+                Data last updated: {% now "F j, Y H:i:s" %}
+                <span class="mx-2">|</span>
+                <i class="fas fa-version me-1"></i>
+                Abay Repository v{{ APP_VERSION|default:"1.0.0" }}
             </div>
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Animate progress bars on load
+        const progressBars = document.querySelectorAll('.progress-bar');
+        progressBars.forEach(function(bar) {
+            const width = bar.style.width;
+            bar.style.width = '0%';
+            setTimeout(function() {
+                bar.style.width = width;
+            }, 100);
+        });
+
+        // Auto-refresh stats every 60 seconds (optional)
+        // setInterval(function() {
+        //     location.reload();
+        // }, 60000);
+    });
+</script>
 {% endblock %}

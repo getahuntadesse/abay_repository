@@ -61,7 +61,6 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -71,6 +70,74 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'simple_history.middleware.HistoryRequestMiddleware',
 ]
+
+# ==================================================
+# DEBUG TOOLBAR CONFIGURATION
+# ==================================================
+
+# Only add Debug Toolbar middleware and apps when DEBUG is True
+if DEBUG:
+    # Add debug toolbar to installed apps if not already present
+    if 'debug_toolbar' not in INSTALLED_APPS:
+        INSTALLED_APPS.append('debug_toolbar')
+    
+    # Insert debug toolbar middleware at the appropriate position
+    # It should be after SecurityMiddleware but before other middleware
+    DEBUG_TOOLBAR_MIDDLEWARE = 'debug_toolbar.middleware.DebugToolbarMiddleware'
+    if DEBUG_TOOLBAR_MIDDLEWARE not in MIDDLEWARE:
+        # Insert after SecurityMiddleware (position 1) or at the beginning
+        # We want it to run early but after security checks
+        MIDDLEWARE.insert(1, DEBUG_TOOLBAR_MIDDLEWARE)
+    
+    # Internal IPs for debug toolbar
+    INTERNAL_IPS = [
+        '127.0.0.1',
+        'localhost',
+    ]
+    
+    # Add additional internal IPs from environment if provided
+    INTERNAL_IPS_EXTRA = config('INTERNAL_IPS', default='', cast=Csv())
+    if INTERNAL_IPS_EXTRA:
+        INTERNAL_IPS.extend(INTERNAL_IPS_EXTRA)
+    
+    # Debug toolbar configuration
+    DEBUG_TOOLBAR_CONFIG = {
+        'SHOW_TOOLBAR_CALLBACK': lambda request: True,  # Show for all requests when DEBUG=True
+        'INTERCEPT_REDIRECTS': False,
+        'ENABLE_STACKTRACES': True,
+        'SHOW_TEMPLATE_CONTEXT': True,
+        'SQL_WARNING_THRESHOLD': 100,  # milliseconds
+        'SHOW_COLLAPSED': True,
+    }
+    
+    # Debug toolbar panels to enable
+    DEBUG_TOOLBAR_PANELS = [
+        'debug_toolbar.panels.history.HistoryPanel',
+        'debug_toolbar.panels.versions.VersionsPanel',
+        'debug_toolbar.panels.timer.TimerPanel',
+        'debug_toolbar.panels.settings.SettingsPanel',
+        'debug_toolbar.panels.headers.HeadersPanel',
+        'debug_toolbar.panels.request.RequestPanel',
+        'debug_toolbar.panels.sql.SQLPanel',
+        'debug_toolbar.panels.staticfiles.StaticFilesPanel',
+        'debug_toolbar.panels.templates.TemplatesPanel',
+        'debug_toolbar.panels.cache.CachePanel',
+        'debug_toolbar.panels.signals.SignalsPanel',
+        'debug_toolbar.panels.logging.LoggingPanel',
+        'debug_toolbar.panels.redirects.RedirectsPanel',
+        'debug_toolbar.panels.profiling.ProfilingPanel',
+    ]
+else:
+    # When DEBUG=False, explicitly remove debug toolbar from installed apps
+    if 'debug_toolbar' in INSTALLED_APPS:
+        INSTALLED_APPS.remove('debug_toolbar')
+    
+    # Remove debug toolbar middleware
+    if 'debug_toolbar.middleware.DebugToolbarMiddleware' in MIDDLEWARE:
+        MIDDLEWARE.remove('debug_toolbar.middleware.DebugToolbarMiddleware')
+    
+    # Set empty INTERNAL_IPS for security
+    INTERNAL_IPS = []
 
 ROOT_URLCONF = 'config.urls'
 
@@ -193,6 +260,14 @@ CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Africa/Addis_Ababa'
+
+# ==================================================
+# FAYDA API CONFIGURATION
+# ==================================================
+
+FAYDA_CLIENT_ID = config('FAYDA_CLIENT_ID', default=None)
+FAYDA_CLIENT_SECRET = config('FAYDA_CLIENT_SECRET', default=None)
+FAYDA_API_URL = config('FAYDA_API_URL', default='https://id.et/api')
 
 # ==================================================
 # APP SETTINGS

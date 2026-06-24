@@ -264,6 +264,20 @@
         color: var(--primary-gold);
     }
 
+    /* OIDC Redirect notice */
+    .oidc-notice {
+        background: #FFF3CD;
+        border: 1px solid #FFC107;
+        border-radius: 12px;
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+        display: none;
+    }
+
+    .oidc-notice i {
+        color: #856404;
+    }
+
     @media (max-width: 768px) {
         .form-body {
             padding: 1.5rem;
@@ -283,8 +297,8 @@
 <div class="spinner-overlay" id="loadingOverlay">
     <div class="spinner-box">
         <div class="spinner-border mb-3" role="status"></div>
-        <h5>Verifying with Fayda...</h5>
-        <p class="text-muted small">Please wait while we confirm your identity</p>
+        <h5>Redirecting to Fayda...</h5>
+        <p class="text-muted small">You will be redirected to Fayda's secure authentication portal.</p>
     </div>
 </div>
 
@@ -297,6 +311,12 @@
                 <p class="mb-0 opacity-75">Join our community of Ethiopian authors and share your stories with the world.</p>
             </div>
             <div class="form-body">
+                <!-- OIDC Notice -->
+                <div class="oidc-notice" id="oidcNotice">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Fayda Verification Required:</strong> You will be redirected to Fayda's secure portal to verify your identity.
+                </div>
+
                 <form method="POST" novalidate id="registerForm">
                     {% csrf_token %}
 
@@ -344,10 +364,13 @@
                         </div>
                         <small class="text-muted">
                             <i class="fas fa-info-circle me-1"></i>
-                            Enter your 16-digit Ethiopian National ID (Fayda) for verification. This is required for author registration.
+                            Enter your 16-digit Ethiopian National ID (Fayda) and click verify. You will be redirected to Fayda's secure portal.
                         </small>
                         <div id="verificationStatus" class="mt-2"></div>
                     </div>
+
+                    <!-- OIDC State (hidden) -->
+                    <input type="hidden" id="oidc_state" name="oidc_state" value="">
 
                     <!-- Verified ID Information (Auto-populated) -->
                     <div id="verifiedInfo" style="display: none;" class="info-fetched mb-4">
@@ -507,7 +530,7 @@
                     <div class="requirements">
                         <strong><i class="fas fa-shield-alt me-2"></i>Requirements for Authors:</strong>
                         <ul class="mt-2 mb-0">
-                            <li><i class="fas fa-check-circle me-2" style="color: var(--primary-gold);"></i> Valid 16-digit Ethiopian Fayda National ID (verified via official API)</li>
+                            <li><i class="fas fa-check-circle me-2" style="color: var(--primary-gold);"></i> Valid 16-digit Ethiopian Fayda National ID (verified via OIDC)</li>
                             <li><i class="fas fa-check-circle me-2" style="color: var(--primary-gold);"></i> You must own the copyright to all content you wish to publish</li>
                             <li><i class="fas fa-check-circle me-2" style="color: var(--primary-gold);"></i> Agree to our standard royalty (70%) and publishing agreement</li>
                             <li><i class="fas fa-check-circle me-2" style="color: var(--primary-gold);"></i> Valid Ethiopian bank account for royalty payments</li>
@@ -578,9 +601,16 @@
         return cookieValue;
     }
 
+    // Generate a random state parameter for OIDC
+    function generateState() {
+        return Math.random().toString(36).substring(2, 15) + 
+               Math.random().toString(36).substring(2, 15);
+    }
+
     let isNationalIdVerified = false;
     let verifiedData = null;
     let rawNationalIdValue = '';
+    let oidcState = '';
 
     // Fayda ID Formatting (xxxx-xxxx-xxxx-xxxx)
     const nationalIdInput = document.getElementById('national_id');
@@ -649,7 +679,7 @@
         }
     }
 
-    // Real Fayda API Verification
+    // OIDC-based Fayda Verification
     document.getElementById('verifyBtn').addEventListener('click', async function() {
         const nationalIdRaw = rawNationalIdValue;
         if (nationalIdRaw.length !== 16) {
@@ -664,70 +694,136 @@
         showLoading(true);
 
         try {
+            // Generate OIDC state for security
+            oidcState = generateState();
+            document.getElementById('oidc_state').value = oidcState;
+
             // Get CSRF token for the POST request
             const csrftoken = getCookie('csrftoken');
 
-            // Call your Django backend endpoint that securely communicates with Fayda API
-            const response = await fetch('/api/fayda/verify/', {
+            // Step 1: Initiate OIDC flow - get authorization URL
+            const initResponse = await fetch('/api/fayda/oidc/initiate/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRFToken': csrftoken
                 },
                 body: JSON.stringify({
-                    national_id: nationalIdRaw
+                    national_id: nationalIdRaw,
+                    state: oidcState
                 })
             });
 
             showLoading(false);
 
-            if (!response.ok) {
-                let errorMessage = 'Verification failed. Please try again.';
+            if (!initResponse.ok) {
+                let errorMessage = 'Failed to initiate Fayda verification.';
                 try {
-                    const errorData = await response.json();
+                    const errorData = await initResponse.json();
                     errorMessage = errorData.message || errorData.error || errorMessage;
                 } catch (e) {
-                    // If response is not JSON
-                    if (response.status === 401) {
+                    if (initResponse.status === 401) {
                         errorMessage = 'Authentication failed. Please contact support.';
-                    } else if (response.status === 429) {
-                        errorMessage = 'Too many requests. Please wait and try again.';
-                    } else if (response.status === 503) {
+                    } else if (initResponse.status === 503) {
                         errorMessage = 'Fayda service is temporarily unavailable. Please try again later.';
                     }
                 }
                 throw new Error(errorMessage);
             }
 
-            const data = await response.json();
+            const initData = await initResponse.json();
 
-            // Check if verification was successful
-            if (!data.success) {
-                throw new Error(data.message || 'Verification failed. Please check your National ID.');
+            if (!initData.success || !initData.authorization_url) {
+                throw new Error(initData.message || 'Failed to get authorization URL from Fayda.');
             }
 
-            // Process the verified data from the API
-            // Adjust these field names based on your actual API response structure
-            const userData = data.data || data.user || {};
-            
+            // Step 2: Show OIDC notice
+            document.getElementById('oidcNotice').style.display = 'block';
+
+            // Step 3: Redirect to Fayda for authentication
+            showLoading(true);
+            setTimeout(() => {
+                window.location.href = initData.authorization_url;
+            }, 1000);
+
+        } catch (error) {
+            showLoading(false);
+            showVerificationStatus('error', `Fayda verification failed: ${error.message || 'Please try again.'}`);
+            isNationalIdVerified = false;
+            btn.innerHTML = originalHtml;
+            btn.classList.remove('btn-verify-verified');
+            btn.disabled = false;
+        }
+    });
+
+    // Check for OIDC callback on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        // Check if we have OIDC callback parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('code');
+        const state = urlParams.get('state');
+        const error = urlParams.get('error');
+
+        if (error) {
+            showVerificationStatus('error', `Fayda authentication failed: ${error}. Please try again.`);
+            return;
+        }
+
+        if (code && state) {
+            // Exchange code for user info
+            processOIDCCallback(code, state);
+        }
+
+        checkFormCompletion();
+    });
+
+    function processOIDCCallback(code, state) {
+        // Show loading
+        showLoading(true);
+
+        const csrftoken = getCookie('csrftoken');
+
+        fetch('/api/fayda/oidc/callback/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken
+            },
+            body: JSON.stringify({
+                code: code,
+                state: state
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            showLoading(false);
+
+            if (!data.success) {
+                showVerificationStatus('error', data.message || 'Failed to complete Fayda verification.');
+                return;
+            }
+
+            // Process verified data
+            const userData = data.data || {};
+
             verifiedData = {
-                full_name: userData.full_name || userData.fullName || userData.name || '',
-                date_of_birth: userData.date_of_birth || userData.dateOfBirth || userData.dob || '',
+                full_name: userData.full_name || userData.name || '',
+                date_of_birth: userData.date_of_birth || userData.dob || '',
                 gender: userData.gender || '',
-                region: userData.region || userData.region_name || '',
-                zone: userData.zone || userData.zone_name || '',
-                woreda: userData.woreda || userData.woreda_name || '',
+                region: userData.region || '',
+                zone: userData.zone || '',
+                woreda: userData.woreda || '',
                 address: userData.address || ''
             };
 
-            // Validate that we got the minimum required data
             if (!verifiedData.full_name) {
-                throw new Error('Could not retrieve full name from Fayda. Please try again.');
+                showVerificationStatus('error', 'Could not retrieve user information from Fayda.');
+                return;
             }
 
             isNationalIdVerified = true;
 
-            // Auto-populate the form with the real data
+            // Auto-populate the form
             document.getElementById('full_name').value = verifiedData.full_name;
             document.getElementById('date_of_birth').value = verifiedData.date_of_birth;
             document.getElementById('gender').value = verifiedData.gender;
@@ -746,21 +842,24 @@
                 <strong>Date of Birth:</strong> ${verifiedData.date_of_birth || 'N/A'}
             `;
             document.getElementById('verifiedBadge').style.display = 'inline-block';
-            btn.innerHTML = '<i class="fas fa-check-circle me-1"></i> Verified with Fayda ✓';
-            btn.classList.add('btn-verify-verified');
+            const verifyBtn = document.getElementById('verifyBtn');
+            verifyBtn.innerHTML = '<i class="fas fa-check-circle me-1"></i> Verified with Fayda ✓';
+            verifyBtn.classList.add('btn-verify-verified');
             nationalIdInput.readOnly = true;
+            document.getElementById('oidcNotice').style.display = 'none';
             checkFormCompletion();
 
-        } catch (error) {
+            // Clean URL - remove query parameters
+            if (window.history && window.history.pushState) {
+                const cleanUrl = window.location.pathname;
+                window.history.pushState({}, document.title, cleanUrl);
+            }
+        })
+        .catch(error => {
             showLoading(false);
-            showVerificationStatus('error', `Fayda verification failed: ${error.message || 'Please try again.'}`);
-            isNationalIdVerified = false;
-            btn.innerHTML = originalHtml;
-            btn.classList.remove('btn-verify-verified');
-        } finally {
-            btn.disabled = false;
-        }
-    });
+            showVerificationStatus('error', `Failed to process Fayda callback: ${error.message}`);
+        });
+    }
 
     // Password strength and matching
     const passwordInput = document.getElementById('password');
@@ -934,7 +1033,7 @@
             return false;
         }
         
-        // IMPORTANT: Set the national ID input value to the raw digits without hyphens
+        // Set the national ID input value to the raw digits without hyphens
         nationalIdInput.value = rawNationalIdValue;
         
         const submitBtn = document.getElementById('submitBtn');
@@ -950,11 +1049,6 @@
             e.preventDefault();
             document.getElementById('verifyBtn').click();
         }
-    });
-
-    // Initialize - check if form is complete on page load
-    document.addEventListener('DOMContentLoaded', function() {
-        checkFormCompletion();
     });
 </script>
 {% endblock %}

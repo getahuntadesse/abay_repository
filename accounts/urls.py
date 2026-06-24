@@ -11,7 +11,9 @@ urlpatterns = [
     path('register/author/', views.register_author, name='register_author'),
     path('register/client/', views.register_view, name='register_client'),
     
-    # Fayda API Verification
+    # Fayda OIDC Verification
+    path('api/fayda/oidc/initiate/', views.oidc_initiate, name='fayda_oidc_initiate'),
+    path('api/fayda/oidc/callback/', views.oidc_callback, name='fayda_oidc_callback'),
     path('api/fayda/verify/', views.verify_fayda_id, name='verify_fayda_id'),
     
     # Dashboards
