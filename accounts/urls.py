@@ -14,7 +14,6 @@ urlpatterns = [
     # Fayda OIDC Verification
     path('api/fayda/oidc/initiate/', views.oidc_initiate, name='fayda_oidc_initiate'),
     path('api/fayda/oidc/callback/', views.oidc_callback, name='fayda_oidc_callback'),
-    path('api/fayda/verify/', views.verify_fayda_id, name='verify_fayda_id'),
     
     # Dashboards
     path('dashboard/', views.dashboard_redirect, name='dashboard'),

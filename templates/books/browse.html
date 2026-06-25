@@ -17,73 +17,196 @@
     
     .page-header {
         background: linear-gradient(135deg, var(--primary-darker), var(--primary-dark));
-        padding: 60px 0;
-        margin-bottom: 40px;
+        padding: 40px 0 30px;
+        margin-bottom: 30px;
         color: white;
     }
     
-    .filter-sidebar {
-        background: white;
-        border-radius: 16px;
-        padding: 1.5rem;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-        position: sticky;
-        top: 90px;
-    }
-    
-    .filter-title {
-        font-size: 1.1rem;
+    .page-header h1 {
+        font-size: 2rem;
         font-weight: 700;
-        color: var(--primary-darker);
-        margin-bottom: 1rem;
-        padding-bottom: 0.5rem;
-        border-bottom: 2px solid var(--primary-gold);
     }
     
-    .genre-list {
-        list-style: none;
-        padding: 0;
-        margin: 0;
+    .page-header .lead {
+        font-size: 1rem;
+        opacity: 0.8;
     }
     
-    .genre-list li {
-        margin-bottom: 0.5rem;
+    /* Search Box - Mobile First */
+    .search-box {
+        position: relative;
+        max-width: 500px;
+        margin: 0 auto;
     }
     
-    .genre-list a {
-        color: var(--primary-gray);
-        text-decoration: none;
+    .search-box form {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+    
+    .search-box input {
+        flex: 1;
+        padding: 10px 16px;
+        border: 2px solid rgba(255,255,255,0.2);
+        border-radius: 50px;
+        font-size: 0.95rem;
+        background: rgba(255,255,255,0.95);
         transition: all 0.3s ease;
-        display: block;
-        padding: 0.3rem 0;
+        min-width: 150px;
     }
     
-    .genre-list a:hover,
-    .genre-list a.active {
-        color: var(--primary-gold);
-        padding-left: 10px;
+    .search-box input:focus {
+        outline: none;
+        border-color: var(--primary-gold);
+        box-shadow: 0 0 0 3px rgba(218, 165, 32, 0.2);
     }
     
+    .search-box button {
+        background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark));
+        color: var(--primary-darker);
+        border: none;
+        padding: 10px 20px;
+        border-radius: 50px;
+        font-weight: 600;
+        white-space: nowrap;
+        transition: all 0.3s ease;
+    }
+    
+    .search-box button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(218, 165, 32, 0.3);
+    }
+    
+    /* Filter Bar - Mobile Friendly */
+    .filter-bar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        align-items: center;
+        justify-content: space-between;
+        background: white;
+        padding: 0.75rem 1rem;
+        border-radius: 16px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        margin-bottom: 1.5rem;
+    }
+    
+    .filter-bar .results-info {
+        font-size: 0.9rem;
+        color: var(--primary-gray);
+    }
+    
+    .filter-bar .results-info i {
+        margin-right: 0.25rem;
+    }
+    
+    .filter-controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        align-items: center;
+    }
+    
+    .filter-controls .dropdown-toggle {
+        background: #f8f9fa;
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        padding: 6px 14px;
+        font-size: 0.85rem;
+        color: var(--primary-gray);
+        transition: all 0.3s ease;
+    }
+    
+    .filter-controls .dropdown-toggle:hover {
+        border-color: var(--primary-gold);
+        color: var(--primary-dark);
+    }
+    
+    .filter-controls .dropdown-toggle i {
+        margin-right: 0.25rem;
+    }
+    
+    .filter-controls .btn-clear {
+        background: transparent;
+        border: none;
+        color: var(--primary-gray-light);
+        font-size: 0.85rem;
+        padding: 6px 10px;
+        transition: color 0.3s ease;
+    }
+    
+    .filter-controls .btn-clear:hover {
+        color: #dc3545;
+    }
+    
+    /* Filter Chips */
+    .filter-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+    }
+    
+    .filter-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        background: #f8f9fa;
+        border: 1px solid #e9ecef;
+        border-radius: 20px;
+        padding: 3px 10px 3px 12px;
+        font-size: 0.8rem;
+        color: var(--primary-gray);
+    }
+    
+    .filter-chip .remove {
+        cursor: pointer;
+        color: var(--primary-gray-light);
+        transition: color 0.3s ease;
+    }
+    
+    .filter-chip .remove:hover {
+        color: #dc3545;
+    }
+    
+    /* Book Cards - Mobile First */
     .book-card {
         background: white;
         border-radius: 16px;
         overflow: hidden;
         transition: all 0.3s ease;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        box-shadow: 0 3px 12px rgba(0,0,0,0.08);
         height: 100%;
+        display: flex;
+        flex-direction: column;
     }
     
     .book-card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+        box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+    }
+    
+    .book-cover-wrapper {
+        position: relative;
+        overflow: hidden;
+        padding-top: 130%;
+        background: #f0f0f0;
     }
     
     .book-cover {
-        height: 260px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
         background-size: cover;
         background-position: center;
-        background-color: #F0F0F0;
-        position: relative;
+        transition: transform 0.3s ease;
+    }
+    
+    .book-card:hover .book-cover {
+        transform: scale(1.05);
     }
     
     .book-overlay {
@@ -92,25 +215,81 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background: rgba(0,0,0,0.75);
+        background: rgba(0,0,0,0.65);
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 10px;
+        gap: 8px;
         opacity: 0;
-        transition: opacity 0.3s;
+        transition: opacity 0.3s ease;
+        flex-wrap: wrap;
+        padding: 0.5rem;
     }
     
     .book-card:hover .book-overlay {
         opacity: 1;
     }
     
+    .book-overlay .btn {
+        font-size: 0.75rem;
+        padding: 6px 14px;
+        border-radius: 20px;
+    }
+    
+    .book-badges {
+        position: absolute;
+        top: 8px;
+        left: 8px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+    }
+    
+    .book-badges .badge {
+        font-size: 0.6rem;
+        padding: 3px 8px;
+        border-radius: 12px;
+        text-transform: uppercase;
+        font-weight: 600;
+    }
+    
+    .badge-free {
+        background: #28a745;
+        color: white;
+    }
+    
+    .badge-new {
+        background: var(--primary-gold);
+        color: var(--primary-darker);
+    }
+    
+    .badge-popular {
+        background: #17a2b8;
+        color: white;
+    }
+    
+    .book-stats {
+        position: absolute;
+        bottom: 8px;
+        right: 8px;
+        display: flex;
+        gap: 8px;
+        font-size: 0.65rem;
+        color: rgba(255,255,255,0.85);
+        background: rgba(0,0,0,0.5);
+        padding: 3px 10px;
+        border-radius: 12px;
+    }
+    
     .book-info {
-        padding: 1rem;
+        padding: 0.75rem 1rem 1rem;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
     }
     
     .book-title {
-        font-size: 1rem;
+        font-size: 0.95rem;
         font-weight: 700;
         color: var(--primary-darker);
         margin-bottom: 0.25rem;
@@ -118,6 +297,7 @@
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
+        line-height: 1.3;
     }
     
     .book-author {
@@ -126,29 +306,41 @@
         margin-bottom: 0.5rem;
     }
     
+    .book-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: auto;
+        flex-wrap: wrap;
+        gap: 0.25rem;
+    }
+    
     .book-price {
         font-size: 1rem;
         font-weight: 700;
-        color: var(--primary-gold);
+        color: var(--primary-gold-dark);
     }
     
-    .badge-free {
-        background: #28a745;
-        color: white;
-        font-size: 0.7rem;
-        padding: 0.2rem 0.5rem;
-        border-radius: 20px;
+    .book-price.free {
+        color: #28a745;
+        font-size: 0.85rem;
+    }
+    
+    .book-actions {
+        display: flex;
+        gap: 0.25rem;
     }
     
     .btn-sm-gold {
         background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark));
         color: var(--primary-darker);
         border: none;
-        padding: 6px 15px;
-        border-radius: 20px;
-        font-size: 0.8rem;
+        padding: 4px 12px;
+        border-radius: 16px;
+        font-size: 0.75rem;
         font-weight: 600;
         transition: all 0.3s ease;
+        text-decoration: none;
     }
     
     .btn-sm-gold:hover {
@@ -158,59 +350,42 @@
     }
     
     .btn-sm-outline {
-        border: 1px solid var(--primary-gray);
+        border: 1px solid #e9ecef;
         color: var(--primary-gray);
         background: transparent;
-        padding: 6px 15px;
-        border-radius: 20px;
-        font-size: 0.8rem;
+        padding: 4px 12px;
+        border-radius: 16px;
+        font-size: 0.75rem;
         font-weight: 600;
         transition: all 0.3s ease;
+        text-decoration: none;
     }
     
     .btn-sm-outline:hover {
         background: var(--primary-gray);
         color: white;
+        border-color: var(--primary-gray);
     }
     
-    .search-box {
-        position: relative;
-        max-width: 500px;
-        margin: 0 auto;
-    }
-    
-    .search-box input {
-        width: 100%;
-        padding: 12px 20px;
-        border: 2px solid #E8E8E8;
-        border-radius: 50px;
-        font-size: 1rem;
-        transition: all 0.3s ease;
-    }
-    
-    .search-box input:focus {
-        outline: none;
-        border-color: var(--primary-gold);
-        box-shadow: 0 0 0 3px rgba(218, 165, 32, 0.1);
-    }
-    
-    .search-box button {
-        position: absolute;
-        right: 5px;
-        top: 5px;
-        background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark));
-        color: var(--primary-darker);
-        border: none;
-        padding: 7px 20px;
-        border-radius: 50px;
-        font-weight: 600;
+    /* Pagination - Mobile First */
+    .pagination {
+        flex-wrap: wrap;
+        gap: 0.25rem;
     }
     
     .pagination .page-link {
         color: var(--primary-gold);
         border: 1px solid #E8E8E8;
-        margin: 0 3px;
         border-radius: 8px;
+        padding: 6px 12px;
+        font-size: 0.85rem;
+        transition: all 0.3s ease;
+    }
+    
+    .pagination .page-link:hover {
+        background: var(--primary-gold);
+        color: var(--primary-darker);
+        border-color: var(--primary-gold);
     }
     
     .pagination .page-item.active .page-link {
@@ -219,33 +394,187 @@
         color: var(--primary-darker);
     }
     
+    .pagination .page-item.disabled .page-link {
+        color: var(--primary-gray-light);
+        cursor: not-allowed;
+    }
+    
+    /* No Results */
     .no-results {
         text-align: center;
-        padding: 60px 20px;
+        padding: 40px 20px;
         background: white;
         border-radius: 16px;
     }
     
     .no-results i {
-        font-size: 4rem;
+        font-size: 3.5rem;
         color: var(--primary-gray-light);
         margin-bottom: 1rem;
     }
     
-    .btn-gold {
-        background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark));
-        color: var(--primary-darker);
-        border: none;
-        padding: 10px 25px;
-        border-radius: 25px;
-        font-weight: 600;
-        transition: all 0.3s ease;
+    .no-results h4 {
+        font-weight: 700;
+        color: var(--primary-dark);
     }
     
-    .btn-gold:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(218, 165, 32, 0.4);
+    /* Dropdown Menu */
+    .dropdown-menu {
+        border-radius: 12px;
+        border: 1px solid #e9ecef;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        padding: 0.25rem;
+    }
+    
+    .dropdown-item {
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        transition: all 0.2s ease;
+    }
+    
+    .dropdown-item:hover {
+        background: rgba(218, 165, 32, 0.1);
+        color: var(--primary-gold);
+    }
+    
+    .dropdown-item.active {
+        background: var(--primary-gold);
         color: var(--primary-darker);
+    }
+    
+    .dropdown-item i {
+        width: 18px;
+        text-align: center;
+        margin-right: 0.5rem;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+        .page-header {
+            padding: 30px 0 20px;
+        }
+        
+        .page-header h1 {
+            font-size: 1.6rem;
+        }
+        
+        .search-box form {
+            flex-direction: column;
+        }
+        
+        .search-box input {
+            width: 100%;
+            border-radius: 25px;
+        }
+        
+        .search-box button {
+            width: 100%;
+            justify-content: center;
+        }
+        
+        .filter-bar {
+            flex-direction: column;
+            align-items: stretch;
+            padding: 0.75rem;
+        }
+        
+        .filter-bar .results-info {
+            text-align: center;
+            font-size: 0.8rem;
+        }
+        
+        .filter-controls {
+            justify-content: center;
+        }
+        
+        .filter-controls .dropdown-toggle {
+            font-size: 0.8rem;
+            padding: 5px 12px;
+        }
+        
+        .filter-chips {
+            justify-content: center;
+        }
+        
+        .book-cover-wrapper {
+            padding-top: 120%;
+        }
+        
+        .book-title {
+            font-size: 0.85rem;
+        }
+        
+        .book-author {
+            font-size: 0.75rem;
+        }
+        
+        .book-price {
+            font-size: 0.9rem;
+        }
+        
+        .pagination .page-link {
+            padding: 4px 10px;
+            font-size: 0.8rem;
+        }
+    }
+    
+    @media (max-width: 576px) {
+        .page-header h1 {
+            font-size: 1.3rem;
+        }
+        
+        .page-header .lead {
+            font-size: 0.85rem;
+        }
+        
+        .filter-controls {
+            flex-wrap: wrap;
+            gap: 0.35rem;
+        }
+        
+        .filter-controls .dropdown-toggle {
+            font-size: 0.75rem;
+            padding: 4px 10px;
+        }
+        
+        .book-cover-wrapper {
+            padding-top: 140%;
+        }
+        
+        .book-info {
+            padding: 0.5rem 0.75rem 0.75rem;
+        }
+        
+        .book-title {
+            font-size: 0.8rem;
+        }
+        
+        .btn-sm-gold,
+        .btn-sm-outline {
+            font-size: 0.65rem;
+            padding: 3px 10px;
+        }
+        
+        .pagination .page-link {
+            padding: 3px 8px;
+            font-size: 0.75rem;
+        }
+        
+        .no-results i {
+            font-size: 2.5rem;
+        }
+    }
+    
+    /* Tablet */
+    @media (min-width: 769px) and (max-width: 992px) {
+        .book-cover-wrapper {
+            padding-top: 135%;
+        }
+        
+        .page-header h1 {
+            font-size: 1.8rem;
+        }
     }
 </style>
 {% endblock %}
@@ -255,13 +584,13 @@
 <div class="page-header">
     <div class="container">
         <div class="text-center">
-            <h1 class="mb-3">Browse Our Collection</h1>
-            <p class="lead mb-4 opacity-75">Discover thousands of books from Ethiopian authors</p>
+            <h1 class="mb-2">Browse Our Collection</h1>
+            <p class="lead mb-3 opacity-75">Discover thousands of books from Ethiopian authors</p>
             
             <!-- Search Box -->
             <div class="search-box">
-                <form method="GET" action="{% url 'books:browse' %}">
-                    <input type="text" name="q" placeholder="Search by title, author, or keyword..." value="{{ query|default:'' }}">
+                <form method="GET" action="{% url 'books:browse' %}" id="searchForm">
+                    <input type="text" name="q" placeholder="Search by title, author, or keyword..." value="{{ query|default:'' }}" id="searchInput">
                     <button type="submit"><i class="fas fa-search me-1"></i> Search</button>
                 </form>
             </div>
@@ -270,154 +599,331 @@
 </div>
 
 <div class="container mb-5">
-    <div class="row">
-        <!-- Sidebar Filters -->
-        <div class="col-lg-3 mb-4">
-            <div class="filter-sidebar">
-                <h5 class="filter-title">
-                    <i class="fas fa-filter me-2"></i> Filters
-                </h5>
-                
-                <div class="mb-4">
-                    <h6 class="fw-bold mb-2">Genres</h6>
-                    <ul class="genre-list">
-                        <li><a href="?{% if query %}q={{ query }}&{% endif %}" class="{% if not selected_genre %}active{% endif %}">All Books</a></li>
-                        {% for genre in genres %}
-                            <li>
-                                <a href="?{% if query %}q={{ query }}&{% endif %}genre={{ genre.id }}" 
-                                   class="{% if selected_genre == genre.id|stringformat:"s" %}active{% endif %}">
-                                    {{ genre.name }}
-                                </a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-                
-                <div class="mb-4">
-                    <h6 class="fw-bold mb-2">Price Range</h6>
-                    <ul class="genre-list">
-                        <li><a href="?{% if query %}q={{ query }}&{% endif %}{% if selected_genre %}genre={{ selected_genre }}&{% endif %}price=free">Free Books</a></li>
-                        <li><a href="?{% if query %}q={{ query }}&{% endif %}{% if selected_genre %}genre={{ selected_genre }}&{% endif %}price=paid">Paid Books</a></li>
-                    </ul>
-                </div>
-                
-                <hr>
-                
-                <div>
-                    <a href="{% url 'books:browse' %}" class="btn btn-sm-outline w-100">
-                        <i class="fas fa-undo-alt me-2"></i> Clear All Filters
-                    </a>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Books Grid -->
-        <div class="col-lg-9">
+    <!-- Filter Bar -->
+    <div class="filter-bar">
+        <div class="results-info">
+            <i class="fas fa-book"></i>
             {% if books %}
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <p class="text-muted mb-0">
-                        <i class="fas fa-book me-1"></i> Showing {{ books.start_index }}-{{ books.end_index }} of {{ books.paginator.count }} books
-                    </p>
-                    <div class="dropdown">
-                        <button class="btn btn-sm-outline dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                            <i class="fas fa-sort me-1"></i> Sort by
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="?{% if query %}q={{ query }}&{% endif %}{% if selected_genre %}genre={{ selected_genre }}&{% endif %}sort=newest">Newest First</a></li>
-                            <li><a class="dropdown-item" href="?{% if query %}q={{ query }}&{% endif %}{% if selected_genre %}genre={{ selected_genre }}&{% endif %}sort=popular">Most Popular</a></li>
-                            <li><a class="dropdown-item" href="?{% if query %}q={{ query }}&{% endif %}{% if selected_genre %}genre={{ selected_genre }}&{% endif %}sort=price_low">Price: Low to High</a></li>
-                            <li><a class="dropdown-item" href="?{% if query %}q={{ query }}&{% endif %}{% if selected_genre %}genre={{ selected_genre }}&{% endif %}sort=price_high">Price: High to Low</a></li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="row g-4">
-                    {% for book in books %}
-                        <div class="col-md-6 col-lg-4">
-                            <div class="book-card">
-                                <div class="book-cover" style="background-image: url('{% if book.cover_image %}{{ book.cover_image.url }}{% else %}https://via.placeholder.com/300x400/2C2C2C/DAA520?text=No+Cover{% endif %}');">
-                                    <div class="book-overlay">
-                                        <a href="{% url 'books:detail' book.id %}" class="btn btn-sm-gold">
-                                            <i class="fas fa-info-circle"></i> Details
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="book-info">
-                                    <h6 class="book-title">{{ book.title|truncatechars:50 }}</h6>
-                                    <p class="book-author">by {{ book.author.full_name|default:"Unknown Author" }}</p>
-                                    <div class="d-flex justify-content-between align-items-center mt-2">
-                                        <span class="book-price">
-                                            {% if book.is_free %}
-                                                <span class="badge-free">FREE</span>
-                                            {% else %}
-                                                {{ book.price }} ETB
-                                            {% endif %}
-                                        </span>
-                                        <div class="d-flex gap-1">
-                                            <i class="fas fa-eye text-muted small"></i>
-                                            <span class="text-muted small">{{ book.views_count|default:0 }}</span>
-                                            <i class="fas fa-download text-muted small ms-2"></i>
-                                            <span class="text-muted small">{{ book.downloads_count|default:0 }}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    {% endfor %}
-                </div>
-                
-                <!-- Pagination -->
-                {% if books.has_other_pages %}
-                    <nav class="mt-5">
-                        <ul class="pagination justify-content-center">
-                            {% if books.has_previous %}
-                                <li class="page-item">
-                                    <a class="page-link" href="?page={{ books.previous_page_number }}{% if query %}&q={{ query }}{% endif %}{% if selected_genre %}&genre={{ selected_genre }}{% endif %}{% if selected_price %}&price={{ selected_price }}{% endif %}">
-                                        <i class="fas fa-chevron-left"></i> Previous
-                                    </a>
-                                </li>
-                            {% else %}
-                                <li class="page-item disabled">
-                                    <span class="page-link"><i class="fas fa-chevron-left"></i> Previous</span>
-                                </li>
-                            {% endif %}
-                            
-                            {% for num in books.paginator.page_range %}
-                                {% if books.number == num %}
-                                    <li class="page-item active"><span class="page-link">{{ num }}</span></li>
-                                {% elif num > books.number|add:'-3' and num < books.number|add:'3' %}
-                                    <li class="page-item">
-                                        <a class="page-link" href="?page={{ num }}{% if query %}&q={{ query }}{% endif %}{% if selected_genre %}&genre={{ selected_genre }}{% endif %}{% if selected_price %}&price={{ selected_price }}{% endif %}">{{ num }}</a>
-                                    </li>
-                                {% endif %}
-                            {% endfor %}
-                            
-                            {% if books.has_next %}
-                                <li class="page-item">
-                                    <a class="page-link" href="?page={{ books.next_page_number }}{% if query %}&q={{ query }}{% endif %}{% if selected_genre %}&genre={{ selected_genre }}{% endif %}{% if selected_price %}&price={{ selected_price }}{% endif %}">
-                                        Next <i class="fas fa-chevron-right"></i>
-                                    </a>
-                                </li>
-                            {% else %}
-                                <li class="page-item disabled">
-                                    <span class="page-link">Next <i class="fas fa-chevron-right"></i></span>
-                                </li>
-                            {% endif %}
-                        </ul>
-                    </nav>
-                {% endif %}
-                
+                Showing {{ books.start_index }}-{{ books.end_index }} of {{ books.paginator.count }} books
             {% else %}
-                <div class="no-results">
-                    <i class="fas fa-book-open"></i>
-                    <h4>No books found</h4>
-                    <p class="text-muted">We couldn't find any books matching your criteria.</p>
-                    <a href="{% url 'books:browse' %}" class="btn btn-gold mt-3">
-                        <i class="fas fa-undo-alt me-2"></i> Clear Filters
-                    </a>
-                </div>
+                No books found
+            {% endif %}
+        </div>
+        <div class="filter-controls">
+            <!-- Genre Dropdown -->
+            <div class="dropdown">
+                <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-tag"></i>
+                    {% if selected_genre %}
+                        {% for genre in genres %}
+                            {% if genre.id|stringformat:"s" == selected_genre %}
+                                {{ genre.name }}
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        All Genres
+                    {% endif %}
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a class="dropdown-item {% if not selected_genre %}active{% endif %}" href="?{% if query %}q={{ query }}&{% endif %}{% if selected_price %}price={{ selected_price }}&{% endif %}{% if sort %}sort={{ sort }}{% endif %}">
+                            <i class="fas fa-book"></i> All Genres
+                        </a>
+                    </li>
+                    {% for genre in genres %}
+                        <li>
+                            <a class="dropdown-item {% if selected_genre == genre.id|stringformat:"s" %}active{% endif %}" 
+                               href="?{% if query %}q={{ query }}&{% endif %}genre={{ genre.id }}{% if selected_price %}&price={{ selected_price }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}">
+                                <i class="fas fa-tag"></i> {{ genre.name }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            
+            <!-- Price Dropdown -->
+            <div class="dropdown">
+                <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-coins"></i>
+                    {% if selected_price == 'free' %}Free
+                    {% elif selected_price == 'paid' %}Paid
+                    {% else %}All Prices{% endif %}
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a class="dropdown-item {% if not selected_price %}active{% endif %}" href="?{% if query %}q={{ query }}&{% endif %}{% if selected_genre %}genre={{ selected_genre }}&{% endif %}{% if sort %}sort={{ sort }}{% endif %}">
+                            <i class="fas fa-coins"></i> All Prices
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item {% if selected_price == 'free' %}active{% endif %}" href="?{% if query %}q={{ query }}&{% endif %}{% if selected_genre %}genre={{ selected_genre }}&{% endif %}price=free{% if sort %}&sort={{ sort }}{% endif %}">
+                            <i class="fas fa-gift"></i> Free
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item {% if selected_price == 'paid' %}active{% endif %}" href="?{% if query %}q={{ query }}&{% endif %}{% if selected_genre %}genre={{ selected_genre }}&{% endif %}price=paid{% if sort %}&sort={{ sort }}{% endif %}">
+                            <i class="fas fa-credit-card"></i> Paid
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Sort Dropdown -->
+            <div class="dropdown">
+                <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-sort"></i>
+                    {% if sort == 'newest' %}Newest
+                    {% elif sort == 'popular' %}Popular
+                    {% elif sort == 'price_low' %}Price: Low
+                    {% elif sort == 'price_high' %}Price: High
+                    {% else %}Sort By{% endif %}
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a class="dropdown-item {% if not sort %}active{% endif %}" href="?{% if query %}q={{ query }}&{% endif %}{% if selected_genre %}genre={{ selected_genre }}&{% endif %}{% if selected_price %}price={{ selected_price }}{% endif %}">
+                            <i class="fas fa-sort"></i> Default
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item {% if sort == 'newest' %}active{% endif %}" href="?{% if query %}q={{ query }}&{% endif %}{% if selected_genre %}genre={{ selected_genre }}&{% endif %}{% if selected_price %}price={{ selected_price }}&{% endif %}sort=newest">
+                            <i class="fas fa-clock"></i> Newest First
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item {% if sort == 'popular' %}active{% endif %}" href="?{% if query %}q={{ query }}&{% endif %}{% if selected_genre %}genre={{ selected_genre }}&{% endif %}{% if selected_price %}price={{ selected_price }}&{% endif %}sort=popular">
+                            <i class="fas fa-fire"></i> Most Popular
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item {% if sort == 'price_low' %}active{% endif %}" href="?{% if query %}q={{ query }}&{% endif %}{% if selected_genre %}genre={{ selected_genre }}&{% endif %}{% if selected_price %}price={{ selected_price }}&{% endif %}sort=price_low">
+                            <i class="fas fa-arrow-up"></i> Price: Low to High
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item {% if sort == 'price_high' %}active{% endif %}" href="?{% if query %}q={{ query }}&{% endif %}{% if selected_genre %}genre={{ selected_genre }}&{% endif %}{% if selected_price %}price={{ selected_price }}&{% endif %}sort=price_high">
+                            <i class="fas fa-arrow-down"></i> Price: High to Low
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Clear Filters -->
+            {% if selected_genre or selected_price or query or sort %}
+                <a href="{% url 'books:browse' %}" class="btn-clear" title="Clear all filters">
+                    <i class="fas fa-times-circle"></i> Clear
+                </a>
             {% endif %}
         </div>
     </div>
+    
+    <!-- Active Filter Chips -->
+    <div class="filter-chips" id="filterChips">
+        {% if query %}
+            <span class="filter-chip">
+                <i class="fas fa-search"></i> "{{ query|truncatechars:20 }}"
+                <a href="?{% if selected_genre %}genre={{ selected_genre }}&{% endif %}{% if selected_price %}price={{ selected_price }}&{% endif %}{% if sort %}sort={{ sort }}{% endif %}" class="remove" title="Remove search">
+                    <i class="fas fa-times"></i>
+                </a>
+            </span>
+        {% endif %}
+        {% if selected_genre %}
+            {% for genre in genres %}
+                {% if genre.id|stringformat:"s" == selected_genre %}
+                    <span class="filter-chip">
+                        <i class="fas fa-tag"></i> {{ genre.name }}
+                        <a href="?{% if query %}q={{ query }}&{% endif %}{% if selected_price %}price={{ selected_price }}&{% endif %}{% if sort %}sort={{ sort }}{% endif %}" class="remove" title="Remove genre filter">
+                            <i class="fas fa-times"></i>
+                        </a>
+                    </span>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        {% if selected_price %}
+            <span class="filter-chip">
+                <i class="fas fa-coins"></i> {{ selected_price|title }}
+                <a href="?{% if query %}q={{ query }}&{% endif %}{% if selected_genre %}genre={{ selected_genre }}&{% endif %}{% if sort %}sort={{ sort }}{% endif %}" class="remove" title="Remove price filter">
+                    <i class="fas fa-times"></i>
+                </a>
+            </span>
+        {% endif %}
+        {% if sort %}
+            <span class="filter-chip">
+                <i class="fas fa-sort"></i> {{ sort|title }}
+                <a href="?{% if query %}q={{ query }}&{% endif %}{% if selected_genre %}genre={{ selected_genre }}&{% endif %}{% if selected_price %}price={{ selected_price }}{% endif %}" class="remove" title="Remove sort">
+                    <i class="fas fa-times"></i>
+                </a>
+            </span>
+        {% endif %}
+    </div>
+    
+    <!-- Books Grid -->
+    {% if books %}
+        <div class="row g-3 g-md-4 mt-2">
+            {% for book in books %}
+                <div class="col-6 col-lg-4 col-xl-3">
+                    <div class="book-card">
+                        <div class="book-cover-wrapper">
+                            <div class="book-cover" style="background-image: url('{% if book.cover_image %}{{ book.cover_image.url }}{% else %}https://via.placeholder.com/300x400/2C2C2C/DAA520?text=No+Cover{% endif %}');">
+                            </div>
+                            <div class="book-overlay">
+                                <a href="{% url 'books:detail' book.id %}" class="btn-sm-gold">
+                                    <i class="fas fa-info-circle"></i> View
+                                </a>
+                                {% if user.is_authenticated and user.role == 'client' %}
+                                    <a href="#" class="btn-sm-outline">
+                                        <i class="fas fa-heart"></i>
+                                    </a>
+                                {% endif %}
+                            </div>
+                            <div class="book-badges">
+                                {% if book.is_free %}
+                                    <span class="badge badge-free">Free</span>
+                                {% endif %}
+                                {% if book.is_new %}
+                                    <span class="badge badge-new">New</span>
+                                {% endif %}
+                                {% if book.is_popular %}
+                                    <span class="badge badge-popular">Popular</span>
+                                {% endif %}
+                            </div>
+                            <div class="book-stats">
+                                <span><i class="far fa-eye"></i> {{ book.views_count|default:0 }}</span>
+                                <span><i class="fas fa-download"></i> {{ book.downloads_count|default:0 }}</span>
+                            </div>
+                        </div>
+                        <div class="book-info">
+                            <h6 class="book-title">{{ book.title|truncatechars:45 }}</h6>
+                            <p class="book-author">by {{ book.author.full_name|default:"Unknown Author" }}</p>
+                            <div class="book-meta">
+                                <span class="book-price {% if book.is_free %}free{% endif %}">
+                                    {% if book.is_free %}
+                                        <i class="fas fa-gift me-1"></i> FREE
+                                    {% else %}
+                                        {{ book.price }} ETB
+                                    {% endif %}
+                                </span>
+                                <div class="book-actions">
+                                    <a href="{% url 'books:detail' book.id %}" class="btn-sm-gold">
+                                        <i class="fas fa-arrow-right"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        
+        <!-- Pagination -->
+        {% if books.has_other_pages %}
+            <nav class="mt-4 mt-md-5">
+                <ul class="pagination justify-content-center">
+                    {% if books.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ books.previous_page_number }}{% if query %}&q={{ query }}{% endif %}{% if selected_genre %}&genre={{ selected_genre }}{% endif %}{% if selected_price %}&price={{ selected_price }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}">
+                                <i class="fas fa-chevron-left"></i>
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link"><i class="fas fa-chevron-left"></i></span>
+                        </li>
+                    {% endif %}
+                    
+                    {% for num in books.paginator.page_range %}
+                        {% if books.number == num %}
+                            <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                        {% elif num > books.number|add:'-3' and num < books.number|add:'3' %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ num }}{% if query %}&q={{ query }}{% endif %}{% if selected_genre %}&genre={{ selected_genre }}{% endif %}{% if selected_price %}&price={{ selected_price }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}">{{ num }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if books.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ books.next_page_number }}{% if query %}&q={{ query }}{% endif %}{% if selected_genre %}&genre={{ selected_genre }}{% endif %}{% if selected_price %}&price={{ selected_price }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}">
+                                <i class="fas fa-chevron-right"></i>
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link"><i class="fas fa-chevron-right"></i></span>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
+        
+    {% else %}
+        <div class="no-results">
+            <i class="fas fa-book-open"></i>
+            <h4>No books found</h4>
+            <p class="text-muted">We couldn't find any books matching your criteria.</p>
+            <a href="{% url 'books:browse' %}" class="btn-gold mt-3">
+                <i class="fas fa-undo-alt me-2"></i> Clear Filters
+            </a>
+        </div>
+    {% endif %}
 </div>
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Auto-submit search on Enter
+        const searchInput = document.getElementById('searchInput');
+        const searchForm = document.getElementById('searchForm');
+        
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                searchForm.submit();
+            }
+        });
+        
+        // Close dropdowns on mobile after selection
+        document.querySelectorAll('.dropdown-item').forEach(function(item) {
+            item.addEventListener('click', function() {
+                var dropdown = this.closest('.dropdown');
+                if (dropdown) {
+                    var toggle = dropdown.querySelector('.dropdown-toggle');
+                    if (toggle) {
+                        var bsDropdown = bootstrap.Dropdown.getInstance(toggle);
+                        if (bsDropdown) {
+                            bsDropdown.hide();
+                        }
+                    }
+                }
+            });
+        });
+        
+        // Show active filters count
+        function updateFilterCount() {
+            var chips = document.querySelectorAll('.filter-chip');
+            var count = chips.length;
+            var filterBar = document.querySelector('.filter-bar');
+            if (count > 0) {
+                if (!document.querySelector('.filter-count-badge')) {
+                    var badge = document.createElement('span');
+                    badge.className = 'badge bg-gold text-dark ms-2 filter-count-badge';
+                    badge.textContent = count;
+                    var resultsInfo = document.querySelector('.results-info');
+                    if (resultsInfo) {
+                        resultsInfo.appendChild(badge);
+                    }
+                } else {
+                    document.querySelector('.filter-count-badge').textContent = count;
+                }
+            } else {
+                var badge = document.querySelector('.filter-count-badge');
+                if (badge) {
+                    badge.remove();
+                }
+            }
+        }
+        
+        updateFilterCount();
+    });
+</script>
+{% endblock %}
 {% endblock %}

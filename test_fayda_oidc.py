@@ -86,14 +86,15 @@ def verify_private_key_pairing(private_key_b64, client_id, token_url):
             )
         ).private_key(default_backend())
         
-        # 3. Generate a test JWT
+        # 3. Generate a test JWT matching Fayda eSignet expectations
         now = datetime.utcnow()
         test_payload = {
             'iss': client_id,
             'sub': client_id,
             'aud': token_url,
-            'iat': int(now.timestamp()),
-            'exp': int((now + timedelta(minutes=1)).timestamp()),
+            'iat': int(now.timestamp()) - 10,  # 10s back clock-skew protection
+            'nbf': int(now.timestamp()) - 10,  # Mandatory for MOSIP
+            'exp': int((now + timedelta(minutes=5)).timestamp()),
             'jti': str(int(time.time() * 1000))
         }
         
@@ -104,21 +105,22 @@ def verify_private_key_pairing(private_key_b64, client_id, token_url):
             encryption_algorithm=serialization.NoEncryption()
         )
         
-        test_jwt = jwt.encode(test_payload, pem, algorithm='RS256')
+        headers = {}
+        if 'kid' in key_data:
+            headers['kid'] = key_data['kid']
+
+        test_jwt = jwt.encode(test_payload, pem, algorithm='RS256', headers=headers)
         
         # 5. Verify the JWT can be decoded with the public key
-        # Extract public key from private key
         public_key = private_key.public_key()
         public_pem = public_key.public_bytes(
             encoding=serialization.Encoding.PEM,
             format=serialization.PublicFormat.SubjectPublicKeyInfo
         )
         
-        # Decode without verification first
         decoded_jwt = jwt.decode(test_jwt, options={"verify_signature": False})
         debug_log(f"Test JWT decoded successfully. Claims: {list(decoded_jwt.keys())}")
         
-        # Try to verify the signature
         try:
             jwt.decode(test_jwt, public_pem, algorithms=['RS256'])
             debug_log("✅ JWT signature verification successful! Private key is valid.")
@@ -133,20 +135,15 @@ def verify_private_key_pairing(private_key_b64, client_id, token_url):
 
 
 def verify_client_id_status(client_id):
-    """
-    Verify if the Client ID is active by checking its format and validity.
-    Note: Full verification requires contacting Fayda's support.
-    """
+    """Verify if the Client ID is active by checking its format and validity."""
     debug_log("=== VERIFYING CLIENT ID STATUS ===")
     
-    # Check client ID format
     if not client_id:
         return False, "Client ID is empty"
     
     if len(client_id) < 20:
         return False, f"Client ID length ({len(client_id)}) is too short"
     
-    # Check for valid characters (alphanumeric, -, _)
     import re
     if not re.match(r'^[a-zA-Z0-9_-]+$', client_id):
         return False, f"Client ID contains invalid characters: {client_id}"
@@ -156,9 +153,7 @@ def verify_client_id_status(client_id):
 
 
 def verify_kid_match(key_data):
-    """
-    Verify the Key ID (kid) is present and formatted correctly.
-    """
+    """Verify the Key ID (kid) is present and formatted correctly."""
     debug_log("=== VERIFYING KEY ID (kid) ===")
     
     kid = key_data.get('kid')
@@ -168,7 +163,6 @@ def verify_kid_match(key_data):
     if len(kid) < 10:
         return False, f"Key ID is too short: {kid}"
     
-    # Check if it's a valid UUID format or similar
     import re
     uuid_pattern = r'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$'
     if not re.match(uuid_pattern, kid, re.IGNORECASE):
@@ -180,9 +174,7 @@ def verify_kid_match(key_data):
 
 
 def verify_credential_compatibility(client_id, private_key_b64):
-    """
-    Comprehensive verification of credentials.
-    """
+    """Comprehensive verification of credentials."""
     debug_log("=== STARTING COMPREHENSIVE CREDENTIAL VERIFICATION ===")
     
     results = {
@@ -192,21 +184,17 @@ def verify_credential_compatibility(client_id, private_key_b64):
         'pairing_status': {'status': False, 'message': ''}
     }
     
-    # 1. Verify Client ID
     client_status, client_msg = verify_client_id_status(client_id)
     results['client_id_status'] = {'status': client_status, 'message': client_msg}
     
-    # 2. Verify Private Key structure
     try:
         decoded = base64.b64decode(private_key_b64)
         key_data = json.loads(decoded.decode('utf-8'))
         results['private_key_status'] = {'status': True, 'message': 'Private key parsed successfully'}
         
-        # 3. Verify KID
         kid_status, kid_msg = verify_kid_match(key_data)
         results['kid_status'] = {'status': kid_status, 'message': kid_msg}
         
-        # 4. Verify Pairing (generate and validate test JWT)
         token_url = config('FAYDA_TOKEN_URL')
         pairing_status, pairing_msg = verify_private_key_pairing(private_key_b64, client_id, token_url)
         results['pairing_status'] = {'status': pairing_status, 'message': pairing_msg}
@@ -214,7 +202,6 @@ def verify_credential_compatibility(client_id, private_key_b64):
     except Exception as e:
         results['private_key_status'] = {'status': False, 'message': f'Failed to parse private key: {str(e)}'}
     
-    # Print summary
     debug_log("\n=== CREDENTIAL VERIFICATION SUMMARY ===")
     for key, value in results.items():
         status_icon = "✅" if value['status'] else "❌"
@@ -224,31 +211,22 @@ def verify_credential_compatibility(client_id, private_key_b64):
 
 
 def get_private_key_from_jwk(private_key_b64):
-    """
-    Convert the Base64 encoded JWK to a PEM private key.
-    This function follows the exact pattern from the official oidc-project.
-    """
+    """Convert the Base64 encoded JWK to a PEM private key."""
     if not private_key_b64:
         logger.error("Private key is empty or None")
         return None
     
     try:
-        # Decode Base64
         decoded = base64.b64decode(private_key_b64)
         key_data = json.loads(decoded.decode('utf-8'))
         
-        # Extract components - these are Base64 URL-safe encoded
         def b64url_to_int(value):
-            # Add padding
             padding = 4 - (len(value) % 4)
             if padding != 4:
                 value += '=' * padding
-            # Replace URL-safe chars
             value = value.replace('-', '+').replace('_', '/')
-            # Decode and convert to int
             return int.from_bytes(base64.b64decode(value), byteorder='big')
         
-        # Reconstruct the private key
         private_key = rsa.RSAPrivateNumbers(
             p=b64url_to_int(key_data['p']),
             q=b64url_to_int(key_data['q']),
@@ -262,7 +240,6 @@ def get_private_key_from_jwk(private_key_b64):
             )
         ).private_key(default_backend())
         
-        # Convert to PEM
         pem = private_key.private_bytes(
             encoding=serialization.Encoding.PEM,
             format=serialization.PrivateFormat.PKCS8,
@@ -278,35 +255,51 @@ def get_private_key_from_jwk(private_key_b64):
 
 def generate_client_assertion(client_id, token_url, private_key_b64):
     """
-    Generate a client assertion JWT for OIDC client authentication.
-    Based on the official oidc-project implementation.
+    Generate a client assertion JWT for Fayda OIDC client authentication.
+    Complies with National-ID-Program-Ethiopia / MOSIP eSignet strict policies.
     """
     try:
+        # Extract the Key ID (kid) from the base64 JWK data
+        decoded = base64.b64decode(private_key_b64)
+        key_data = json.loads(decoded.decode('utf-8'))
+        kid = key_data.get('kid')
+        
         # Get the private key in PEM format
         private_key_pem = get_private_key_from_jwk(private_key_b64)
         if not private_key_pem:
             logger.error("Failed to get private key")
             return None
         
-        # Generate the JWT payload
+        # Generate timestamps with clock skew buffer for UAT alignment
         now = datetime.utcnow()
+        iat_time = int(now.timestamp()) - 10  # 10 second fallback for timing sync
+        exp_time = int((now + timedelta(minutes=5)).timestamp())
+        
+        # Strict Fayda / MOSIP payload configuration
         payload = {
             'iss': client_id,
             'sub': client_id,
-            'aud': token_url,
-            'iat': int(now.timestamp()),
-            'exp': int((now + timedelta(minutes=5)).timestamp()),
+            'aud': token_url,      # Must match token endpoint
+            'iat': iat_time,
+            'nbf': iat_time,       # Mandatory for eSignet
+            'exp': exp_time,
             'jti': str(int(time.time() * 1000))
         }
         
-        # Encode the JWT with RS256
+        # Set up header parameters including the mandatory 'kid'
+        headers = {}
+        if kid:
+            headers['kid'] = kid
+        
+        # Encode the JWT with RS256 algorithm
         client_assertion = jwt.encode(
             payload,
             private_key_pem,
-            algorithm='RS256'
+            algorithm='RS256',
+            headers=headers
         )
         
-        logger.info(f"Client assertion generated successfully")
+        logger.info(f"Client assertion generated successfully with kid: {kid}")
         return client_assertion
         
     except Exception as e:
@@ -400,7 +393,6 @@ def register_author(request):
     if request.user.is_authenticated:
         return redirect('accounts:dashboard')
     
-    # Check if we have verified data from session (set by callback)
     verified_data = request.session.pop('fayda_verified_data', None)
     
     if request.method == 'POST':
@@ -415,7 +407,6 @@ def register_author(request):
     else:
         form = AuthorRegistrationForm()
         if verified_data:
-            # Pre-populate the form with verified data
             form.initial = {
                 'full_name': verified_data.get('full_name', ''),
                 'national_id': verified_data.get('national_id', ''),
@@ -431,27 +422,20 @@ def register_author(request):
 
 @csrf_exempt
 def oidc_callback_view(request):
-    """
-    Handle OIDC callback from Fayda.
-    This view receives the authorization code from Fayda after authentication.
-    """
-    # Get parameters from the URL
+    """Handle OIDC callback from Fayda."""
     code = request.GET.get('code')
     state = request.GET.get('state')
     error = request.GET.get('error')
     error_description = request.GET.get('error_description')
     
-    # Check for errors from Fayda
     if error:
         messages.error(request, f'Fayda authentication error: {error_description or error}')
         return redirect('accounts:register_author')
     
-    # Validate required parameters
     if not code or not state:
         messages.error(request, 'Missing authorization code or state parameter.')
         return redirect('accounts:register_author')
     
-    # Verify state matches session (CSRF protection)
     session_state = request.session.get('fayda_state')
     if state != session_state:
         logger.warning(f"OIDC state mismatch: received {state}, expected {session_state}")
@@ -459,7 +443,6 @@ def oidc_callback_view(request):
         return redirect('accounts:register_author')
     
     try:
-        # Get OIDC configuration from environment (UAT)
         client_id = config('FAYDA_CLIENT_ID')
         token_url = config('FAYDA_TOKEN_URL')
         userinfo_url = config('FAYDA_USERINFO_URL')
@@ -467,22 +450,14 @@ def oidc_callback_view(request):
         private_key_b64 = config('FAYDA_PRIVATE_KEY_B64')
         
         debug_log(f"=== Starting OIDC Callback Processing ===")
-        debug_log(f"Client ID: {client_id[:10] if client_id else 'None'}...")
-        debug_log(f"Token URL: {token_url}")
-        debug_log(f"Redirect URI: {redirect_uri}")
         
-        # Run credential verification
-        debug_log("\n--- Running Credential Verification ---")
         verification_results = verify_credential_compatibility(client_id, private_key_b64)
-        
-        # Log verification results
         all_verified = all([v['status'] for v in verification_results.values()])
         if all_verified:
             debug_log("✅ All credential checks passed!")
         else:
             debug_log("⚠️ Some credential checks failed. Please review the logs above.", level='warning')
         
-        # Generate client assertion JWT
         client_assertion = generate_client_assertion(client_id, token_url, private_key_b64)
         
         if not client_assertion:
@@ -490,9 +465,6 @@ def oidc_callback_view(request):
             messages.error(request, 'Failed to generate authentication token. Please contact support.')
             return redirect('accounts:register_author')
         
-        debug_log("Client assertion generated successfully")
-        
-        # Step 1: Exchange code for access token using client assertion
         token_data = {
             'grant_type': 'authorization_code',
             'code': code,
@@ -501,8 +473,6 @@ def oidc_callback_view(request):
             'client_assertion': client_assertion,
             'redirect_uri': redirect_uri
         }
-        
-        debug_log(f"Sending token exchange request to: {token_url}")
         
         token_response = requests.post(
             token_url,
@@ -513,48 +483,23 @@ def oidc_callback_view(request):
             timeout=30
         )
         
-        debug_log(f"Token response status: {token_response.status_code}")
-        
         if not token_response.ok:
-            debug_log(f"Token exchange failed: {token_response.status_code}", level='error')
-            debug_log(f"Response: {token_response.text}", level='error')
-            
-            # Try to parse the error for better message
+            error_msg = token_response.text
             try:
                 error_data = token_response.json()
                 error_msg = error_data.get('error_description', error_data.get('error', 'Unknown error'))
-                debug_log(f"Error details: {error_data}", level='error')
-                
-                # Provide specific guidance based on error
-                if 'invalid_assertion' in str(error_data):
-                    debug_log("\n=== TROUBLESHOOTING GUIDE ===", level='warning')
-                    debug_log("The 'invalid_assertion' error indicates your credentials are not being accepted.", level='warning')
-                    debug_log("Please contact Fayda Support with:", level='warning')
-                    debug_log(f"  1. Client ID: {client_id}", level='warning')
-                    debug_log("  2. The error: invalid_assertion", level='warning')
-                    debug_log("  3. Ask them to verify:", level='warning')
-                    debug_log("     - The private key is correctly paired with this Client ID", level='warning')
-                    debug_log("     - The correct 'kid' for this key", level='warning')
-                    debug_log("     - If the Client ID is active for the UAT environment", level='warning')
-                    
             except:
                 pass
             
-            messages.error(request, f'Token exchange failed: {error_msg if "error_msg" in locals() else token_response.status_code}')
+            messages.error(request, f'Token exchange failed: {error_msg}')
             return redirect('accounts:register_author')
         
         token_response_data = token_response.json()
         access_token = token_response_data.get('access_token')
         
         if not access_token:
-            debug_log(f"No access token received: {token_response_data}", level='error')
             messages.error(request, 'No access token received from Fayda.')
             return redirect('accounts:register_author')
-        
-        debug_log("Access token received successfully")
-        
-        # Step 2: Get user information using access token
-        debug_log(f"Fetching userinfo from: {userinfo_url}")
         
         userinfo_response = requests.get(
             userinfo_url,
@@ -566,15 +511,11 @@ def oidc_callback_view(request):
         )
         
         if not userinfo_response.ok:
-            debug_log(f"Userinfo request failed: {userinfo_response.status_code}", level='error')
-            debug_log(f"Response: {userinfo_response.text}", level='error')
             messages.error(request, 'Failed to retrieve user information from Fayda.')
             return redirect('accounts:register_author')
         
         userinfo = userinfo_response.json()
-        debug_log(f"Userinfo received successfully")
         
-        # Step 3: Map userinfo to our format
         user_data = {
             'full_name': userinfo.get('name', userinfo.get('full_name', '')),
             'date_of_birth': userinfo.get('birthdate', userinfo.get('date_of_birth', '')),
@@ -586,18 +527,12 @@ def oidc_callback_view(request):
             'national_id': request.session.get('fayda_national_id', '')
         }
         
-        # Validate that we got the required data
         if not user_data['full_name']:
-            debug_log(f"Missing full_name in userinfo: {userinfo}", level='error')
             messages.error(request, 'Could not retrieve full name from Fayda.')
             return redirect('accounts:register_author')
         
-        debug_log(f"OIDC callback successful for user: {user_data['full_name']}")
-        
-        # Store verified data in session for the registration form
         request.session['fayda_verified_data'] = user_data
         
-        # Clear session data
         request.session.pop('fayda_state', None)
         request.session.pop('fayda_national_id', None)
         request.session.pop('fayda_nonce', None)
@@ -606,15 +541,10 @@ def oidc_callback_view(request):
         return redirect('accounts:register_author')
         
     except requests.exceptions.Timeout:
-        debug_log("Fayda service timeout", level='error')
         messages.error(request, 'Fayda service timeout. Please try again.')
     except requests.exceptions.ConnectionError:
-        debug_log("Could not connect to Fayda service", level='error')
         messages.error(request, 'Could not connect to Fayda service. Please try again later.')
     except Exception as e:
-        debug_log(f"Callback processing error: {str(e)}", level='error')
-        import traceback
-        traceback.print_exc()
         messages.error(request, f'Authentication failed: {str(e)}')
     
     return redirect('accounts:register_author')
@@ -622,69 +552,41 @@ def oidc_callback_view(request):
 
 @csrf_exempt
 def oidc_initiate(request):
-    """
-    Initiate OIDC flow with Fayda eSignet using UAT credentials.
-    This endpoint generates the authorization URL for redirecting to Fayda.
-    """
+    """Initiate OIDC flow with Fayda eSignet using UAT credentials."""
     if request.method != 'POST':
-        return JsonResponse({
-            'success': False,
-            'message': 'Method not allowed. Use POST.'
-        }, status=405)
+        return JsonResponse({'success': False, 'message': 'Method not allowed. Use POST.'}, status=405)
     
     try:
-        # Parse the request body
         try:
             data = json.loads(request.body)
         except json.JSONDecodeError:
-            return JsonResponse({
-                'success': False,
-                'message': 'Invalid JSON payload.'
-            }, status=400)
+            return JsonResponse({'success': False, 'message': 'Invalid JSON payload.'}, status=400)
         
         national_id = data.get('national_id')
         state = data.get('state')
         nonce = data.get('nonce')
         
-        # Validate national ID format
         if not national_id:
-            return JsonResponse({
-                'success': False,
-                'message': 'National ID is required.'
-            }, status=400)
+            return JsonResponse({'success': False, 'message': 'National ID is required.'}, status=400)
         
         national_id_clean = national_id.replace('-', '').replace(' ', '')
         if len(national_id_clean) != 16 or not national_id_clean.isdigit():
-            return JsonResponse({
-                'success': False,
-                'message': 'Invalid National ID format. Must be 16 digits.'
-            }, status=400)
+            return JsonResponse({'success': False, 'message': 'Invalid National ID format. Must be 16 digits.'}, status=400)
         
-        # Validate state
         if not state or len(state) < 10:
-            return JsonResponse({
-                'success': False,
-                'message': 'Invalid state parameter.'
-            }, status=400)
+            return JsonResponse({'success': False, 'message': 'Invalid state parameter.'}, status=400)
         
-        # Validate nonce
         if not nonce or len(nonce) < 10:
-            return JsonResponse({
-                'success': False,
-                'message': 'Invalid nonce parameter.'
-            }, status=400)
+            return JsonResponse({'success': False, 'message': 'Invalid nonce parameter.'}, status=400)
         
-        # Get OIDC configuration from environment (UAT)
         client_id = config('FAYDA_CLIENT_ID')
         auth_url = config('FAYDA_AUTH_URL')
         redirect_uri = config('FAYDA_REDIRECT_URI')
         
-        # Store in session for callback verification
         request.session['fayda_national_id'] = national_id_clean
         request.session['fayda_state'] = state
         request.session['fayda_nonce'] = nonce
         
-        # Build the authorization URL with all required parameters
         authorization_url = (
             f"{auth_url}"
             f"?response_type=code"
@@ -695,8 +597,6 @@ def oidc_initiate(request):
             f"&scope=openid profile eKYC"
         )
         
-        debug_log(f"OIDC initiated for national_id: {national_id_clean[:4] if national_id_clean else 'None'}****")
-        
         return JsonResponse({
             'success': True,
             'authorization_url': authorization_url,
@@ -704,71 +604,42 @@ def oidc_initiate(request):
         })
         
     except Exception as e:
-        debug_log(f"OIDC initiate error: {str(e)}", level='error')
-        return JsonResponse({
-            'success': False,
-            'message': f'An error occurred: {str(e)}'
-        }, status=500)
+        return JsonResponse({'success': False, 'message': f'An error occurred: {str(e)}'}, status=500)
 
 
 @csrf_exempt
 def oidc_callback(request):
-    """
-    Handle OIDC callback from Fayda using UAT credentials.
-    Exchanges the authorization code for user information.
-    This is the API endpoint called by the frontend JavaScript.
-    """
+    """Handle OIDC callback from Fayda using UAT credentials via JSON endpoint."""
     if request.method != 'POST':
-        return JsonResponse({
-            'success': False,
-            'message': 'Method not allowed. Use POST.'
-        }, status=405)
+        return JsonResponse({'success': False, 'message': 'Method not allowed. Use POST.'}, status=405)
     
     try:
-        # Parse the request body
         try:
             data = json.loads(request.body)
         except json.JSONDecodeError:
-            return JsonResponse({
-                'success': False,
-                'message': 'Invalid JSON payload.'
-            }, status=400)
+            return JsonResponse({'success': False, 'message': 'Invalid JSON payload.'}, status=400)
         
         code = data.get('code')
         state = data.get('state')
         
         if not code or not state:
-            return JsonResponse({
-                'success': False,
-                'message': 'Missing code or state parameter.'
-            }, status=400)
+            return JsonResponse({'success': False, 'message': 'Missing code or state parameter.'}, status=400)
         
-        # Verify state matches session (CSRF protection)
         session_state = request.session.get('fayda_state')
         if state != session_state:
-            debug_log(f"OIDC state mismatch: received {state}, expected {session_state}", level='error')
-            return JsonResponse({
-                'success': False,
-                'message': 'Invalid state parameter. Possible CSRF attack.'
-            }, status=400)
+            return JsonResponse({'success': False, 'message': 'Invalid state parameter. Possible CSRF attack.'}, status=400)
         
-        # Get OIDC configuration from environment (UAT)
         client_id = config('FAYDA_CLIENT_ID')
         token_url = config('FAYDA_TOKEN_URL')
         userinfo_url = config('FAYDA_USERINFO_URL')
         redirect_uri = config('FAYDA_REDIRECT_URI')
         private_key_b64 = config('FAYDA_PRIVATE_KEY_B64')
         
-        # Generate client assertion
         client_assertion = generate_client_assertion(client_id, token_url, private_key_b64)
         
         if not client_assertion:
-            return JsonResponse({
-                'success': False,
-                'message': 'Failed to generate client assertion.'
-            }, status=500)
+            return JsonResponse({'success': False, 'message': 'Failed to generate client assertion.'}, status=500)
         
-        # Step 1: Exchange code for access token using client assertion
         token_response = requests.post(
             token_url,
             data={
@@ -786,22 +657,14 @@ def oidc_callback(request):
         )
         
         if not token_response.ok:
-            debug_log(f"Token exchange failed: {token_response.status_code} - {token_response.text}", level='error')
-            return JsonResponse({
-                'success': False,
-                'message': 'Failed to exchange authorization code. Please try again.'
-            }, status=400)
+            return JsonResponse({'success': False, 'message': 'Failed to exchange authorization code. Please try again.'}, status=400)
         
         token_data = token_response.json()
         access_token = token_data.get('access_token')
         
         if not access_token:
-            return JsonResponse({
-                'success': False,
-                'message': 'No access token received from Fayda.'
-            }, status=400)
+            return JsonResponse({'success': False, 'message': 'No access token received from Fayda.'}, status=400)
         
-        # Step 2: Get user information using access token
         userinfo_response = requests.get(
             userinfo_url,
             headers={
@@ -812,15 +675,10 @@ def oidc_callback(request):
         )
         
         if not userinfo_response.ok:
-            debug_log(f"Userinfo request failed: {userinfo_response.status_code} - {userinfo_response.text}", level='error')
-            return JsonResponse({
-                'success': False,
-                'message': 'Failed to retrieve user information from Fayda.'
-            }, status=400)
+            return JsonResponse({'success': False, 'message': 'Failed to retrieve user information from Fayda.'}, status=400)
         
         userinfo = userinfo_response.json()
         
-        # Step 3: Map userinfo to our format
         user_data = {
             'full_name': userinfo.get('name', userinfo.get('full_name', '')),
             'date_of_birth': userinfo.get('birthdate', userinfo.get('date_of_birth', '')),
@@ -831,16 +689,9 @@ def oidc_callback(request):
             'address': userinfo.get('address', '')
         }
         
-        # Validate that we got the required data
         if not user_data['full_name']:
-            return JsonResponse({
-                'success': False,
-                'message': 'Could not retrieve full name from Fayda.'
-            }, status=400)
+            return JsonResponse({'success': False, 'message': 'Could not retrieve full name from Fayda.'}, status=400)
         
-        debug_log(f"OIDC callback successful for user: {user_data['full_name']}")
-        
-        # Clear session data
         request.session.pop('fayda_state', None)
         request.session.pop('fayda_national_id', None)
         request.session.pop('fayda_nonce', None)
@@ -852,44 +703,28 @@ def oidc_callback(request):
         })
         
     except requests.exceptions.Timeout:
-        return JsonResponse({
-            'success': False,
-            'message': 'Fayda service timeout. Please try again.'
-        }, status=503)
+        return JsonResponse({'success': False, 'message': 'Fayda service timeout. Please try again.'}, status=503)
     except requests.exceptions.ConnectionError:
-        return JsonResponse({
-            'success': False,
-            'message': 'Could not connect to Fayda service. Please try again later.'
-        }, status=503)
+        return JsonResponse({'success': False, 'message': 'Could not connect to Fayda service. Please try again later.'}, status=503)
     except Exception as e:
-        debug_log(f"OIDC callback error: {str(e)}", level='error')
-        return JsonResponse({
-            'success': False,
-            'message': f'An error occurred: {str(e)}'
-        }, status=500)
+        return JsonResponse({'success': False, 'message': f'An error occurred: {str(e)}'}, status=500)
 
 
 @login_required
 def dashboard_redirect(request):
-    """Redirect users to their respective dashboards based on role"""
     return redirect(role_based_redirect(request.user))
 
 
 @login_required
 def admin_dashboard(request):
-    """
-    Admin dashboard view with comprehensive analytics and payment data.
-    """
     if request.user.role != 'admin':
         messages.error(request, 'You do not have permission to access this page.')
         return redirect('accounts:dashboard')
     
-    # Date ranges for analytics
     today = timezone.now().date()
     week_start = today - timedelta(days=7)
     month_start = today.replace(day=1)
     
-    # Initialize payment data with defaults
     telebirr_sales = 0
     cbe_sales = 0
     total_sales = 0
@@ -898,10 +733,8 @@ def admin_dashboard(request):
     month_sales = 0
     monthly_sales = 0
     
-    # Try to import payment models and get real data
     try:
         from payments.models import Purchase, PaymentTransaction
-        
         completed_purchases = Purchase.objects.filter(status='completed')
         
         def sum_amount(qs):
@@ -909,37 +742,18 @@ def admin_dashboard(request):
             return result if result is not None else 0
         
         total_sales = sum_amount(completed_purchases)
-        
-        today_purchases = completed_purchases.filter(created_at__date=today)
-        today_sales = sum_amount(today_purchases)
-        
-        week_purchases = completed_purchases.filter(
-            created_at__date__gte=week_start,
-            created_at__date__lte=today
-        )
-        week_sales = sum_amount(week_purchases)
-        
-        month_purchases = completed_purchases.filter(
-            created_at__date__gte=month_start,
-            created_at__date__lte=today
-        )
-        month_sales = sum_amount(month_purchases)
+        today_sales = sum_amount(completed_purchases.filter(created_at__date=today))
+        week_sales = sum_amount(completed_purchases.filter(created_at__date__gte=week_start, created_at__date__lte=today))
+        month_sales = sum_amount(completed_purchases.filter(created_at__date__gte=month_start, created_at__date__lte=today))
         monthly_sales = month_sales
         
         if hasattr(Purchase, 'payment_method'):
-            telebirr_purchases = completed_purchases.filter(payment_method__icontains='telebirr')
-            telebirr_sales = sum_amount(telebirr_purchases)
-            
-            cbe_purchases = completed_purchases.filter(
-                Q(payment_method__icontains='cbe') | Q(payment_method__icontains='cbe_birr')
-            )
-            cbe_sales = sum_amount(cbe_purchases)
+            telebirr_sales = sum_amount(completed_purchases.filter(payment_method__icontains='telebirr'))
+            cbe_sales = sum_amount(completed_purchases.filter(Q(payment_method__icontains='cbe') | Q(payment_method__icontains='cbe_birr')))
         elif hasattr(PaymentTransaction, 'payment_method'):
             completed_transactions = PaymentTransaction.objects.filter(status='completed')
             telebirr_sales = sum_amount(completed_transactions.filter(payment_method__icontains='telebirr'))
-            cbe_sales = sum_amount(completed_transactions.filter(
-                Q(payment_method__icontains='cbe') | Q(payment_method__icontains='cbe_birr')
-            ))
+            cbe_sales = sum_amount(completed_transactions.filter(Q(payment_method__icontains='cbe') | Q(payment_method__icontains='cbe_birr')))
     except ImportError:
         pass
     except Exception as e:
@@ -968,13 +782,11 @@ def admin_dashboard(request):
 
 @login_required
 def author_dashboard(request):
-    """Author dashboard view"""
     if request.user.role != 'author':
         messages.error(request, 'You do not have permission to access this page.')
         return redirect('accounts:dashboard')
     
     books = Book.objects.filter(author=request.user)
-    
     context = {
         'user': request.user,
         'total_books': books.count(),
@@ -992,62 +804,39 @@ def author_dashboard(request):
 
 @login_required
 def checker_dashboard(request):
-    """Checker dashboard view - Review and validate book submissions"""
     if request.user.role != 'checker':
         messages.error(request, 'You do not have permission to access this page.')
         return redirect('accounts:dashboard')
     
     pending_books = Book.objects.filter(status='pending_review').order_by('created_at')
-    
-    reviewed_books = QualityReview.objects.filter(
-        reviewer=request.user, 
-        review_type='checker'
-    ).select_related('book', 'book__author').order_by('-created_at')[:20]
-    
-    total_pending = pending_books.count()
-    total_reviewed = reviewed_books.count()
-    avg_score = reviewed_books.aggregate(avg=Avg('overall_score'))['avg'] or 0
-    
-    current_month = timezone.now().month
-    current_year = timezone.now().year
-    reviewed_this_month = QualityReview.objects.filter(
-        reviewer=request.user,
-        review_type='checker',
-        created_at__year=current_year,
-        created_at__month=current_month
-    ).count()
-    
-    scoring_criteria = {
-        'excellent': {'min': 9, 'max': 10, 'label': 'Excellent', 'description': 'Exceptional quality, ready for publication with no issues'},
-        'good': {'min': 7, 'max': 8, 'label': 'Good', 'description': 'Good quality, minor improvements recommended'},
-        'average': {'min': 5, 'max': 6, 'label': 'Average', 'description': 'Acceptable but needs significant improvements'},
-        'below_average': {'min': 3, 'max': 4, 'label': 'Below Average', 'description': 'Major issues, needs substantial revision'},
-        'poor': {'min': 0, 'max': 2, 'label': 'Poor', 'description': 'Unacceptable quality, recommend rejection'},
-    }
-    
-    recommendation_guide = {
-        'approved': {'min_score': 7.0, 'label': '✅ Pass to Maker', 'description': 'Score ≥ 7.0, meets all quality standards'},
-        'needs_revision': {'min_score': 5.0, 'max_score': 6.9, 'label': '🔄 Request Revision', 'description': 'Score 5.0-6.9, needs improvements but has potential'},
-        'rejected': {'max_score': 4.9, 'label': '❌ Reject', 'description': 'Score < 5.0, serious quality issues or guideline violations'},
-    }
+    reviewed_books = QualityReview.objects.filter(reviewer=request.user, review_type='checker').select_related('book', 'book__author').order_by('-created_at')[:20]
     
     context = {
         'user': request.user,
         'pending_books': pending_books,
         'reviewed_books': reviewed_books,
-        'total_pending': total_pending,
-        'total_reviewed': total_reviewed,
-        'avg_score': avg_score,
-        'reviewed_this_month': reviewed_this_month,
-        'scoring_criteria': scoring_criteria,
-        'recommendation_guide': recommendation_guide,
+        'total_pending': pending_books.count(),
+        'total_reviewed': reviewed_books.count(),
+        'avg_score': reviewed_books.aggregate(avg=Avg('overall_score'))['avg'] or 0,
+        'reviewed_this_month': QualityReview.objects.filter(reviewer=request.user, review_type='checker', created_at__year=timezone.now().year, created_at__month=timezone.now().month).count(),
+        'scoring_criteria': {
+            'excellent': {'min': 9, 'max': 10, 'label': 'Excellent', 'description': 'Exceptional quality'},
+            'good': {'min': 7, 'max': 8, 'label': 'Good', 'description': 'Good quality'},
+            'average': {'min': 5, 'max': 6, 'label': 'Average', 'description': 'Acceptable'},
+            'below_average': {'min': 3, 'max': 4, 'label': 'Below Average', 'description': 'Major issues'},
+            'poor': {'min': 0, 'max': 2, 'label': 'Poor', 'description': 'Unacceptable'},
+        },
+        'recommendation_guide': {
+            'approved': {'min_score': 7.0, 'label': '✅ Pass to Maker', 'description': 'Score ≥ 7.0'},
+            'needs_revision': {'min_score': 5.0, 'max_score': 6.9, 'label': '🔄 Request Revision', 'description': 'Score 5.0-6.9'},
+            'rejected': {'max_score': 4.9, 'label': '❌ Reject', 'description': 'Score < 5.0'},
+        }
     }
     return render(request, 'dashboard/checker_dashboard.html', context)
 
 
 @login_required
 def process_checker_review(request):
-    """Process the checker's review submission"""
     if request.user.role != 'checker':
         messages.error(request, 'You do not have permission to perform this action.')
         return redirect('accounts:dashboard')
@@ -1068,129 +857,89 @@ def process_checker_review(request):
         
         try:
             book = Book.objects.get(id=book_id)
-            
             scores = [
-                float(content_quality),
-                float(editorial_quality),
-                float(technical_quality),
+                float(content_quality), float(editorial_quality), float(technical_quality),
                 float(copyright_compliance) if copyright_compliance else 0,
                 float(community_guidelines) if community_guidelines else 0,
             ]
             overall_score = sum(scores) / len(scores)
             
-            if recommendation == 'approved':
-                book.status = 'checker_approved'
-            elif recommendation == 'needs_revision':
-                book.status = 'needs_revision'
-            else:
-                book.status = 'rejected'
-            
+            book.status = 'checker_approved' if recommendation == 'approved' else ('needs_revision' if recommendation == 'needs_revision' else 'rejected')
             book.checker_reviewed_at = timezone.now()
             book.save()
             
             quality_review, created = QualityReview.objects.update_or_create(
-                book=book,
-                reviewer=request.user,
-                review_type='checker',
+                book=book, reviewer=request.user, review_type='checker',
                 defaults={
-                    'content_quality': float(content_quality),
-                    'editorial_quality': float(editorial_quality),
-                    'technical_quality': float(technical_quality),
-                    'overall_score': round(overall_score, 1),
-                    'comments': comments,
-                    'recommendation': recommendation,
-                    'updated_at': timezone.now(),
+                    'content_quality': float(content_quality), 'editorial_quality': float(editorial_quality),
+                    'technical_quality': float(technical_quality), 'overall_score': round(overall_score, 1),
+                    'comments': comments, 'recommendation': recommendation, 'updated_at': timezone.now(),
                 }
             )
-            
             if created:
                 quality_review.created_at = timezone.now()
                 quality_review.save()
             
             messages.success(request, f'Review for "{book.title}" submitted successfully!')
-            
         except Book.DoesNotExist:
             messages.error(request, 'Book not found.')
         except Exception as e:
             messages.error(request, f'An error occurred: {str(e)}')
-    
+            
     return redirect('accounts:checker_dashboard')
 
 
 @login_required
 def view_book_for_review(request, book_id):
-    """View book details for review"""
     if request.user.role != 'checker':
         messages.error(request, 'You do not have permission to access this page.')
         return redirect('accounts:dashboard')
     
     book = get_object_or_404(Book, id=book_id, status='pending_review')
-    
-    context = {
-        'user': request.user,
-        'book': book,
-    }
-    return render(request, 'reviews/review_book.html', context)
+    return render(request, 'reviews/review_book.html', {'user': request.user, 'book': book})
 
 
 @login_required
 def maker_dashboard(request):
-    """Maker dashboard view"""
     if request.user.role != 'maker':
         messages.error(request, 'You do not have permission to access this page.')
         return redirect('accounts:dashboard')
     
     pending_books = Book.objects.filter(status='checker_approved').order_by('checker_reviewed_at')
-    
-    published_books = Book.objects.filter(
-        status='published',
-        published_at__month=timezone.now().month
-    ).order_by('-published_at')[:10]
-    
-    pending_count = pending_books.count()
-    approved_count = Book.objects.filter(status='published', published_at__month=timezone.now().month).count()
-    total_published = Book.objects.filter(status='published').count()
+    published_books = Book.objects.filter(status='published', published_at__month=timezone.now().month).order_by('-published_at')[:10]
     
     context = {
         'user': request.user,
         'pending_books': pending_books,
         'published_books': published_books,
-        'pending_count': pending_count,
-        'approved_count': approved_count,
-        'published_count': approved_count,
-        'total_published': total_published,
+        'pending_count': pending_books.count(),
+        'approved_count': Book.objects.filter(status='published', published_at__month=timezone.now().month).count(),
+        'published_count': Book.objects.filter(status='published', published_at__month=timezone.now().month).count(),
+        'total_published': Book.objects.filter(status='published').count(),
     }
     return render(request, 'dashboard/maker_dashboard.html', context)
 
 
 @login_required
 def publish_book(request, book_id):
-    """Publish a book (Maker action)"""
     if request.user.role != 'maker':
         messages.error(request, 'You do not have permission to perform this action.')
         return redirect('accounts:dashboard')
     
     book = get_object_or_404(Book, id=book_id, status='checker_approved')
-    
     if request.method == 'POST':
         book.status = 'published'
         book.published_at = timezone.now()
         book.maker_approved_at = timezone.now()
         book.save()
-        
         messages.success(request, f'Book "{book.title}" has been published successfully!')
         return redirect('accounts:maker_dashboard')
-    
-    context = {
-        'user': request.user,
-        'book': book,
-    }
-    return render(request, 'books/publish_confirm.html', context)
+        
+    return render(request, 'books/publish_confirm.html', {'user': request.user, 'book': book})
 
 
 @login_required
 def client_dashboard(request):
-    """Client dashboard view"""
     if request.user.role != 'client':
         messages.error(request, 'You do not have permission to access this page.')
         return redirect('accounts:dashboard')
@@ -1199,7 +948,6 @@ def client_dashboard(request):
     from books.models import Wishlist
     
     purchases = Purchase.objects.filter(client=request.user, status='completed')
-    
     context = {
         'user': request.user,
         'purchases_count': purchases.count(),
@@ -1212,13 +960,11 @@ def client_dashboard(request):
 
 @login_required
 def profile_view(request):
-    """User profile view"""
     return render(request, 'accounts/profile.html', {'user': request.user})
 
 
 @login_required
 def profile_edit(request):
-    """Edit user profile"""
     if request.method == 'POST':
         user = request.user
         user.full_name = request.POST.get('full_name', user.full_name)
@@ -1227,12 +973,10 @@ def profile_edit(request):
         user.region = request.POST.get('region', user.region)
         user.zone = request.POST.get('zone', user.zone)
         user.woreda = request.POST.get('woreda', user.woreda)
-        
         if request.FILES.get('profile_image'):
             user.profile_image = request.FILES['profile_image']
-        
         user.save()
         messages.success(request, 'Profile updated successfully!')
         return redirect('accounts:profile')
-    
+        
     return render(request, 'accounts/profile_edit.html', {'user': request.user})
