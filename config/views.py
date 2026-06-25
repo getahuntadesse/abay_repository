@@ -6,6 +6,9 @@ from django.db.models import Sum, Count, Q, Avg
 from django.utils import timezone
 from datetime import timedelta
 import logging
+import os
+import re
+from django.conf import settings
 
 # Set up logger
 logger = logging.getLogger(__name__)
@@ -293,6 +296,104 @@ def admin_analytics(request):
         return JsonResponse({
             'success': False,
             'error': str(e)
+        }, status=500)
+
+
+@staff_member_required
+def admin_logs(request):
+    """
+    API endpoint to fetch system logs for the admin dashboard.
+    Returns the last 200 lines of the log file with parsed timestamps and levels.
+    """
+    log_file = settings.BASE_DIR / 'logs/abay_repository.log'
+    
+    if not log_file.exists():
+        return JsonResponse({
+            'success': True,
+            'logs': [],
+            'message': 'No log file found',
+            'count': 0
+        })
+    
+    try:
+        with open(log_file, 'r', encoding='utf-8') as f:
+            lines = f.readlines()
+        
+        logs = []
+        # Parse log format: [timestamp] LEVEL message
+        # Example: [2024-01-01 12:00:00.123] INFO This is a log message
+        log_pattern = re.compile(r'\[(.*?)\]\s+(\w+)\s+(.*)')
+        
+        # Get the last 200 lines
+        last_lines = lines[-200:] if len(lines) > 200 else lines
+        
+        for line in last_lines:
+            line = line.strip()
+            if not line:
+                continue
+            
+            match = log_pattern.match(line)
+            if match:
+                timestamp_str, level, message = match.groups()
+                try:
+                    # Try to parse with milliseconds
+                    timestamp = datetime.strptime(timestamp_str, '%Y-%m-%d %H:%M:%S.%f')
+                    logs.append({
+                        'timestamp': timestamp.isoformat(),
+                        'level': level,
+                        'message': message
+                    })
+                except ValueError:
+                    try:
+                        # Try without milliseconds
+                        timestamp = datetime.strptime(timestamp_str, '%Y-%m-%d %H:%M:%S')
+                        logs.append({
+                            'timestamp': timestamp.isoformat(),
+                            'level': level,
+                            'message': message
+                        })
+                    except ValueError:
+                        # If parsing fails, use current time
+                        logs.append({
+                            'timestamp': timezone.now().isoformat(),
+                            'level': level,
+                            'message': line
+                        })
+            else:
+                # Fallback for lines without standard format
+                # Try to detect level from common patterns
+                level = 'INFO'
+                if 'ERROR' in line.upper() or 'EXCEPTION' in line.upper():
+                    level = 'ERROR'
+                elif 'WARNING' in line.upper() or 'WARN' in line.upper():
+                    level = 'WARNING'
+                elif 'DEBUG' in line.upper():
+                    level = 'DEBUG'
+                elif 'CRITICAL' in line.upper():
+                    level = 'CRITICAL'
+                
+                logs.append({
+                    'timestamp': timezone.now().isoformat(),
+                    'level': level,
+                    'message': line
+                })
+        
+        # Return logs in reverse order (newest first)
+        logs.reverse()
+        
+        return JsonResponse({
+            'success': True,
+            'logs': logs,
+            'count': len(logs)
+        })
+        
+    except Exception as e:
+        logger.error(f"Error reading log file: {str(e)}")
+        return JsonResponse({
+            'success': False,
+            'message': str(e),
+            'logs': [],
+            'count': 0
         }, status=500)
 
 

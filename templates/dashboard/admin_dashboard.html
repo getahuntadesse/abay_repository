@@ -258,58 +258,207 @@
     .legend-color.telebirr { background: linear-gradient(135deg, #17a2b8, #138496); }
     .legend-color.cbe { background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark)); }
 
-    .activity-item {
-        padding: 0.75rem 0;
-        border-bottom: 1px solid #f1f3f5;
+    /* Log Viewer Styles */
+    .log-container {
+        max-height: 400px;
+        overflow-y: auto;
+        background: #1a1a1a;
+        border-radius: 12px;
+        padding: 1rem;
+        font-family: 'Courier New', monospace;
+        font-size: 0.8rem;
+        position: relative;
+    }
+
+    .log-container::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .log-container::-webkit-scrollbar-track {
+        background: #2a2a2a;
+        border-radius: 3px;
+    }
+
+    .log-container::-webkit-scrollbar-thumb {
+        background: var(--primary-gold);
+        border-radius: 3px;
+    }
+
+    .log-entry {
+        padding: 0.25rem 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.03);
         display: flex;
-        align-items: center;
-        gap: 1rem;
+        gap: 0.75rem;
+        align-items: flex-start;
+        color: #d4d4d4;
+        line-height: 1.4;
     }
 
-    .activity-item:last-child {
-        border-bottom: none;
+    .log-entry:hover {
+        background: rgba(255, 255, 255, 0.02);
     }
 
-    .activity-icon {
-        width: 36px;
-        height: 36px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-        font-size: 0.875rem;
+    .log-timestamp {
+        color: var(--primary-gold);
+        font-weight: 600;
+        white-space: nowrap;
+        min-width: 140px;
+        font-size: 0.7rem;
     }
 
-    .activity-content {
-        flex: 1;
-    }
-
-    .activity-content .title {
-        font-weight: 500;
-        color: var(--primary-dark);
-        margin-bottom: 0.125rem;
-    }
-
-    .activity-content .time {
-        font-size: 0.75rem;
-        color: var(--primary-gray-light);
-    }
-
-    .empty-state {
+    .log-level {
+        font-weight: 700;
+        padding: 0.1rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.65rem;
+        text-transform: uppercase;
+        min-width: 60px;
         text-align: center;
-        padding: 2rem 1rem;
+        flex-shrink: 0;
+    }
+
+    .log-level.INFO {
+        background: rgba(40, 167, 69, 0.2);
+        color: #28a745;
+    }
+
+    .log-level.WARNING {
+        background: rgba(255, 193, 7, 0.2);
+        color: #ffc107;
+    }
+
+    .log-level.ERROR {
+        background: rgba(220, 53, 69, 0.2);
+        color: #dc3545;
+    }
+
+    .log-level.DEBUG {
+        background: rgba(23, 162, 184, 0.2);
+        color: #17a2b8;
+    }
+
+    .log-level.CRITICAL {
+        background: rgba(220, 53, 69, 0.4);
+        color: #dc3545;
+        font-weight: 800;
+    }
+
+    .log-message {
+        flex: 1;
+        word-break: break-word;
+        font-size: 0.75rem;
+    }
+
+    .log-controls {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        margin-bottom: 1rem;
+        align-items: center;
+    }
+
+    .log-controls .btn-filter {
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        border: 1px solid #e9ecef;
+        background: white;
+        transition: all 0.3s ease;
+        color: var(--primary-gray);
+        cursor: pointer;
+    }
+
+    .log-controls .btn-filter:hover {
+        border-color: var(--primary-gold);
+        color: var(--primary-dark);
+    }
+
+    .log-controls .btn-filter.active {
+        background: var(--primary-gold);
+        color: var(--primary-darker);
+        border-color: var(--primary-gold);
+    }
+
+    .log-controls .btn-filter .count {
+        background: rgba(0,0,0,0.1);
+        padding: 0.1rem 0.4rem;
+        border-radius: 10px;
+        font-size: 0.6rem;
+        margin-left: 0.25rem;
+    }
+
+    .log-controls .btn-filter.active .count {
+        background: rgba(0,0,0,0.2);
+    }
+
+    .log-controls .btn-clear-log {
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        border: 1px solid #dc3545;
+        background: white;
+        color: #dc3545;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .log-controls .btn-clear-log:hover {
+        background: #dc3545;
+        color: white;
+    }
+
+    .log-controls .log-stats {
+        margin-left: auto;
+        font-size: 0.8rem;
         color: var(--primary-gray-light);
     }
 
-    .empty-state i {
-        font-size: 3rem;
+    .log-controls .log-stats span {
+        font-weight: 600;
+        color: var(--primary-dark);
+    }
+
+    .log-controls .auto-refresh-toggle {
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        border: 1px solid #e9ecef;
+        background: white;
+        transition: all 0.3s ease;
+        color: var(--primary-gray);
+        cursor: pointer;
+    }
+
+    .log-controls .auto-refresh-toggle.active {
+        background: var(--primary-gold);
+        color: var(--primary-darker);
+        border-color: var(--primary-gold);
+    }
+
+    .no-logs {
+        text-align: center;
+        padding: 2rem;
+        color: var(--primary-gray-light);
+    }
+
+    .no-logs i {
+        font-size: 2.5rem;
         margin-bottom: 1rem;
         opacity: 0.5;
     }
 
-    .empty-state p {
-        margin-bottom: 0;
+    .log-count-badge {
+        display: inline-block;
+        background: var(--primary-gold);
+        color: var(--primary-darker);
+        padding: 0.1rem 0.6rem;
+        border-radius: 20px;
+        font-size: 0.7rem;
+        font-weight: 700;
+        margin-left: 0.5rem;
     }
 
     /* Quick Action Buttons */
@@ -366,6 +515,63 @@
 
         .quick-actions {
             grid-template-columns: repeat(2, 1fr);
+        }
+
+        .log-timestamp {
+            min-width: 100px;
+            font-size: 0.6rem;
+        }
+
+        .log-level {
+            min-width: 45px;
+            font-size: 0.55rem;
+            padding: 0.05rem 0.3rem;
+        }
+
+        .log-message {
+            font-size: 0.65rem;
+        }
+
+        .log-container {
+            max-height: 300px;
+            padding: 0.75rem;
+        }
+
+        .log-controls {
+            gap: 0.35rem;
+        }
+
+        .log-controls .btn-filter,
+        .log-controls .btn-clear-log,
+        .log-controls .auto-refresh-toggle {
+            font-size: 0.65rem;
+            padding: 0.15rem 0.5rem;
+        }
+
+        .log-controls .log-stats {
+            font-size: 0.65rem;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .log-timestamp {
+            min-width: 80px;
+            font-size: 0.55rem;
+        }
+
+        .log-container {
+            max-height: 250px;
+            padding: 0.5rem;
+        }
+
+        .log-entry {
+            flex-wrap: wrap;
+            gap: 0.25rem;
+        }
+
+        .log-level {
+            min-width: 40px;
+            font-size: 0.5rem;
         }
     }
 </style>
@@ -548,14 +754,13 @@
                     </div>
                 </div>
 
-                <!-- Payment Method Breakdown - FIXED -->
+                <!-- Payment Method Breakdown -->
                 <div>
                     <div class="d-flex justify-content-between align-items-center mb-2">
                         <span class="fw-bold">Payment Method Breakdown</span>
                         <span class="text-muted">Total: ${{ total_sales|default:0|floatformat:2 }}</span>
                     </div>
 
-                    <!-- FIX: Use default filters and check total before widthratio -->
                     {% with total=telebirr_sales|default:0|add:cbe_sales|default:0 %}
                         <div class="progress">
                             {% if total > 0 %}
@@ -631,18 +836,52 @@
         </div>
     </div>
 
-    <!-- Recent Activity Section -->
-    <div class="row g-4">
+    <!-- System Logs Section -->
+    <div class="row g-4 mb-4">
         <div class="col-12">
             <div class="chart-container">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h5 class="mb-0"><i class="fas fa-bell me-2"></i>Recent Activity</h5>
-                    <a href="#" class="text-decoration-none" style="color: var(--primary-gold);">View All <i class="fas fa-arrow-right ms-1"></i></a>
+                <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                    <h5 class="mb-0">
+                        <i class="fas fa-terminal me-2"></i>
+                        System Logs
+                        <span class="log-count-badge" id="logCount">0</span>
+                    </h5>
+                    <div class="log-controls">
+                        <button class="btn-filter active" data-level="all">
+                            All <span class="count" id="countAll">0</span>
+                        </button>
+                        <button class="btn-filter" data-level="INFO">
+                            Info <span class="count" id="countInfo">0</span>
+                        </button>
+                        <button class="btn-filter" data-level="WARNING">
+                            Warning <span class="count" id="countWarning">0</span>
+                        </button>
+                        <button class="btn-filter" data-level="ERROR">
+                            Error <span class="count" id="countError">0</span>
+                        </button>
+                        <button class="btn-filter" data-level="DEBUG">
+                            Debug <span class="count" id="countDebug">0</span>
+                        </button>
+                        <button class="btn-filter" data-level="CRITICAL">
+                            Critical <span class="count" id="countCritical">0</span>
+                        </button>
+                        <button class="auto-refresh-toggle active" id="autoRefreshToggle" title="Auto-refresh logs every 10 seconds">
+                            <i class="fas fa-sync-alt"></i> Auto
+                        </button>
+                        <button class="btn-clear-log" id="clearLogs" title="Clear logs from view">
+                            <i class="fas fa-trash-alt"></i> Clear
+                        </button>
+                    </div>
                 </div>
-                <div class="empty-state">
-                    <i class="fas fa-inbox"></i>
-                    <p class="mb-0">No recent activity to display</p>
-                    <small class="text-muted">Activities will appear here as users interact with the platform.</small>
+                <div class="log-container" id="logContainer">
+                    <div class="no-logs" id="noLogs">
+                        <i class="fas fa-terminal"></i>
+                        <p class="mb-0">Loading logs...</p>
+                    </div>
+                    <div id="logEntries"></div>
+                </div>
+                <div class="mt-2 text-end">
+                    <small class="text-muted" id="logUpdateTime">Last updated: {% now "F j, Y H:i:s" %}</small>
                 </div>
             </div>
         </div>
@@ -674,6 +913,250 @@
             setTimeout(function() {
                 bar.style.width = width;
             }, 100);
+        });
+
+        // ============================================
+        // LOG VIEWER FUNCTIONALITY
+        // ============================================
+        
+        let logData = [];
+        let currentFilter = 'all';
+        let autoRefresh = true;
+        let refreshInterval = null;
+        let lastLogCount = 0;
+
+        // Fetch logs from server
+        function fetchLogs() {
+            fetch('/admin/logs/')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && data.logs) {
+                        logData = data.logs;
+                        renderLogs(logData);
+                        updateCounts(logData);
+                        document.getElementById('logUpdateTime').textContent = 'Last updated: ' + new Date().toLocaleString();
+                        
+                        // Check for new logs
+                        if (logData.length > lastLogCount) {
+                            const newCount = logData.length - lastLogCount;
+                            const logContainer = document.getElementById('logContainer');
+                            if (newCount > 0 && !logContainer.querySelector('.no-logs')) {
+                                // Show notification
+                                const notification = document.createElement('div');
+                                notification.className = 'alert alert-info alert-dismissible fade show py-1 mb-1';
+                                notification.innerHTML = `
+                                    <i class="fas fa-info-circle me-1"></i>
+                                    ${newCount} new log entr${newCount > 1 ? 'ies' : 'y'} loaded
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                `;
+                                document.getElementById('logEntries').prepend(notification);
+                                
+                                // Auto-dismiss after 3 seconds
+                                setTimeout(() => {
+                                    if (notification) {
+                                        const bsAlert = new bootstrap.Alert(notification);
+                                        bsAlert.close();
+                                    }
+                                }, 3000);
+                            }
+                        }
+                        lastLogCount = logData.length;
+                    } else {
+                        console.error('Failed to fetch logs:', data.message || 'Unknown error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching logs:', error);
+                    document.getElementById('logEntries').innerHTML = `
+                        <div class="no-logs">
+                            <i class="fas fa-exclamation-triangle" style="color: #ffc107;"></i>
+                            <p class="mb-0">Failed to load logs. Please refresh the page.</p>
+                            <small class="text-muted">Error: ${error.message}</small>
+                        </div>
+                    `;
+                });
+        }
+
+        // Render logs with optional filter
+        function renderLogs(logs) {
+            const container = document.getElementById('logEntries');
+            const noLogs = document.getElementById('noLogs');
+            
+            let filteredLogs = logs;
+            if (currentFilter !== 'all') {
+                filteredLogs = logs.filter(log => log.level === currentFilter);
+            }
+
+            if (filteredLogs.length === 0) {
+                container.innerHTML = `
+                    <div class="no-logs">
+                        <i class="fas fa-inbox"></i>
+                        <p class="mb-0">No logs found${currentFilter !== 'all' ? ' for level: ' + currentFilter : ''}</p>
+                        <small class="text-muted">System logs will appear here as they are generated.</small>
+                    </div>
+                `;
+                document.getElementById('logCount').textContent = '0';
+                return;
+            }
+
+            // Show latest logs first (most recent at top)
+            let html = '';
+            const displayLogs = filteredLogs.slice(0, 100); // Limit to 100 logs for performance
+            
+            displayLogs.forEach(function(log) {
+                const levelClass = log.level || 'INFO';
+                const timestamp = log.timestamp || new Date().toISOString();
+                const message = log.message || 'No message';
+                
+                html += `
+                    <div class="log-entry" data-level="${levelClass}">
+                        <span class="log-timestamp">${formatTimestamp(timestamp)}</span>
+                        <span class="log-level ${levelClass}">${levelClass}</span>
+                        <span class="log-message">${escapeHtml(message)}</span>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+            document.getElementById('logCount').textContent = filteredLogs.length;
+            
+            // Scroll to top of log container
+            document.getElementById('logContainer').scrollTop = 0;
+        }
+
+        // Format timestamp for display
+        function formatTimestamp(timestamp) {
+            try {
+                const date = new Date(timestamp);
+                if (isNaN(date.getTime())) {
+                    return timestamp.substring(0, 19) || timestamp;
+                }
+                return date.toLocaleString('en-US', {
+                    month: 'short',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
+                });
+            } catch (e) {
+                return timestamp;
+            }
+        }
+
+        // Escape HTML to prevent XSS
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Update log count badges
+        function updateCounts(logs) {
+            const total = logs.length;
+            const info = logs.filter(l => l.level === 'INFO').length;
+            const warning = logs.filter(l => l.level === 'WARNING').length;
+            const error = logs.filter(l => l.level === 'ERROR').length;
+            const debug = logs.filter(l => l.level === 'DEBUG').length;
+            const critical = logs.filter(l => l.level === 'CRITICAL').length;
+
+            document.getElementById('countAll').textContent = total;
+            document.getElementById('countInfo').textContent = info;
+            document.getElementById('countWarning').textContent = warning;
+            document.getElementById('countError').textContent = error;
+            document.getElementById('countDebug').textContent = debug;
+            document.getElementById('countCritical').textContent = critical;
+        }
+
+        // Filter logs by level
+        function filterLogs(level) {
+            currentFilter = level;
+            
+            // Update button states
+            document.querySelectorAll('.btn-filter').forEach(function(btn) {
+                btn.classList.toggle('active', btn.dataset.level === level);
+            });
+            
+            renderLogs(logData);
+        }
+
+        // Clear logs from view
+        function clearLogs() {
+            if (confirm('Are you sure you want to clear the log display?')) {
+                const container = document.getElementById('logEntries');
+                container.innerHTML = `
+                    <div class="no-logs">
+                        <i class="fas fa-check-circle" style="color: #28a745;"></i>
+                        <p class="mb-0">Log display cleared</p>
+                        <small class="text-muted">New logs will appear as they are generated.</small>
+                    </div>
+                `;
+                document.getElementById('logCount').textContent = '0';
+                lastLogCount = 0;
+            }
+        }
+
+        // Toggle auto-refresh
+        function toggleAutoRefresh() {
+            autoRefresh = !autoRefresh;
+            const toggle = document.getElementById('autoRefreshToggle');
+            toggle.classList.toggle('active');
+            toggle.innerHTML = autoRefresh ? '<i class="fas fa-sync-alt"></i> Auto' : '<i class="fas fa-pause"></i> Paused';
+            
+            if (autoRefresh) {
+                startAutoRefresh();
+            } else {
+                stopAutoRefresh();
+            }
+        }
+
+        function startAutoRefresh() {
+            if (refreshInterval) {
+                clearInterval(refreshInterval);
+            }
+            refreshInterval = setInterval(fetchLogs, 10000);
+        }
+
+        function stopAutoRefresh() {
+            if (refreshInterval) {
+                clearInterval(refreshInterval);
+                refreshInterval = null;
+            }
+        }
+
+        // Initialize log viewer
+        function initLogViewer() {
+            // Fetch initial logs
+            fetchLogs();
+            
+            // Start auto-refresh
+            if (autoRefresh) {
+                startAutoRefresh();
+            }
+            
+            // Set up event listeners
+            document.querySelectorAll('.btn-filter').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    filterLogs(this.dataset.level);
+                });
+            });
+            
+            document.getElementById('autoRefreshToggle').addEventListener('click', toggleAutoRefresh);
+            document.getElementById('clearLogs').addEventListener('click', clearLogs);
+            
+            // Refresh logs manually when tab becomes visible
+            document.addEventListener('visibilitychange', function() {
+                if (!document.hidden) {
+                    fetchLogs();
+                }
+            });
+        }
+
+        // Initialize when DOM is ready
+        initLogViewer();
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', function() {
+            stopAutoRefresh();
         });
 
         // Auto-refresh stats every 60 seconds (optional)

@@ -10,6 +10,7 @@ from accounts import views as accounts_views
 urlpatterns = [
     # Custom Admin URLs (must come before the default admin pattern)
     path('admin/analytics/', config_views.admin_analytics, name='admin_analytics'),
+    path('admin/logs/', config_views.admin_logs, name='admin_logs'),
     
     # Default Admin Panel
     path('admin/', admin.site.urls),

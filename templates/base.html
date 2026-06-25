@@ -60,6 +60,7 @@
             right: 0;
             z-index: 1050;
             min-height: var(--navbar-height-desktop);
+            border-bottom: 2px solid rgba(218, 165, 32, 0.2);
         }
         
         .navbar-brand {
@@ -75,10 +76,11 @@
             height: 45px;
             width: auto;
             transition: transform 0.3s ease;
+            filter: drop-shadow(0 2px 4px rgba(218, 165, 32, 0.2));
         }
         
         .navbar-brand:hover img {
-            transform: scale(1.05);
+            transform: scale(1.05) rotate(-2deg);
         }
         
         .brand-text {
@@ -92,24 +94,37 @@
             font-weight: 800;
             color: var(--primary-gold);
             letter-spacing: -0.5px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .brand-name .lightbulb {
+            display: inline-block;
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.1); }
         }
         
         .brand-tagline {
             font-size: 0.6rem;
             color: rgba(255,255,255,0.6);
-            letter-spacing: 0.5px;
+            letter-spacing: 1.5px;
             text-transform: uppercase;
+            font-weight: 400;
         }
         
         .brand-motto {
             font-size: 0.55rem;
             color: var(--primary-gold-light);
             font-style: italic;
+            font-weight: 300;
         }
         
         /* Navbar Toggler - Mobile */
         .navbar-toggler {
-            border: 2px solid rgba(255,255,255,0.2);
+            border: 2px solid rgba(218, 165, 32, 0.3);
             padding: 0.4rem 0.6rem;
             border-radius: 8px;
             transition: all 0.3s ease;
@@ -117,6 +132,7 @@
         
         .navbar-toggler:hover {
             border-color: var(--primary-gold);
+            background: rgba(218, 165, 32, 0.1);
         }
         
         .navbar-toggler-icon {
@@ -125,11 +141,13 @@
         
         /* Navbar Collapse - Mobile */
         .navbar-collapse {
-            background: var(--primary-dark);
+            background: rgba(26, 26, 26, 0.98);
+            backdrop-filter: blur(10px);
             border-radius: 12px;
             padding: 1rem;
             margin-top: 0.5rem;
-            border: 1px solid rgba(255,255,255,0.05);
+            border: 1px solid rgba(218, 165, 32, 0.1);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
         }
         
         .navbar-nav {
@@ -143,12 +161,30 @@
             padding: 0.6rem 0.8rem !important;
             border-radius: 8px;
             font-size: 0.95rem;
+            position: relative;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 4px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--primary-gold);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+        
+        .nav-link:hover::after,
+        .nav-link:focus::after {
+            width: 60%;
         }
         
         .nav-link:hover,
         .nav-link:focus {
             color: var(--primary-gold) !important;
-            background: rgba(218, 165, 32, 0.1);
+            background: rgba(218, 165, 32, 0.08);
         }
         
         .nav-link i {
@@ -159,7 +195,7 @@
         /* Dropdown - Mobile */
         .dropdown-menu {
             background: var(--primary-darker);
-            border: 1px solid var(--primary-gray);
+            border: 1px solid rgba(218, 165, 32, 0.15);
             border-radius: 12px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             padding: 0.5rem;
@@ -204,6 +240,7 @@
             border: none;
             padding: 0.75rem 1rem;
             font-size: 0.95rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
         }
         
         .alert-success {
@@ -231,13 +268,27 @@
         }
         
         /* ============================================
-           FOOTER
+           FOOTER - Enhanced
            ============================================ */
         footer {
-            background: linear-gradient(135deg, var(--primary-darker) 0%, var(--primary-dark) 100%);
+            background: linear-gradient(135deg, var(--primary-darker) 0%, #0d0d0d 100%);
             color: white;
             margin-top: auto;
-            padding: 2rem 0 1rem;
+            padding: 3rem 0 1.5rem;
+            border-top: 3px solid rgba(218, 165, 32, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        footer::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(218, 165, 32, 0.03) 0%, transparent 70%);
+            border-radius: 50%;
         }
         
         .footer-brand {
@@ -248,12 +299,28 @@
         }
         
         .footer-brand img {
-            height: 40px;
+            height: 45px;
             width: auto;
+            filter: drop-shadow(0 2px 8px rgba(218, 165, 32, 0.2));
         }
         
         .footer-brand .brand-name {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--primary-gold);
+        }
+        
+        .footer-brand .brand-tagline {
+            font-size: 0.55rem;
+            color: rgba(255,255,255,0.5);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        
+        .footer-brand .brand-motto {
+            font-size: 0.5rem;
+            color: var(--primary-gold-light);
+            font-style: italic;
         }
         
         footer h6 {
@@ -261,17 +328,33 @@
             font-weight: 700;
             margin-bottom: 0.75rem;
             font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        footer h6::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 30px;
+            height: 2px;
+            background: var(--primary-gold);
         }
         
         footer a {
             color: #B4B4B4;
             text-decoration: none;
-            transition: color 0.3s ease;
+            transition: all 0.3s ease;
             font-size: 0.9rem;
+            position: relative;
         }
         
         footer a:hover {
             color: var(--primary-gold);
+            transform: translateX(4px);
         }
         
         footer .text-white-50 {
@@ -283,23 +366,98 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 36px;
-            height: 36px;
+            width: 38px;
+            height: 38px;
             border-radius: 50%;
             background: rgba(255,255,255,0.05);
             transition: all 0.3s ease;
             color: rgba(255,255,255,0.6);
             margin-right: 0.5rem;
+            border: 1px solid rgba(255,255,255,0.05);
         }
         
         .footer-social a:hover {
             background: var(--primary-gold);
             color: var(--primary-darker);
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+            border-color: var(--primary-gold);
+            box-shadow: 0 5px 15px rgba(218, 165, 32, 0.3);
         }
         
         .footer-gold {
             color: var(--primary-gold);
+        }
+        
+        .footer-contact-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 0.75rem;
+        }
+        
+        .footer-contact-item .icon-wrapper {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(218, 165, 32, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            color: var(--primary-gold);
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-contact-item:hover .icon-wrapper {
+            background: var(--primary-gold);
+            color: var(--primary-darker);
+            transform: scale(1.1);
+        }
+        
+        .footer-contact-item .text {
+            color: rgba(255,255,255,0.6);
+            font-size: 0.85rem;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-contact-item:hover .text {
+            color: white;
+        }
+        
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding-top: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .footer-bottom .copyright {
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.35);
+        }
+        
+        .footer-bottom .copyright i {
+            color: var(--primary-gold);
+            margin: 0 0.25rem;
+        }
+        
+        .footer-bottom .footer-links {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+        }
+        
+        .footer-bottom .footer-links a {
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.35);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .footer-bottom .footer-links a:hover {
+            color: var(--primary-gold);
+            transform: translateX(0);
         }
         
         /* ============================================
@@ -381,6 +539,10 @@
             .brand-motto {
                 font-size: 0.5rem;
             }
+            
+            footer {
+                padding: 2rem 0 1rem;
+            }
         }
         
         /* Mobile (up to 767px) */
@@ -412,7 +574,7 @@
             
             .brand-motto {
                 font-size: 0.45rem;
-                display: none; /* Hide on very small screens */
+                display: none;
             }
             
             .navbar-collapse {
@@ -425,6 +587,10 @@
             .nav-link {
                 padding: 0.5rem 0.7rem !important;
                 font-size: 0.9rem;
+            }
+            
+            .nav-link::after {
+                display: none;
             }
             
             .dropdown-menu {
@@ -463,9 +629,23 @@
             }
             
             .footer-social a {
-                width: 32px;
-                height: 32px;
+                width: 34px;
+                height: 34px;
                 font-size: 0.8rem;
+            }
+            
+            .footer-contact-item .text {
+                font-size: 0.8rem;
+            }
+            
+            .footer-bottom .footer-links {
+                justify-content: center;
+                margin-top: 0.5rem;
+                gap: 1rem;
+            }
+            
+            .footer-bottom .copyright {
+                text-align: center;
             }
             
             /* Alert - Mobile */
@@ -503,6 +683,12 @@
                 font-size: 0.8rem;
                 padding: 0.4rem 0.6rem;
             }
+            
+            .footer-contact-item .icon-wrapper {
+                width: 28px;
+                height: 28px;
+                font-size: 0.7rem;
+            }
         }
         
         /* ============================================
@@ -514,6 +700,8 @@
                 padding: 0;
                 margin-top: 0;
                 border: none;
+                backdrop-filter: none;
+                box-shadow: none;
             }
             
             .navbar-nav {
@@ -541,9 +729,12 @@
         <a class="navbar-brand" href="{% url 'home' %}">
             <img src="{% static 'images/logo.png' %}" alt="Abrehot Library Logo" onerror="this.src='https://placehold.co/50x50/DAA520/1A1A1A?text=AL'">
             <div class="brand-text">
-                <span class="brand-name">Abay Repository</span>
+                <span class="brand-name">
+                    <i class="fas fa-lightbulb lightbulb" style="font-size: 0.7rem; color: var(--primary-gold);"></i>
+                    Abay Repository
+                </span>
                 <span class="brand-tagline">Abrehot Library</span>
-                <span class="brand-motto"><i class="fas fa-lightbulb me-1"></i>Enlightenment for Ethiopia</span>
+                <span class="brand-motto">Enlightenment for Ethiopia</span>
             </div>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
@@ -658,54 +849,100 @@
 <footer>
     <div class="container">
         <div class="row">
-            <div class="col-md-4 mb-3 mb-md-4">
+            <div class="col-lg-4 mb-4 mb-lg-0">
                 <div class="footer-brand">
                     <img src="{% static 'images/logo.png' %}" alt="Abrehot Library Logo" onerror="this.src='https://placehold.co/45x45/DAA520/1A1A1A?text=AL'">
                     <div>
-                        <div class="brand-name" style="font-size: 1.1rem;">Abay Repository</div>
-                        <div class="brand-tagline" style="font-size: 0.6rem;">Abrehot Library</div>
-                        <div class="brand-motto" style="font-size: 0.55rem;"><i class="fas fa-lightbulb me-1"></i>Enlightenment for Ethiopia</div>
+                        <div class="brand-name">
+                            <i class="fas fa-lightbulb" style="font-size: 0.7rem; color: var(--primary-gold);"></i>
+                            Abay Repository
+                        </div>
+                        <div class="brand-tagline">Abrehot Library</div>
+                        <div class="brand-motto">Enlightenment for Ethiopia</div>
                     </div>
                 </div>
-                <p class="text-white-50 small">Ethiopia's premier digital library platform connecting readers with authentic Ethiopian literature and global knowledge.</p>
-                <div class="footer-social mt-2">
+                <p class="text-white-50 small" style="line-height: 1.6;">Ethiopia's premier digital library platform connecting readers with authentic Ethiopian literature and global knowledge.</p>
+                <div class="footer-social mt-3">
                     <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
                     <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
                     <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
                     <a href="#" aria-label="Telegram"><i class="fab fa-telegram"></i></a>
+                    <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
                 </div>
             </div>
-            <div class="col-6 col-md-2 mb-3 mb-md-4">
+            
+            <div class="col-6 col-md-3 col-lg-2 mb-4 mb-md-0">
                 <h6>Quick Links</h6>
                 <ul class="list-unstyled small">
                     <li class="mb-2"><a href="{% url 'home' %}">Home</a></li>
                     <li class="mb-2"><a href="{% url 'books:browse' %}">Browse Books</a></li>
                     <li class="mb-2"><a href="#">About Us</a></li>
                     <li class="mb-2"><a href="#">Contact</a></li>
+                    <li class="mb-2"><a href="#">Blog</a></li>
                 </ul>
             </div>
-            <div class="col-6 col-md-3 mb-3 mb-md-4">
+            
+            <div class="col-6 col-md-3 col-lg-2 mb-4 mb-md-0">
                 <h6>Support</h6>
                 <ul class="list-unstyled small">
                     <li class="mb-2"><a href="#">Privacy Policy</a></li>
                     <li class="mb-2"><a href="#">Terms of Service</a></li>
                     <li class="mb-2"><a href="#">Refund Policy</a></li>
                     <li class="mb-2"><a href="#">FAQ</a></li>
+                    <li class="mb-2"><a href="#">Help Center</a></li>
                 </ul>
             </div>
-            <div class="col-md-3 mb-3 mb-md-4">
-                <h6>Contact</h6>
-                <ul class="list-unstyled small text-white-50">
-                    <li class="mb-2"><i class="fas fa-envelope me-2" style="width:16px;"></i> info@abrehotlibrary.com</li>
-                    <li class="mb-2"><i class="fas fa-phone me-2" style="width:16px;"></i> +251-111-234-567</li>
-                    <li class="mb-2"><i class="fas fa-map-marker-alt me-2" style="width:16px;"></i> Addis Ababa, Ethiopia</li>
-                </ul>
+            
+            <div class="col-md-6 col-lg-4">
+                <h6>Contact Us</h6>
+                <div class="footer-contact-item">
+                    <span class="icon-wrapper"><i class="fas fa-envelope"></i></span>
+                    <span class="text">info@abrehot.org.et</span>
+                </div>
+                <div class="footer-contact-item">
+                    <span class="icon-wrapper"><i class="fas fa-globe-africa"></i></span>
+                    <span class="text">www.abrehot.org.et</span>
+                </div>
+                <div class="footer-contact-item">
+                    <span class="icon-wrapper"><i class="fas fa-phone"></i></span>
+                    <span class="text">+251-111-234-567</span>
+                </div>
+                <div class="footer-contact-item">
+                    <span class="icon-wrapper"><i class="fas fa-map-marker-alt"></i></span>
+                    <span class="text">Addis Ababa, Ethiopia</span>
+                </div>
+                
+                <!-- Newsletter Signup -->
+                <div class="mt-3">
+                    <p class="text-white-50 small mb-2">Subscribe to our newsletter</p>
+                    <div class="input-group" style="max-width: 100%;">
+                        <input type="email" class="form-control form-control-sm" placeholder="Your email" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white;">
+                        <button class="btn btn-sm" style="background: var(--primary-gold); color: var(--primary-darker); font-weight: 600;">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
-        <hr class="bg-secondary opacity-25">
-        <div class="text-center">
-            <p class="mb-0 text-white-50 small">&copy; {% now "Y" %} Abrehot Library - Abay Repository. All rights reserved.</p>
-            <p class="text-white-50 small mt-1"><i class="fas fa-lightbulb me-1"></i> Enlightenment for Ethiopia</p>
+        
+        <div class="footer-bottom">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="copyright mb-0">
+                        &copy; {% now "Y" %} <span class="text-gold">Abrehot Library</span> — Abay Repository.
+                        <i class="fas fa-heart" style="color: #e74c3c; font-size: 0.7rem;"></i>
+                        All rights reserved.
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    <div class="footer-links">
+                        <a href="#"><i class="fas fa-lock me-1"></i>Privacy</a>
+                        <a href="#"><i class="fas fa-file-contract me-1"></i>Terms</a>
+                        <a href="#"><i class="fas fa-shield-alt me-1"></i>Security</a>
+                        <a href="#"><i class="fas fa-sitemap me-1"></i>Sitemap</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </footer>
@@ -737,6 +974,17 @@
                 });
             });
         }
+        
+        // Add smooth scroll animation for footer links
+        document.querySelectorAll('footer a[href^="#"]').forEach(function(anchor) {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                var target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
     });
 </script>
 
