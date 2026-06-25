@@ -12,7 +12,7 @@ class LoginForm(forms.Form):
         widget=forms.TextInput(attrs={
             'class': 'form-control',
             'placeholder': 'Enter your username or email',
-            'autofocus': True
+            'auto]focus': True
         })
     )
     password = forms.CharField(
@@ -272,7 +272,7 @@ class AuthorRegistrationForm(UserCreationForm):
         username = self.cleaned_data.get('username')
         if CustomUser.objects.filter(username=username).exists():
             raise forms.ValidationError('A user with this username already exists.')
-        return username
+        return usehrname
     
     def save(self, commit=True):
         user = super().save(commit=False)

@@ -33,7 +33,7 @@ from reviews.models import QualityReview
 logger = logging.getLogger(__name__)
 
 # ============================================
-# FAYDA OIDC HELPERS - From oidc_app/views.py
+# FAYDA OIDC HELPERS - Matching Working OIDC App
 # ============================================
 
 def base64url_decode(input_str):
@@ -93,43 +93,31 @@ def load_private_key_from_string(base64_key_str):
         raise
 
 
-def generate_signed_jwt(client_id, token_endpoint, private_key_b64, expiration_time=15):
-    """Generate signed JWT for MOSIP Fayda Assertion"""
-    logger.info("Generating signed JWT for MOSIP Fayda Assertion...")
+def generate_signed_jwt(client_id, token_endpoint, private_key_b64):
+    """
+    Generate signed JWT for Fayda client assertion.
+    This matches the working OIDC app methodology exactly.
+    """
+    logger.info("Generating signed JWT for Fayda Assertion...")
     
-    # Safely load the key string first to extract a 'kid' if present
-    try:
-        key_bytes = base64.b64decode(private_key_b64)
-        jwk_data = json.loads(key_bytes)
-        kid = jwk_data.get('kid')
-    except Exception:
-        kid = None
-
+    # Use the same approach as the working OIDC app - no kid header
     header = {
         "alg": "RS256",
         "typ": "JWT",
     }
-    if kid:
-        header["kid"] = kid
 
-    # Fix: Address clock skew issues and include mandatory MOSIP attributes
-    now = datetime.utcnow()
-    iat_time = now - timedelta(seconds=10)  # 10s fallback timing sync buffer
-    exp_time = now + timedelta(minutes=expiration_time)
-
+    # Use the same approach as the working OIDC app
     payload = {
         "iss": client_id,
         "sub": client_id,
         "aud": token_endpoint,
-        "exp": int(exp_time.timestamp()),
-        "iat": int(iat_time.timestamp()),
-        "nbf": int(iat_time.timestamp()),  # Mandatory for eSignet
-        "jti": str(int(time.time() * 1000))  # Unique identifier trace
+        "exp": datetime.utcnow() + timedelta(minutes=15),
+        "iat": datetime.utcnow(),
     }
 
     private_key = load_private_key_from_string(private_key_b64)
     signed_jwt = jwt.encode(payload, private_key, algorithm="RS256", headers=header)
-    logger.info("Signed JWT successfully generated with timing offsets.")
+    logger.info("Signed JWT generated successfully.")
     return signed_jwt
 
 
@@ -296,7 +284,6 @@ def oidc_callback_view(request):
         userinfo_url = config('FAYDA_USERINFO_URL')
         redirect_uri = config('FAYDA_REDIRECT_URI')
         private_key_b64 = config('FAYDA_PRIVATE_KEY_B64')
-        expiration_time = config('FAYDA_EXPIRATION_TIME', default=15, cast=int)
         
         logger.info(f"=== Processing OIDC Callback ===")
         logger.info(f"Client ID: {client_id[:10] if client_id else 'None'}...")
@@ -305,8 +292,8 @@ def oidc_callback_view(request):
         # Get code verifier from session
         code_verifier = request.session.get('fayda_code_verifier', '')
         
-        # Generate signed JWT for client assertion
-        signed_jwt = generate_signed_jwt(client_id, token_url, private_key_b64, expiration_time)
+        # Generate signed JWT for client assertion - MATCHING WORKING APP
+        signed_jwt = generate_signed_jwt(client_id, token_url, private_key_b64)
         
         if not signed_jwt:
             logger.error("Failed to generate signed JWT")
@@ -315,7 +302,7 @@ def oidc_callback_view(request):
         
         logger.info("Signed JWT generated successfully")
         
-        # Exchange code for token
+        # Exchange code for token - MATCHING THE WORKING OIDC APP EXACTLY
         token_response = requests.post(
             token_url,
             data={
@@ -332,10 +319,18 @@ def oidc_callback_view(request):
         )
         
         logger.info(f"Token response status: {token_response.status_code}")
+        logger.info(f"Token response body: {token_response.text[:500]}")
         
         if not token_response.ok:
-            logger.error(f"Token exchange failed: {token_response.status_code} - {token_response.text}")
-            messages.error(request, f'Token exchange failed. Status: {token_response.status_code}')
+            logger.error(f"Token exchange failed: {token_response.status_code}")
+            try:
+                error_data = token_response.json()
+                logger.error(f"Error details: {error_data}")
+                error_msg = error_data.get('error_description', error_data.get('error', 'Unknown error'))
+            except:
+                error_msg = token_response.text[:200]
+            
+            messages.error(request, f'Token exchange failed: {error_msg}')
             return redirect('accounts:register_author')
         
         token_data = token_response.json()
@@ -360,9 +355,9 @@ def oidc_callback_view(request):
             messages.error(request, 'Failed to retrieve user information from Fayda.')
             return redirect('accounts:register_author')
         
-        # Decode user info (it's a JWT)
+        # Decode user info (it's a JWT) - MATCHING WORKING APP
         try:
-            userinfo = jwt.decode(
+            decoded_user_info = jwt.decode(
                 userinfo_response.text,
                 options={"verify_signature": False},
                 algorithms=["RS256"]
@@ -375,17 +370,17 @@ def oidc_callback_view(request):
         
         # Map userinfo to our format
         user_data = {
-            'full_name': userinfo.get('name', userinfo.get('full_name', '')),
-            'date_of_birth': userinfo.get('birthdate', userinfo.get('date_of_birth', '')),
-            'gender': userinfo.get('gender', ''),
-            'region': userinfo.get('region', userinfo.get('region_name', '')),
-            'zone': userinfo.get('zone', userinfo.get('zone_name', '')),
-            'woreda': userinfo.get('woreda', userinfo.get('woreda_name', '')),
-            'address': userinfo.get('address', ''),
-            'phone': userinfo.get('phone_number', ''),
-            'email': userinfo.get('email', ''),
-            'nationality': userinfo.get('nationality', ''),
-            'individual_id': userinfo.get('individual_id', ''),
+            'full_name': decoded_user_info.get('name', ''),
+            'date_of_birth': decoded_user_info.get('birthdate', ''),
+            'gender': decoded_user_info.get('gender', ''),
+            'region': decoded_user_info.get('region', ''),
+            'zone': decoded_user_info.get('zone', ''),
+            'woreda': decoded_user_info.get('woreda', ''),
+            'address': decoded_user_info.get('address', ''),
+            'phone': decoded_user_info.get('phone_number', ''),
+            'email': decoded_user_info.get('email', ''),
+            'nationality': decoded_user_info.get('nationality', ''),
+            'individual_id': decoded_user_info.get('individual_id', ''),
             'national_id': request.session.get('fayda_national_id', '')
         }
         
@@ -474,7 +469,7 @@ def oidc_initiate(request):
         request.session['fayda_state'] = state
         request.session['fayda_nonce'] = nonce
         
-        # Build claims
+        # Build claims - MATCHING WORKING APP
         claims = {
             "userinfo": {
                 "name": {"essential": True},
@@ -491,7 +486,7 @@ def oidc_initiate(request):
         }
         encoded_claims = urllib.parse.quote(json.dumps(claims))
         
-        # Build the authorization URL with PKCE
+        # Build the authorization URL with PKCE - MATCHING WORKING APP
         authorization_url = (
             f"{auth_url}"
             f"?claims_locales=en"
@@ -560,13 +555,12 @@ def oidc_callback(request):
         userinfo_url = config('FAYDA_USERINFO_URL')
         redirect_uri = config('FAYDA_REDIRECT_URI')
         private_key_b64 = config('FAYDA_PRIVATE_KEY_B64')
-        expiration_time = config('FAYDA_EXPIRATION_TIME', default=15, cast=int)
         
         # Get code verifier from session
         code_verifier = request.session.get('fayda_code_verifier', '')
         
-        # Generate signed JWT for client assertion
-        signed_jwt = generate_signed_jwt(client_id, token_url, private_key_b64, expiration_time)
+        # Generate signed JWT for client assertion - MATCHING WORKING APP
+        signed_jwt = generate_signed_jwt(client_id, token_url, private_key_b64)
         
         if not signed_jwt:
             return JsonResponse({
@@ -574,7 +568,7 @@ def oidc_callback(request):
                 'message': 'Failed to generate client assertion.'
             }, status=500)
         
-        # Exchange code for token
+        # Exchange code for token - MATCHING THE WORKING OIDC APP EXACTLY
         token_response = requests.post(
             token_url,
             data={
@@ -590,11 +584,19 @@ def oidc_callback(request):
             timeout=30
         )
         
+        logger.info(f"Token response status: {token_response.status_code}")
+        
         if not token_response.ok:
             logger.error(f"Token exchange failed: {token_response.status_code} - {token_response.text}")
+            try:
+                error_data = token_response.json()
+                error_msg = error_data.get('error_description', error_data.get('error', 'Unknown error'))
+            except:
+                error_msg = token_response.text[:200]
+            
             return JsonResponse({
                 'success': False,
-                'message': f'Token exchange failed: {token_response.status_code}'
+                'message': f'Token exchange failed: {error_msg}'
             }, status=400)
         
         token_data = token_response.json()
@@ -620,9 +622,9 @@ def oidc_callback(request):
                 'message': 'Failed to retrieve user information from Fayda.'
             }, status=400)
         
-        # Decode user info (it's a JWT)
+        # Decode user info (it's a JWT) - MATCHING WORKING APP
         try:
-            userinfo = jwt.decode(
+            decoded_user_info = jwt.decode(
                 userinfo_response.text,
                 options={"verify_signature": False},
                 algorithms=["RS256"]
@@ -636,17 +638,17 @@ def oidc_callback(request):
         
         # Map userinfo to our format
         user_data = {
-            'full_name': userinfo.get('name', userinfo.get('full_name', '')),
-            'date_of_birth': userinfo.get('birthdate', userinfo.get('date_of_birth', '')),
-            'gender': userinfo.get('gender', ''),
-            'region': userinfo.get('region', userinfo.get('region_name', '')),
-            'zone': userinfo.get('zone', userinfo.get('zone_name', '')),
-            'woreda': userinfo.get('woreda', userinfo.get('woreda_name', '')),
-            'address': userinfo.get('address', ''),
-            'phone': userinfo.get('phone_number', ''),
-            'email': userinfo.get('email', ''),
-            'nationality': userinfo.get('nationality', ''),
-            'individual_id': userinfo.get('individual_id', ''),
+            'full_name': decoded_user_info.get('name', ''),
+            'date_of_birth': decoded_user_info.get('birthdate', ''),
+            'gender': decoded_user_info.get('gender', ''),
+            'region': decoded_user_info.get('region', ''),
+            'zone': decoded_user_info.get('zone', ''),
+            'woreda': decoded_user_info.get('woreda', ''),
+            'address': decoded_user_info.get('address', ''),
+            'phone': decoded_user_info.get('phone_number', ''),
+            'email': decoded_user_info.get('email', ''),
+            'nationality': decoded_user_info.get('nationality', ''),
+            'individual_id': decoded_user_info.get('individual_id', ''),
         }
         
         logger.info(f"OIDC callback successful for user: {user_data['full_name']}")

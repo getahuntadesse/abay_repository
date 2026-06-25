@@ -16,6 +16,8 @@
         --primary-gray-light: #6C6C6C;
         --fayda-blue: #1a237e;
         --fayda-blue-light: #e3f2fd;
+        --success-green: #28a745;
+        --error-red: #dc3545;
     }
 
     .register-container {
@@ -118,6 +120,7 @@
         font-weight: 600;
         white-space: nowrap;
         transition: all 0.3s;
+        min-width: 140px;
     }
 
     .btn-verify:hover:not(:disabled) {
@@ -132,7 +135,7 @@
     }
 
     .btn-verify-verified {
-        background: #28a745;
+        background: var(--success-green);
         color: white;
     }
 
@@ -156,7 +159,7 @@
 
     .verified-badge {
         display: inline-block;
-        background: #28a745;
+        background: var(--success-green);
         color: white;
         padding: 0.2rem 0.7rem;
         border-radius: 20px;
@@ -164,15 +167,17 @@
         font-weight: 600;
         margin-left: 0.75rem;
         vertical-align: middle;
+        animation: fadeIn 0.5s ease;
     }
 
     .info-fetched {
         background: #E8F5E9;
-        border-left: 4px solid #4CAF50;
+        border-left: 4px solid var(--success-green);
         padding: 1rem;
         border-radius: 12px;
         margin-top: 0.5rem;
         font-size: 0.9rem;
+        animation: slideDown 0.5s ease;
     }
 
     .field-disabled {
@@ -180,6 +185,16 @@
         border-color: #dee2e6 !important;
         color: #6c757d;
         cursor: not-allowed;
+    }
+
+    .field-verified {
+        background-color: #E8F5E9 !important;
+        border-color: var(--success-green) !important;
+        color: #1a1a1a !important;
+    }
+
+    .field-verified::placeholder {
+        color: #6c757d;
     }
 
     .password-strength {
@@ -196,25 +211,25 @@
     .strength-very-strong { background: #28a745; width: 100%; }
 
     .password-match-success {
-        color: #28a745;
+        color: var(--success-green);
         font-size: 0.75rem;
         margin-top: 0.25rem;
     }
 
     .password-match-error {
-        color: #dc3545;
+        color: var(--error-red);
         font-size: 0.75rem;
         margin-top: 0.25rem;
     }
 
     .error-message {
-        color: #dc3545;
+        color: var(--error-red);
         font-size: 0.75rem;
         margin-top: 0.25rem;
     }
 
     .form-control.error {
-        border-color: #dc3545;
+        border-color: var(--error-red);
     }
 
     .form-control:focus {
@@ -287,6 +302,7 @@
         padding: 1rem;
         margin-bottom: 1.5rem;
         display: none;
+        animation: fadeIn 0.5s ease;
     }
 
     .oidc-notice i {
@@ -338,6 +354,97 @@
         color: #FFC107;
     }
 
+    /* Verified data display cards */
+    .verified-data-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1rem;
+        border: 1px solid #E8F5E9;
+        margin-top: 1rem;
+    }
+
+    .verified-data-card .data-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #f1f3f5;
+    }
+
+    .verified-data-card .data-item:last-child {
+        border-bottom: none;
+    }
+
+    .verified-data-card .label {
+        color: var(--primary-gray-light);
+        font-weight: 500;
+        font-size: 0.85rem;
+    }
+
+    .verified-data-card .value {
+        font-weight: 600;
+        color: var(--primary-dark);
+        font-size: 0.95rem;
+    }
+
+    .verified-data-card .value.text-gold {
+        color: var(--primary-gold);
+    }
+
+    /* User picture preview */
+    .user-picture-preview {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: #f8f9fa;
+        border: 3px solid var(--primary-gold);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        margin: 0 auto 1rem;
+    }
+
+    .user-picture-preview img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .user-picture-preview i {
+        font-size: 2.5rem;
+        color: var(--primary-gray-light);
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Verification status alerts */
+    .verification-status {
+        margin-top: 0.5rem;
+    }
+
+    .verification-status .alert {
+        border-radius: 8px;
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+        margin-bottom: 0;
+    }
+
+    /* Responsive */
     @media (max-width: 768px) {
         .form-body {
             padding: 1.5rem;
@@ -347,6 +454,51 @@
         }
         .btn-verify {
             width: 100%;
+            min-width: unset;
+        }
+        .form-header h2 {
+            font-size: 1.4rem;
+        }
+        .form-header i {
+            font-size: 2.5rem;
+        }
+        .section-title {
+            font-size: 0.8rem;
+        }
+        .test-mode-badge {
+            font-size: 0.75rem;
+            padding: 0.4rem 0.8rem;
+        }
+        .info-fetched {
+            font-size: 0.8rem;
+            padding: 0.75rem;
+        }
+        .verified-data-card .data-item {
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+        .user-picture-preview {
+            width: 60px;
+            height: 60px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .form-body {
+            padding: 1rem;
+        }
+        .form-header {
+            padding: 1.25rem;
+        }
+        .form-header h2 {
+            font-size: 1.2rem;
+        }
+        .btn-register {
+            padding: 12px;
+            font-size: 0.95rem;
+        }
+        .requirements li {
+            font-size: 0.85rem;
         }
     }
 </style>
@@ -389,7 +541,7 @@
                     <strong>Fayda Verification Required:</strong> You will be redirected to Fayda's secure portal to verify your identity.
                 </div>
 
-                <form method="POST" novalidate id="registerForm">
+                <form method="POST" novalidate id="registerForm" autocomplete="off" enctype="multipart/form-data">
                     {% csrf_token %}
 
                     {% if form.non_field_errors %}
@@ -438,7 +590,7 @@
                             <i class="fas fa-info-circle me-1"></i>
                             Enter your 16-digit Ethiopian National ID (Fayda) and click verify. You will be redirected to Fayda's secure portal.
                         </small>
-                        <div id="verificationStatus" class="mt-2"></div>
+                        <div id="verificationStatus" class="verification-status mt-2"></div>
                     </div>
 
                     <!-- Fayda Info Box -->
@@ -466,6 +618,7 @@
 
                     <!-- OIDC State (hidden) -->
                     <input type="hidden" id="oidc_state" name="oidc_state" value="">
+                    <input type="hidden" id="oidc_nonce" name="oidc_nonce" value="">
 
                     <!-- Verified ID Information (Auto-populated) -->
                     <div id="verifiedInfo" style="display: none;" class="info-fetched mb-4">
@@ -478,14 +631,25 @@
                         <h6 class="section-title"><i class="fas fa-user me-2"></i>Personal Information</h6>
                     </div>
 
+                    <!-- Profile Picture -->
+                    <div class="row">
+                        <div class="col-12 mb-3 text-center">
+                            <div class="user-picture-preview" id="picturePreview">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div id="pictureStatus" class="text-muted small">No profile picture from Fayda</div>
+                            <input type="hidden" name="profile_picture_url" id="profile_picture_url" value="">
+                        </div>
+                    </div>
+
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-bold">
                                 Full Name <span class="text-danger">*</span>
                                 <span id="verifiedBadge" class="verified-badge" style="display: none;"><i class="fas fa-check"></i> Verified</span>
                             </label>
-                            <input type="text" name="full_name" id="full_name" class="form-control field-disabled" readonly value="{{ form.full_name.value|default:'' }}">
-                            <small class="text-muted">Auto-filled from Fayda verification</small>
+                            <input type="text" name="full_name" id="full_name" class="form-control field-disabled" readonly value="{{ form.full_name.value|default:'' }}" placeholder="Waiting for verification...">
+                            <small class="text-muted" id="full_name_status">Auto-filled from Fayda verification</small>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-bold">
@@ -504,6 +668,7 @@
                             </label>
                             <input type="email" name="email" id="email" class="form-control" value="{{ form.email.value|default:'' }}" required>
                             <div id="emailError" class="error-message"></div>
+                            <small class="text-muted" id="email_status">Manual entry (Fayda will auto-fill if available)</small>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-bold">
@@ -512,45 +677,59 @@
                             <input type="tel" name="phone" id="phone" class="form-control" placeholder="09XXXXXXXX" value="{{ form.phone.value|default:'' }}" required>
                             <small class="text-muted">Format: 09XXXXXXXX</small>
                             <div id="phoneError" class="error-message"></div>
+                            <small class="text-muted" id="phone_status">Manual entry (Fayda will auto-fill if available)</small>
                         </div>
                     </div>
 
-                    <!-- Demographics from Fayda (Read-only) -->
+                    <!-- Demographics from Fayda (Read-only - Auto-populated) -->
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-bold">Date of Birth</label>
-                            <input type="date" class="form-control field-disabled" id="date_of_birth" readonly>
-                            <small class="text-muted">Auto-filled from Fayda</small>
+                            <input type="date" class="form-control field-disabled" id="date_of_birth" readonly placeholder="Waiting for verification...">
+                            <small class="text-muted" id="dob_status">Auto-filled from Fayda</small>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-bold">Gender</label>
-                            <input type="text" class="form-control field-disabled" id="gender" readonly>
-                            <small class="text-muted">Auto-filled from Fayda</small>
+                            <input type="text" class="form-control field-disabled" id="gender" readonly placeholder="Waiting for verification...">
+                            <small class="text-muted" id="gender_status">Auto-filled from Fayda</small>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Nationality</label>
+                            <input type="text" class="form-control field-disabled" id="nationality" readonly placeholder="Waiting for verification...">
+                            <small class="text-muted" id="nationality_status">Auto-filled from Fayda</small>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Individual ID</label>
+                            <input type="text" class="form-control field-disabled" id="individual_id" readonly placeholder="Waiting for verification...">
+                            <small class="text-muted" id="individual_id_status">Auto-filled from Fayda</small>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-md-4 mb-3">
                             <label class="form-label fw-bold">Region</label>
-                            <input type="text" class="form-control field-disabled" id="region" readonly>
-                            <small class="text-muted">Auto-filled from Fayda</small>
+                            <input type="text" class="form-control field-disabled" id="region" readonly placeholder="Waiting for verification...">
+                            <small class="text-muted" id="region_status">Auto-filled from Fayda</small>
                         </div>
                         <div class="col-md-4 mb-3">
                             <label class="form-label fw-bold">Zone / Subcity</label>
-                            <input type="text" class="form-control field-disabled" id="zone" readonly>
-                            <small class="text-muted">Auto-filled from Fayda</small>
+                            <input type="text" class="form-control field-disabled" id="zone" readonly placeholder="Waiting for verification...">
+                            <small class="text-muted" id="zone_status">Auto-filled from Fayda</small>
                         </div>
                         <div class="col-md-4 mb-3">
                             <label class="form-label fw-bold">Woreda</label>
-                            <input type="text" class="form-control field-disabled" id="woreda" readonly>
-                            <small class="text-muted">Auto-filled from Fayda</small>
+                            <input type="text" class="form-control field-disabled" id="woreda" readonly placeholder="Waiting for verification...">
+                            <small class="text-muted" id="woreda_status">Auto-filled from Fayda</small>
                         </div>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label fw-bold">Address</label>
-                        <textarea class="form-control field-disabled" id="address" rows="2" readonly></textarea>
-                        <small class="text-muted">Auto-filled from Fayda</small>
+                        <textarea class="form-control field-disabled" id="address" rows="2" readonly placeholder="Waiting for verification..."></textarea>
+                        <small class="text-muted" id="address_status">Auto-filled from Fayda</small>
                     </div>
 
                     <!-- Author Profile Information -->
@@ -738,6 +917,7 @@
         }
         this.value = formatted;
 
+        // Reset verification if ID changes
         if (isNationalIdVerified) {
             resetVerification();
         }
@@ -756,13 +936,31 @@
         document.getElementById('submitBtn').disabled = true;
         
         // Clear readonly fields
-        document.getElementById('full_name').value = '';
-        document.getElementById('date_of_birth').value = '';
-        document.getElementById('gender').value = '';
-        document.getElementById('region').value = '';
-        document.getElementById('zone').value = '';
-        document.getElementById('woreda').value = '';
-        document.getElementById('address').value = '';
+        const fields = ['full_name', 'date_of_birth', 'gender', 'nationality', 'individual_id', 'region', 'zone', 'woreda', 'address'];
+        fields.forEach(function(field) {
+            const el = document.getElementById(field);
+            if (el) {
+                el.value = '';
+                el.placeholder = 'Waiting for verification...';
+                el.classList.remove('field-verified');
+            }
+        });
+        
+        // Reset status labels
+        const statusFields = ['full_name_status', 'dob_status', 'gender_status', 'nationality_status', 'individual_id_status', 'region_status', 'zone_status', 'woreda_status', 'address_status', 'email_status', 'phone_status'];
+        statusFields.forEach(function(id) {
+            const el = document.getElementById(id);
+            if (el) {
+                el.textContent = 'Waiting for verification...';
+                el.style.color = '#6c757d';
+            }
+        });
+        
+        // Reset picture
+        const picturePreview = document.getElementById('picturePreview');
+        picturePreview.innerHTML = '<i class="fas fa-user"></i>';
+        document.getElementById('pictureStatus').textContent = 'No profile picture from Fayda';
+        document.getElementById('profile_picture_url').value = '';
         
         // Enable national ID input
         nationalIdInput.readOnly = false;
@@ -779,6 +977,14 @@
                 <button type="button" class="btn-close small" data-bs-dismiss="alert"></button>
             </div>
         `;
+        // Auto-dismiss after 5 seconds
+        setTimeout(function() {
+            const alert = statusDiv.querySelector('.alert');
+            if (alert) {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            }
+        }, 5000);
     }
 
     function showLoading(show, message) {
@@ -813,6 +1019,7 @@
             oidcState = generateState();
             oidcNonce = generateNonce();
             document.getElementById('oidc_state').value = oidcState;
+            document.getElementById('oidc_nonce').value = oidcNonce;
 
             // Get CSRF token for the POST request
             const csrftoken = getCookie('csrftoken');
@@ -933,10 +1140,15 @@
                 full_name: userData.full_name || userData.name || '',
                 date_of_birth: userData.date_of_birth || userData.dob || userData.birthdate || '',
                 gender: userData.gender || '',
+                nationality: userData.nationality || '',
+                individual_id: userData.individual_id || '',
                 region: userData.region || userData.region_name || '',
                 zone: userData.zone || userData.zone_name || '',
                 woreda: userData.woreda || userData.woreda_name || '',
-                address: userData.address || ''
+                address: userData.address || '',
+                phone: userData.phone || userData.phone_number || '',
+                email: userData.email || '',
+                picture: userData.picture || userData.photo || userData.profile_picture || ''
             };
 
             if (!verifiedData.full_name) {
@@ -946,30 +1158,139 @@
 
             isNationalIdVerified = true;
 
-            // Auto-populate the form
-            document.getElementById('full_name').value = verifiedData.full_name;
-            document.getElementById('date_of_birth').value = verifiedData.date_of_birth;
-            document.getElementById('gender').value = verifiedData.gender;
-            document.getElementById('region').value = verifiedData.region;
-            document.getElementById('zone').value = verifiedData.zone;
-            document.getElementById('woreda').value = verifiedData.woreda;
-            document.getElementById('address').value = verifiedData.address || 
-                `${verifiedData.zone || ''} Subcity, ${verifiedData.woreda || ''}`.trim();
+            // Auto-populate the form with verified data
+            const fieldMappings = {
+                'full_name': verifiedData.full_name,
+                'date_of_birth': verifiedData.date_of_birth,
+                'gender': verifiedData.gender,
+                'nationality': verifiedData.nationality,
+                'individual_id': verifiedData.individual_id,
+                'region': verifiedData.region,
+                'zone': verifiedData.zone,
+                'woreda': verifiedData.woreda,
+                'address': verifiedData.address || `${verifiedData.zone || ''} Subcity, ${verifiedData.woreda || ''}`.trim()
+            };
 
-            showVerificationStatus('success', `Fayda verification successful! Welcome, ${verifiedData.full_name}.`);
+            // Populate each field and mark as verified
+            Object.keys(fieldMappings).forEach(function(fieldId) {
+                const el = document.getElementById(fieldId);
+                if (el && fieldMappings[fieldId]) {
+                    el.value = fieldMappings[fieldId];
+                    el.classList.add('field-verified');
+                    el.placeholder = '';
+                }
+            });
+
+            // Update status labels
+            const statusMappings = {
+                'full_name_status': verifiedData.full_name,
+                'dob_status': verifiedData.date_of_birth || 'Not provided',
+                'gender_status': verifiedData.gender || 'Not provided',
+                'nationality_status': verifiedData.nationality || 'Not provided',
+                'individual_id_status': verifiedData.individual_id || 'Not provided',
+                'region_status': verifiedData.region || 'Not provided',
+                'zone_status': verifiedData.zone || 'Not provided',
+                'woreda_status': verifiedData.woreda || 'Not provided',
+                'address_status': verifiedData.address || 'Not provided'
+            };
+
+            Object.keys(statusMappings).forEach(function(id) {
+                const el = document.getElementById(id);
+                if (el) {
+                    const value = statusMappings[id];
+                    if (value && value !== 'Not provided') {
+                        el.textContent = '✓ ' + value;
+                        el.style.color = '#28a745';
+                    } else {
+                        el.textContent = 'Not provided by Fayda';
+                        el.style.color = '#6c757d';
+                    }
+                }
+            });
+
+            // Pre-fill email and phone if available from Fayda
+            if (verifiedData.email) {
+                document.getElementById('email').value = verifiedData.email;
+                document.getElementById('email_status').textContent = '✓ Auto-filled from Fayda';
+                document.getElementById('email_status').style.color = '#28a745';
+            }
+            if (verifiedData.phone) {
+                document.getElementById('phone').value = verifiedData.phone;
+                document.getElementById('phone_status').textContent = '✓ Auto-filled from Fayda';
+                document.getElementById('phone_status').style.color = '#28a745';
+            }
+
+            // Handle profile picture
+            if (verifiedData.picture) {
+                const picturePreview = document.getElementById('picturePreview');
+                picturePreview.innerHTML = `<img src="${verifiedData.picture}" alt="Profile Picture" onerror="this.onerror=null;this.parentElement.innerHTML='<i class=\\'fas fa-user\\'></i>';">`;
+                document.getElementById('pictureStatus').textContent = '✓ Profile picture from Fayda';
+                document.getElementById('pictureStatus').style.color = '#28a745';
+                document.getElementById('profile_picture_url').value = verifiedData.picture;
+            }
+
+            // Show success message with real name
+            showVerificationStatus('success', `✅ Fayda verification successful! Welcome, ${verifiedData.full_name}!`);
+
+            // Show verified info card with all real data
             document.getElementById('verifiedInfo').style.display = 'block';
             document.getElementById('verifiedInfoContent').innerHTML = `
-                <strong>Name:</strong> ${verifiedData.full_name}<br>
-                <strong>Fayda ID:</strong> ${nationalIdInput.value}<br>
-                <strong>Region:</strong> ${verifiedData.region || 'N/A'}<br>
-                <strong>Date of Birth:</strong> ${verifiedData.date_of_birth || 'N/A'}
+                <div class="verified-data-card">
+                    <div class="data-item">
+                        <span class="label">Full Name</span>
+                        <span class="value text-gold">${verifiedData.full_name}</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="label">Fayda ID</span>
+                        <span class="value">${nationalIdInput.value}</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="label">Date of Birth</span>
+                        <span class="value">${verifiedData.date_of_birth || 'N/A'}</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="label">Gender</span>
+                        <span class="value">${verifiedData.gender || 'N/A'}</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="label">Nationality</span>
+                        <span class="value">${verifiedData.nationality || 'N/A'}</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="label">Individual ID</span>
+                        <span class="value">${verifiedData.individual_id || 'N/A'}</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="label">Region</span>
+                        <span class="value">${verifiedData.region || 'N/A'}</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="label">Zone / Subcity</span>
+                        <span class="value">${verifiedData.zone || 'N/A'}</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="label">Woreda</span>
+                        <span class="value">${verifiedData.woreda || 'N/A'}</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="label">Address</span>
+                        <span class="value">${verifiedData.address || 'N/A'}</span>
+                    </div>
+                    ${verifiedData.email ? `<div class="data-item"><span class="label">Email</span><span class="value">${verifiedData.email}</span></div>` : ''}
+                    ${verifiedData.phone ? `<div class="data-item"><span class="label">Phone</span><span class="value">${verifiedData.phone}</span></div>` : ''}
+                    ${verifiedData.picture ? `<div class="data-item"><span class="label">Profile Picture</span><span class="value"><i class="fas fa-check-circle text-success"></i> Available</span></div>` : ''}
+                </div>
             `;
+            
             document.getElementById('verifiedBadge').style.display = 'inline-block';
+            
             const verifyBtn = document.getElementById('verifyBtn');
-            verifyBtn.innerHTML = '<i class="fas fa-check-circle me-1"></i> Verified with Fayda ✓';
+            verifyBtn.innerHTML = '<i class="fas fa-check-circle me-1"></i> ✅ Verified with Fayda';
             verifyBtn.classList.add('btn-verify-verified');
+            
             nationalIdInput.readOnly = true;
             document.getElementById('oidcNotice').style.display = 'none';
+            
             checkFormCompletion();
 
             // Clean URL - remove query parameters
@@ -1137,7 +1458,7 @@
     document.getElementById('registerForm').addEventListener('submit', function(e) {
         if (!isNationalIdVerified) {
             e.preventDefault();
-            alert('Please verify your Fayda National ID before registering.');
+            showVerificationStatus('error', 'Please verify your Fayda National ID before registering.');
             return false;
         }
         
@@ -1146,13 +1467,13 @@
         
         if (password !== confirm) {
             e.preventDefault();
-            alert('Passwords do not match. Please re-enter.');
+            showVerificationStatus('error', 'Passwords do not match. Please re-enter.');
             return false;
         }
         
         if (password.length < 8) {
             e.preventDefault();
-            alert('Password must be at least 8 characters long.');
+            showVerificationStatus('error', 'Password must be at least 8 characters long.');
             return false;
         }
         
@@ -1179,6 +1500,27 @@
         e.preventDefault();
         if (redirectUrl) {
             window.location.href = redirectUrl;
+        }
+    });
+
+    // Check if form was pre-filled with verified data from session
+    document.addEventListener('DOMContentLoaded', function() {
+        // Check if verified data exists in the form (from server-side pre-fill)
+        const fullName = document.getElementById('full_name').value;
+        if (fullName && fullName !== '') {
+            // If there's already data in the full_name field, it might be from server-side pre-fill
+            // But we need to check if it was actually verified
+            const verifiedDataFromServer = {{ verified_data|safe|default:'null' }};
+            if (verifiedDataFromServer && verifiedDataFromServer.full_name) {
+                isNationalIdVerified = true;
+                document.getElementById('verifiedBadge').style.display = 'inline-block';
+                const verifyBtn = document.getElementById('verifyBtn');
+                verifyBtn.innerHTML = '<i class="fas fa-check-circle me-1"></i> ✅ Verified with Fayda';
+                verifyBtn.classList.add('btn-verify-verified');
+                nationalIdInput.readOnly = true;
+                document.getElementById('submitBtn').disabled = false;
+                checkFormCompletion();
+            }
         }
     });
 </script>
