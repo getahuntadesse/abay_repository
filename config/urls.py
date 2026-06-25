@@ -58,6 +58,7 @@ if settings.DEBUG:
             path('__debug__/', include(debug_toolbar.urls)),
         ] + urlpatterns
     except ImportError:
+        # debug_toolbar is not installed, skip
         pass
 
 # Static and media file serving in development

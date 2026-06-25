@@ -16,6 +16,9 @@ import logging
 import jwt
 import base64
 import time
+import hashlib
+import urllib
+import os
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.asymmetric import rsa
@@ -29,290 +32,119 @@ from reviews.models import QualityReview
 # Set up logger
 logger = logging.getLogger(__name__)
 
+# ============================================
+# FAYDA OIDC HELPERS - From oidc_app/views.py
+# ============================================
 
-def debug_log(message, data=None, level='info'):
-    """Helper function for debugging with timestamps"""
-    timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
-    log_message = f"[{timestamp}] {message}"
-    if data:
-        log_message += f"\nData: {json.dumps(data, default=str, indent=2) if isinstance(data, dict) else data}"
-    
-    if level == 'error':
-        logger.error(log_message)
-    elif level == 'warning':
-        logger.warning(log_message)
-    else:
-        logger.info(log_message)
-    
-    print(log_message)
+def base64url_decode(input_str):
+    """Decode base64url string with padding"""
+    padding = '=' * (4 - (len(input_str) % 4))
+    return base64.urlsafe_b64decode(input_str + padding)
 
 
-def verify_private_key_pairing(private_key_b64, client_id, token_url):
-    """
-    Verify that the private key is correctly paired with the Client ID.
-    This function tests the key by generating a JWT and attempting to validate it.
-    """
-    debug_log("=== VERIFYING PRIVATE KEY PAIRING ===")
-    
+def load_private_key_from_string(base64_key_str):
+    """Load RSA private key from base64 encoded JWK string"""
+    logger.info("Loading private key from base64 key string")
     try:
-        # 1. Decode and parse the private key
-        decoded = base64.b64decode(private_key_b64)
-        key_data = json.loads(decoded.decode('utf-8'))
-        
-        debug_log(f"Key components found: {list(key_data.keys())}")
-        debug_log(f"Key ID (kid): {key_data.get('kid', 'Not found')}")
-        debug_log(f"Key Type (kty): {key_data.get('kty', 'Not found')}")
-        debug_log(f"Algorithm (alg): {key_data.get('alg', 'Not found')}")
-        debug_log(f"Key Usage (use): {key_data.get('use', 'Not found')}")
-        
-        # 2. Reconstruct the private key
-        def b64url_to_int(value):
-            padding = 4 - (len(value) % 4)
-            if padding != 4:
-                value += '=' * padding
-            value = value.replace('-', '+').replace('_', '/')
-            return int.from_bytes(base64.b64decode(value), byteorder='big')
-        
-        private_key = rsa.RSAPrivateNumbers(
-            p=b64url_to_int(key_data['p']),
-            q=b64url_to_int(key_data['q']),
-            d=b64url_to_int(key_data['d']),
-            dmp1=b64url_to_int(key_data['dp']),
-            dmq1=b64url_to_int(key_data['dq']),
-            iqmp=b64url_to_int(key_data['qi']),
-            public_numbers=rsa.RSAPublicNumbers(
-                e=b64url_to_int(key_data['e']),
-                n=b64url_to_int(key_data['n'])
+        # Decode the base64 string
+        key_bytes = base64.b64decode(base64_key_str)
+        jwk_data = json.loads(key_bytes)
+
+        # Decode the base64url components
+        n = int.from_bytes(base64url_decode(jwk_data['n']), 'big')
+        e = int.from_bytes(base64url_decode(jwk_data['e']), 'big')
+        d = int.from_bytes(base64url_decode(jwk_data['d']), 'big')
+
+        p = int.from_bytes(base64url_decode(jwk_data['p']), 'big') if 'p' in jwk_data else None
+        q = int.from_bytes(base64url_decode(jwk_data['q']), 'big') if 'q' in jwk_data else None
+        dmp1 = int.from_bytes(base64url_decode(jwk_data['dp']), 'big') if 'dp' in jwk_data else None
+        dmq1 = int.from_bytes(base64url_decode(jwk_data['dq']), 'big') if 'dq' in jwk_data else None
+        iqmp = int.from_bytes(base64url_decode(jwk_data['qi']), 'big') if 'qi' in jwk_data else None
+
+        public_numbers = rsa.RSAPublicNumbers(e, n)
+
+        if p and q and dmp1 and dmq1 and iqmp:
+            private_numbers = rsa.RSAPrivateNumbers(
+                p=p,
+                q=q,
+                d=d,
+                dmp1=dmp1,
+                dmq1=dmq1,
+                iqmp=iqmp,
+                public_numbers=public_numbers
             )
-        ).private_key(default_backend())
-        
-        # 3. Generate a test JWT
-        now = datetime.utcnow()
-        test_payload = {
-            'iss': client_id,
-            'sub': client_id,
-            'aud': token_url,
-            'iat': int(now.timestamp()),
-            'exp': int((now + timedelta(minutes=1)).timestamp()),
-            'jti': str(int(time.time() * 1000))
-        }
-        
-        # 4. Encode the test JWT
-        pem = private_key.private_bytes(
-            encoding=serialization.Encoding.PEM,
-            format=serialization.PrivateFormat.PKCS8,
-            encryption_algorithm=serialization.NoEncryption()
-        )
-        
-        test_jwt = jwt.encode(test_payload, pem, algorithm='RS256')
-        
-        # 5. Verify the JWT can be decoded with the public key
-        # Extract public key from private key
-        public_key = private_key.public_key()
-        public_pem = public_key.public_bytes(
-            encoding=serialization.Encoding.PEM,
-            format=serialization.PublicFormat.SubjectPublicKeyInfo
-        )
-        
-        # Decode without verification first
-        decoded_jwt = jwt.decode(test_jwt, options={"verify_signature": False})
-        debug_log(f"Test JWT decoded successfully. Claims: {list(decoded_jwt.keys())}")
-        
-        # Try to verify the signature
-        try:
-            jwt.decode(test_jwt, public_pem, algorithms=['RS256'])
-            debug_log("✅ JWT signature verification successful! Private key is valid.")
-            return True, "Private key is valid and correctly paired"
-        except jwt.InvalidSignatureError:
-            debug_log("❌ JWT signature verification failed!", level='error')
-            return False, "Private key signature verification failed"
-            
+        else:
+            private_numbers = rsa.RSAPrivateNumbers(
+                p=None,
+                q=None,
+                d=d,
+                dmp1=None,
+                dmq1=None,
+                iqmp=None,
+                public_numbers=public_numbers
+            )
+
+        private_key = private_numbers.private_key(default_backend())
+        logger.info("Private Key Loaded Successfully")
+        return private_key
+
     except Exception as e:
-        debug_log(f"❌ Private key verification failed: {str(e)}", level='error')
-        return False, f"Private key verification failed: {str(e)}"
+        logger.error(f"Failed to load private key: {e}")
+        raise
 
 
-def verify_client_id_status(client_id):
-    """
-    Verify if the Client ID is active by checking its format and validity.
-    Note: Full verification requires contacting Fayda's support.
-    """
-    debug_log("=== VERIFYING CLIENT ID STATUS ===")
+def generate_signed_jwt(client_id, token_endpoint, private_key_b64, expiration_time=15):
+    """Generate signed JWT for MOSIP Fayda Assertion"""
+    logger.info("Generating signed JWT for MOSIP Fayda Assertion...")
     
-    # Check client ID format
-    if not client_id:
-        return False, "Client ID is empty"
-    
-    if len(client_id) < 20:
-        return False, f"Client ID length ({len(client_id)}) is too short"
-    
-    # Check for valid characters (alphanumeric, -, _)
-    import re
-    if not re.match(r'^[a-zA-Z0-9_-]+$', client_id):
-        return False, f"Client ID contains invalid characters: {client_id}"
-    
-    debug_log(f"✅ Client ID format is valid. Length: {len(client_id)}")
-    return True, f"Client ID format is valid (length: {len(client_id)})"
+    # Safely load the key string first to extract a 'kid' if present
+    try:
+        key_bytes = base64.b64decode(private_key_b64)
+        jwk_data = json.loads(key_bytes)
+        kid = jwk_data.get('kid')
+    except Exception:
+        kid = None
 
-
-def verify_kid_match(key_data):
-    """
-    Verify the Key ID (kid) is present and formatted correctly.
-    """
-    debug_log("=== VERIFYING KEY ID (kid) ===")
-    
-    kid = key_data.get('kid')
-    if not kid:
-        return False, "Key ID (kid) is missing from the private key"
-    
-    if len(kid) < 10:
-        return False, f"Key ID is too short: {kid}"
-    
-    # Check if it's a valid UUID format or similar
-    import re
-    uuid_pattern = r'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$'
-    if not re.match(uuid_pattern, kid, re.IGNORECASE):
-        debug_log(f"⚠️ Warning: Key ID is not a standard UUID format: {kid}", level='warning')
-        return True, f"Key ID present (non-UUID format): {kid}"
-    
-    debug_log(f"✅ Key ID (kid) is valid: {kid}")
-    return True, f"Key ID is valid UUID: {kid}"
-
-
-def verify_credential_compatibility(client_id, private_key_b64):
-    """
-    Comprehensive verification of credentials.
-    """
-    debug_log("=== STARTING COMPREHENSIVE CREDENTIAL VERIFICATION ===")
-    
-    results = {
-        'client_id_status': {'status': False, 'message': ''},
-        'private_key_status': {'status': False, 'message': ''},
-        'kid_status': {'status': False, 'message': ''},
-        'pairing_status': {'status': False, 'message': ''}
+    header = {
+        "alg": "RS256",
+        "typ": "JWT",
     }
-    
-    # 1. Verify Client ID
-    client_status, client_msg = verify_client_id_status(client_id)
-    results['client_id_status'] = {'status': client_status, 'message': client_msg}
-    
-    # 2. Verify Private Key structure
-    try:
-        decoded = base64.b64decode(private_key_b64)
-        key_data = json.loads(decoded.decode('utf-8'))
-        results['private_key_status'] = {'status': True, 'message': 'Private key parsed successfully'}
-        
-        # 3. Verify KID
-        kid_status, kid_msg = verify_kid_match(key_data)
-        results['kid_status'] = {'status': kid_status, 'message': kid_msg}
-        
-        # 4. Verify Pairing (generate and validate test JWT)
-        token_url = config('FAYDA_TOKEN_URL')
-        pairing_status, pairing_msg = verify_private_key_pairing(private_key_b64, client_id, token_url)
-        results['pairing_status'] = {'status': pairing_status, 'message': pairing_msg}
-        
-    except Exception as e:
-        results['private_key_status'] = {'status': False, 'message': f'Failed to parse private key: {str(e)}'}
-    
-    # Print summary
-    debug_log("\n=== CREDENTIAL VERIFICATION SUMMARY ===")
-    for key, value in results.items():
-        status_icon = "✅" if value['status'] else "❌"
-        debug_log(f"{status_icon} {key.replace('_', ' ').title()}: {value['message']}")
-    
-    return results
+    if kid:
+        header["kid"] = kid
+
+    # Fix: Address clock skew issues and include mandatory MOSIP attributes
+    now = datetime.utcnow()
+    iat_time = now - timedelta(seconds=10)  # 10s fallback timing sync buffer
+    exp_time = now + timedelta(minutes=expiration_time)
+
+    payload = {
+        "iss": client_id,
+        "sub": client_id,
+        "aud": token_endpoint,
+        "exp": int(exp_time.timestamp()),
+        "iat": int(iat_time.timestamp()),
+        "nbf": int(iat_time.timestamp()),  # Mandatory for eSignet
+        "jti": str(int(time.time() * 1000))  # Unique identifier trace
+    }
+
+    private_key = load_private_key_from_string(private_key_b64)
+    signed_jwt = jwt.encode(payload, private_key, algorithm="RS256", headers=header)
+    logger.info("Signed JWT successfully generated with timing offsets.")
+    return signed_jwt
 
 
-def get_private_key_from_jwk(private_key_b64):
-    """
-    Convert the Base64 encoded JWK to a PEM private key.
-    This function follows the exact pattern from the official oidc-project.
-    """
-    if not private_key_b64:
-        logger.error("Private key is empty or None")
-        return None
-    
-    try:
-        # Decode Base64
-        decoded = base64.b64decode(private_key_b64)
-        key_data = json.loads(decoded.decode('utf-8'))
-        
-        # Extract components - these are Base64 URL-safe encoded
-        def b64url_to_int(value):
-            # Add padding
-            padding = 4 - (len(value) % 4)
-            if padding != 4:
-                value += '=' * padding
-            # Replace URL-safe chars
-            value = value.replace('-', '+').replace('_', '/')
-            # Decode and convert to int
-            return int.from_bytes(base64.b64decode(value), byteorder='big')
-        
-        # Reconstruct the private key
-        private_key = rsa.RSAPrivateNumbers(
-            p=b64url_to_int(key_data['p']),
-            q=b64url_to_int(key_data['q']),
-            d=b64url_to_int(key_data['d']),
-            dmp1=b64url_to_int(key_data['dp']),
-            dmq1=b64url_to_int(key_data['dq']),
-            iqmp=b64url_to_int(key_data['qi']),
-            public_numbers=rsa.RSAPublicNumbers(
-                e=b64url_to_int(key_data['e']),
-                n=b64url_to_int(key_data['n'])
-            )
-        ).private_key(default_backend())
-        
-        # Convert to PEM
-        pem = private_key.private_bytes(
-            encoding=serialization.Encoding.PEM,
-            format=serialization.PrivateFormat.PKCS8,
-            encryption_algorithm=serialization.NoEncryption()
-        )
-        
-        return pem
-        
-    except Exception as e:
-        logger.error(f"Failed to get private key from JWK: {str(e)}")
-        return None
+def generate_pkce():
+    """Generate PKCE code verifier and challenge"""
+    code_verifier = base64.urlsafe_b64encode(os.urandom(32)).rstrip(b'=').decode('utf-8')
+    code_challenge = base64.urlsafe_b64encode(
+        hashlib.sha256(code_verifier.encode('utf-8')).digest()
+    ).rstrip(b'=').decode('utf-8')
+    return code_verifier, code_challenge
 
 
-def generate_client_assertion(client_id, token_url, private_key_b64):
-    """
-    Generate a client assertion JWT for OIDC client authentication.
-    Based on the official oidc-project implementation.
-    """
-    try:
-        # Get the private key in PEM format
-        private_key_pem = get_private_key_from_jwk(private_key_b64)
-        if not private_key_pem:
-            logger.error("Failed to get private key")
-            return None
-        
-        # Generate the JWT payload
-        now = datetime.utcnow()
-        payload = {
-            'iss': client_id,
-            'sub': client_id,
-            'aud': token_url,
-            'iat': int(now.timestamp()),
-            'exp': int((now + timedelta(minutes=5)).timestamp()),
-            'jti': str(int(time.time() * 1000))
-        }
-        
-        # Encode the JWT with RS256
-        client_assertion = jwt.encode(
-            payload,
-            private_key_pem,
-            algorithm='RS256'
-        )
-        
-        logger.info(f"Client assertion generated successfully")
-        return client_assertion
-        
-    except Exception as e:
-        logger.error(f"Failed to generate client assertion: {str(e)}")
-        return None
-
+# ============================================
+# ACCOUNT VIEWS
+# ============================================
 
 @sensitive_post_parameters()
 @csrf_protect
@@ -400,7 +232,6 @@ def register_author(request):
     if request.user.is_authenticated:
         return redirect('accounts:dashboard')
     
-    # Check if we have verified data from session (set by callback)
     verified_data = request.session.pop('fayda_verified_data', None)
     
     if request.method == 'POST':
@@ -415,7 +246,6 @@ def register_author(request):
     else:
         form = AuthorRegistrationForm()
         if verified_data:
-            # Pre-populate the form with verified data
             form.initial = {
                 'full_name': verified_data.get('full_name', ''),
                 'national_id': verified_data.get('national_id', ''),
@@ -432,8 +262,9 @@ def register_author(request):
 @csrf_exempt
 def oidc_callback_view(request):
     """
-    Handle OIDC callback from Fayda.
-    This view receives the authorization code from Fayda after authentication.
+    Handle OIDC callback from Fayda via GET request.
+    This view receives the authorization code from Fayda after authentication
+    and processes it to get user information.
     """
     # Get parameters from the URL
     code = request.GET.get('code')
@@ -451,7 +282,7 @@ def oidc_callback_view(request):
         messages.error(request, 'Missing authorization code or state parameter.')
         return redirect('accounts:register_author')
     
-    # Verify state matches session (CSRF protection)
+    # Verify state matches session
     session_state = request.session.get('fayda_state')
     if state != session_state:
         logger.warning(f"OIDC state mismatch: received {state}, expected {session_state}")
@@ -459,122 +290,90 @@ def oidc_callback_view(request):
         return redirect('accounts:register_author')
     
     try:
-        # Get OIDC configuration from environment (UAT)
+        # Get OIDC configuration
         client_id = config('FAYDA_CLIENT_ID')
         token_url = config('FAYDA_TOKEN_URL')
         userinfo_url = config('FAYDA_USERINFO_URL')
         redirect_uri = config('FAYDA_REDIRECT_URI')
         private_key_b64 = config('FAYDA_PRIVATE_KEY_B64')
+        expiration_time = config('FAYDA_EXPIRATION_TIME', default=15, cast=int)
         
-        debug_log(f"=== Starting OIDC Callback Processing ===")
-        debug_log(f"Client ID: {client_id[:10] if client_id else 'None'}...")
-        debug_log(f"Token URL: {token_url}")
-        debug_log(f"Redirect URI: {redirect_uri}")
+        logger.info(f"=== Processing OIDC Callback ===")
+        logger.info(f"Client ID: {client_id[:10] if client_id else 'None'}...")
+        logger.info(f"Code: {code[:20]}...")
         
-        # Run credential verification
-        debug_log("\n--- Running Credential Verification ---")
-        verification_results = verify_credential_compatibility(client_id, private_key_b64)
+        # Get code verifier from session
+        code_verifier = request.session.get('fayda_code_verifier', '')
         
-        # Log verification results
-        all_verified = all([v['status'] for v in verification_results.values()])
-        if all_verified:
-            debug_log("✅ All credential checks passed!")
-        else:
-            debug_log("⚠️ Some credential checks failed. Please review the logs above.", level='warning')
+        # Generate signed JWT for client assertion
+        signed_jwt = generate_signed_jwt(client_id, token_url, private_key_b64, expiration_time)
         
-        # Generate client assertion JWT
-        client_assertion = generate_client_assertion(client_id, token_url, private_key_b64)
-        
-        if not client_assertion:
-            debug_log("ERROR: Failed to generate client assertion", level='error')
-            messages.error(request, 'Failed to generate authentication token. Please contact support.')
+        if not signed_jwt:
+            logger.error("Failed to generate signed JWT")
+            messages.error(request, 'Failed to generate authentication token.')
             return redirect('accounts:register_author')
         
-        debug_log("Client assertion generated successfully")
+        logger.info("Signed JWT generated successfully")
         
-        # Step 1: Exchange code for access token using client assertion
-        token_data = {
-            'grant_type': 'authorization_code',
-            'code': code,
-            'client_id': client_id,
-            'client_assertion_type': 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
-            'client_assertion': client_assertion,
-            'redirect_uri': redirect_uri
-        }
-        
-        debug_log(f"Sending token exchange request to: {token_url}")
-        
+        # Exchange code for token
         token_response = requests.post(
             token_url,
-            data=token_data,
-            headers={
-                'Content-Type': 'application/x-www-form-urlencoded'
+            data={
+                'grant_type': 'authorization_code',
+                'code': code,
+                'redirect_uri': redirect_uri,
+                'client_id': client_id,
+                'client_assertion_type': 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
+                'client_assertion': signed_jwt,
+                'code_verifier': code_verifier,
             },
+            headers={'Content-Type': 'application/x-www-form-urlencoded'},
             timeout=30
         )
         
-        debug_log(f"Token response status: {token_response.status_code}")
+        logger.info(f"Token response status: {token_response.status_code}")
         
         if not token_response.ok:
-            debug_log(f"Token exchange failed: {token_response.status_code}", level='error')
-            debug_log(f"Response: {token_response.text}", level='error')
-            
-            # Try to parse the error for better message
-            try:
-                error_data = token_response.json()
-                error_msg = error_data.get('error_description', error_data.get('error', 'Unknown error'))
-                debug_log(f"Error details: {error_data}", level='error')
-                
-                # Provide specific guidance based on error
-                if 'invalid_assertion' in str(error_data):
-                    debug_log("\n=== TROUBLESHOOTING GUIDE ===", level='warning')
-                    debug_log("The 'invalid_assertion' error indicates your credentials are not being accepted.", level='warning')
-                    debug_log("Please contact Fayda Support with:", level='warning')
-                    debug_log(f"  1. Client ID: {client_id}", level='warning')
-                    debug_log("  2. The error: invalid_assertion", level='warning')
-                    debug_log("  3. Ask them to verify:", level='warning')
-                    debug_log("     - The private key is correctly paired with this Client ID", level='warning')
-                    debug_log("     - The correct 'kid' for this key", level='warning')
-                    debug_log("     - If the Client ID is active for the UAT environment", level='warning')
-                    
-            except:
-                pass
-            
-            messages.error(request, f'Token exchange failed: {error_msg if "error_msg" in locals() else token_response.status_code}')
+            logger.error(f"Token exchange failed: {token_response.status_code} - {token_response.text}")
+            messages.error(request, f'Token exchange failed. Status: {token_response.status_code}')
             return redirect('accounts:register_author')
         
-        token_response_data = token_response.json()
-        access_token = token_response_data.get('access_token')
+        token_data = token_response.json()
+        access_token = token_data.get('access_token')
         
         if not access_token:
-            debug_log(f"No access token received: {token_response_data}", level='error')
+            logger.error(f"No access token received")
             messages.error(request, 'No access token received from Fayda.')
             return redirect('accounts:register_author')
         
-        debug_log("Access token received successfully")
+        logger.info("Access token received successfully")
         
-        # Step 2: Get user information using access token
-        debug_log(f"Fetching userinfo from: {userinfo_url}")
-        
+        # Get user information
         userinfo_response = requests.get(
             userinfo_url,
-            headers={
-                'Authorization': f'Bearer {access_token}',
-                'Content-Type': 'application/json'
-            },
+            headers={'Authorization': f'Bearer {access_token}'},
             timeout=10
         )
         
         if not userinfo_response.ok:
-            debug_log(f"Userinfo request failed: {userinfo_response.status_code}", level='error')
-            debug_log(f"Response: {userinfo_response.text}", level='error')
+            logger.error(f"Userinfo request failed: {userinfo_response.status_code} - {userinfo_response.text}")
             messages.error(request, 'Failed to retrieve user information from Fayda.')
             return redirect('accounts:register_author')
         
-        userinfo = userinfo_response.json()
-        debug_log(f"Userinfo received successfully")
+        # Decode user info (it's a JWT)
+        try:
+            userinfo = jwt.decode(
+                userinfo_response.text,
+                options={"verify_signature": False},
+                algorithms=["RS256"]
+            )
+            logger.info(f"Userinfo decoded successfully")
+        except Exception as e:
+            logger.error(f"Failed to decode userinfo JWT: {str(e)}")
+            messages.error(request, 'Failed to decode user information.')
+            return redirect('accounts:register_author')
         
-        # Step 3: Map userinfo to our format
+        # Map userinfo to our format
         user_data = {
             'full_name': userinfo.get('name', userinfo.get('full_name', '')),
             'date_of_birth': userinfo.get('birthdate', userinfo.get('date_of_birth', '')),
@@ -583,16 +382,14 @@ def oidc_callback_view(request):
             'zone': userinfo.get('zone', userinfo.get('zone_name', '')),
             'woreda': userinfo.get('woreda', userinfo.get('woreda_name', '')),
             'address': userinfo.get('address', ''),
+            'phone': userinfo.get('phone_number', ''),
+            'email': userinfo.get('email', ''),
+            'nationality': userinfo.get('nationality', ''),
+            'individual_id': userinfo.get('individual_id', ''),
             'national_id': request.session.get('fayda_national_id', '')
         }
         
-        # Validate that we got the required data
-        if not user_data['full_name']:
-            debug_log(f"Missing full_name in userinfo: {userinfo}", level='error')
-            messages.error(request, 'Could not retrieve full name from Fayda.')
-            return redirect('accounts:register_author')
-        
-        debug_log(f"OIDC callback successful for user: {user_data['full_name']}")
+        logger.info(f"OIDC callback successful for user: {user_data['full_name']}")
         
         # Store verified data in session for the registration form
         request.session['fayda_verified_data'] = user_data
@@ -601,18 +398,19 @@ def oidc_callback_view(request):
         request.session.pop('fayda_state', None)
         request.session.pop('fayda_national_id', None)
         request.session.pop('fayda_nonce', None)
+        request.session.pop('fayda_code_verifier', None)
         
-        messages.success(request, f'Fayda verification successful! Welcome {user_data["full_name"]}. Please complete your registration.')
+        messages.success(request, f'Fayda verification successful! Welcome {user_data["full_name"]}.')
         return redirect('accounts:register_author')
         
     except requests.exceptions.Timeout:
-        debug_log("Fayda service timeout", level='error')
+        logger.error("Fayda service timeout")
         messages.error(request, 'Fayda service timeout. Please try again.')
     except requests.exceptions.ConnectionError:
-        debug_log("Could not connect to Fayda service", level='error')
+        logger.error("Could not connect to Fayda service")
         messages.error(request, 'Could not connect to Fayda service. Please try again later.')
     except Exception as e:
-        debug_log(f"Callback processing error: {str(e)}", level='error')
+        logger.error(f"Callback processing error: {str(e)}")
         import traceback
         traceback.print_exc()
         messages.error(request, f'Authentication failed: {str(e)}')
@@ -624,7 +422,6 @@ def oidc_callback_view(request):
 def oidc_initiate(request):
     """
     Initiate OIDC flow with Fayda eSignet using UAT credentials.
-    This endpoint generates the authorization URL for redirecting to Fayda.
     """
     if request.method != 'POST':
         return JsonResponse({
@@ -633,20 +430,11 @@ def oidc_initiate(request):
         }, status=405)
     
     try:
-        # Parse the request body
-        try:
-            data = json.loads(request.body)
-        except json.JSONDecodeError:
-            return JsonResponse({
-                'success': False,
-                'message': 'Invalid JSON payload.'
-            }, status=400)
-        
+        data = json.loads(request.body)
         national_id = data.get('national_id')
         state = data.get('state')
         nonce = data.get('nonce')
         
-        # Validate national ID format
         if not national_id:
             return JsonResponse({
                 'success': False,
@@ -660,42 +448,65 @@ def oidc_initiate(request):
                 'message': 'Invalid National ID format. Must be 16 digits.'
             }, status=400)
         
-        # Validate state
         if not state or len(state) < 10:
             return JsonResponse({
                 'success': False,
                 'message': 'Invalid state parameter.'
             }, status=400)
         
-        # Validate nonce
         if not nonce or len(nonce) < 10:
             return JsonResponse({
                 'success': False,
                 'message': 'Invalid nonce parameter.'
             }, status=400)
         
-        # Get OIDC configuration from environment (UAT)
+        # Get OIDC configuration
         client_id = config('FAYDA_CLIENT_ID')
         auth_url = config('FAYDA_AUTH_URL')
         redirect_uri = config('FAYDA_REDIRECT_URI')
+        
+        # Generate PKCE
+        code_verifier, code_challenge = generate_pkce()
+        request.session['fayda_code_verifier'] = code_verifier
         
         # Store in session for callback verification
         request.session['fayda_national_id'] = national_id_clean
         request.session['fayda_state'] = state
         request.session['fayda_nonce'] = nonce
         
-        # Build the authorization URL with all required parameters
+        # Build claims
+        claims = {
+            "userinfo": {
+                "name": {"essential": True},
+                "phone_number": {"essential": True},
+                "email": {"essential": True},
+                "picture": {"essential": True},
+                "gender": {"essential": True},
+                "birthdate": {"essential": True},
+                "address": {"essential": True},
+                "nationality": {"essential": True},
+                "individual_id": {"essential": True}
+            },
+            "id_token": {}
+        }
+        encoded_claims = urllib.parse.quote(json.dumps(claims))
+        
+        # Build the authorization URL with PKCE
         authorization_url = (
             f"{auth_url}"
-            f"?response_type=code"
+            f"?claims_locales=en"
+            f"&response_type=code"
             f"&client_id={client_id}"
             f"&redirect_uri={redirect_uri}"
+            f"&scope=openid profile email"
+            f"&acr_values=mosip:idp:acr:generated-code:biometrics"
+            f"&code_challenge={code_challenge}"
+            f"&code_challenge_method=S256"
+            f"&claims={encoded_claims}"
             f"&state={state}"
-            f"&nonce={nonce}"
-            f"&scope=openid profile eKYC"
         )
         
-        debug_log(f"OIDC initiated for national_id: {national_id_clean[:4] if national_id_clean else 'None'}****")
+        logger.info(f"OIDC initiated for national_id: {national_id_clean[:4] if national_id_clean else 'None'}****")
         
         return JsonResponse({
             'success': True,
@@ -704,7 +515,7 @@ def oidc_initiate(request):
         })
         
     except Exception as e:
-        debug_log(f"OIDC initiate error: {str(e)}", level='error')
+        logger.error(f"OIDC initiate error: {str(e)}")
         return JsonResponse({
             'success': False,
             'message': f'An error occurred: {str(e)}'
@@ -714,9 +525,8 @@ def oidc_initiate(request):
 @csrf_exempt
 def oidc_callback(request):
     """
-    Handle OIDC callback from Fayda using UAT credentials.
-    Exchanges the authorization code for user information.
-    This is the API endpoint called by the frontend JavaScript.
+    Handle OIDC callback from Fayda - API endpoint for frontend JavaScript.
+    This exchanges the authorization code for user information.
     """
     if request.method != 'POST':
         return JsonResponse({
@@ -725,15 +535,7 @@ def oidc_callback(request):
         }, status=405)
     
     try:
-        # Parse the request body
-        try:
-            data = json.loads(request.body)
-        except json.JSONDecodeError:
-            return JsonResponse({
-                'success': False,
-                'message': 'Invalid JSON payload.'
-            }, status=400)
-        
+        data = json.loads(request.body)
         code = data.get('code')
         state = data.get('state')
         
@@ -743,53 +545,56 @@ def oidc_callback(request):
                 'message': 'Missing code or state parameter.'
             }, status=400)
         
-        # Verify state matches session (CSRF protection)
+        # Verify state matches session
         session_state = request.session.get('fayda_state')
         if state != session_state:
-            debug_log(f"OIDC state mismatch: received {state}, expected {session_state}", level='error')
+            logger.warning(f"OIDC state mismatch: received {state}, expected {session_state}")
             return JsonResponse({
                 'success': False,
                 'message': 'Invalid state parameter. Possible CSRF attack.'
             }, status=400)
         
-        # Get OIDC configuration from environment (UAT)
+        # Get configuration
         client_id = config('FAYDA_CLIENT_ID')
         token_url = config('FAYDA_TOKEN_URL')
         userinfo_url = config('FAYDA_USERINFO_URL')
         redirect_uri = config('FAYDA_REDIRECT_URI')
         private_key_b64 = config('FAYDA_PRIVATE_KEY_B64')
+        expiration_time = config('FAYDA_EXPIRATION_TIME', default=15, cast=int)
         
-        # Generate client assertion
-        client_assertion = generate_client_assertion(client_id, token_url, private_key_b64)
+        # Get code verifier from session
+        code_verifier = request.session.get('fayda_code_verifier', '')
         
-        if not client_assertion:
+        # Generate signed JWT for client assertion
+        signed_jwt = generate_signed_jwt(client_id, token_url, private_key_b64, expiration_time)
+        
+        if not signed_jwt:
             return JsonResponse({
                 'success': False,
                 'message': 'Failed to generate client assertion.'
             }, status=500)
         
-        # Step 1: Exchange code for access token using client assertion
+        # Exchange code for token
         token_response = requests.post(
             token_url,
             data={
                 'grant_type': 'authorization_code',
                 'code': code,
+                'redirect_uri': redirect_uri,
                 'client_id': client_id,
                 'client_assertion_type': 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
-                'client_assertion': client_assertion,
-                'redirect_uri': redirect_uri
+                'client_assertion': signed_jwt,
+                'code_verifier': code_verifier,
             },
-            headers={
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            timeout=15
+            headers={'Content-Type': 'application/x-www-form-urlencoded'},
+            timeout=30
         )
         
         if not token_response.ok:
-            debug_log(f"Token exchange failed: {token_response.status_code} - {token_response.text}", level='error')
+            logger.error(f"Token exchange failed: {token_response.status_code} - {token_response.text}")
             return JsonResponse({
                 'success': False,
-                'message': 'Failed to exchange authorization code. Please try again.'
+                'message': f'Token exchange failed: {token_response.status_code}'
             }, status=400)
         
         token_data = token_response.json()
@@ -801,26 +606,35 @@ def oidc_callback(request):
                 'message': 'No access token received from Fayda.'
             }, status=400)
         
-        # Step 2: Get user information using access token
+        # Get user information
         userinfo_response = requests.get(
             userinfo_url,
-            headers={
-                'Authorization': f'Bearer {access_token}',
-                'Content-Type': 'application/json'
-            },
+            headers={'Authorization': f'Bearer {access_token}'},
             timeout=10
         )
         
         if not userinfo_response.ok:
-            debug_log(f"Userinfo request failed: {userinfo_response.status_code} - {userinfo_response.text}", level='error')
+            logger.error(f"Userinfo request failed: {userinfo_response.status_code} - {userinfo_response.text}")
             return JsonResponse({
                 'success': False,
                 'message': 'Failed to retrieve user information from Fayda.'
             }, status=400)
         
-        userinfo = userinfo_response.json()
+        # Decode user info (it's a JWT)
+        try:
+            userinfo = jwt.decode(
+                userinfo_response.text,
+                options={"verify_signature": False},
+                algorithms=["RS256"]
+            )
+        except Exception as e:
+            logger.error(f"Failed to decode userinfo JWT: {str(e)}")
+            return JsonResponse({
+                'success': False,
+                'message': 'Failed to decode user information.'
+            }, status=400)
         
-        # Step 3: Map userinfo to our format
+        # Map userinfo to our format
         user_data = {
             'full_name': userinfo.get('name', userinfo.get('full_name', '')),
             'date_of_birth': userinfo.get('birthdate', userinfo.get('date_of_birth', '')),
@@ -828,22 +642,20 @@ def oidc_callback(request):
             'region': userinfo.get('region', userinfo.get('region_name', '')),
             'zone': userinfo.get('zone', userinfo.get('zone_name', '')),
             'woreda': userinfo.get('woreda', userinfo.get('woreda_name', '')),
-            'address': userinfo.get('address', '')
+            'address': userinfo.get('address', ''),
+            'phone': userinfo.get('phone_number', ''),
+            'email': userinfo.get('email', ''),
+            'nationality': userinfo.get('nationality', ''),
+            'individual_id': userinfo.get('individual_id', ''),
         }
         
-        # Validate that we got the required data
-        if not user_data['full_name']:
-            return JsonResponse({
-                'success': False,
-                'message': 'Could not retrieve full name from Fayda.'
-            }, status=400)
-        
-        debug_log(f"OIDC callback successful for user: {user_data['full_name']}")
+        logger.info(f"OIDC callback successful for user: {user_data['full_name']}")
         
         # Clear session data
         request.session.pop('fayda_state', None)
         request.session.pop('fayda_national_id', None)
         request.session.pop('fayda_nonce', None)
+        request.session.pop('fayda_code_verifier', None)
         
         return JsonResponse({
             'success': True,
@@ -862,7 +674,9 @@ def oidc_callback(request):
             'message': 'Could not connect to Fayda service. Please try again later.'
         }, status=503)
     except Exception as e:
-        debug_log(f"OIDC callback error: {str(e)}", level='error')
+        logger.error(f"OIDC callback error: {str(e)}")
+        import traceback
+        traceback.print_exc()
         return JsonResponse({
             'success': False,
             'message': f'An error occurred: {str(e)}'
@@ -877,19 +691,15 @@ def dashboard_redirect(request):
 
 @login_required
 def admin_dashboard(request):
-    """
-    Admin dashboard view with comprehensive analytics and payment data.
-    """
+    """Admin dashboard view"""
     if request.user.role != 'admin':
         messages.error(request, 'You do not have permission to access this page.')
         return redirect('accounts:dashboard')
     
-    # Date ranges for analytics
     today = timezone.now().date()
     week_start = today - timedelta(days=7)
     month_start = today.replace(day=1)
     
-    # Initialize payment data with defaults
     telebirr_sales = 0
     cbe_sales = 0
     total_sales = 0
@@ -898,7 +708,6 @@ def admin_dashboard(request):
     month_sales = 0
     monthly_sales = 0
     
-    # Try to import payment models and get real data
     try:
         from payments.models import Purchase, PaymentTransaction
         
@@ -909,37 +718,18 @@ def admin_dashboard(request):
             return result if result is not None else 0
         
         total_sales = sum_amount(completed_purchases)
-        
-        today_purchases = completed_purchases.filter(created_at__date=today)
-        today_sales = sum_amount(today_purchases)
-        
-        week_purchases = completed_purchases.filter(
-            created_at__date__gte=week_start,
-            created_at__date__lte=today
-        )
-        week_sales = sum_amount(week_purchases)
-        
-        month_purchases = completed_purchases.filter(
-            created_at__date__gte=month_start,
-            created_at__date__lte=today
-        )
-        month_sales = sum_amount(month_purchases)
+        today_sales = sum_amount(completed_purchases.filter(created_at__date=today))
+        week_sales = sum_amount(completed_purchases.filter(created_at__date__gte=week_start, created_at__date__lte=today))
+        month_sales = sum_amount(completed_purchases.filter(created_at__date__gte=month_start, created_at__date__lte=today))
         monthly_sales = month_sales
         
         if hasattr(Purchase, 'payment_method'):
-            telebirr_purchases = completed_purchases.filter(payment_method__icontains='telebirr')
-            telebirr_sales = sum_amount(telebirr_purchases)
-            
-            cbe_purchases = completed_purchases.filter(
-                Q(payment_method__icontains='cbe') | Q(payment_method__icontains='cbe_birr')
-            )
-            cbe_sales = sum_amount(cbe_purchases)
+            telebirr_sales = sum_amount(completed_purchases.filter(payment_method__icontains='telebirr'))
+            cbe_sales = sum_amount(completed_purchases.filter(Q(payment_method__icontains='cbe') | Q(payment_method__icontains='cbe_birr')))
         elif hasattr(PaymentTransaction, 'payment_method'):
             completed_transactions = PaymentTransaction.objects.filter(status='completed')
             telebirr_sales = sum_amount(completed_transactions.filter(payment_method__icontains='telebirr'))
-            cbe_sales = sum_amount(completed_transactions.filter(
-                Q(payment_method__icontains='cbe') | Q(payment_method__icontains='cbe_birr')
-            ))
+            cbe_sales = sum_amount(completed_transactions.filter(Q(payment_method__icontains='cbe') | Q(payment_method__icontains='cbe_birr')))
     except ImportError:
         pass
     except Exception as e:
@@ -992,17 +782,13 @@ def author_dashboard(request):
 
 @login_required
 def checker_dashboard(request):
-    """Checker dashboard view - Review and validate book submissions"""
+    """Checker dashboard view"""
     if request.user.role != 'checker':
         messages.error(request, 'You do not have permission to access this page.')
         return redirect('accounts:dashboard')
     
     pending_books = Book.objects.filter(status='pending_review').order_by('created_at')
-    
-    reviewed_books = QualityReview.objects.filter(
-        reviewer=request.user, 
-        review_type='checker'
-    ).select_related('book', 'book__author').order_by('-created_at')[:20]
+    reviewed_books = QualityReview.objects.filter(reviewer=request.user, review_type='checker').select_related('book', 'book__author').order_by('-created_at')[:20]
     
     total_pending = pending_books.count()
     total_reviewed = reviewed_books.count()
@@ -1010,12 +796,7 @@ def checker_dashboard(request):
     
     current_month = timezone.now().month
     current_year = timezone.now().year
-    reviewed_this_month = QualityReview.objects.filter(
-        reviewer=request.user,
-        review_type='checker',
-        created_at__year=current_year,
-        created_at__month=current_month
-    ).count()
+    reviewed_this_month = QualityReview.objects.filter(reviewer=request.user, review_type='checker', created_at__year=current_year, created_at__month=current_month).count()
     
     scoring_criteria = {
         'excellent': {'min': 9, 'max': 10, 'label': 'Excellent', 'description': 'Exceptional quality, ready for publication with no issues'},
@@ -1141,11 +922,7 @@ def maker_dashboard(request):
         return redirect('accounts:dashboard')
     
     pending_books = Book.objects.filter(status='checker_approved').order_by('checker_reviewed_at')
-    
-    published_books = Book.objects.filter(
-        status='published',
-        published_at__month=timezone.now().month
-    ).order_by('-published_at')[:10]
+    published_books = Book.objects.filter(status='published', published_at__month=timezone.now().month).order_by('-published_at')[:10]
     
     pending_count = pending_books.count()
     approved_count = Book.objects.filter(status='published', published_at__month=timezone.now().month).count()
