@@ -1,8 +1,9 @@
+<!-- templates/accounts/profile.html -->
 {% extends 'base.html' %}
 {% load static %}
 {% load humanize %}
 
-{% block title %}My Profile - Abrehot Library{% endblock %}
+{% block title %}My Profile - Abay Repository{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -96,6 +97,51 @@
         color: var(--primary-darker);
         transform: translateY(-2px);
     }
+
+    .bg-gold {
+        background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark));
+        color: var(--primary-darker);
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+        .profile-header {
+            padding: 1.5rem;
+        }
+        .profile-avatar {
+            width: 90px;
+            height: 90px;
+        }
+        .info-card {
+            padding: 1rem;
+        }
+        .stat-badge {
+            padding: 0.75rem;
+        }
+        .stat-number {
+            font-size: 1.2rem;
+        }
+        .btn-gold {
+            padding: 8px 16px;
+            font-size: 0.9rem;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .profile-header {
+            padding: 1rem;
+        }
+        .profile-avatar {
+            width: 70px;
+            height: 70px;
+        }
+        .info-label {
+            font-size: 0.65rem;
+        }
+        .info-value {
+            font-size: 0.85rem;
+        }
+    }
 </style>
 {% endblock %}
 
@@ -122,6 +168,9 @@
                         <span class="badge bg-success p-2"><i class="fas fa-check-circle me-1"></i> Verified</span>
                     {% else %}
                         <span class="badge bg-warning p-2"><i class="fas fa-clock me-1"></i> Pending Verification</span>
+                    {% endif %}
+                    {% if user.two_factor_enabled %}
+                        <span class="badge bg-info p-2"><i class="fas fa-shield-alt me-1"></i> 2FA Enabled</span>
                     {% endif %}
                 </div>
             </div>
@@ -160,11 +209,11 @@
                     </div>
                     <div class="col-sm-6 mb-3">
                         <div class="info-label">Gender</div>
-                        <div class="info-value">{{ user.get_gender_display|default:"Not specified" }}</div>
+                        <div class="info-value">{{ user.gender|default:"Not specified" }}</div>
                     </div>
                     <div class="col-sm-6 mb-3">
                         <div class="info-label">Date of Birth</div>
-                        <div class="info-value">{{ user.date_of_birth|date:"F d, Y"|default:"Not provided" }}</div>
+                        <div class="info-value">{{ user.date_of_birth|default:"Not provided" }}</div>
                     </div>
                 </div>
             </div>
@@ -226,16 +275,6 @@
                         <div class="info-value">{{ user.last_login|date:"F d, Y H:i"|default:"Never" }}</div>
                     </div>
                     <div class="col-sm-6 mb-3">
-                        <div class="info-label">Two-Factor Auth</div>
-                        <div class="info-value">
-                            {% if user.two_factor_enabled %}
-                                <span class="text-success">Enabled</span>
-                            {% else %}
-                                <span class="text-muted">Disabled</span>
-                            {% endif %}
-                        </div>
-                    </div>
-                    <div class="col-sm-6 mb-3">
                         <div class="info-label">Email Verification</div>
                         <div class="info-value">
                             {% if user.email_verified %}
@@ -246,6 +285,36 @@
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <!-- Two-Factor Authentication Section - FIXED -->
+            <div class="info-card">
+                <h5 class="mb-3">
+                    <i class="fas fa-shield-alt me-2" style="color: var(--primary-gold);"></i>
+                    Two-Factor Authentication
+                </h5>
+                {% if user.two_factor_enabled %}
+                    <div class="alert alert-success">
+                        <i class="fas fa-check-circle me-2"></i>
+                        Two-Factor Authentication is <strong>ENABLED</strong>
+                    </div>
+                    <div class="mt-2 d-flex flex-wrap gap-2">
+                        <a href="#" class="btn btn-outline-warning btn-sm" onclick="alert('Backup codes feature is coming soon.')">
+                            <i class="fas fa-save me-1"></i> View Backup Codes
+                        </a>
+                        <a href="#" class="btn btn-outline-danger btn-sm" onclick="alert('Disable 2FA feature is coming soon.')">
+                            <i class="fas fa-times me-1"></i> Disable 2FA
+                        </a>
+                    </div>
+                {% else %}
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Two-Factor Authentication is <strong>DISABLED</strong>
+                    </div>
+                    <a href="#" class="btn btn-gold" onclick="alert('2FA setup feature is coming soon.')">
+                        <i class="fas fa-shield-alt me-2"></i> Enable 2FA
+                    </a>
+                {% endif %}
             </div>
 
             <!-- Bio Section -->
@@ -315,14 +384,4 @@
         </div>
     </div>
 </div>
-
-<style>
-    .bg-gold {
-        background: linear-gradient(135deg, #DAA520, #B8860B);
-        color: #1A1A1A;
-    }
-    .text-gold {
-        color: #DAA520;
-    }
-</style>
 {% endblock %}

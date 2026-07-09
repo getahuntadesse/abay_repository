@@ -268,6 +268,11 @@
         color: white;
     }
     
+    .badge-available {
+        background: #28a745;
+        color: white;
+    }
+    
     .book-stats {
         position: absolute;
         bottom: 8px;
@@ -341,6 +346,9 @@
         font-weight: 600;
         transition: all 0.3s ease;
         text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
     }
     
     .btn-sm-gold:hover {
@@ -359,6 +367,9 @@
         font-weight: 600;
         transition: all 0.3s ease;
         text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
     }
     
     .btn-sm-outline:hover {
@@ -367,7 +378,94 @@
         border-color: var(--primary-gray);
     }
     
-    /* Pagination - Mobile First */
+    .btn-sm-success {
+        background: #28a745;
+        color: white;
+        border: none;
+        padding: 4px 12px;
+        border-radius: 16px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+    }
+    
+    .btn-sm-success:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 3px 10px rgba(40, 167, 69, 0.4);
+        color: white;
+    }
+    
+    /* Free Access Banner */
+    .free-access-banner {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        color: white;
+        padding: 12px 20px;
+        border-radius: 12px;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    
+    .free-access-banner i {
+        font-size: 1.5rem;
+    }
+    
+    .free-access-banner .btn-light {
+        background: white;
+        color: #28a745;
+        border: none;
+        padding: 6px 20px;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .free-access-banner .btn-light:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(255,255,255,0.3);
+    }
+    
+    /* Login Required Overlay for Paid Books */
+    .login-required-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.7);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        padding: 1rem;
+        text-align: center;
+    }
+    
+    .book-card:hover .login-required-overlay {
+        opacity: 1;
+    }
+    
+    .login-required-overlay p {
+        color: white;
+        font-size: 0.8rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .login-required-overlay .btn {
+        font-size: 0.7rem;
+        padding: 4px 14px;
+    }
+    
+    /* Pagination */
     .pagination {
         flex-wrap: wrap;
         gap: 0.25rem;
@@ -449,6 +547,14 @@
         margin-right: 0.5rem;
     }
     
+    /* Toast/Notification */
+    .toast-container {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 9999;
+    }
+    
     /* Responsive */
     @media (max-width: 768px) {
         .page-header {
@@ -495,6 +601,12 @@
         
         .filter-chips {
             justify-content: center;
+        }
+        
+        .free-access-banner {
+            flex-direction: column;
+            text-align: center;
+            padding: 15px;
         }
         
         .book-cover-wrapper {
@@ -551,7 +663,8 @@
         }
         
         .btn-sm-gold,
-        .btn-sm-outline {
+        .btn-sm-outline,
+        .btn-sm-success {
             font-size: 0.65rem;
             padding: 3px 10px;
         }
@@ -559,21 +672,6 @@
         .pagination .page-link {
             padding: 3px 8px;
             font-size: 0.75rem;
-        }
-        
-        .no-results i {
-            font-size: 2.5rem;
-        }
-    }
-    
-    /* Tablet */
-    @media (min-width: 769px) and (max-width: 992px) {
-        .book-cover-wrapper {
-            padding-top: 135%;
-        }
-        
-        .page-header h1 {
-            font-size: 1.8rem;
         }
     }
 </style>
@@ -599,6 +697,20 @@
 </div>
 
 <div class="container mb-5">
+    <!-- Free Access Banner (shown to non-authenticated users) -->
+    {% if not user.is_authenticated %}
+    <div class="free-access-banner">
+        <div>
+            <i class="fas fa-gift me-2"></i>
+            <strong>Free Books Available!</strong>
+            <span class="ms-2">You can read free books without creating an account.</span>
+        </div>
+        <a href="{% url 'accounts:login' %}" class="btn btn-light">
+            <i class="fas fa-user-plus me-1"></i> Sign Up Free
+        </a>
+    </div>
+    {% endif %}
+    
     <!-- Filter Bar -->
     <div class="filter-bar">
         <div class="results-info">
@@ -765,25 +877,47 @@
                         <div class="book-cover-wrapper">
                             <div class="book-cover" style="background-image: url('{% if book.cover_image %}{{ book.cover_image.url }}{% else %}https://via.placeholder.com/300x400/2C2C2C/DAA520?text=No+Cover{% endif %}');">
                             </div>
+                            
+                            <!-- Overlay for Paid Books (non-authenticated users) -->
+                            {% if not user.is_authenticated and not book.is_free %}
+                            <div class="login-required-overlay">
+                                <p><i class="fas fa-lock fa-2x mb-2 d-block"></i></p>
+                                <p>Login to view this book</p>
+                                <a href="{% url 'accounts:login' %}?next={{ request.path }}" class="btn btn-sm btn-gold">
+                                    <i class="fas fa-sign-in-alt"></i> Login
+                                </a>
+                            </div>
+                            {% else %}
+                            <!-- Overlay for Authenticated Users -->
                             <div class="book-overlay">
                                 <a href="{% url 'books:detail' book.id %}" class="btn-sm-gold">
                                     <i class="fas fa-info-circle"></i> View
                                 </a>
                                 {% if user.is_authenticated and user.role == 'client' %}
-                                    <a href="#" class="btn-sm-outline">
+                                    <a href="#" class="btn-sm-outline add-to-wishlist" data-book-id="{{ book.id }}">
                                         <i class="fas fa-heart"></i>
                                     </a>
                                 {% endif %}
+                                {% if book.is_free %}
+                                    <a href="{% url 'books:read_free' book.id %}" class="btn-sm-success">
+                                        <i class="fas fa-book-open"></i> Read Free
+                                    </a>
+                                {% endif %}
                             </div>
+                            {% endif %}
+                            
                             <div class="book-badges">
                                 {% if book.is_free %}
-                                    <span class="badge badge-free">Free</span>
+                                    <span class="badge badge-free"><i class="fas fa-gift"></i> Free</span>
                                 {% endif %}
                                 {% if book.is_new %}
                                     <span class="badge badge-new">New</span>
                                 {% endif %}
                                 {% if book.is_popular %}
                                     <span class="badge badge-popular">Popular</span>
+                                {% endif %}
+                                {% if book.status == 'published' %}
+                                    <span class="badge badge-available">Available</span>
                                 {% endif %}
                             </div>
                             <div class="book-stats">
@@ -803,9 +937,15 @@
                                     {% endif %}
                                 </span>
                                 <div class="book-actions">
-                                    <a href="{% url 'books:detail' book.id %}" class="btn-sm-gold">
-                                        <i class="fas fa-arrow-right"></i>
-                                    </a>
+                                    {% if book.is_free %}
+                                        <a href="{% url 'books:read_free' book.id %}" class="btn-sm-success">
+                                            <i class="fas fa-book-open"></i>
+                                        </a>
+                                    {% else %}
+                                        <a href="{% url 'books:detail' book.id %}" class="btn-sm-gold">
+                                            <i class="fas fa-arrow-right"></i>
+                                        </a>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
@@ -867,6 +1007,19 @@
     {% endif %}
 </div>
 
+<!-- Toast Notification Container -->
+<div class="toast-container">
+    <div id="wishlistToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <strong class="me-auto"><i class="fas fa-heart text-danger"></i> Wishlist</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+        </div>
+        <div class="toast-body" id="wishlistToastBody">
+            Book added to wishlist!
+        </div>
+    </div>
+</div>
+
 {% block extra_js %}
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -874,12 +1027,14 @@
         const searchInput = document.getElementById('searchInput');
         const searchForm = document.getElementById('searchForm');
         
-        searchInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                searchForm.submit();
-            }
-        });
+        if (searchInput && searchForm) {
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    searchForm.submit();
+                }
+            });
+        }
         
         // Close dropdowns on mobile after selection
         document.querySelectorAll('.dropdown-item').forEach(function(item) {
@@ -901,18 +1056,18 @@
         function updateFilterCount() {
             var chips = document.querySelectorAll('.filter-chip');
             var count = chips.length;
-            var filterBar = document.querySelector('.filter-bar');
             if (count > 0) {
-                if (!document.querySelector('.filter-count-badge')) {
-                    var badge = document.createElement('span');
-                    badge.className = 'badge bg-gold text-dark ms-2 filter-count-badge';
-                    badge.textContent = count;
+                var badge = document.querySelector('.filter-count-badge');
+                if (!badge) {
                     var resultsInfo = document.querySelector('.results-info');
                     if (resultsInfo) {
+                        badge = document.createElement('span');
+                        badge.className = 'badge bg-gold text-dark ms-2 filter-count-badge';
+                        badge.textContent = count;
                         resultsInfo.appendChild(badge);
                     }
                 } else {
-                    document.querySelector('.filter-count-badge').textContent = count;
+                    badge.textContent = count;
                 }
             } else {
                 var badge = document.querySelector('.filter-count-badge');
@@ -921,8 +1076,40 @@
                 }
             }
         }
-        
         updateFilterCount();
+        
+        // Add to wishlist functionality (AJAX)
+        document.querySelectorAll('.add-to-wishlist').forEach(function(btn) {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                var bookId = this.dataset.bookId;
+                
+                fetch('/api/wishlist/add/', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]')?.value || '',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ book_id: bookId })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    var toastBody = document.getElementById('wishlistToastBody');
+                    if (data.success) {
+                        toastBody.textContent = 'Book added to your wishlist! ❤️';
+                        this.innerHTML = '<i class="fas fa-heart text-danger"></i>';
+                        this.classList.add('active');
+                    } else {
+                        toastBody.textContent = data.message || 'Please login to add to wishlist';
+                    }
+                    var toast = new bootstrap.Toast(document.getElementById('wishlistToast'));
+                    toast.show();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            });
+        });
     });
 </script>
 {% endblock %}

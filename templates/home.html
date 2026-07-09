@@ -1,3 +1,4 @@
+<!-- templates/home.html -->
 {% extends 'base.html' %}
 {% load static %}
 {% load humanize %}
@@ -16,7 +17,6 @@
         --primary-gray-light: #6C6C6C;
     }
 
-    /* Hero Section */
     .hero-section {
         background: linear-gradient(135deg, var(--primary-darker) 0%, var(--primary-dark) 100%);
         padding: 60px 0 50px;
@@ -80,21 +80,15 @@
         height: auto;
         border-radius: 20px;
         box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        transition: transform 0.3s ease;
         max-height: 350px;
         object-fit: cover;
     }
     
     .hero-image:hover {
         transform: scale(1.02);
-        box-shadow: 0 25px 50px rgba(0,0,0,0.4);
     }
     
-    .hero-buttons .btn {
-        margin-bottom: 0.5rem;
-    }
-    
-    /* Stat Cards */
     .stat-card {
         background: white;
         border-radius: 20px;
@@ -130,7 +124,6 @@
         font-weight: 500;
     }
     
-    /* Feature Cards */
     .feature-card {
         background: white;
         border-radius: 20px;
@@ -178,7 +171,6 @@
         margin-bottom: 0;
     }
     
-    /* Section Title */
     .section-title {
         font-size: 2rem;
         font-weight: 700;
@@ -206,7 +198,6 @@
         margin-top: 1.25rem;
     }
     
-    /* Book Cards */
     .book-card {
         background: white;
         border-radius: 16px;
@@ -316,16 +307,6 @@
         gap: 0.25rem;
     }
     
-    .book-price {
-        font-weight: 700;
-        color: var(--primary-gold-dark);
-    }
-    
-    .book-price.free {
-        color: #28a745;
-    }
-    
-    /* Step Cards */
     .step-card {
         text-align: center;
         padding: 1rem;
@@ -357,7 +338,6 @@
         margin-bottom: 0;
     }
     
-    /* CTA Section */
     .cta-section {
         background: linear-gradient(135deg, var(--primary-darker) 0%, var(--primary-dark) 100%);
         padding: 50px 0;
@@ -375,7 +355,6 @@
         opacity: 0.8;
     }
     
-    /* Testimonial Cards */
     .testimonial-card {
         background: white;
         border-radius: 20px;
@@ -437,7 +416,6 @@
         margin-top: 0.5rem;
     }
     
-    /* Buttons */
     .btn-gold {
         background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark));
         color: var(--primary-darker);
@@ -480,194 +458,6 @@
         text-decoration: none;
     }
     
-    .btn-sm {
-        padding: 6px 16px;
-        font-size: 0.85rem;
-    }
-    
-    /* Responsive */
-    @media (max-width: 992px) {
-        .hero-title {
-            font-size: 2.4rem;
-        }
-        .hero-section {
-            padding: 50px 0 40px;
-        }
-        .hero-image {
-            max-height: 280px;
-        }
-    }
-    
-    @media (max-width: 768px) {
-        .hero-title {
-            font-size: 2rem;
-            text-align: center;
-        }
-        .hero-motto {
-            font-size: 0.95rem;
-            text-align: center;
-        }
-        .hero-subtitle {
-            font-size: 0.9rem;
-            text-align: center;
-            max-width: 100%;
-        }
-        .hero-buttons {
-            text-align: center;
-        }
-        .hero-buttons .btn {
-            width: 100%;
-            justify-content: center;
-            margin-bottom: 0.5rem;
-        }
-        .hero-buttons .btn:last-child {
-            margin-bottom: 0;
-        }
-        .hero-image {
-            max-height: 220px;
-            margin-top: 1.5rem;
-        }
-        .section-title {
-            font-size: 1.6rem;
-        }
-        .section-subtitle {
-            font-size: 0.9rem;
-        }
-        .stat-number {
-            font-size: 1.5rem;
-        }
-        .stat-card {
-            padding: 1.25rem 0.75rem;
-        }
-        .feature-card {
-            padding: 1.25rem;
-        }
-        .feature-icon {
-            width: 60px;
-            height: 60px;
-        }
-        .feature-icon i {
-            font-size: 1.6rem;
-        }
-        .cta-section {
-            padding: 35px 20px;
-            border-radius: 16px;
-            margin: 30px 0;
-        }
-        .cta-section h2 {
-            font-size: 1.5rem;
-        }
-        .cta-section p {
-            font-size: 0.95rem;
-        }
-        .cta-section .btn {
-            width: 100%;
-            justify-content: center;
-        }
-        .cta-section .d-flex {
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-        .testimonial-card {
-            padding: 1.25rem;
-        }
-        .book-cover-wrapper {
-            padding-top: 130%;
-        }
-        .step-card {
-            padding: 0.75rem;
-        }
-        .step-number {
-            width: 42px;
-            height: 42px;
-            font-size: 1.2rem;
-        }
-        .step-card h5 {
-            font-size: 1rem;
-        }
-    }
-    
-    @media (max-width: 576px) {
-        .hero-title {
-            font-size: 1.7rem;
-        }
-        .hero-section {
-            padding: 40px 0 30px;
-        }
-        .hero-image {
-            max-height: 180px;
-        }
-        .stat-number {
-            font-size: 1.3rem;
-        }
-        .stat-icon {
-            font-size: 1.8rem;
-        }
-        .section-title {
-            font-size: 1.4rem;
-        }
-        .section-title:after {
-            width: 40px;
-        }
-        .book-title {
-            font-size: 0.9rem;
-        }
-        .book-author {
-            font-size: 0.8rem;
-        }
-        .feature-card h4 {
-            font-size: 1rem;
-        }
-        .feature-card p {
-            font-size: 0.85rem;
-        }
-        .container {
-            padding-left: 12px;
-            padding-right: 12px;
-        }
-        .row {
-            margin-left: -8px;
-            margin-right: -8px;
-        }
-        .col-6, .col-12, .col-md-3, .col-md-4 {
-            padding-left: 8px;
-            padding-right: 8px;
-        }
-    }
-    
-    /* Animations */
-    @keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translateY(30px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-    
-    .fade-in-up {
-        animation: fadeInUp 0.6s ease-out forwards;
-    }
-    
-    .delay-1 { animation-delay: 0.1s; opacity: 0; }
-    .delay-2 { animation-delay: 0.2s; opacity: 0; }
-    .delay-3 { animation-delay: 0.3s; opacity: 0; }
-    .delay-4 { animation-delay: 0.4s; opacity: 0; }
-    
-    /* Utility */
-    .text-gold {
-        color: var(--primary-gold);
-    }
-    .bg-gold {
-        background: var(--primary-gold);
-    }
-    .gap-1 { gap: 0.25rem; }
-    .gap-2 { gap: 0.5rem; }
-    .gap-3 { gap: 1rem; }
-    
-    /* Badge override */
     .badge-free {
         background: #28a745;
         color: white;
@@ -684,6 +474,56 @@
         border-radius: 20px;
         font-size: 0.7rem;
         font-weight: 600;
+    }
+    
+    .text-gold {
+        color: var(--primary-gold);
+    }
+    
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .fade-in-up {
+        animation: fadeInUp 0.6s ease-out forwards;
+    }
+    .delay-1 { animation-delay: 0.1s; opacity: 0; }
+    .delay-2 { animation-delay: 0.2s; opacity: 0; }
+    .delay-3 { animation-delay: 0.3s; opacity: 0; }
+    .delay-4 { animation-delay: 0.4s; opacity: 0; }
+    
+    @media (max-width: 992px) {
+        .hero-title { font-size: 2.4rem; }
+        .hero-section { padding: 50px 0 40px; }
+        .hero-image { max-height: 280px; }
+    }
+    
+    @media (max-width: 768px) {
+        .hero-title { font-size: 2rem; text-align: center; }
+        .hero-motto { font-size: 0.95rem; text-align: center; }
+        .hero-subtitle { font-size: 0.9rem; text-align: center; max-width: 100%; }
+        .hero-buttons { text-align: center; }
+        .hero-buttons .btn { width: 100%; justify-content: center; margin-bottom: 0.5rem; }
+        .hero-image { max-height: 220px; margin-top: 1.5rem; }
+        .section-title { font-size: 1.6rem; }
+        .stat-number { font-size: 1.5rem; }
+        .cta-section { padding: 35px 20px; border-radius: 16px; margin: 30px 0; }
+        .cta-section h2 { font-size: 1.5rem; }
+        .cta-section .btn { width: 100%; justify-content: center; }
+        .cta-section .d-flex { flex-direction: column; gap: 0.5rem; }
+        .book-cover-wrapper { padding-top: 130%; }
+    }
+    
+    @media (max-width: 576px) {
+        .hero-title { font-size: 1.7rem; }
+        .hero-section { padding: 40px 0 30px; }
+        .hero-image { max-height: 180px; }
+        .stat-number { font-size: 1.3rem; }
+        .stat-icon { font-size: 1.8rem; }
+        .section-title { font-size: 1.4rem; }
+        .section-title:after { width: 40px; }
+        .container { padding-left: 12px; padding-right: 12px; }
     }
 </style>
 {% endblock %}
@@ -867,7 +707,7 @@
             <div class="step-card">
                 <div class="step-number">1</div>
                 <h5>Register</h5>
-                <p>Create your author account with National ID verification</p>
+                <p>Create your account with National ID verification</p>
             </div>
         </div>
         <div class="col-6 col-md-3 fade-in-up delay-2">
@@ -881,7 +721,7 @@
             <div class="step-card">
                 <div class="step-number">3</div>
                 <h5>Review</h5>
-                <p>Quality check by our expert team (2-3 days)</p>
+                <p>Quality check by our expert team</p>
             </div>
         </div>
         <div class="col-6 col-md-3 fade-in-up delay-4">
@@ -905,13 +745,13 @@
                     <a href="{% url 'accounts:register_author' %}" class="btn-gold px-4">
                         <i class="fas fa-pen-fancy me-2"></i> Become an Author
                     </a>
-                    <a href="{% url 'accounts:register' %}" class="btn-outline-gold px-4">
+                    <a href="{% url 'accounts:register_client' %}" class="btn-outline-gold px-4">
                         <i class="fas fa-book-reader me-2"></i> Start Reading
                     </a>
                 </div>
             {% else %}
                 <div class="d-flex justify-content-center gap-3 flex-wrap flex-sm-nowrap">
-                    <a href="{% url 'accounts:dashboard' %}" class="btn-gold px-4">
+                    <a href="{% url 'accounts:dashboard_redirect' %}" class="btn-gold px-4">
                         <i class="fas fa-tachometer-alt me-2"></i> Go to Dashboard
                     </a>
                     <a href="{% url 'books:browse' %}" class="btn-outline-gold px-4">
@@ -935,19 +775,15 @@
             <div class="testimonial-card">
                 <p class="testimonial-text">"Abrehot Library has transformed my publishing experience. The platform is easy to use, and I've reached readers across Ethiopia."</p>
                 <div class="testimonial-author">
-                    <div class="avatar-circle">
-                        <i class="fas fa-user"></i>
-                    </div>
+                    <div class="avatar-circle"><i class="fas fa-user"></i></div>
                     <div class="testimonial-author-info">
                         <h6>Dr. Almaz T.</h6>
                         <small>Author</small>
                     </div>
                 </div>
                 <div class="testimonial-stars">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i>
                     <i class="fas fa-star"></i>
                 </div>
             </div>
@@ -956,19 +792,15 @@
             <div class="testimonial-card">
                 <p class="testimonial-text">"The best digital library in Ethiopia! Wide selection of books and easy payment with Telebirr. Highly recommended!"</p>
                 <div class="testimonial-author">
-                    <div class="avatar-circle">
-                        <i class="fas fa-user"></i>
-                    </div>
+                    <div class="avatar-circle"><i class="fas fa-user"></i></div>
                     <div class="testimonial-author-info">
                         <h6>Michael D.</h6>
                         <small>Reader</small>
                     </div>
                 </div>
                 <div class="testimonial-stars">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i>
                     <i class="fas fa-star"></i>
                 </div>
             </div>
@@ -977,19 +809,15 @@
             <div class="testimonial-card">
                 <p class="testimonial-text">"Royalty payments are prompt, and the support team is very responsive. Great platform for Ethiopian writers!"</p>
                 <div class="testimonial-author">
-                    <div class="avatar-circle">
-                        <i class="fas fa-user"></i>
-                    </div>
+                    <div class="avatar-circle"><i class="fas fa-user"></i></div>
                     <div class="testimonial-author-info">
                         <h6>Yonas A.</h6>
                         <small>Author</small>
                     </div>
                 </div>
                 <div class="testimonial-stars">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i>
                     <i class="fas fa-star"></i>
                 </div>
             </div>

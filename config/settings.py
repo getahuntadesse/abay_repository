@@ -1,28 +1,29 @@
 """
-Django settings for config project.
-Updated for MySQL (XAMPP) - Abay Repository
+Django settings for abay_repository project.
 """
 
 import os
 from pathlib import Path
-from decouple import config, Csv
-from datetime import timedelta
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# ==================================================
-# SECURITY SETTINGS
-# ==================================================
+# =============================================
+# 1. SECRET KEY & DEBUG SETTINGS
+# =============================================
 
-SECRET_KEY = config('SECRET_KEY')
-DEBUG = config('DEBUG', default=False, cast=bool)
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1', cast=Csv())
-CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS', default='http://localhost:8000', cast=Csv())
+SECRET_KEY = config('SECRET_KEY', default='django-insecure-9!@#x$%^&*()_+=-qwertyuiop[]{}|;:,.<>/')
 
-# ==================================================
-# APPLICATION DEFINITION
-# ==================================================
+DEBUG = config('DEBUG', default=True, cast=bool)
+
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1,::1').split(',')
+
+CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS', default='http://localhost:3000,http://127.0.0.1:3000,https://esignet.ida.fayda.et').split(',')
+
+# =============================================
+# 2. APPLICATION DEFINITION
+# =============================================
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -31,113 +32,40 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.humanize',
+    'django.contrib.humanize', 
     
-    # Third Party Apps
+    # Third-party apps
+    'corsheaders',
     'crispy_forms',
     'crispy_bootstrap5',
-    'rest_framework',
-    'channels',
-    'corsheaders',
-    'import_export',
-    'django_filters',
-    'debug_toolbar',
-    'cacheops',
-    'simple_history',
-    'actstream',
-    'taggit',
-    'widget_tweaks',
     
-    # Local Apps
+    # 2FA Apps
+    'django_otp',
+    'django_otp.plugins.otp_static',
+    'django_otp.plugins.otp_email',
+    
+    # Local apps
     'accounts',
     'books',
-    'reviews',
-    'royalties',
+    'core',
     'payments',
+    #'royalties',
     'notifications',
     'dashboard',
+    'reviews',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django_otp.middleware.OTPMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'simple_history.middleware.HistoryRequestMiddleware',
 ]
-
-# ==================================================
-# DEBUG TOOLBAR CONFIGURATION
-# ==================================================
-
-# Only add Debug Toolbar middleware and apps when DEBUG is True
-if DEBUG:
-    # Add debug toolbar to installed apps if not already present
-    if 'debug_toolbar' not in INSTALLED_APPS:
-        INSTALLED_APPS.append('debug_toolbar')
-    
-    # Insert debug toolbar middleware at the appropriate position
-    # It should be after SecurityMiddleware but before other middleware
-    DEBUG_TOOLBAR_MIDDLEWARE = 'debug_toolbar.middleware.DebugToolbarMiddleware'
-    if DEBUG_TOOLBAR_MIDDLEWARE not in MIDDLEWARE:
-        # Insert after SecurityMiddleware (position 1) or at the beginning
-        # We want it to run early but after security checks
-        MIDDLEWARE.insert(1, DEBUG_TOOLBAR_MIDDLEWARE)
-    
-    # Internal IPs for debug toolbar
-    INTERNAL_IPS = [
-        '127.0.0.1',
-        'localhost',
-    ]
-    
-    # Add additional internal IPs from environment if provided
-    INTERNAL_IPS_EXTRA = config('INTERNAL_IPS', default='', cast=Csv())
-    if INTERNAL_IPS_EXTRA:
-        INTERNAL_IPS.extend(INTERNAL_IPS_EXTRA)
-    
-    # Debug toolbar configuration
-    DEBUG_TOOLBAR_CONFIG = {
-        'SHOW_TOOLBAR_CALLBACK': lambda request: True,  # Show for all requests when DEBUG=True
-        'INTERCEPT_REDIRECTS': False,
-        'ENABLE_STACKTRACES': True,
-        'SHOW_TEMPLATE_CONTEXT': True,
-        'SQL_WARNING_THRESHOLD': 100,  # milliseconds
-        'SHOW_COLLAPSED': True,
-    }
-    
-    # Debug toolbar panels to enable
-    DEBUG_TOOLBAR_PANELS = [
-        'debug_toolbar.panels.history.HistoryPanel',
-        'debug_toolbar.panels.versions.VersionsPanel',
-        'debug_toolbar.panels.timer.TimerPanel',
-        'debug_toolbar.panels.settings.SettingsPanel',
-        'debug_toolbar.panels.headers.HeadersPanel',
-        'debug_toolbar.panels.request.RequestPanel',
-        'debug_toolbar.panels.sql.SQLPanel',
-        'debug_toolbar.panels.staticfiles.StaticFilesPanel',
-        'debug_toolbar.panels.templates.TemplatesPanel',
-        'debug_toolbar.panels.cache.CachePanel',
-        'debug_toolbar.panels.signals.SignalsPanel',
-        'debug_toolbar.panels.logging.LoggingPanel',
-        'debug_toolbar.panels.redirects.RedirectsPanel',
-        'debug_toolbar.panels.profiling.ProfilingPanel',
-    ]
-else:
-    # When DEBUG=False, explicitly remove debug toolbar from installed apps
-    if 'debug_toolbar' in INSTALLED_APPS:
-        INSTALLED_APPS.remove('debug_toolbar')
-    
-    # Remove debug toolbar middleware
-    if 'debug_toolbar.middleware.DebugToolbarMiddleware' in MIDDLEWARE:
-        MIDDLEWARE.remove('debug_toolbar.middleware.DebugToolbarMiddleware')
-    
-    # Set empty INTERNAL_IPS for security
-    INTERNAL_IPS = []
 
 ROOT_URLCONF = 'config.urls'
 
@@ -158,30 +86,166 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'
-ASGI_APPLICATION = 'config.asgi.application'
 
-# ==================================================
-# DATABASE CONFIGURATION - MYSQL (with environment variables)
-# ==================================================
+# =============================================
+# 3. DATABASE CONFIGURATION - FROM .env
+# =============================================
 
 DATABASES = {
     'default': {
         'ENGINE': config('DB_ENGINE', default='django.db.backends.mysql'),
-        'NAME': config('DB_NAME'),
-        'USER': config('DB_USER'),
-        'PASSWORD': config('DB_PASSWORD'),
-        'HOST': config('DB_HOST', default='127.0.0.1'),
+        'NAME': config('DB_NAME', default='abay_repository'),
+        'USER': config('DB_USER', default='root'),
+        'PASSWORD': config('DB_PASSWORD', default=''),
+        'HOST': config('DB_HOST', default='localhost'),
         'PORT': config('DB_PORT', default='3306'),
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
             'charset': 'utf8mb4',
         },
+        'CONN_MAX_AGE': 600,
+        'ATOMIC_REQUESTS': True,
     }
 }
 
-# ==================================================
-# CACHE CONFIGURATION
-# ==================================================
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# =============================================
+# 4. AUTH USER MODEL
+# =============================================
+
+AUTH_USER_MODEL = 'accounts.CustomUser'
+
+# =============================================
+# 5. PASSWORD VALIDATION
+# =============================================
+
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {
+            'min_length': 10,
+        }
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
+]
+
+# Password hashing
+PASSWORD_HASHERS = [
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+    'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
+]
+
+# Try to use Argon2 if available
+try:
+    import argon2
+    PASSWORD_HASHERS.insert(0, 'django.contrib.auth.hashers.Argon2PasswordHasher')
+except ImportError:
+    pass
+
+# =============================================
+# 6. AUTHENTICATION & SESSION
+# =============================================
+
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/dashboard/'
+LOGOUT_REDIRECT_URL = '/'
+
+SESSION_COOKIE_AGE = 86400
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SECURE = False
+SESSION_COOKIE_SAMESITE = 'Lax'  # Changed from Strict for OIDC
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+SESSION_SAVE_EVERY_REQUEST = True
+
+CSRF_COOKIE_HTTPONLY = True
+CSRF_COOKIE_SECURE = False
+CSRF_COOKIE_SAMESITE = 'Lax'
+CSRF_USE_SESSIONS = True
+
+# =============================================
+# 7. SECURE SSL/HTTPS
+# =============================================
+
+SECURE_SSL_REDIRECT = False
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_HSTS_SECONDS = 0
+SECURE_HSTS_INCLUDE_SUBDOMAINS = False
+SECURE_HSTS_PRELOAD = False
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_REFERRER_POLICY = 'strict-origin-when-cross-origin'
+X_FRAME_OPTIONS = 'DENY'
+
+# =============================================
+# 8. CORS
+# =============================================
+
+CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', default='http://localhost:3000,http://127.0.0.1:3000,https://esignet.ida.fayda.et').split(',')
+CORS_ALLOW_CREDENTIALS = True
+CORS_PREFLIGHT_MAX_AGE = 86400
+
+# =============================================
+# 9. FILE UPLOAD
+# =============================================
+
+FILE_UPLOAD_MAX_MEMORY_SIZE = 5242880
+FILE_UPLOAD_PERMISSIONS = 0o644
+
+# =============================================
+# 10. STATIC & MEDIA
+# =============================================
+
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# =============================================
+# 11. INTERNATIONALIZATION
+# =============================================
+
+LANGUAGE_CODE = 'en-us'
+TIME_ZONE = 'Africa/Addis_Ababa'
+USE_I18N = True
+USE_TZ = True
+
+# =============================================
+# 12. EMAIL
+# =============================================
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = config('EMAIL_HOST', default='smtp.gmail.com')
+EMAIL_PORT = config('EMAIL_PORT', default=587, cast=int)
+EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=True, cast=bool)
+EMAIL_USE_SSL = config('EMAIL_USE_SSL', default=False, cast=bool)
+EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
+DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='noreply@abay.abrehot.org.et')
+
+# =============================================
+# 13. CRISPY FORMS
+# =============================================
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+# =============================================
+# 14. CACHING
+# =============================================
 
 CACHES = {
     'default': {
@@ -190,178 +254,212 @@ CACHES = {
     }
 }
 
-# ==================================================
-# PASSWORD VALIDATION
-# ==================================================
+# =============================================
+# 15. 2FA EMAIL SETTINGS
+# =============================================
 
-AUTH_PASSWORD_VALIDATORS = [
-    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator', 'OPTIONS': {'min_length': 8}},
-    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
-]
+OTP_EMAIL_SUBJECT = "Your Abay Repository Verification Code"
+OTP_EMAIL_SENDER = config('DEFAULT_FROM_EMAIL', default='noreply@abay.abrehot.org.et')
+OTP_EMAIL_TOKEN_VALIDITY = 300
+OTP_EMAIL_THROTTLE_FACTOR = 1
 
-# ==================================================
-# INTERNATIONALIZATION
-# ==================================================
+OTP_EMAIL_BODY_TEMPLATE = """
+Hello {username},
 
-LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'Africa/Addis_Ababa'
-USE_I18N = True
-USE_TZ = True
+You are receiving this email because you need to verify your identity to access Abay Repository.
 
-# ==================================================
-# STATIC & MEDIA FILES
-# ==================================================
+Your verification code is: {token}
 
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+This code will expire in 5 minutes.
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+If you did not request this code, please ignore this email.
 
-# ==================================================
-# CUSTOM USER MODEL
-# ==================================================
+Best regards,
+Abay Repository Team
+"""
 
-AUTH_USER_MODEL = 'accounts.CustomUser'
-
-# ==================================================
-# LOGIN/REDIRECT SETTINGS
-# ==================================================
-
-LOGIN_URL = 'accounts:login'
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/'
-
-# ==================================================
-# EMAIL CONFIGURATION
-# ==================================================
-
-EMAIL_BACKEND = config('EMAIL_BACKEND', default='django.core.mail.backends.console.EmailBackend')
-EMAIL_HOST = config('EMAIL_HOST', default='smtp.gmail.com')
-EMAIL_PORT = config('EMAIL_PORT', default=587, cast=int)
-EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=True, cast=bool)
-EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
-EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
-DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='noreply@abay.abrehot.org.et')
-
-# ==================================================
-# REDIS & CELERY CONFIGURATION
-# ==================================================
-
-REDIS_HOST = config('REDIS_HOST', default='localhost')
-REDIS_PORT = config('REDIS_PORT', default=6379, cast=int)
-
-CELERY_BROKER_URL = f'redis://{REDIS_HOST}:{REDIS_PORT}/0'
-CELERY_RESULT_BACKEND = f'redis://{REDIS_HOST}:{REDIS_PORT}/0'
-CELERY_ACCEPT_CONTENT = ['json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TIMEZONE = 'Africa/Addis_Ababa'
-
-# ==================================================
-# FAYDA API CONFIGURATION
-# ==================================================
-
-FAYDA_CLIENT_ID = config('FAYDA_CLIENT_ID', default=None)
-FAYDA_CLIENT_SECRET = config('FAYDA_CLIENT_SECRET', default=None)
-FAYDA_API_URL = config('FAYDA_API_URL', default='https://id.et/api')
-
-# ==================================================
-# APP SETTINGS
-# ==================================================
-
-APP_NAME = config('APP_NAME', default='Abay Repository')
-APP_VERSION = config('APP_VERSION', default='1.0.0')
-SITE_URL = config('SITE_URL', default='http://localhost:8000')
-
-# ==================================================
-# ROYALTY SETTINGS
-# ==================================================
-
-DEFAULT_AUTHOR_COMMISSION = config('DEFAULT_AUTHOR_COMMISSION', default=70, cast=int)
-PLATFORM_FEE_PERCENTAGE = config('PLATFORM_FEE_PERCENTAGE', default=10, cast=int)
-TAX_PERCENTAGE = config('TAX_PERCENTAGE', default=15, cast=int)
-MIN_PAYOUT_AMOUNT = config('MIN_PAYOUT_AMOUNT', default=100, cast=int)
-
-# ==================================================
-# BOOK SETTINGS
-# ==================================================
-
-MAX_BOOK_FILE_SIZE = 52428800  # 50MB
-MAX_COVER_IMAGE_SIZE = 10485760  # 10MB
-ALLOWED_BOOK_EXTENSIONS = ['.pdf', '.epub', '.mobi', '.azw3']
-ALLOWED_IMAGE_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.webp']
-
-# ==================================================
-# REVIEW SETTINGS
-# ==================================================
-
-MIN_PASSING_SCORE = 7.0
-MAX_REVISION_ATTEMPTS = 3
-
-# ==================================================
-# CRISPY FORMS
-# ==================================================
-
-CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
-CRISPY_TEMPLATE_PACK = "bootstrap5"
-
-# ==================================================
-# DEFAULT PRIMARY KEY FIELD TYPE
-# ==================================================
-
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# ==================================================
-# FILE UPLOAD SETTINGS
-# ==================================================
-
-DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000
-FILE_UPLOAD_MAX_MEMORY_SIZE = 5242880  # 5MB
-
-# ==================================================
-# SESSION SETTINGS
-# ==================================================
-
-SESSION_COOKIE_AGE = 86400  # 24 hours
-SESSION_SAVE_EVERY_REQUEST = True
-SESSION_EXPIRE_AT_BROWSER_CLOSE = False
-
-# ==================================================
-# MESSAGE STORAGE
-# ==================================================
-
-MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
-
-# ==================================================
-# AUTHENTICATION BACKENDS
-# ==================================================
-
-AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',
-]
-
-# ==================================================
-# LOGGING
-# ==================================================
+# =============================================
+# 16. LOGGING
+# =============================================
 
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+        'secure': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+    },
     'handlers': {
         'console': {
+            'level': 'INFO',
             'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
         },
         'file': {
-            'class': 'logging.FileHandler',
-            'filename': BASE_DIR / 'logs/abay_repository.log',
+            'level': 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs', 'django.log'),
+            'maxBytes': 10485760,
+            'backupCount': 10,
+            'formatter': 'verbose',
+        },
+        'security': {
+            'level': 'WARNING',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs', 'security.log'),
+            'maxBytes': 10485760,
+            'backupCount': 10,
+            'formatter': 'secure',
         },
     },
-    'root': {
-        'handlers': ['console', 'file'],
-        'level': 'INFO',
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'django.security': {
+            'handlers': ['security'],
+            'level': 'WARNING',
+            'propagate': False,
+        },
+        'django.db.backends': {
+            'handlers': ['console'],
+            'level': 'WARNING',
+            'propagate': False,
+        },
     },
 }
+
+# =============================================
+# 17. FAYDA OIDC SETTINGS - Using .env variables
+# =============================================
+
+# Fayda OIDC Configuration - Direct from .env
+FAYDA_CLIENT_ID = config('FAYDA_CLIENT_ID', default='')
+FAYDA_AUTH_URL = config('FAYDA_AUTH_URL', default='')
+FAYDA_TOKEN_URL = config('FAYDA_TOKEN_URL', default='')
+FAYDA_USERINFO_URL = config('FAYDA_USERINFO_URL', default='')
+FAYDA_REDIRECT_URI = config('FAYDA_REDIRECT_URI', default='http://localhost:3000/callback/')
+FAYDA_PRIVATE_KEY_B64 = config('FAYDA_PRIVATE_KEY_B64', default='')
+FAYDA_ALGORITHM = config('FAYDA_ALGORITHM', default='RS256')
+FAYDA_CLIENT_ASSERTION_TYPE = config('FAYDA_CLIENT_ASSERTION_TYPE', default='urn:ietf:params:oauth:client-assertion-type:jwt-bearer')
+FAYDA_EXPIRATION_TIME = config('FAYDA_EXPIRATION_TIME', default=15, cast=int)
+FAYDA_TEST_NATIONAL_ID = config('FAYDA_TEST_NATIONAL_ID', default='')
+FAYDA_TEST_OTP = config('FAYDA_TEST_OTP', default='')
+
+# =============================================
+# 18. TELEBIRR SETTINGS
+# =============================================
+
+TELEBIRR_BASE_URL = config('TELEBIRR_BASE_URL', default='https://196.188.120.3:38443/apiaccess/payment/gateway')
+TELEBIRR_FABRIC_APP_ID = config('TELEBIRR_FABRIC_APP_ID', default='c4182ef8-9249-458a-985e-06d191f4d505')
+TELEBIRR_APP_SECRET = config('TELEBIRR_APP_SECRET', default='fad0f06383c6297f545876694b974599')
+TELEBIRR_MERCHANT_APP_ID = config('TELEBIRR_MERCHANT_APP_ID', default='930231098009602')
+TELEBIRR_MERCHANT_CODE = config('TELEBIRR_MERCHANT_CODE', default='101011')
+TELEBIRR_PRIVATE_KEY = config('TELEBIRR_PRIVATE_KEY', default='')
+TELEBIRR_PUBLIC_KEY = config('TELEBIRR_PUBLIC_KEY', default='')
+TELEBIRR_VERIFY_SSL = config('TELEBIRR_VERIFY_SSL', default=False, cast=bool)
+TELEBIRR_ENABLED = config('TELEBIRR_ENABLED', default=False, cast=bool)
+USE_SIMULATED_PAYMENT = config('USE_SIMULATED_PAYMENT', default=True, cast=bool)
+
+# For backward compatibility
+TELEBIRR_APP_ID = TELEBIRR_FABRIC_APP_ID
+TELEBIRR_APP_KEY = TELEBIRR_APP_SECRET
+TELEBIRR_SHORT_CODE = TELEBIRR_MERCHANT_CODE
+TELEBIRR_API_URL = TELEBIRR_BASE_URL
+
+# =============================================
+# 19. CBE BIRR SETTINGS
+# =============================================
+
+CBE_MERCHANT_ID = config('CBE_MERCHANT_ID', default='')
+CBE_TERMINAL_ID = config('CBE_TERMINAL_ID', default='')
+CBE_PUBLIC_KEY = config('CBE_PUBLIC_KEY', default='')
+CBE_API_URL = config('CBE_API_URL', default='')
+
+# =============================================
+# 20. CUSTOM SETTINGS
+# =============================================
+
+APP_NAME = config('APP_NAME', default='Abay Repository')
+APP_VERSION = config('APP_VERSION', default='1.0.0')
+SITE_URL = config('SITE_URL', default='http://localhost:3000')
+
+ROYALTY_COMMISSION_RATE = 30
+MINIMUM_PAYOUT_AMOUNT = 100
+
+MAX_BOOK_TITLE_LENGTH = 255
+MAX_BOOK_DESCRIPTION_LENGTH = 5000
+BOOKS_PER_PAGE = 12
+
+MIN_CHECKER_SCORE = 0
+MAX_CHECKER_SCORE = 10
+PASSING_CHECKER_SCORE = 7
+
+# =============================================
+# 21. ENSURE DIRECTORIES
+# =============================================
+
+LOGS_DIR = os.path.join(BASE_DIR, 'logs')
+if not os.path.exists(LOGS_DIR):
+    os.makedirs(LOGS_DIR, mode=0o755)
+
+TMP_DIR = os.path.join(BASE_DIR, 'tmp')
+if not os.path.exists(TMP_DIR):
+    os.makedirs(TMP_DIR, mode=0o755)
+
+STATIC_ROOT_DIR = os.path.join(BASE_DIR, 'staticfiles')
+if not os.path.exists(STATIC_ROOT_DIR):
+    os.makedirs(STATIC_ROOT_DIR, mode=0o755)
+
+MEDIA_ROOT_DIR = os.path.join(BASE_DIR, 'media')
+if not os.path.exists(MEDIA_ROOT_DIR):
+    os.makedirs(MEDIA_ROOT_DIR, mode=0o755)
+
+# =============================================
+# 22. LOAD ENVIRONMENT VARIABLES
+# =============================================
+
+try:
+    from dotenv import load_dotenv
+    env_path = BASE_DIR / '.env'
+    if env_path.exists():
+        load_dotenv(env_path)
+        print(f"Loaded environment variables from: {env_path}")
+except ImportError:
+    pass
+
+# =============================================
+# 23. STARTUP MESSAGE
+# =============================================
+
+print("")
+print("============================================================")
+print("               ABREHOT LIBRARY - Django Settings")
+print("============================================================")
+print(f" DEBUG: {str(DEBUG):<8}")
+print(f" SECRET_KEY: {'SET' if SECRET_KEY else 'NOT SET':<8}")
+print(f" DATABASE: MySQL")
+print(f" DB_NAME: {DATABASES['default']['NAME']:<8}")
+print(f" DB_HOST: {DATABASES['default']['HOST']:<8}")
+print(f" AUTH_USER_MODEL: CustomUser")
+print(f" TIME_ZONE: {TIME_ZONE:<8}")
+print(f" 2FA: Enabled (Email-based)")
+print(f" FAYDA_CLIENT_ID: {'SET' if FAYDA_CLIENT_ID else 'NOT SET':<8}")
+print(f" FAYDA_REDIRECT_URI: {FAYDA_REDIRECT_URI}")
+print(f" TELEBIRR_APP_ID: {'SET' if TELEBIRR_APP_ID else 'NOT SET':<8}")
+print(f" CBE_MERCHANT_ID: {'SET' if CBE_MERCHANT_ID else 'NOT SET':<8}")
+print(f" APP_NAME: {APP_NAME:<8}")
+print("============================================================")
+print("")

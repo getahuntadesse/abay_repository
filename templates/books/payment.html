@@ -1,0 +1,283 @@
+<!-- books/templates/books/payment.html -->
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}Payment - {{ book.title }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .payment-container {
+        max-width: 500px;
+        margin: 2rem auto;
+    }
+    
+    .payment-card {
+        background: white;
+        border-radius: 15px;
+        padding: 2rem;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    }
+    
+    .payment-card .book-info {
+        text-align: center;
+        padding-bottom: 1.5rem;
+        border-bottom: 2px solid #f0f0f0;
+        margin-bottom: 1.5rem;
+    }
+    
+    .payment-card .book-info h4 {
+        font-weight: 700;
+        color: var(--primary-dark);
+    }
+    
+    .payment-card .book-info .price {
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: var(--primary-gold);
+    }
+    
+    .payment-method {
+        border: 2px solid #e9ecef;
+        border-radius: 12px;
+        padding: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-bottom: 0.75rem;
+    }
+    
+    .payment-method:hover {
+        border-color: var(--primary-gold);
+        background: rgba(218, 165, 32, 0.05);
+    }
+    
+    .payment-method.active {
+        border-color: var(--primary-gold);
+        background: rgba(218, 165, 32, 0.1);
+    }
+    
+    .payment-method .method-icon {
+        font-size: 1.5rem;
+        margin-right: 1rem;
+    }
+    
+    .payment-method .method-name {
+        font-weight: 600;
+    }
+    
+    .payment-method .method-desc {
+        font-size: 0.85rem;
+        color: #6c757d;
+    }
+    
+    .btn-gold {
+        background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark));
+        color: var(--primary-dark);
+        border: none;
+        padding: 0.8rem 2rem;
+        border-radius: 10px;
+        font-weight: 700;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        width: 100%;
+    }
+    
+    .btn-gold:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 20px rgba(218, 165, 32, 0.3);
+        color: var(--primary-dark);
+    }
+    
+    .btn-outline-gold {
+        border: 2px solid var(--primary-gold);
+        color: var(--primary-gold);
+        background: transparent;
+        padding: 0.5rem 1.2rem;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-outline-gold:hover {
+        background: var(--primary-gold);
+        color: var(--primary-dark);
+    }
+    
+    .telebirr-input {
+        border: 2px solid #e9ecef;
+        border-radius: 10px;
+        padding: 0.75rem 1rem;
+        width: 100%;
+        transition: all 0.3s ease;
+    }
+    
+    .telebirr-input:focus {
+        border-color: var(--primary-gold);
+        box-shadow: 0 0 0 0.2rem rgba(218, 165, 32, 0.25);
+        outline: none;
+    }
+    
+    .payment-summary {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 1rem;
+        margin: 1rem 0;
+    }
+    
+    .payment-summary .label {
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
+    
+    .payment-summary .value {
+        font-weight: 700;
+        font-size: 1.1rem;
+    }
+    
+    .simulated-badge {
+        background: #ffc107;
+        color: #1a1a1a;
+        padding: 0.25rem 0.75rem;
+        border-radius: 50px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        display: inline-block;
+    }
+    
+    .simulated-notice {
+        background: #fff3cd;
+        border: 1px solid #ffc107;
+        border-radius: 10px;
+        padding: 0.75rem 1rem;
+        margin-top: 0.5rem;
+        font-size: 0.9rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="payment-container">
+        <div class="payment-card">
+            <!-- Book Info -->
+            <div class="book-info">
+                <h4>{{ book.title }}</h4>
+                <p class="text-muted">by {{ book.author.get_full_name|default:book.author.username }}</p>
+                <div class="price">{{ amount|floatformat:2|intcomma }} ETB</div>
+            </div>
+            
+            <div class="simulated-notice">
+                <i class="fas fa-flask me-2"></i>
+                <strong>Simulated Payment Mode</strong>
+                <p class="mb-0 small">This is a test payment. Your book will be available immediately after clicking "Complete Payment".</p>
+            </div>
+            
+            <!-- Payment Form -->
+            <form method="post" action="{% url 'books:process_payment' purchase.id %}" id="paymentForm">
+                {% csrf_token %}
+                
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Select Payment Method</label>
+                    
+                    <!-- Telebirr -->
+                    <div class="payment-method active" id="method-telebirr">
+                        <div class="d-flex align-items-center">
+                            <input type="radio" name="payment_method" value="telebirr" id="radio-telebirr" class="me-2" checked>
+                            <span class="method-icon">
+                                <i class="fas fa-mobile-alt" style="color: #28a745; font-size: 1.5rem;"></i>
+                            </span>
+                            <div>
+                                <div class="method-name">Telebirr</div>
+                                <div class="method-desc">Pay using Telebirr mobile money</div>
+                                <span class="simulated-badge mt-1">Simulated</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- CBE -->
+                    <div class="payment-method" onclick="selectMethod('cbe')" id="method-cbe">
+                        <div class="d-flex align-items-center">
+                            <input type="radio" name="payment_method" value="cbe" id="radio-cbe" class="me-2">
+                            <span class="method-icon"><i class="fas fa-university" style="color: #0d6efd;"></i></span>
+                            <div>
+                                <div class="method-name">CBE Birr</div>
+                                <div class="method-desc">Pay using CBE Birr mobile banking</div>
+                                <span class="simulated-badge mt-1">Simulated</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Bank Transfer -->
+                    <div class="payment-method" onclick="selectMethod('bank_transfer')" id="method-bank_transfer">
+                        <div class="d-flex align-items-center">
+                            <input type="radio" name="payment_method" value="bank_transfer" id="radio-bank_transfer" class="me-2">
+                            <span class="method-icon"><i class="fas fa-building" style="color: #6c757d;"></i></span>
+                            <div>
+                                <div class="method-name">Bank Transfer</div>
+                                <div class="method-desc">Pay via bank transfer</div>
+                                <span class="simulated-badge mt-1">Simulated</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Cash -->
+                    <div class="payment-method" onclick="selectMethod('cash')" id="method-cash">
+                        <div class="d-flex align-items-center">
+                            <input type="radio" name="payment_method" value="cash" id="radio-cash" class="me-2">
+                            <span class="method-icon"><i class="fas fa-money-bill-wave" style="color: #28a745;"></i></span>
+                            <div>
+                                <div class="method-name">Cash</div>
+                                <div class="method-desc">Pay with cash</div>
+                                <span class="simulated-badge mt-1">Simulated</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Payment Summary -->
+                <div class="payment-summary">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="label">Total Amount</div>
+                            <div class="value">{{ amount|floatformat:2|intcomma }} ETB</div>
+                        </div>
+                        <div class="col-6 text-end">
+                            <div class="label">Status</div>
+                            <div class="value text-warning">Pending</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Submit Button -->
+                <button type="submit" class="btn-gold" id="payBtn">
+                    <i class="fas fa-check-circle me-2"></i> Complete Payment
+                </button>
+            </form>
+            
+            <!-- Back Button -->
+            <div class="mt-3 text-center">
+                <a href="{% url 'books:detail' book.id %}" class="btn-outline-gold">
+                    <i class="fas fa-arrow-left me-2"></i> Back to Book
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+    function selectMethod(method) {
+        // Update radio buttons
+        document.querySelectorAll('input[name="payment_method"]').forEach(el => {
+            el.checked = el.value === method;
+        });
+        
+        // Update active class
+        document.querySelectorAll('.payment-method').forEach(el => {
+            el.classList.remove('active');
+        });
+        document.getElementById(`method-${method}`).classList.add('active');
+    }
+</script>
+{% endblock %}
+{% endblock %}

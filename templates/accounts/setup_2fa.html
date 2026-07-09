@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Setup Two-Factor Authentication - Abay Repository{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><i class="fas fa-shield-alt me-2"></i> Two-Factor Authentication</h4>
+                </div>
+                <div class="card-body">
+                    <p>Secure your account by enabling two-factor authentication.</p>
+                    
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        A verification code will be sent to your email each time you log in.
+                    </div>
+                    
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email Address</label>
+                            <input type="email" class="form-control" id="email" name="email" 
+                                   value="{{ user.email }}" required>
+                            <small class="text-muted">We'll send verification codes to this email.</small>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-check-circle me-2"></i> Enable 2FA
+                        </button>
+                    </form>
+                    
+                    <hr class="my-4">
+                    
+                    <div class="text-center">
+                        <a href="{% url 'accounts:profile' %}" class="text-decoration-none">
+                            <i class="fas fa-arrow-left me-1"></i> Back to Profile
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

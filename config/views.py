@@ -1,10 +1,13 @@
+# config/views.py
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponseNotFound, HttpResponseServerError
 from django.template import loader
 from django.contrib.admin.views.decorators import staff_member_required
 from django.db.models import Sum, Count, Q, Avg
 from django.utils import timezone
-from datetime import timedelta
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect
+from datetime import datetime, timedelta
 import logging
 import os
 import re
@@ -82,19 +85,19 @@ def admin_analytics(request):
         # Sales this month
         sales_month = Purchase.objects.filter(
             status='completed',
-            completed_at__gte=month_ago
+            purchased_at__gte=month_ago
         ).aggregate(total=Sum('amount'))['total'] or 0
         
         # Sales this week
         sales_week = Purchase.objects.filter(
             status='completed',
-            completed_at__gte=week_ago
+            purchased_at__gte=week_ago
         ).aggregate(total=Sum('amount'))['total'] or 0
         
         # Sales today
         sales_today = Purchase.objects.filter(
             status='completed',
-            completed_at__date=today
+            purchased_at__date=today
         ).aggregate(total=Sum('amount'))['total'] or 0
         
         # Payment method breakdown
@@ -215,8 +218,8 @@ def admin_analytics(request):
         
         sales_previous_month = Purchase.objects.filter(
             status='completed',
-            completed_at__gte=previous_month,
-            completed_at__lt=month_ago
+            purchased_at__gte=previous_month,
+            purchased_at__lt=month_ago
         ).aggregate(total=Sum('amount'))['total'] or 0
         sales_growth = ((sales_month - sales_previous_month) / (sales_previous_month or 1)) * 100
         
@@ -293,6 +296,8 @@ def admin_analytics(request):
         
     except Exception as e:
         logger.error(f"Error in admin_analytics: {str(e)}")
+        import traceback
+        traceback.print_exc()
         return JsonResponse({
             'success': False,
             'error': str(e)
@@ -395,6 +400,23 @@ def admin_logs(request):
             'logs': [],
             'count': 0
         }, status=500)
+
+
+@login_required
+def dashboard_redirect(request):
+    """
+    Redirect users to their role-based dashboard.
+    """
+    user = request.user
+    role_redirects = {
+        'admin': 'accounts:admin_dashboard',
+        'author': 'accounts:author_dashboard',
+        'checker': 'accounts:checker_dashboard',
+        'maker': 'accounts:maker_dashboard',
+        'client': 'accounts:client_dashboard',
+    }
+    redirect_url = role_redirects.get(user.role, 'accounts:client_dashboard')
+    return redirect(redirect_url)
 
 
 def handler404(request, exception):

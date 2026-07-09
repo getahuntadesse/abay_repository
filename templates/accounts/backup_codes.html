@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Backup Codes - Abay Repository{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-warning text-dark">
+                    <h4 class="mb-0"><i class="fas fa-save me-2"></i> Backup Codes</h4>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <strong>Save these backup codes!</strong>
+                        <p class="mb-0 mt-2">Use these codes if you lose access to your email.</p>
+                    </div>
+                    
+                    <div class="bg-light p-3 rounded">
+                        {% for code in codes %}
+                            <code class="d-block py-1">{{ code }}</code>
+                        {% empty %}
+                            <p class="text-muted mb-0">No backup codes generated yet.</p>
+                        {% endfor %}
+                    </div>
+                    
+                    <hr>
+                    
+                    <form method="POST" action="{% url 'accounts:2fa_generate_backup' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-warning w-100">
+                            <i class="fas fa-sync me-2"></i> Generate New Codes
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

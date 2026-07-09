@@ -1,8 +1,9 @@
+<!-- books/templates/books/detail.html - Complete with Purchase Form -->
 {% extends 'base.html' %}
 {% load static %}
 {% load humanize %}
 
-{% block title %}{{ book.title }} - Abrehot Library{% endblock %}
+{% block title %}{{ book.title }} - Abay Repository{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -13,320 +14,484 @@
         --primary-darker: #1A1A1A;
     }
 
-    .book-cover-large {
-        max-width: 100%;
+    .book-cover {
+        width: 100%;
+        max-height: 450px;
+        object-fit: contain;
         border-radius: 12px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        background: #f8f9fa;
     }
-
+    
+    .book-info {
+        padding: 1rem 0;
+    }
+    
+    .book-title {
+        font-size: 2.2rem;
+        font-weight: 800;
+        color: var(--primary-dark);
+        line-height: 1.2;
+    }
+    
+    .book-subtitle {
+        font-size: 1.2rem;
+        color: #6c757d;
+        font-weight: 400;
+    }
+    
+    .book-author {
+        font-size: 1.2rem;
+        color: var(--primary-gold);
+        font-weight: 600;
+    }
+    
+    .book-author a {
+        color: var(--primary-gold);
+        text-decoration: none;
+    }
+    
+    .book-author a:hover {
+        text-decoration: underline;
+    }
+    
+    .book-price {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--primary-dark);
+    }
+    
+    .book-price.free {
+        color: #28a745;
+    }
+    
+    .badge-status {
+        padding: 0.35rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+    
+    .badge-published { background: #28a745; color: white; }
+    .badge-pending { background: #ffc107; color: #1a1a1a; }
+    .badge-draft { background: #6c757d; color: white; }
+    .badge-rejected { background: #dc3545; color: white; }
+    .badge-in-review { background: #17a2b8; color: white; }
+    .badge-needs-revision { background: #fd7e14; color: white; }
+    
     .btn-gold {
         background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark));
-        color: var(--primary-darker);
+        color: var(--primary-dark);
         border: none;
+        padding: 0.6rem 1.5rem;
+        border-radius: 10px;
         font-weight: 600;
-        padding: 10px 25px;
-        border-radius: 25px;
         transition: all 0.3s ease;
     }
-
+    
     .btn-gold:hover {
         transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(218, 165, 32, 0.4);
-        color: var(--primary-darker);
+        box-shadow: 0 5px 15px rgba(218, 165, 32, 0.3);
+        color: var(--primary-dark);
     }
-
+    
+    .btn-gold:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none !important;
+    }
+    
     .btn-outline-gold {
         border: 2px solid var(--primary-gold);
         color: var(--primary-gold);
         background: transparent;
+        padding: 0.5rem 1.2rem;
+        border-radius: 10px;
         font-weight: 600;
-        padding: 10px 25px;
-        border-radius: 25px;
         transition: all 0.3s ease;
     }
-
+    
     .btn-outline-gold:hover {
         background: var(--primary-gold);
-        color: var(--primary-darker);
+        color: var(--primary-dark);
         transform: translateY(-2px);
     }
-
-    .btn-outline-danger {
-        border: 2px solid #dc3545;
-        color: #dc3545;
-        background: transparent;
-        font-weight: 600;
-        padding: 10px 25px;
-        border-radius: 25px;
-    }
-
-    .btn-outline-danger:hover {
-        background: #dc3545;
+    
+    .btn-success-custom {
+        background: linear-gradient(135deg, #28a745, #1e7e34);
         color: white;
-    }
-
-    .breadcrumb-item a {
-        color: var(--primary-gold);
-        text-decoration: none;
-    }
-
-    .breadcrumb-item.active {
-        color: var(--primary-dark);
-    }
-
-    .info-box {
-        background: #f8f9fa;
-        border-radius: 12px;
-        padding: 1rem;
-        margin-bottom: 1rem;
-    }
-
-    .rating-star {
-        color: var(--primary-gold);
-        font-size: 1.2rem;
-    }
-
-    .payment-option {
-        border: 2px solid #e9ecef;
-        border-radius: 12px;
-        padding: 1rem;
-        margin-bottom: 0.75rem;
-        cursor: pointer;
+        border: none;
+        padding: 0.6rem 1.5rem;
+        border-radius: 10px;
+        font-weight: 600;
         transition: all 0.3s ease;
     }
-
-    .payment-option:hover {
-        border-color: var(--primary-gold);
-        background: #fff9e6;
+    
+    .btn-success-custom:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+        color: white;
     }
-
-    .payment-option.selected {
-        border-color: var(--primary-gold);
-        background: #fff9e6;
-    }
-
-    .payment-icon {
-        width: 45px;
-        height: 45px;
-        border-radius: 50%;
+    
+    .action-buttons {
         display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+    }
+    
+    .action-buttons .btn {
+        flex: 1;
+        min-width: 120px;
+    }
+    
+    .action-buttons form {
+        flex: 1;
+        min-width: 120px;
+    }
+    
+    .action-buttons form .btn {
+        width: 100%;
+    }
+    
+    .detail-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        margin-bottom: 1.5rem;
+    }
+    
+    .detail-card .label {
+        font-size: 0.85rem;
+        color: #6c757d;
+        font-weight: 500;
+    }
+    
+    .detail-card .value {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--primary-dark);
+    }
+    
+    .related-book-card {
+        transition: all 0.3s ease;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        height: 100%;
+    }
+    
+    .related-book-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    }
+    
+    .related-book-card .card-img-top {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+    }
+    
+    .related-book-card .card-body {
+        padding: 0.75rem;
+    }
+    
+    .related-book-card .card-title {
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    
+    .quality-score {
+        display: inline-flex;
         align-items: center;
-        justify-content: center;
-        background: #f8f9fa;
+        gap: 0.3rem;
+        padding: 0.2rem 0.6rem;
+        border-radius: 50px;
+        font-size: 0.8rem;
+        font-weight: 600;
     }
-
-    .telebirr-color {
-        color: #00A859;
-    }
-
-    .cbe-color {
-        color: #0033A0;
-    }
-
-    .telebirr-bg {
-        background: #00A85910;
-    }
-
-    .cbe-bg {
-        background: #0033A010;
+    
+    .quality-score.good { background: #d4edda; color: #155724; }
+    .quality-score.average { background: #fff3cd; color: #856404; }
+    .quality-score.poor { background: #f8d7da; color: #721c24; }
+    
+    @media (max-width: 768px) {
+        .book-title {
+            font-size: 1.6rem;
+        }
+        .book-price {
+            font-size: 1.5rem;
+        }
+        .action-buttons .btn,
+        .action-buttons form {
+            flex: 1 1 100%;
+        }
+        .book-cover {
+            max-height: 300px;
+        }
     }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="container mt-4">
-    <!-- Breadcrumb -->
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'books:browse' %}">Books</a></li>
-            <li class="breadcrumb-item active">{{ book.title|truncatechars:50 }}</li>
-        </ol>
-    </nav>
-
     <div class="row">
-        <!-- Book Cover Column -->
+        <!-- Book Cover -->
         <div class="col-md-4 mb-4">
-            <div class="card shadow-sm border-0">
-                <div class="card-body text-center">
-                    {% if book.cover_image %}
-                        <img src="{{ book.cover_image.url }}" alt="{{ book.title }}" class="book-cover-large img-fluid rounded">
-                    {% else %}
-                        <div class="bg-light rounded p-5 text-center">
-                            <i class="fas fa-book fa-5x" style="color: var(--primary-gold);"></i>
-                            <p class="mt-2 text-muted">No Cover Image</p>
-                        </div>
-                    {% endif %}
-                </div>
+            {% if book.cover_image %}
+            <img src="{{ book.cover_image.url }}" alt="{{ book.title }}" class="book-cover">
+            {% else %}
+            <img src="{% static 'images/default-cover.png' %}" alt="{{ book.title }}" class="book-cover">
+            {% endif %}
+            
+            <!-- Status Badge -->
+            <div class="mt-3 text-center">
+                {% if book.status == 'published' %}
+                <span class="badge-status badge-published">
+                    <i class="fas fa-check-circle me-1"></i> Published
+                </span>
+                {% elif book.status == 'pending_review' %}
+                <span class="badge-status badge-pending">
+                    <i class="fas fa-clock me-1"></i> Pending Review
+                </span>
+                {% elif book.status == 'in_review' %}
+                <span class="badge-status badge-in-review">
+                    <i class="fas fa-spinner fa-spin me-1"></i> In Review
+                </span>
+                {% elif book.status == 'needs_revision' %}
+                <span class="badge-status badge-needs-revision">
+                    <i class="fas fa-edit me-1"></i> Needs Revision
+                </span>
+                {% elif book.status == 'rejected' %}
+                <span class="badge-status badge-rejected">
+                    <i class="fas fa-times-circle me-1"></i> Rejected
+                </span>
+                {% else %}
+                <span class="badge-status badge-draft">
+                    <i class="fas fa-pencil-alt me-1"></i> Draft
+                </span>
+                {% endif %}
+            </div>
+            
+            <div class="mt-2 text-center text-muted small">
+                <i class="fas fa-download me-1"></i> {{ book.downloads_count|intcomma }} downloads
+                <span class="mx-2">•</span>
+                <i class="fas fa-eye me-1"></i> {{ book.views_count|intcomma }} views
             </div>
         </div>
-
-        <!-- Book Details Column -->
+        
+        <!-- Book Info -->
         <div class="col-md-8">
-            <div class="card shadow-sm border-0">
-                <div class="card-body">
-                    <h1 class="mb-2">{{ book.title }}</h1>
-                    {% if book.subtitle %}
-                        <h5 class="text-muted mb-3">{{ book.subtitle }}</h5>
+            <div class="book-info">
+                <h1 class="book-title">{{ book.title }}</h1>
+                {% if book.subtitle %}
+                <h4 class="book-subtitle">{{ book.subtitle }}</h4>
+                {% endif %}
+                
+                <p class="book-author">
+                    <i class="fas fa-user-edit me-2"></i>
+                    <a href="{% url 'books:author_books' book.author.id %}">
+                        {{ book.author.get_full_name|default:book.author.username }}
+                    </a>
+                </p>
+                
+                <div class="mb-2 d-flex flex-wrap gap-2">
+                    {% if quality_score %}
+                    <span class="quality-score {% if quality_score >= 7 %}good{% elif quality_score >= 4 %}average{% else %}poor{% endif %}">
+                        <i class="fas fa-star"></i> Quality: {{ quality_score|floatformat:1 }}/10
+                    </span>
                     {% endif %}
                     
-                    <p class="text-muted mb-3">
-                        <i class="fas fa-user me-1"></i> by {{ book.author.full_name|default:"Unknown Author" }}
-                    </p>
-
-                    <!-- Rating -->
-                    <div class="mb-3">
-                        {% if book.avg_rating > 0 %}
-                            {% for i in "12345"|make_list %}
-                                {% if forloop.counter <= book.avg_rating|floatformat:0 %}
-                                    <i class="fas fa-star rating-star"></i>
-                                {% else %}
-                                    <i class="far fa-star rating-star"></i>
-                                {% endif %}
-                            {% endfor %}
-                            <span class="text-muted ms-2">({{ book.total_reviews }} reviews)</span>
-                        {% else %}
-                            <span class="text-muted">No ratings yet</span>
-                        {% endif %}
-                    </div>
-
-                    <!-- Price and Badges -->
-                    <div class="mb-3">
-                        {% if book.is_free %}
-                            <span class="badge bg-success fs-6 p-2">FREE</span>
-                        {% else %}
-                            <span class="badge fs-6 p-2" style="background: var(--primary-gold); color: var(--primary-darker);">{{ book.price }} ETB</span>
-                        {% endif %}
-                        <span class="badge bg-secondary ms-2 p-2">{{ book.genre.name|default:"Uncategorized" }}</span>
-                        <span class="badge bg-info ms-2 p-2">{{ book.language|default:"English" }}</span>
-                        {% if book.status == 'published' %}
-                            <span class="badge bg-success ms-2 p-2">Published</span>
-                        {% endif %}
-                    </div>
-
-                    <!-- Book Info -->
-                    <div class="row mb-4">
-                        <div class="col-md-6">
-                            <div class="info-box">
-                                <i class="fas fa-file-alt me-2" style="color: var(--primary-gold);"></i>
-                                <strong>Pages:</strong> {{ book.page_count|default:"N/A" }}
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="info-box">
-                                <i class="fas fa-calendar me-2" style="color: var(--primary-gold);"></i>
-                                <strong>Year:</strong> {{ book.publication_year|default:"N/A" }}
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="info-box">
-                                <i class="fas fa-download me-2" style="color: var(--primary-gold);"></i>
-                                <strong>Downloads:</strong> {{ book.downloads_count|default:0|intcomma }}
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="info-box">
-                                <i class="fas fa-eye me-2" style="color: var(--primary-gold);"></i>
-                                <strong>Views:</strong> {{ book.views_count|default:0|intcomma }}
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="info-box">
-                                <i class="fas fa-hashtag me-2" style="color: var(--primary-gold);"></i>
-                                <strong>ISBN:</strong> {{ book.isbn|default:"N/A" }}
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="info-box">
-                                <i class="fas fa-language me-2" style="color: var(--primary-gold);"></i>
-                                <strong>Edition:</strong> {{ book.edition|default:"1st" }}
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Description -->
-                    <div class="mb-4">
-                        <h5><i class="fas fa-align-left me-2" style="color: var(--primary-gold);"></i>Description</h5>
-                        <p class="text-muted">{{ book.description|linebreaks }}</p>
-                    </div>
-
-                    <!-- Keywords -->
-                    {% if book.keywords %}
-                    <div class="mb-4">
-                        <h5><i class="fas fa-tags me-2" style="color: var(--primary-gold);"></i>Keywords</h5>
-                        {% for keyword in book.keywords.split|slice:":10" %}
-                            <span class="badge bg-light text-dark me-1 mb-1 p-2">{{ keyword }}</span>
-                        {% endfor %}
-                    </div>
+                    {% if book.genre %}
+                    <span class="badge bg-secondary">
+                        <i class="fas fa-tag me-1"></i> {{ book.genre.name }}
+                    </span>
                     {% endif %}
-
-                    <!-- Action Buttons -->
-                    <div class="mt-4">
-                        {% if user.is_authenticated %}
-                            {% if has_purchased or book.is_free %}
-                                {% if book.file %}
-                                    <a href="/books/{{ book.id }}/download/" class="btn btn-gold">
-                                        <i class="fas fa-download me-2"></i> Download Book
+                    
+                    {% if book.language %}
+                    <span class="badge bg-info">
+                        <i class="fas fa-language me-1"></i> {{ book.language }}
+                    </span>
+                    {% endif %}
+                </div>
+                
+                <div class="mb-3">
+                    {% if book.is_free %}
+                    <span class="book-price free">
+                        <i class="fas fa-gift me-2"></i> Free
+                    </span>
+                    {% else %}
+                    <span class="book-price">
+                        {{ book.price|floatformat:2|intcomma }} ETB
+                    </span>
+                    {% endif %}
+                </div>
+                
+                <!-- Action Buttons - FIXED PURCHASE FORM -->
+                <div class="action-buttons mb-4">
+                    {% if book.status == 'published' %}
+                        {% if book.is_free %}
+                            <a href="{% url 'books:read_free' book.id %}" class="btn btn-success-custom">
+                                <i class="fas fa-book-open me-2"></i> Read Free
+                            </a>
+                            <a href="{% url 'books:download' book.id %}" class="btn btn-gold">
+                                <i class="fas fa-download me-2"></i> Download
+                            </a>
+                        {% else %}
+                            {% if user.is_authenticated %}
+                                {% if has_purchased %}
+                                    <a href="{% url 'books:download' book.id %}" class="btn btn-gold">
+                                        <i class="fas fa-download me-2"></i> Download
                                     </a>
                                 {% else %}
-                                    <button class="btn btn-secondary" disabled>File Not Available</button>
-                                {% endif %}
-                                
-                                {% if in_wishlist %}
-                                    <a href="/books/{{ book.id }}/wishlist/remove/" class="btn btn-outline-danger ms-2">
-                                        <i class="fas fa-heart-broken me-2"></i> Remove from Wishlist
-                                    </a>
-                                {% else %}
-                                    <a href="/books/{{ book.id }}/wishlist/add/" class="btn btn-outline-gold ms-2">
-                                        <i class="fas fa-heart me-2"></i> Add to Wishlist
-                                    </a>
+                                    <!-- Purchase Form - This works with CSRF -->
+                                    <form method="post" action="{% url 'books:purchase_book' book.id %}" id="purchaseForm">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-gold" id="purchaseBtn">
+                                            <i class="fas fa-shopping-cart me-2"></i> 
+                                            Purchase ({{ book.price|floatformat:2|intcomma }} ETB)
+                                        </button>
+                                    </form>
                                 {% endif %}
                             {% else %}
-                                <button class="btn btn-gold" data-bs-toggle="modal" data-bs-target="#purchaseModal">
-                                    <i class="fas fa-shopping-cart me-2"></i> Purchase for {{ book.price }} ETB
-                                </button>
-                                <a href="/books/{{ book.id }}/wishlist/add/" class="btn btn-outline-gold ms-2">
-                                    <i class="fas fa-heart me-2"></i> Add to Wishlist
+                                <a href="{% url 'accounts:login' %}?next={{ request.path }}" class="btn btn-gold">
+                                    <i class="fas fa-sign-in-alt me-2"></i> Login to Purchase
                                 </a>
                             {% endif %}
-                        {% else %}
-                            <a href="{% url 'accounts:login' %}" class="btn btn-gold">
-                                <i class="fas fa-sign-in-alt me-2"></i> Login to Purchase
-                            </a>
-                            <a href="{% url 'accounts:register' %}" class="btn btn-outline-gold ms-2">
-                                <i class="fas fa-user-plus me-2"></i> Register
-                            </a>
                         {% endif %}
+                        
+                        <!-- Wishlist Button -->
+                        {% if user.is_authenticated %}
+                            <form method="post" action="{% if in_wishlist %}{% url 'books:remove_from_wishlist' book.id %}{% else %}{% url 'books:add_to_wishlist' book.id %}{% endif %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-outline-gold">
+                                    <i class="fas fa-{% if in_wishlist %}heart{% else %}heart{% endif %} me-2"></i>
+                                    {% if in_wishlist %}In Wishlist{% else %}Add to Wishlist{% endif %}
+                                </button>
+                            </form>
+                        {% endif %}
+                    {% endif %}
+                    
+                    <!-- Edit/Delete for Author -->
+                    {% if user.is_authenticated and user == book.author and book.status != 'published' %}
+                        <a href="{% url 'books:edit' book.id %}" class="btn btn-outline-gold">
+                            <i class="fas fa-edit me-2"></i> Edit
+                        </a>
+                        <a href="{% url 'books:delete' book.id %}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this book?')">
+                            <i class="fas fa-trash me-2"></i> Delete
+                        </a>
+                    {% endif %}
+                </div>
+                
+                <!-- Purchase Status Messages -->
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                
+                <!-- Book Details Card -->
+                <div class="detail-card">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="label">Genre</div>
+                            <div class="value">{{ book.genre.name|default:"N/A" }}</div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="label">Language</div>
+                            <div class="value">{{ book.language|default:"N/A" }}</div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="label">Pages</div>
+                            <div class="value">{{ book.page_count|default:"N/A" }}</div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="label">Edition</div>
+                            <div class="value">{{ book.edition|default:"1st" }}</div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="label">ISBN</div>
+                            <div class="value">{{ book.isbn|default:"N/A" }}</div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="label">Publication Year</div>
+                            <div class="value">{{ book.publication_year|default:"N/A" }}</div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="label">Published Date</div>
+                            <div class="value">{{ book.published_at|date:"F d, Y"|default:"Not yet published" }}</div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- Related Books Section -->
+    
+    <!-- Description -->
+    <div class="detail-card mt-3">
+        <h5 class="mb-3">
+            <i class="fas fa-align-left me-2" style="color: var(--primary-gold);"></i>
+            Description
+        </h5>
+        <p>{{ book.description|linebreaks }}</p>
+        
+        {% if book.keywords %}
+        <div class="mt-3">
+            <strong>Keywords:</strong>
+            {% for keyword in book.keywords.split %}
+            <span class="badge bg-light text-dark me-1">{{ keyword }}</span>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    
+    <!-- Related Books -->
     {% if related_books %}
-    <div class="mt-5">
-        <h3 class="mb-4"><i class="fas fa-book me-2" style="color: var(--primary-gold);"></i>Related Books</h3>
-        <div class="row g-4">
+    <div class="mt-4">
+        <h5 class="mb-3">
+            <i class="fas fa-book me-2" style="color: var(--primary-gold);"></i>
+            Related Books
+        </h5>
+        <div class="row">
             {% for related in related_books %}
-            <div class="col-md-3">
-                <div class="card h-100 shadow-sm">
-                    <div class="card-body text-center">
-                        {% if related.cover_image %}
-                            <img src="{{ related.cover_image.url }}" alt="{{ related.title }}" style="height: 150px; width: auto; max-width: 100%; object-fit: cover;">
-                        {% else %}
-                            <i class="fas fa-book fa-3x text-muted"></i>
-                        {% endif %}
-                        <h6 class="mt-2">{{ related.title|truncatechars:30 }}</h6>
-                        <small class="text-muted">{{ related.author.full_name|default:"Unknown" }}</small>
+            <div class="col-md-3 col-6 mb-3">
+                <div class="related-book-card card">
+                    {% if related.cover_image %}
+                    <img src="{{ related.cover_image.url }}" alt="{{ related.title }}" class="card-img-top">
+                    {% else %}
+                    <img src="{% static 'images/default-cover.png' %}" alt="{{ related.title }}" class="card-img-top">
+                    {% endif %}
+                    <div class="card-body">
+                        <div class="card-title">{{ related.title|truncatechars:20 }}</div>
+                        <div class="card-text">{{ related.author.get_full_name|default:related.author.username|truncatechars:15 }}</div>
                         <div class="mt-2">
                             {% if related.is_free %}
-                                <span class="badge bg-success">FREE</span>
+                            <span class="badge bg-success">Free</span>
                             {% else %}
-                                <span class="badge" style="background: var(--primary-gold);">{{ related.price }} ETB</span>
+                            <span class="badge bg-warning text-dark">{{ related.price|floatformat:0 }} ETB</span>
                             {% endif %}
+                            <a href="{% url 'books:detail' related.id %}" class="btn btn-sm btn-gold float-end">
+                                View
+                            </a>
                         </div>
-                        <a href="{% url 'books:detail' related.id %}" class="btn btn-sm btn-outline-gold mt-2 w-100">View Details</a>
                     </div>
                 </div>
             </div>
@@ -336,160 +501,22 @@
     {% endif %}
 </div>
 
-<!-- Purchase Modal with Telebirr and CBE Birr Options -->
-<div class="modal fade" id="purchaseModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header" style="background: linear-gradient(135deg, var(--primary-darker), var(--primary-dark)); color: white;">
-                <h5 class="modal-title">
-                    <i class="fas fa-shopping-cart me-2"></i>Complete Your Purchase
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-            </div>
-            <form method="POST" action="{% url 'payments:initiate' %}" id="paymentForm">
-                {% csrf_token %}
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <div class="alert alert-info">
-                            <i class="fas fa-book me-2"></i>
-                            <strong>{{ book.title }}</strong><br>
-                            <span class="text-muted">Amount: <strong>{{ book.price }} ETB</strong></span>
-                        </div>
-                    </div>
-                    
-                    <label class="form-label fw-bold mb-2">Select Payment Method:</label>
-                    
-                    <!-- Telebirr Option -->
-                    <div class="payment-option" onclick="selectPayment('telebirr')" id="option-telebirr">
-                        <div class="d-flex align-items-center">
-                            <div class="payment-icon telebirr-bg me-3">
-                                <i class="fas fa-mobile-alt fa-2x telebirr-color"></i>
-                            </div>
-                            <div class="flex-grow-1">
-                                <h6 class="mb-0">Telebirr</h6>
-                                <small class="text-muted">Pay using Telebirr mobile money</small>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="payment_method" id="telebirr" value="telebirr" checked>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- CBE Birr Option -->
-                    <div class="payment-option mt-2" onclick="selectPayment('cbe_birr')" id="option-cbe_birr">
-                        <div class="d-flex align-items-center">
-                            <div class="payment-icon cbe-bg me-3">
-                                <i class="fas fa-university fa-2x cbe-color"></i>
-                            </div>
-                            <div class="flex-grow-1">
-                                <h6 class="mb-0">CBE Birr</h6>
-                                <small class="text-muted">Pay using CBE Birr mobile banking</small>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="payment_method" id="cbe_birr" value="cbe_birr">
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <input type="hidden" name="book_id" value="{{ book.id }}">
-                    
-                    <div class="mt-3 p-3 bg-light rounded">
-                        <div class="d-flex justify-content-between mb-2">
-                            <span>Subtotal:</span>
-                            <span>{{ book.price }} ETB</span>
-                        </div>
-                        <div class="d-flex justify-content-between mb-2">
-                            <span>Platform Fee:</span>
-                            <span>0 ETB</span>
-                        </div>
-                        <hr>
-                        <div class="d-flex justify-content-between fw-bold">
-                            <span>Total:</span>
-                            <span>{{ book.price }} ETB</span>
-                        </div>
-                    </div>
-                    
-                    <div class="mt-3 text-muted small">
-                        <i class="fas fa-lock me-1"></i> Your payment is secure and encrypted.
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-gold" id="submitPaymentBtn">
-                        <i class="fas fa-check-circle me-2"></i> Complete Purchase
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!-- Payment Processing Modal -->
-<div class="modal fade" id="processingModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-body text-center py-5">
-                <div class="spinner-border text-gold mb-3" role="status" style="width: 3rem; height: 3rem;">
-                    <span class="visually-hidden">Loading...</span>
-                </div>
-                <h5>Processing Payment...</h5>
-                <p class="text-muted">Please wait while we redirect you to the payment gateway.</p>
-            </div>
-        </div>
-    </div>
-</div>
-
+<!-- Purchase Processing JavaScript -->
 <script>
-    // Payment method selection
-    function selectPayment(method) {
-        // Update radio buttons
-        document.getElementById('telebirr').checked = (method === 'telebirr');
-        document.getElementById('cbe_birr').checked = (method === 'cbe_birr');
-        
-        // Update visual selection
-        document.querySelectorAll('.payment-option').forEach(option => {
-            option.classList.remove('selected');
-        });
-        document.getElementById(`option-${method}`).classList.add('selected');
-    }
-    
-    // Form submission with processing modal
-    document.getElementById('paymentForm').addEventListener('submit', function(e) {
-        const submitBtn = document.getElementById('submitPaymentBtn');
-        const selectedMethod = document.querySelector('input[name="payment_method"]:checked');
-        
-        if (!selectedMethod) {
-            e.preventDefault();
-            alert('Please select a payment method.');
-            return false;
-        }
-        
-        // Show processing modal
-        const processingModal = new bootstrap.Modal(document.getElementById('processingModal'));
-        processingModal.show();
-        
-        // Disable submit button
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Processing...';
-        
-        // Form will submit normally
-        return true;
-    });
-    
-    // Initialize selection on page load
     document.addEventListener('DOMContentLoaded', function() {
-        // Set Telebirr as default selected
-        selectPayment('telebirr');
+        const purchaseForm = document.getElementById('purchaseForm');
+        const purchaseBtn = document.getElementById('purchaseBtn');
+        
+        if (purchaseForm) {
+            purchaseForm.addEventListener('submit', function(e) {
+                // Show loading state
+                purchaseBtn.disabled = true;
+                purchaseBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Processing...';
+                
+                // The form will submit normally - the server handles the purchase
+                // This gives visual feedback to the user
+            });
+        }
     });
 </script>
-
-<style>
-    .text-gold {
-        color: var(--primary-gold);
-    }
-    .payment-option.selected {
-        border-color: var(--primary-gold);
-        background: #fff9e6;
-    }
-</style>
 {% endblock %}

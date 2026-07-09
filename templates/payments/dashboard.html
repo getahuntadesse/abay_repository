@@ -1,0 +1,577 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}Payment Dashboard - Abay Repository{% endblock %}
+
+{% block extra_css %}
+<style>
+    :root {
+        --primary-gold: #DAA520;
+        --primary-gold-dark: #B8860B;
+        --primary-dark: #2C2C2C;
+        --primary-darker: #1A1A1A;
+    }
+
+    .stat-card {
+        background: white;
+        border-radius: 15px;
+        padding: 1.5rem;
+        text-align: center;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+        border: none;
+        position: relative;
+        overflow: hidden;
+        height: 100%;
+    }
+
+    .stat-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--primary-gold), var(--primary-gold-dark));
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    }
+
+    .stat-icon {
+        font-size: 2rem;
+        color: var(--primary-gold);
+        margin-bottom: 0.5rem;
+    }
+
+    .stat-value {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--primary-dark);
+    }
+
+    .stat-label {
+        color: #6c757d;
+        font-size: 0.85rem;
+    }
+
+    .btn-gold {
+        background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark));
+        color: var(--primary-dark);
+        border: none;
+        padding: 0.6rem 1.2rem;
+        border-radius: 10px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-gold:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(218, 165, 32, 0.3);
+        color: var(--primary-dark);
+    }
+
+    .btn-gold-small {
+        background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark));
+        color: var(--primary-dark);
+        border: none;
+        padding: 0.3rem 0.8rem;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 0.8rem;
+        transition: all 0.3s ease;
+    }
+
+    .btn-gold-small:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(218, 165, 32, 0.3);
+        color: var(--primary-dark);
+    }
+
+    .btn-outline-gold {
+        border: 2px solid var(--primary-gold);
+        color: var(--primary-gold);
+        background: transparent;
+        padding: 0.5rem 1.2rem;
+        border-radius: 10px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-outline-gold:hover {
+        background: var(--primary-gold);
+        color: var(--primary-dark);
+        transform: translateY(-2px);
+    }
+
+    .btn-outline-gold-small {
+        border: 1.5px solid var(--primary-gold);
+        color: var(--primary-gold);
+        background: transparent;
+        padding: 0.25rem 0.7rem;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 0.75rem;
+        transition: all 0.3s ease;
+    }
+
+    .btn-outline-gold-small:hover {
+        background: var(--primary-gold);
+        color: var(--primary-dark);
+    }
+
+    .badge-status {
+        padding: 0.35rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+
+    .badge-paid { background: #28a745; color: white; }
+    .badge-pending { background: #ffc107; color: #1a1a1a; }
+    .badge-processing { background: #17a2b8; color: white; }
+    .badge-failed { background: #dc3545; color: white; }
+    .badge-calculated { background: #6c757d; color: white; }
+    .badge-taxable { background: #fd7e14; color: white; }
+
+    .author-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1rem;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+        border-left: 4px solid var(--primary-gold);
+        margin-bottom: 0.75rem;
+    }
+
+    .author-card:hover {
+        transform: translateX(5px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+    }
+
+    .chart-container {
+        background: white;
+        border-radius: 15px;
+        padding: 1.5rem;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        height: 100%;
+    }
+
+    .table-payments td {
+        vertical-align: middle;
+    }
+
+    .quick-action-card {
+        background: white;
+        border-radius: 15px;
+        padding: 1.5rem;
+        text-align: center;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+        cursor: pointer;
+        height: 100%;
+        border: 2px solid transparent;
+    }
+
+    .quick-action-card:hover {
+        border-color: var(--primary-gold);
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+    }
+
+    .quick-action-icon {
+        font-size: 2.5rem;
+        color: var(--primary-gold);
+        margin-bottom: 0.75rem;
+    }
+
+    .quick-action-title {
+        font-weight: 600;
+        color: var(--primary-dark);
+        font-size: 1rem;
+    }
+
+    .quick-action-desc {
+        font-size: 0.85rem;
+        color: #6c757d;
+    }
+
+    .modal-content {
+        border-radius: 15px;
+    }
+
+    .modal-header {
+        background: linear-gradient(135deg, var(--primary-dark), var(--primary-darker));
+        color: white;
+        border-radius: 15px 15px 0 0;
+        border-bottom: 3px solid var(--primary-gold);
+    }
+
+    .modal-header .btn-close {
+        filter: brightness(0) invert(1);
+    }
+
+    .payment-method-select {
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .payment-method-select:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .payment-method-select input[type="radio"]:checked + .card {
+        border-color: var(--primary-gold);
+        background: rgba(218, 165, 32, 0.05);
+    }
+
+    .payment-method-select .card {
+        border: 2px solid #e9ecef;
+        border-radius: 12px;
+        padding: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .payment-method-select .card:hover {
+        border-color: var(--primary-gold);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <h2>
+            <i class="fas fa-coins me-2" style="color: var(--primary-gold);"></i>
+            Payment Dashboard
+        </h2>
+        {% if user.role == 'admin' or user.role == 'maker' %}
+        <div class="d-flex flex-wrap gap-2">
+            <a href="{% url 'payments:calculate_all' %}" class="btn btn-gold">
+                <i class="fas fa-calculator me-2"></i> Calculate All
+            </a>
+            <a href="{% url 'payments:payment_history' %}" class="btn btn-outline-gold">
+                <i class="fas fa-history me-2"></i> History
+            </a>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Royalty Rate Info Banner -->
+    <div class="alert alert-info mb-4 d-flex align-items-center">
+        <i class="fas fa-info-circle me-3" style="font-size: 1.2rem;"></i>
+        <div>
+            <strong>Royalty Split:</strong> 
+            <span class="badge bg-warning text-dark me-2">{{ royalty_rate }}% Author</span>
+            <span class="badge bg-secondary me-2">{{ abrehot_rate }}% Abrehot</span>
+            <span class="badge bg-info">Tax applied when author share ≥ {{ tax_threshold|intcomma }} ETB</span>
+        </div>
+    </div>
+
+    {% if user.role == 'admin' or user.role == 'maker' %}
+    <!-- Admin View: Statistics -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-3 col-sm-6">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-money-bill-wave"></i></div>
+                <div class="stat-value">{{ total_earnings|floatformat:2|intcomma }} ETB</div>
+                <div class="stat-label">Total Earnings</div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-check-circle" style="color: #28a745;"></i></div>
+                <div class="stat-value">{{ total_paid|floatformat:2|intcomma }} ETB</div>
+                <div class="stat-label">Total Paid</div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-clock" style="color: #ffc107;"></i></div>
+                <div class="stat-value">{{ total_pending|floatformat:2|intcomma }} ETB</div>
+                <div class="stat-label">Pending Payment</div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-users" style="color: #17a2b8;"></i></div>
+                <div class="stat-value">{{ authors.count|intcomma }}</div>
+                <div class="stat-label">Total Authors</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Split Breakdown -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-user-edit" style="color: var(--primary-gold);"></i></div>
+                <div class="stat-value" style="color: var(--primary-gold);">{{ total_royalty|floatformat:2|intcomma }} ETB</div>
+                <div class="stat-label">Total Author Royalty ({{ royalty_rate }}%)</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-building" style="color: #6c757d;"></i></div>
+                <div class="stat-value" style="color: #6c757d;">{{ total_abrehot_share|floatformat:2|intcomma }} ETB</div>
+                <div class="stat-label">Abrehot Share ({{ abrehot_rate }}%)</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-percent" style="color: #dc3545;"></i></div>
+                <div class="stat-value" style="color: #dc3545;">{{ total_tax|floatformat:2|intcomma }} ETB</div>
+                <div class="stat-label">Total Tax Withheld</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-6">
+            <div class="quick-action-card" onclick="location.href='{% url 'payments:calculate_all' %}'">
+                <div class="quick-action-icon"><i class="fas fa-calculator"></i></div>
+                <div class="quick-action-title">Calculate All Payments</div>
+                <div class="quick-action-desc">Calculate payments for all books</div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="quick-action-card" onclick="location.href='{% url 'payments:payment_history' %}'">
+                <div class="quick-action-icon"><i class="fas fa-history"></i></div>
+                <div class="quick-action-title">Payment History</div>
+                <div class="quick-action-desc">View all payment batches</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Authors List -->
+    <div class="chart-container mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="mb-0">
+                <i class="fas fa-users me-2" style="color: var(--primary-gold);"></i>
+                Authors Payment Summary
+            </h5>
+            <span class="badge bg-secondary">{{ authors.count }} authors</span>
+        </div>
+        
+        {% if authors %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Author</th>
+                        <th>Email</th>
+                        <th class="text-end">Royalty</th>
+                        <th class="text-end">Tax</th>
+                        <th class="text-end">Net</th>
+                        <th class="text-end">Paid</th>
+                        <th class="text-end">Pending</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for author in authors %}
+                    <tr>
+                        <td>
+                            <strong>{{ author.get_full_name|default:author.username }}</strong>
+                        </td>
+                        <td>{{ author.email }}</td>
+                        <td class="text-end text-warning">{{ author.total_royalty|default:0|floatformat:2|intcomma }}</td>
+                        <td class="text-end text-danger">{{ author.total_tax|default:0|floatformat:2|intcomma }}</td>
+                        <td class="text-end fw-bold text-success">{{ author.total_net|default:0|floatformat:2|intcomma }}</td>
+                        <td class="text-end text-success">{{ author.total_paid|default:0|floatformat:2|intcomma }}</td>
+                        <td class="text-end text-warning">{{ author.total_pending|default:0|floatformat:2|intcomma }}</td>
+                        <td class="text-center">
+                            <div class="btn-group btn-group-sm">
+                                <a href="{% url 'payments:author_detail' author.id %}" class="btn btn-outline-gold-small" title="View Details">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                {% if author.total_pending > 0 %}
+                                <button onclick="processAuthorPayment({{ author.id }}, '{{ author.get_full_name|default:author.username|escapejs }}', {{ author.total_pending|floatformat:2 }})" 
+                                        class="btn btn-gold-small" title="Process Payment">
+                                    <i class="fas fa-money-bill-wave"></i> Transfer
+                                </button>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center py-4">
+            <i class="fas fa-users fa-3x text-muted mb-3 d-block"></i>
+            <p class="text-muted">No authors found.</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Recent Payments -->
+    <div class="chart-container">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="mb-0">
+                <i class="fas fa-clock me-2" style="color: var(--primary-gold);"></i>
+                Recent Payments
+            </h5>
+            <a href="{% url 'payments:payment_history' %}" class="btn btn-sm btn-outline-gold">View All</a>
+        </div>
+        {% if recent_payments %}
+        <div class="table-responsive">
+            <table class="table table-payments table-hover">
+                <thead>
+                    <tr>
+                        <th>Book</th>
+                        <th>Author</th>
+                        <th class="text-end">Gross</th>
+                        <th class="text-end">Royalty</th>
+                        <th class="text-end">Tax</th>
+                        <th class="text-end">Net</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for payment in recent_payments %}
+                    <tr>
+                        <td>{{ payment.book.title|truncatechars:25 }}</td>
+                        <td>{{ payment.author.get_full_name|default:payment.author.username }}</td>
+                        <td class="text-end">{{ payment.gross_amount|floatformat:2|intcomma }} ETB</td>
+                        <td class="text-end text-warning">{{ payment.author_royalty|floatformat:2|intcomma }} ETB</td>
+                        <td class="text-end text-danger">{{ payment.tax_amount|floatformat:2|intcomma }} ETB</td>
+                        <td class="text-end fw-bold text-success">{{ payment.final_amount|floatformat:2|intcomma }} ETB</td>
+                        <td>
+                            <span class="badge-status badge-{{ payment.status }}">
+                                {{ payment.get_status_display }}
+                            </span>
+                        </td>
+                        <td>{{ payment.payment_date|default:payment.created_at|date:"M d, Y" }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center py-4">
+            <i class="fas fa-receipt fa-3x text-muted mb-3 d-block"></i>
+            <p class="text-muted mb-0">No recent payments found.</p>
+        </div>
+        {% endif %}
+    </div>
+
+    {% elif user.role == 'author' %}
+    <!-- Author View -->
+    <!-- Author statistics and payments here -->
+    {% endif %}
+</div>
+
+<!-- Process Author Payment Modal -->
+<div class="modal fade" id="processAuthorModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-money-bill-wave me-2"></i> Process Author Payment
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div id="authorPaymentInfo">
+                    <p><strong>Author:</strong> <span id="authorName"></span></p>
+                    <p><strong>Total Pending:</strong> <span id="authorAmount" class="text-warning fw-bold"></span> ETB</p>
+                </div>
+                <form id="processAuthorForm" method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Select Payment Method</label>
+                        <div id="paymentMethodOptions">
+                            <!-- Will be populated by JS -->
+                            <p class="text-muted">Loading payment methods...</p>
+                        </div>
+                    </div>
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        This will transfer all pending payments for this author.
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" form="processAuthorForm" class="btn btn-gold" id="processPaymentBtn" disabled>
+                    <i class="fas fa-check-circle me-2"></i> Process Payment
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+    function processAuthorPayment(authorId, authorName, amount) {
+        document.getElementById('authorName').textContent = authorName;
+        document.getElementById('authorAmount').textContent = amount.toLocaleString();
+        document.getElementById('processAuthorForm').action = `/payments/author/${authorId}/process/`;
+        
+        // Fetch available payment methods
+        fetch(`/payments/author/${authorId}/details/?method=telebirr`)
+            .then(response => response.json())
+            .then(data => {
+                // This will be used to show available methods
+                // For now, we'll show a simple selection
+                const container = document.getElementById('paymentMethodOptions');
+                // We'll show the actual methods in the detail page
+                container.innerHTML = `
+                    <div class="row g-3">
+                        <div class="col-6">
+                            <label class="payment-method-select">
+                                <input type="radio" name="payment_method" value="telebirr" onchange="enableProcessButton()">
+                                <div class="card text-center">
+                                    <i class="fas fa-mobile-alt" style="font-size: 1.5rem; color: #28a745;"></i>
+                                    <strong>Telebirr</strong>
+                                    <small class="text-muted">Mobile Money</small>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="col-6">
+                            <label class="payment-method-select">
+                                <input type="radio" name="payment_method" value="cbe" onchange="enableProcessButton()">
+                                <div class="card text-center">
+                                    <i class="fas fa-university" style="font-size: 1.5rem; color: #0d6efd;"></i>
+                                    <strong>CBE Birr</strong>
+                                    <small class="text-muted">Bank Transfer</small>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                `;
+            })
+            .catch(() => {
+                // Fallback to simple selection
+                document.getElementById('paymentMethodOptions').innerHTML = `
+                    <select name="payment_method" class="form-select" required onchange="enableProcessButton()">
+                        <option value="">Select payment method...</option>
+                        <option value="telebirr">Telebirr</option>
+                        <option value="cbe">CBE Birr</option>
+                        <option value="bank_transfer">Bank Transfer</option>
+                        <option value="cash">Cash</option>
+                    </select>
+                `;
+            });
+        
+        new bootstrap.Modal(document.getElementById('processAuthorModal')).show();
+    }
+
+    function enableProcessButton() {
+        const form = document.getElementById('processAuthorForm');
+        const hasSelection = form.querySelector('input[name="payment_method"]:checked') || 
+                           form.querySelector('select[name="payment_method"]').value;
+        document.getElementById('processPaymentBtn').disabled = !hasSelection;
+    }
+</script>
+{% endblock %}
+{% endblock %}

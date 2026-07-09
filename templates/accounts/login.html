@@ -1,3 +1,4 @@
+<!-- templates/accounts/login.html -->
 {% extends 'base.html' %}
 {% load static %}
 
@@ -328,7 +329,8 @@
         color: #1e40af;
     }
 
-    @media (max-width: 768px) {
+    /* Mobile Responsive */
+    @media (max-width: 992px) {
         .login-left {
             padding: 2rem;
         }
@@ -343,6 +345,89 @@
         }
         .login-logo {
             width: 60px;
+        }
+        .feature-list li {
+            font-size: 0.9rem;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .login-wrapper {
+            min-height: auto;
+            padding: 1rem 0;
+        }
+        .login-card {
+            border-radius: 16px;
+        }
+        .login-left {
+            padding: 1.5rem;
+        }
+        .login-left h2 {
+            font-size: 1.3rem;
+        }
+        .login-left p {
+            font-size: 0.9rem;
+        }
+        .login-right {
+            padding: 1.5rem;
+        }
+        .login-header h3 {
+            font-size: 1.3rem;
+        }
+        .form-group label {
+            font-size: 0.75rem;
+        }
+        .input-group-custom input {
+            padding: 10px 12px 10px 40px;
+            font-size: 0.9rem;
+        }
+        .btn-login {
+            padding: 12px;
+            font-size: 0.9rem;
+        }
+        .form-options {
+            flex-direction: column;
+            gap: 0.5rem;
+            align-items: flex-start;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .login-left {
+            display: none;
+        }
+        .login-right {
+            padding: 1.25rem;
+        }
+        .login-header h3 {
+            font-size: 1.2rem;
+        }
+        .login-header p {
+            font-size: 0.85rem;
+        }
+        .input-group-custom input {
+            padding: 8px 10px 8px 36px;
+            font-size: 0.85rem;
+        }
+        .input-group-custom i {
+            font-size: 0.9rem;
+            left: 12px;
+        }
+        .btn-login {
+            padding: 10px;
+            font-size: 0.85rem;
+        }
+        .register-link p {
+            font-size: 0.85rem;
+        }
+        .register-link a {
+            font-size: 0.9rem;
+        }
+        .author-link a {
+            font-size: 0.8rem;
+        }
+        .divider span {
+            font-size: 0.8rem;
         }
     }
 </style>
@@ -370,7 +455,7 @@
                         </li>
                         <li>
                             <i class="fas fa-check-circle"></i>
-                            <span>Secure payments with Telebirr & CBE Birr</span>
+                            <span>Secure payments with Telebirr &amp; CBE Birr</span>
                         </li>
                         <li>
                             <i class="fas fa-check-circle"></i>
@@ -467,10 +552,11 @@
                         <span>New to Abrehot Library?</span>
                     </div>
 
+                    <!-- Register Links - FIXED -->
                     <div class="register-link">
                         <p>Create an account to start reading</p>
-                        <a href="{% url 'accounts:register' %}">
-                            <i class="fas fa-user-plus me-2"></i>Create New Account
+                        <a href="{% url 'accounts:register_client' %}">
+                            <i class="fas fa-user-plus me-2"></i>Register as Reader
                         </a>
                     </div>
 

@@ -1,3 +1,4 @@
+<!-- templates/base.html -->
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -97,16 +98,6 @@
             text-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
         
-        .brand-name .lightbulb {
-            display: inline-block;
-            animation: pulse-glow 2s ease-in-out infinite;
-        }
-        
-        @keyframes pulse-glow {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.8; transform: scale(1.1); }
-        }
-        
         .brand-tagline {
             font-size: 0.6rem;
             color: rgba(255,255,255,0.6);
@@ -122,7 +113,6 @@
             font-weight: 300;
         }
         
-        /* Navbar Toggler - Mobile */
         .navbar-toggler {
             border: 2px solid rgba(218, 165, 32, 0.3);
             padding: 0.4rem 0.6rem;
@@ -139,7 +129,6 @@
             background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255,255,255,0.9)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
         }
         
-        /* Navbar Collapse - Mobile */
         .navbar-collapse {
             background: rgba(26, 26, 26, 0.98);
             backdrop-filter: blur(10px);
@@ -164,27 +153,15 @@
             position: relative;
         }
         
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: 4px;
-            left: 50%;
-            width: 0;
-            height: 2px;
-            background: var(--primary-gold);
-            transition: all 0.3s ease;
-            transform: translateX(-50%);
-        }
-        
-        .nav-link:hover::after,
-        .nav-link:focus::after {
-            width: 60%;
-        }
-        
         .nav-link:hover,
         .nav-link:focus {
             color: var(--primary-gold) !important;
             background: rgba(218, 165, 32, 0.08);
+        }
+        
+        .nav-link.active {
+            color: var(--primary-gold) !important;
+            background: rgba(218, 165, 32, 0.12);
         }
         
         .nav-link i {
@@ -192,7 +169,6 @@
             text-align: center;
         }
         
-        /* Dropdown - Mobile */
         .dropdown-menu {
             background: var(--primary-darker);
             border: 1px solid rgba(218, 165, 32, 0.15);
@@ -224,16 +200,13 @@
             border-color: rgba(255,255,255,0.05);
         }
         
-        /* ============================================
-           MAIN CONTENT
-           ============================================ */
         main {
             flex: 1;
             padding: 1rem 0;
         }
         
         /* ============================================
-           ALERTS
+           ALERTS - Mobile Responsive
            ============================================ */
         .alert {
             border-radius: 12px;
@@ -243,32 +216,8 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.05);
         }
         
-        .alert-success {
-            background: linear-gradient(135deg, #E8F5E9, #C8E6C9);
-            color: #2E7D32;
-            border-left: 4px solid #4CAF50;
-        }
-        
-        .alert-danger {
-            background: linear-gradient(135deg, #FFEBEE, #FFCDD2);
-            color: #C62828;
-            border-left: 4px solid #F44336;
-        }
-        
-        .alert-info {
-            background: linear-gradient(135deg, #E3F2FD, #BBDEFB);
-            color: #1565C0;
-            border-left: 4px solid #2196F3;
-        }
-        
-        .alert-warning {
-            background: linear-gradient(135deg, #FFF3E0, #FFE0B2);
-            color: #E65100;
-            border-left: 4px solid #FF9800;
-        }
-        
         /* ============================================
-           FOOTER - Enhanced
+           FOOTER - Mobile First
            ============================================ */
         footer {
             background: linear-gradient(135deg, var(--primary-darker) 0%, #0d0d0d 100%);
@@ -278,17 +227,6 @@
             border-top: 3px solid rgba(218, 165, 32, 0.15);
             position: relative;
             overflow: hidden;
-        }
-        
-        footer::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -20%;
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(218, 165, 32, 0.03) 0%, transparent 70%);
-            border-radius: 50%;
         }
         
         .footer-brand {
@@ -308,19 +246,6 @@
             font-size: 1.2rem;
             font-weight: 800;
             color: var(--primary-gold);
-        }
-        
-        .footer-brand .brand-tagline {
-            font-size: 0.55rem;
-            color: rgba(255,255,255,0.5);
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-        
-        .footer-brand .brand-motto {
-            font-size: 0.5rem;
-            color: var(--primary-gold-light);
-            font-style: italic;
         }
         
         footer h6 {
@@ -349,17 +274,11 @@
             text-decoration: none;
             transition: all 0.3s ease;
             font-size: 0.9rem;
-            position: relative;
         }
         
         footer a:hover {
             color: var(--primary-gold);
             transform: translateX(4px);
-        }
-        
-        footer .text-white-50 {
-            color: rgba(255,255,255,0.5) !important;
-            font-size: 0.9rem;
         }
         
         .footer-social a {
@@ -382,10 +301,6 @@
             transform: translateY(-3px);
             border-color: var(--primary-gold);
             box-shadow: 0 5px 15px rgba(218, 165, 32, 0.3);
-        }
-        
-        .footer-gold {
-            color: var(--primary-gold);
         }
         
         .footer-contact-item {
@@ -436,11 +351,6 @@
             color: rgba(255,255,255,0.35);
         }
         
-        .footer-bottom .copyright i {
-            color: var(--primary-gold);
-            margin: 0 0.25rem;
-        }
-        
         .footer-bottom .footer-links {
             display: flex;
             gap: 1.5rem;
@@ -460,49 +370,16 @@
             transform: translateX(0);
         }
         
-        /* ============================================
-           SCROLLBAR
-           ============================================ */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        
-        ::-webkit-scrollbar-track {
-            background: var(--primary-gray-light);
-            border-radius: 4px;
-        }
-        
-        ::-webkit-scrollbar-thumb {
-            background: var(--primary-gold);
-            border-radius: 4px;
-        }
-        
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--primary-gold-dark);
-        }
-        
-        /* ============================================
-           UTILITY
-           ============================================ */
         .text-gold {
             color: var(--primary-gold) !important;
         }
         .bg-gold {
             background: var(--primary-gold);
         }
-        .bg-dark-gradient {
-            background: linear-gradient(135deg, var(--primary-darker) 0%, var(--primary-dark) 100%);
-        }
         
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
         .fade-in {
@@ -512,8 +389,6 @@
         /* ============================================
            RESPONSIVE - TABLETS & MOBILE
            ============================================ */
-        
-        /* Tablets (768px - 991px) */
         @media (max-width: 991px) {
             body {
                 padding-top: var(--navbar-height-mobile);
@@ -545,7 +420,6 @@
             }
         }
         
-        /* Mobile (up to 767px) */
         @media (max-width: 767px) {
             body {
                 padding-top: var(--navbar-height-mobile);
@@ -589,10 +463,6 @@
                 font-size: 0.9rem;
             }
             
-            .nav-link::after {
-                display: none;
-            }
-            
             .dropdown-menu {
                 padding: 0.25rem;
             }
@@ -602,7 +472,6 @@
                 font-size: 0.85rem;
             }
             
-            /* Footer - Mobile */
             footer {
                 padding: 1.5rem 0 0.75rem;
             }
@@ -648,19 +517,16 @@
                 text-align: center;
             }
             
-            /* Alert - Mobile */
             .alert {
                 font-size: 0.85rem;
                 padding: 0.6rem 0.8rem;
             }
             
-            /* Main content - Mobile */
             main {
                 padding: 0.5rem 0;
             }
         }
         
-        /* Small Mobile (up to 400px) */
         @media (max-width: 400px) {
             .navbar-brand img {
                 height: 30px;
@@ -691,9 +557,6 @@
             }
         }
         
-        /* ============================================
-           RESPONSIVE - LARGE SCREENS
-           ============================================ */
         @media (min-width: 992px) {
             .navbar-collapse {
                 background: transparent;
@@ -730,7 +593,7 @@
             <img src="{% static 'images/logo.png' %}" alt="Abrehot Library Logo" onerror="this.src='https://placehold.co/50x50/DAA520/1A1A1A?text=AL'">
             <div class="brand-text">
                 <span class="brand-name">
-                    <i class="fas fa-lightbulb lightbulb" style="font-size: 0.7rem; color: var(--primary-gold);"></i>
+                    <i class="fas fa-lightbulb" style="font-size: 0.7rem; color: var(--primary-gold);"></i>
                     Abay Repository
                 </span>
                 <span class="brand-tagline">Abrehot Library</span>
@@ -744,12 +607,13 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'home' %}">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'home' %}">
                         <i class="fas fa-home me-1"></i> Home
                     </a>
                 </li>
+                
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'books:browse' %}">
+                    <a class="nav-link {% if 'books' in request.path %}active{% endif %}" href="{% url 'books:browse' %}">
                         <i class="fas fa-search me-1"></i> Browse Books
                     </a>
                 </li>
@@ -763,7 +627,7 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'books:upload' %}">
-                                <i class="fas fa-upload me-1"></i> Upload Book
+                                <i class="fas fa-upload me-1"></i> Upload
                             </a>
                         </li>
                     {% endif %}
@@ -776,7 +640,7 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li>
-                                <a class="dropdown-item" href="{% url 'accounts:dashboard' %}">
+                                <a class="dropdown-item" href="{% url 'accounts:dashboard_redirect' %}">
                                     <i class="fas fa-tachometer-alt me-2"></i> Dashboard
                                 </a>
                             </li>
@@ -785,14 +649,9 @@
                                     <i class="fas fa-id-card me-2"></i> Profile
                                 </a>
                             </li>
-                            <li>
-                                <a class="dropdown-item" href="{% url 'books:wishlist' %}">
-                                    <i class="fas fa-heart me-2"></i> Wishlist
-                                </a>
-                            </li>
                             <li><hr class="dropdown-divider"></li>
                             <li>
-                                <a class="dropdown-item" href="{% url 'accounts:logout' %}">
+                                <a class="dropdown-item text-danger" href="{% url 'accounts:logout' %}">
                                     <i class="fas fa-sign-out-alt me-2"></i> Logout
                                 </a>
                             </li>
@@ -815,7 +674,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a class="dropdown-item" href="{% url 'accounts:register' %}">
+                                <a class="dropdown-item" href="{% url 'accounts:register_client' %}">
                                     <i class="fas fa-book-reader me-2"></i> As Reader
                                 </a>
                             </li>
@@ -878,7 +737,6 @@
                     <li class="mb-2"><a href="{% url 'books:browse' %}">Browse Books</a></li>
                     <li class="mb-2"><a href="#">About Us</a></li>
                     <li class="mb-2"><a href="#">Contact</a></li>
-                    <li class="mb-2"><a href="#">Blog</a></li>
                 </ul>
             </div>
             
@@ -889,7 +747,6 @@
                     <li class="mb-2"><a href="#">Terms of Service</a></li>
                     <li class="mb-2"><a href="#">Refund Policy</a></li>
                     <li class="mb-2"><a href="#">FAQ</a></li>
-                    <li class="mb-2"><a href="#">Help Center</a></li>
                 </ul>
             </div>
             
@@ -911,17 +768,6 @@
                     <span class="icon-wrapper"><i class="fas fa-map-marker-alt"></i></span>
                     <span class="text">Addis Ababa, Ethiopia</span>
                 </div>
-                
-                <!-- Newsletter Signup -->
-                <div class="mt-3">
-                    <p class="text-white-50 small mb-2">Subscribe to our newsletter</p>
-                    <div class="input-group" style="max-width: 100%;">
-                        <input type="email" class="form-control form-control-sm" placeholder="Your email" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white;">
-                        <button class="btn btn-sm" style="background: var(--primary-gold); color: var(--primary-darker); font-weight: 600;">
-                            <i class="fas fa-paper-plane"></i>
-                        </button>
-                    </div>
-                </div>
             </div>
         </div>
         
@@ -939,7 +785,6 @@
                         <a href="#"><i class="fas fa-lock me-1"></i>Privacy</a>
                         <a href="#"><i class="fas fa-file-contract me-1"></i>Terms</a>
                         <a href="#"><i class="fas fa-shield-alt me-1"></i>Security</a>
-                        <a href="#"><i class="fas fa-sitemap me-1"></i>Sitemap</a>
                     </div>
                 </div>
             </div>
@@ -959,7 +804,7 @@
         });
     }, 5000);
     
-    // Close mobile menu on link click (for better UX)
+    // Close mobile menu on link click
     document.addEventListener('DOMContentLoaded', function() {
         var navLinks = document.querySelectorAll('.navbar-nav .nav-link, .navbar-nav .dropdown-item');
         var navbarCollapse = document.getElementById('navbarNav');
@@ -974,17 +819,6 @@
                 });
             });
         }
-        
-        // Add smooth scroll animation for footer links
-        document.querySelectorAll('footer a[href^="#"]').forEach(function(anchor) {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                var target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            });
-        });
     });
 </script>
 

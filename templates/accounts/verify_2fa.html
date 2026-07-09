@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Verify 2FA - Abay Repository{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white text-center">
+                    <h4 class="mb-0"><i class="fas fa-lock me-2"></i> Two-Factor Authentication</h4>
+                </div>
+                <div class="card-body text-center">
+                    <div class="mb-4">
+                        <i class="fas fa-envelope-open-text fa-4x text-primary"></i>
+                    </div>
+                    
+                    <p class="mb-3">
+                        A verification code has been sent to <strong>{{ email }}</strong>
+                    </p>
+                    <p class="text-muted small">
+                        The code will expire in 5 minutes.
+                    </p>
+                    
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="token" class="form-label">Verification Code</label>
+                            <input type="text" class="form-control form-control-lg text-center" 
+                                   id="token" name="token" placeholder="Enter 6-digit code" 
+                                   autocomplete="off" maxlength="6" required>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-check-circle me-2"></i> Verify
+                        </button>
+                    </form>
+                    
+                    <hr class="my-4">
+                    
+                    <div class="small text-muted">
+                        <p class="mb-1">Didn't receive the code?</p>
+                        <a href="#" class="text-decoration-none" onclick="resendCode()">
+                            <i class="fas fa-redo me-1"></i> Resend Code
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function resendCode() {
+    alert('A new verification code has been sent to your email.');
+    location.reload();
+}
+</script>
+{% endblock %}
