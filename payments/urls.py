@@ -1,4 +1,4 @@
-# payments/urls.py
+# payments/urls.py - Complete Fixed Version
 from django.urls import path
 from . import views
 
@@ -9,10 +9,14 @@ urlpatterns = [
     path('dashboard/', views.payment_dashboard, name='dashboard'),
     path('history/', views.payment_history, name='payment_history'),
     
-    # Purchase
+    # Purchase (Now using the fixed function)
     path('purchase/<int:book_id>/', views.purchase_book, name='purchase_book'),
     path('download/<int:book_id>/', views.download_book, name='download_book'),
+    
+    # Telebirr Callbacks
     path('callback/', views.payment_callback, name='payment_callback'),
+    path('return/', views.payment_return, name='payment_return'),
+    path('simulate/<str:transaction_id>/', views.simulate_payment, name='simulate_payment'),
     
     # Author Payments
     path('author/', views.author_payments, name='author_payments'),

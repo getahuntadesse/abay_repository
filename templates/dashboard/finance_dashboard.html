@@ -12,12 +12,14 @@
         --primary-gold-dark: #B8860B;
         --primary-gold-light: #F5D061;
         --primary-dark: #1A1A1A;
+        --primary-darker: #2C2C2C;
         --primary-gray: #4A4A4A;
         --primary-gray-light: #6C6C6C;
         --success-green: #28a745;
         --danger-red: #dc3545;
         --warning-yellow: #ffc107;
         --info-blue: #17a2b8;
+        --purple: #6f42c1;
     }
 
     .finance-dashboard {
@@ -27,7 +29,7 @@
     }
 
     .finance-header {
-        background: linear-gradient(135deg, #0d47a1, #1a237e);
+        background: linear-gradient(135deg, var(--primary-darker) 0%, var(--primary-dark) 100%);
         border-radius: 20px;
         padding: 2rem;
         color: white;
@@ -43,7 +45,7 @@
         right: -10%;
         width: 400px;
         height: 400px;
-        background: rgba(255, 215, 0, 0.08);
+        background: rgba(218, 165, 32, 0.08);
         border-radius: 50%;
     }
 
@@ -59,13 +61,13 @@
     }
 
     .finance-header .header-badge {
-        background: rgba(255, 215, 0, 0.2);
+        background: rgba(218, 165, 32, 0.2);
         color: var(--primary-gold);
         padding: 0.5rem 1.25rem;
         border-radius: 50px;
         font-size: 0.875rem;
         font-weight: 600;
-        border: 1px solid rgba(255, 215, 0, 0.3);
+        border: 1px solid rgba(218, 165, 32, 0.3);
         display: inline-block;
     }
 
@@ -77,6 +79,7 @@
         transition: all 0.3s ease;
         height: 100%;
         border: 1px solid rgba(0, 0, 0, 0.05);
+        border-bottom: 4px solid var(--primary-gold);
     }
 
     .stat-card:hover {
@@ -100,8 +103,9 @@
     .stat-icon.green { background: rgba(40, 167, 69, 0.15); color: var(--success-green); }
     .stat-icon.red { background: rgba(220, 53, 69, 0.15); color: var(--danger-red); }
     .stat-icon.blue { background: rgba(23, 162, 184, 0.15); color: var(--info-blue); }
-    .stat-icon.purple { background: rgba(106, 27, 154, 0.15); color: #6a1b9a; }
+    .stat-icon.purple { background: rgba(106, 27, 154, 0.15); color: var(--purple); }
     .stat-icon.orange { background: rgba(255, 152, 0, 0.15); color: #ff9800; }
+    .stat-icon.dark { background: rgba(26, 26, 26, 0.1); color: var(--primary-dark); }
 
     .stat-number {
         font-size: 1.5rem;
@@ -155,16 +159,16 @@
         font-size: 0.875rem;
     }
 
-    .table th {
+    .table thead th {
         font-weight: 600;
-        color: var(--primary-gray);
+        color: white;
         text-transform: uppercase;
         font-size: 0.7rem;
         letter-spacing: 0.5px;
-        border-bottom: 2px solid #e9ecef;
-        background: #f8f9fa;
+        background: var(--primary-darker);
         padding: 0.75rem 1rem;
         white-space: nowrap;
+        border: none;
     }
 
     .table td {
@@ -174,7 +178,7 @@
     }
 
     .table tbody tr:hover {
-        background: #f8f9fa;
+        background: #fff8f0;
     }
 
     .table tbody tr:last-child td {
@@ -216,12 +220,54 @@
     .badge-method.telebirr { background: #cce5ff; color: #004085; }
     .badge-method.cbe { background: #d4edda; color: #155724; }
 
+    .btn-gold {
+        background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark));
+        color: var(--primary-darker);
+        border: none;
+        font-weight: 600;
+        padding: 8px 20px;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .btn-gold:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(218, 165, 32, 0.4);
+        color: var(--primary-darker);
+    }
+
+    .btn-gold:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none !important;
+    }
+
+    .btn-outline-gold {
+        border: 2px solid var(--primary-gold);
+        color: var(--primary-gold);
+        background: transparent;
+        font-weight: 600;
+        padding: 8px 20px;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .btn-outline-gold:hover {
+        background: var(--primary-gold);
+        color: var(--primary-darker);
+        transform: translateY(-2px);
+    }
+
     .btn-pay {
         background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark));
         color: var(--primary-darker);
         border: none;
         padding: 0.4rem 1rem;
-        border-radius: 8px;
+        border-radius: 20px;
         font-weight: 600;
         font-size: 0.8rem;
         transition: all 0.3s ease;
@@ -236,27 +282,45 @@
     .btn-pay:disabled {
         opacity: 0.5;
         cursor: not-allowed;
+        transform: none !important;
     }
 
     .btn-pay-selected {
-        background: linear-gradient(135deg, var(--success-green), #1e7e34);
-        color: white;
+        background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark));
+        color: var(--primary-darker);
         border: none;
         padding: 0.6rem 1.5rem;
-        border-radius: 8px;
+        border-radius: 25px;
         font-weight: 600;
         transition: all 0.3s ease;
     }
 
     .btn-pay-selected:hover {
         transform: translateY(-2px);
-        box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
-        color: white;
+        box-shadow: 0 4px 15px rgba(218, 165, 32, 0.3);
+        color: var(--primary-darker);
     }
 
     .btn-pay-selected:disabled {
         opacity: 0.5;
         cursor: not-allowed;
+        transform: none !important;
+    }
+
+    .btn-success-custom {
+        background: linear-gradient(135deg, #28a745, #1e7e34);
+        color: white;
+        border: none;
+        font-weight: 600;
+        padding: 8px 20px;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-success-custom:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+        color: white;
     }
 
     .progress {
@@ -444,7 +508,7 @@
                     <i class="fas fa-credit-card me-2" style="color: var(--primary-gold);"></i>
                     Finance Dashboard
                 </h1>
-                <p>Manage author payments, calculate royalties and taxes, and process Telebirr payments.</p>
+                <p>Manage author payments, calculate royalties and taxes, and process payments.</p>
                 <div class="mt-3">
                     <span class="header-badge">
                         <i class="fas fa-circle me-1" style="font-size: 0.5rem; color: #28a745;"></i>
@@ -549,10 +613,10 @@
                             <option value="paid">Paid</option>
                             <option value="calculated">Calculated</option>
                         </select>
-                        <button class="btn btn-sm btn-outline-secondary" id="selectAllBtn">
+                        <button class="btn btn-sm btn-outline-gold" id="selectAllBtn">
                             <i class="fas fa-check-double me-1"></i>Select All
                         </button>
-                        <button class="btn btn-sm btn-outline-secondary" id="deselectAllBtn">
+                        <button class="btn btn-sm btn-outline-gold" id="deselectAllBtn">
                             <i class="fas fa-times me-1"></i>Deselect
                         </button>
                     </div>
@@ -585,7 +649,8 @@
                                         data-amount="{{ payment.amount }}"
                                         data-tax="{{ payment.tax_amount|default:0 }}"
                                         data-net="{{ payment.net_payable|default:payment.amount }}"
-                                        data-tax-rate="{{ payment.tax_rate|default:0 }}">
+                                        data-tax-rate="{{ payment.tax_rate|default:0 }}"
+                                        data-phone="{{ payment.phone }}">
                                         <td class="checkbox-column">
                                             <input type="checkbox" class="author-checkbox" 
                                                    data-author-id="{{ payment.author_id }}"
@@ -741,7 +806,7 @@
                             <div class="payment-info">
                                 <div class="name">{{ tx.author_name }}</div>
                                 <div class="details">
-                                    {{ tx.payment_method|default:'Bank' }} • {{ tx.date|date:"M d, Y H:i" }}
+                                    {{ tx.payment_method|default:'Bank'|title }} • {{ tx.date|date:"M d, Y H:i" }}
                                     <span class="badge-status {{ tx.status }} ms-1">{{ tx.status|title }}</span>
                                     {% if tx.tax_amount %}
                                         <span class="ms-1 text-muted">Tax: {{ tx.tax_amount|floatformat:2 }} ETB ({{ tx.tax_rate|default:0 }}%)</span>
@@ -767,15 +832,15 @@
     <div class="modal fade" id="paymentModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header" style="background: linear-gradient(135deg, #0d47a1, #1a237e); color: white;">
+                <div class="modal-header" style="background: linear-gradient(135deg, var(--primary-darker), var(--primary-dark)); color: white;">
                     <h5 class="modal-title">
-                        <i class="fas fa-money-bill-wave me-2"></i>Process Payment
+                        <i class="fas fa-money-bill-wave me-2" style="color: var(--primary-gold);"></i>Process Payment
                     </h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <div class="text-center mb-3">
-                        <div class="spinner-border text-primary" id="paymentSpinner" style="display: none;"></div>
+                        <div class="spinner-border text-gold" id="paymentSpinner" style="display: none;"></div>
                         <div id="paymentStatus">
                             <i class="fas fa-check-circle text-success fa-3x" style="display: none;" id="paymentSuccess"></i>
                             <i class="fas fa-times-circle text-danger fa-3x" style="display: none;" id="paymentFailed"></i>
@@ -824,8 +889,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-pay" id="confirmPayBtn" onclick="confirmPayment()">
+                    <button type="button" class="btn btn-outline-gold" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-gold" id="confirmPayBtn" onclick="confirmPayment()">
                         <i class="fas fa-check me-2"></i>Confirm Payment
                     </button>
                 </div>

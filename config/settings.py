@@ -22,6 +22,12 @@ ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1,::1').split
 CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS', default='http://localhost:3000,http://127.0.0.1:3000,https://esignet.ida.fayda.et').split(',')
 
 # =============================================
+# 1.5. BASE URL SETTINGS
+# =============================================
+
+BASE_URL = config('BASE_URL', default='http://localhost:3000')
+
+# =============================================
 # 2. APPLICATION DEFINITION
 # =============================================
 
@@ -49,7 +55,6 @@ INSTALLED_APPS = [
     'books',
     'core',
     'payments',
-    #'royalties',
     'notifications',
     'dashboard',
     'reviews',
@@ -57,6 +62,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'core.middleware.SecurityHeadersMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -88,7 +94,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'config.wsgi.application'
 
 # =============================================
-# 3. DATABASE CONFIGURATION - FROM .env
+# 3. DATABASE CONFIGURATION
 # =============================================
 
 DATABASES = {
@@ -138,14 +144,12 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# Password hashing
 PASSWORD_HASHERS = [
     'django.contrib.auth.hashers.PBKDF2PasswordHasher',
     'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
     'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
 ]
 
-# Try to use Argon2 if available
 try:
     import argon2
     PASSWORD_HASHERS.insert(0, 'django.contrib.auth.hashers.Argon2PasswordHasher')
@@ -153,41 +157,81 @@ except ImportError:
     pass
 
 # =============================================
-# 6. AUTHENTICATION & SESSION
+# 6. AUTHENTICATION & SESSION SECURITY - FIXED
 # =============================================
 
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/dashboard/'
 LOGOUT_REDIRECT_URL = '/'
 
-SESSION_COOKIE_AGE = 86400
-SESSION_COOKIE_HTTPONLY = True
-SESSION_COOKIE_SECURE = False
-SESSION_COOKIE_SAMESITE = 'Lax'  # Changed from Strict for OIDC
+# Session Cookie Security
+SESSION_COOKIE_AGE = 86400  # 24 hours
+SESSION_COOKIE_HTTPONLY = True  # Prevent JavaScript access
+SESSION_COOKIE_SECURE = config('SESSION_COOKIE_SECURE', default=False, cast=bool)  # HTTPS only
+SESSION_COOKIE_SAMESITE = 'Lax'
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 SESSION_SAVE_EVERY_REQUEST = True
 
-CSRF_COOKIE_HTTPONLY = True
-CSRF_COOKIE_SECURE = False
+# CSRF Cookie Security
+CSRF_COOKIE_HTTPONLY = True  # Prevent JavaScript access
+CSRF_COOKIE_SECURE = config('CSRF_COOKIE_SECURE', default=False, cast=bool)  # HTTPS only
 CSRF_COOKIE_SAMESITE = 'Lax'
 CSRF_USE_SESSIONS = True
 
 # =============================================
-# 7. SECURE SSL/HTTPS
+# 7. SECURE SSL/HTTPS SETTINGS - FIXED
 # =============================================
 
-SECURE_SSL_REDIRECT = False
+# Force HTTPS redirect
+SECURE_SSL_REDIRECT = config('SECURE_SSL_REDIRECT', default=False, cast=bool)
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-SECURE_HSTS_SECONDS = 0
-SECURE_HSTS_INCLUDE_SUBDOMAINS = False
-SECURE_HSTS_PRELOAD = False
+
+# HTTP Strict Transport Security (HSTS)
+SECURE_HSTS_SECONDS = config('SECURE_HSTS_SECONDS', default=31536000, cast=int)  # 1 year
+SECURE_HSTS_INCLUDE_SUBDOMAINS = config('SECURE_HSTS_INCLUDE_SUBDOMAINS', default=True, cast=bool)
+SECURE_HSTS_PRELOAD = config('SECURE_HSTS_PRELOAD', default=True, cast=bool)
+
+# Additional Security Headers
 SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_REFERRER_POLICY = 'strict-origin-when-cross-origin'
+
+# X-Frame-Options (prevent clickjacking)
 X_FRAME_OPTIONS = 'DENY'
 
 # =============================================
-# 8. CORS
+# 8. ENVIRONMENT-BASED SECURITY OVERRIDES
+# =============================================
+
+# Production security settings (enabled when DEBUG=False)
+if not DEBUG:
+    # Force secure cookies in production
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_SSL_REDIRECT = True
+    
+    # Enable HSTS in production
+    SECURE_HSTS_SECONDS = 31536000  # 1 year
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    
+    # Additional security
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_BROWSER_XSS_FILTER = True
+    
+    # Production allowed hosts should be specific
+    # ALLOWED_HOSTS should be set in .env for production
+else:
+    # Development overrides - allow insecure cookies locally
+    SESSION_COOKIE_SECURE = False
+    CSRF_COOKIE_SECURE = False
+    SECURE_SSL_REDIRECT = False
+    SECURE_HSTS_SECONDS = 0
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = False
+    SECURE_HSTS_PRELOAD = False
+
+# =============================================
+# 9. CORS
 # =============================================
 
 CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', default='http://localhost:3000,http://127.0.0.1:3000,https://esignet.ida.fayda.et').split(',')
@@ -195,14 +239,14 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_PREFLIGHT_MAX_AGE = 86400
 
 # =============================================
-# 9. FILE UPLOAD
+# 10. FILE UPLOAD
 # =============================================
 
-FILE_UPLOAD_MAX_MEMORY_SIZE = 5242880
+FILE_UPLOAD_MAX_MEMORY_SIZE = 5242880  # 5MB
 FILE_UPLOAD_PERMISSIONS = 0o644
 
 # =============================================
-# 10. STATIC & MEDIA
+# 11. STATIC & MEDIA
 # =============================================
 
 STATIC_URL = '/static/'
@@ -215,7 +259,7 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # =============================================
-# 11. INTERNATIONALIZATION
+# 12. INTERNATIONALIZATION
 # =============================================
 
 LANGUAGE_CODE = 'en-us'
@@ -224,10 +268,22 @@ USE_I18N = True
 USE_TZ = True
 
 # =============================================
-# 12. EMAIL
+# 13. EMAIL
 # =============================================
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# Use SMTP in production; console backend in development for easy debugging.
+# Override via EMAIL_BACKEND in .env for special cases.
+if DEBUG:
+    EMAIL_BACKEND = config(
+        'EMAIL_BACKEND',
+        default='django.core.mail.backends.console.EmailBackend'
+    )
+else:
+    EMAIL_BACKEND = config(
+        'EMAIL_BACKEND',
+        default='django.core.mail.backends.smtp.EmailBackend'
+    )
+
 EMAIL_HOST = config('EMAIL_HOST', default='smtp.gmail.com')
 EMAIL_PORT = config('EMAIL_PORT', default=587, cast=int)
 EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=True, cast=bool)
@@ -237,14 +293,14 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
 DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='noreply@abay.abrehot.org.et')
 
 # =============================================
-# 13. CRISPY FORMS
+# 14. CRISPY FORMS
 # =============================================
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 # =============================================
-# 14. CACHING
+# 15. CACHING
 # =============================================
 
 CACHES = {
@@ -255,7 +311,7 @@ CACHES = {
 }
 
 # =============================================
-# 15. 2FA EMAIL SETTINGS
+# 16. 2FA EMAIL SETTINGS
 # =============================================
 
 OTP_EMAIL_SUBJECT = "Your Abay Repository Verification Code"
@@ -279,73 +335,222 @@ Abay Repository Team
 """
 
 # =============================================
-# 16. LOGGING
+# 17. LOGGING - UPDATED
 # =============================================
+
+# Create logs directory if it doesn't exist
+LOGS_DIR = os.path.join(BASE_DIR, 'logs')
+if not os.path.exists(LOGS_DIR):
+    os.makedirs(LOGS_DIR, mode=0o755)
+
+# Main log file path
+LOG_FILE_PATH = os.path.join(BASE_DIR, 'logs.txt')
 
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    
+    # Formatters
     'formatters': {
         'verbose': {
-            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'format': '[{asctime}] {levelname} {name} - {message}',
             'style': '{',
+            'datefmt': '%Y-%m-%d %H:%M:%S'
         },
         'simple': {
-            'format': '{levelname} {message}',
+            'format': '[{asctime}] {levelname} - {message}',
             'style': '{',
+            'datefmt': '%Y-%m-%d %H:%M:%S'
+        },
+        'detailed': {
+            'format': '[{asctime}] {levelname} {name} {module}.{funcName}:{lineno} - {message}',
+            'style': '{',
+            'datefmt': '%Y-%m-%d %H:%M:%S'
+        },
+        'payment': {
+            'format': '[{asctime}] PAYMENT {levelname} - {message}',
+            'style': '{',
+            'datefmt': '%Y-%m-%d %H:%M:%S'
+        },
+        'auth': {
+            'format': '[{asctime}] AUTH {levelname} - {message}',
+            'style': '{',
+            'datefmt': '%Y-%m-%d %H:%M:%S'
         },
         'secure': {
-            'format': '{levelname} {asctime} {module} {message}',
+            'format': '[{asctime}] SECURITY {levelname} - {message}',
             'style': '{',
+            'datefmt': '%Y-%m-%d %H:%M:%S'
         },
     },
-    'handlers': {
-        'console': {
-            'level': 'INFO',
-            'class': 'logging.StreamHandler',
-            'formatter': 'verbose',
+    
+    # Filters
+    'filters': {
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
         },
-        'file': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+    },
+    
+    # Handlers
+    'handlers': {
+        # Main log file handler - writes to logs.txt
+        'main_file': {
             'level': 'INFO',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(BASE_DIR, 'logs', 'django.log'),
-            'maxBytes': 10485760,
-            'backupCount': 10,
+            'filename': LOG_FILE_PATH,
+            'maxBytes': 10485760,  # 10MB
+            'backupCount': 5,
             'formatter': 'verbose',
+            'encoding': 'utf-8',
         },
-        'security': {
+        # Auth log handler
+        'auth_file': {
+            'level': 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': LOG_FILE_PATH,
+            'maxBytes': 10485760,
+            'backupCount': 5,
+            'formatter': 'auth',
+            'encoding': 'utf-8',
+        },
+        # Payment log handler
+        'payment_file': {
+            'level': 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': LOG_FILE_PATH,
+            'maxBytes': 10485760,
+            'backupCount': 5,
+            'formatter': 'payment',
+            'encoding': 'utf-8',
+        },
+        # Security log handler
+        'security_file': {
             'level': 'WARNING',
             'class': 'logging.handlers.RotatingFileHandler',
             'filename': os.path.join(BASE_DIR, 'logs', 'security.log'),
             'maxBytes': 10485760,
             'backupCount': 10,
             'formatter': 'secure',
+            'encoding': 'utf-8',
+        },
+        # Django log file (separate for detailed debugging)
+        'django_file': {
+            'level': 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs', 'django.log'),
+            'maxBytes': 10485760,
+            'backupCount': 10,
+            'formatter': 'verbose',
+            'encoding': 'utf-8',
+        },
+        # Console handler for development
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+        # Error handler
+        'error_file': {
+            'level': 'ERROR',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': LOG_FILE_PATH,
+            'maxBytes': 10485760,
+            'backupCount': 5,
+            'formatter': 'detailed',
+            'encoding': 'utf-8',
         },
     },
+    
+    # Loggers
     'loggers': {
-        'django': {
-            'handlers': ['console', 'file'],
+        # Root logger - catches everything
+        '': {
+            'handlers': ['main_file', 'console'],
             'level': 'INFO',
             'propagate': True,
         },
+        # Django base logger
+        'django': {
+            'handlers': ['main_file', 'django_file', 'console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        # Django request logger
+        'django.request': {
+            'handlers': ['main_file', 'error_file', 'console'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        # Django security logger
         'django.security': {
-            'handlers': ['security'],
+            'handlers': ['security_file', 'main_file'],
             'level': 'WARNING',
             'propagate': False,
         },
+        # Django DB backend logger
         'django.db.backends': {
-            'handlers': ['console'],
+            'handlers': ['main_file'],
             'level': 'WARNING',
             'propagate': False,
+        },
+        # Django server logger
+        'django.server': {
+            'handlers': ['main_file', 'console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        # Accounts app - authentication logging
+        'accounts': {
+            'handlers': ['auth_file', 'main_file', 'console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        # Books app logging
+        'books': {
+            'handlers': ['main_file', 'console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        # Payments app - payment transaction logging
+        'payments': {
+            'handlers': ['payment_file', 'main_file', 'console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        # Workflow logging
+        'workflow': {
+            'handlers': ['main_file', 'console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        # Core app logging
+        'core': {
+            'handlers': ['main_file', 'console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        # Notifications logging
+        'notifications': {
+            'handlers': ['main_file', 'console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        # Reviews logging
+        'reviews': {
+            'handlers': ['main_file', 'console'],
+            'level': 'INFO',
+            'propagate': True,
         },
     },
 }
 
 # =============================================
-# 17. FAYDA OIDC SETTINGS - Using .env variables
+# 18. FAYDA OIDC SETTINGS
 # =============================================
 
-# Fayda OIDC Configuration - Direct from .env
 FAYDA_CLIENT_ID = config('FAYDA_CLIENT_ID', default='')
 FAYDA_AUTH_URL = config('FAYDA_AUTH_URL', default='')
 FAYDA_TOKEN_URL = config('FAYDA_TOKEN_URL', default='')
@@ -359,7 +564,7 @@ FAYDA_TEST_NATIONAL_ID = config('FAYDA_TEST_NATIONAL_ID', default='')
 FAYDA_TEST_OTP = config('FAYDA_TEST_OTP', default='')
 
 # =============================================
-# 18. TELEBIRR SETTINGS
+# 19. TELEBIRR SETTINGS
 # =============================================
 
 TELEBIRR_BASE_URL = config('TELEBIRR_BASE_URL', default='https://196.188.120.3:38443/apiaccess/payment/gateway')
@@ -373,14 +578,16 @@ TELEBIRR_VERIFY_SSL = config('TELEBIRR_VERIFY_SSL', default=False, cast=bool)
 TELEBIRR_ENABLED = config('TELEBIRR_ENABLED', default=False, cast=bool)
 USE_SIMULATED_PAYMENT = config('USE_SIMULATED_PAYMENT', default=True, cast=bool)
 
-# For backward compatibility
 TELEBIRR_APP_ID = TELEBIRR_FABRIC_APP_ID
 TELEBIRR_APP_KEY = TELEBIRR_APP_SECRET
 TELEBIRR_SHORT_CODE = TELEBIRR_MERCHANT_CODE
 TELEBIRR_API_URL = TELEBIRR_BASE_URL
 
+TELEBIRR_CALLBACK_URL = config('TELEBIRR_CALLBACK_URL', default=f"{BASE_URL}/books/telebirr/callback/")
+TELEBIRR_RETURN_URL = config('TELEBIRR_RETURN_URL', default=f"{BASE_URL}/books/telebirr/return/")
+
 # =============================================
-# 19. CBE BIRR SETTINGS
+# 20. CBE BIRR SETTINGS
 # =============================================
 
 CBE_MERCHANT_ID = config('CBE_MERCHANT_ID', default='')
@@ -389,7 +596,7 @@ CBE_PUBLIC_KEY = config('CBE_PUBLIC_KEY', default='')
 CBE_API_URL = config('CBE_API_URL', default='')
 
 # =============================================
-# 20. CUSTOM SETTINGS
+# 21. CUSTOM SETTINGS
 # =============================================
 
 APP_NAME = config('APP_NAME', default='Abay Repository')
@@ -407,8 +614,11 @@ MIN_CHECKER_SCORE = 0
 MAX_CHECKER_SCORE = 10
 PASSING_CHECKER_SCORE = 7
 
+ROYALTY_RATE = config('ROYALTY_RATE', default=70, cast=int)
+TAX_THRESHOLD = config('TAX_THRESHOLD', default=500, cast=int)
+
 # =============================================
-# 21. ENSURE DIRECTORIES
+# 22. ENSURE DIRECTORIES
 # =============================================
 
 LOGS_DIR = os.path.join(BASE_DIR, 'logs')
@@ -428,7 +638,7 @@ if not os.path.exists(MEDIA_ROOT_DIR):
     os.makedirs(MEDIA_ROOT_DIR, mode=0o755)
 
 # =============================================
-# 22. LOAD ENVIRONMENT VARIABLES
+# 23. LOAD ENVIRONMENT VARIABLES
 # =============================================
 
 try:
@@ -441,25 +651,36 @@ except ImportError:
     pass
 
 # =============================================
-# 23. STARTUP MESSAGE
+# 24. STARTUP MESSAGE
 # =============================================
 
-print("")
-print("============================================================")
-print("               ABREHOT LIBRARY - Django Settings")
-print("============================================================")
-print(f" DEBUG: {str(DEBUG):<8}")
-print(f" SECRET_KEY: {'SET' if SECRET_KEY else 'NOT SET':<8}")
-print(f" DATABASE: MySQL")
-print(f" DB_NAME: {DATABASES['default']['NAME']:<8}")
-print(f" DB_HOST: {DATABASES['default']['HOST']:<8}")
-print(f" AUTH_USER_MODEL: CustomUser")
-print(f" TIME_ZONE: {TIME_ZONE:<8}")
-print(f" 2FA: Enabled (Email-based)")
-print(f" FAYDA_CLIENT_ID: {'SET' if FAYDA_CLIENT_ID else 'NOT SET':<8}")
-print(f" FAYDA_REDIRECT_URI: {FAYDA_REDIRECT_URI}")
-print(f" TELEBIRR_APP_ID: {'SET' if TELEBIRR_APP_ID else 'NOT SET':<8}")
-print(f" CBE_MERCHANT_ID: {'SET' if CBE_MERCHANT_ID else 'NOT SET':<8}")
-print(f" APP_NAME: {APP_NAME:<8}")
-print("============================================================")
-print("")
+# =============================================
+# 24. STARTUP SUMMARY (via logging, not print)
+# =============================================
+
+import logging as _startup_logging
+_startup_log = _startup_logging.getLogger('django.server')
+_startup_log.info(
+    "Abay Repository starting | DEBUG=%s | DB=%s@%s | EMAIL=%s | HSTS=%ss",
+    DEBUG,
+    DATABASES['default']['NAME'],
+    DATABASES['default']['HOST'],
+    EMAIL_BACKEND.split('.')[-1],
+    SECURE_HSTS_SECONDS,
+)
+
+# =============================================
+# 25. CREATE LOGS.TXT IF NOT EXISTS
+# =============================================
+
+if not os.path.exists(LOG_FILE_PATH):
+    try:
+        with open(LOG_FILE_PATH, 'w', encoding='utf-8') as f:
+            from datetime import datetime
+            f.write(f"# Abay Repository Log File\n")
+            f.write(f"# Created: {datetime.now().isoformat()}\n")
+            f.write(f"# {'='*60}\n\n")
+            f.write(f"# Logging started at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+            f.write(f"# {'='*60}\n\n")
+    except Exception as e:
+        print(f"Warning: Could not create log file: {e}")

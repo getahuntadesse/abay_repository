@@ -4,6 +4,7 @@ from django.utils import timezone
 from django.contrib.auth import get_user_model
 from decimal import Decimal
 import uuid
+import hashlib
 
 User = get_user_model()
 
@@ -58,6 +59,7 @@ class Purchase(models.Model):
         help_text="Payment method used"
     )
     
+    # Transaction fields - all allow NULL
     transaction_id = models.CharField(
         max_length=50, 
         unique=True, 
@@ -70,7 +72,16 @@ class Purchase(models.Model):
         max_length=100, 
         blank=True, 
         null=True,
+        default=None,
         help_text="External transaction reference"
+    )
+    
+    purchase_reference = models.CharField(
+        max_length=100, 
+        blank=True, 
+        null=True,
+        default=None,
+        help_text="Purchase reference"
     )
     
     completed_at = models.DateTimeField(
@@ -94,6 +105,8 @@ class Purchase(models.Model):
             models.Index(fields=['user', 'status']),
             models.Index(fields=['book', 'status']),
             models.Index(fields=['transaction_id']),
+            models.Index(fields=['transaction_reference']),
+            models.Index(fields=['purchase_reference']),
             models.Index(fields=['created_at']),
         ]
         ordering = ['-created_at']
@@ -102,8 +115,16 @@ class Purchase(models.Model):
         return f"Purchase #{self.id} - {self.book.title} by {self.user.username}"
     
     def save(self, *args, **kwargs):
+        # Generate transaction_id if not set
         if not self.transaction_id:
             self.transaction_id = f"PUR-{uuid.uuid4().hex[:12].upper()}"
+        
+        # Set empty strings to None
+        if self.transaction_reference == '':
+            self.transaction_reference = None
+        if self.purchase_reference == '':
+            self.purchase_reference = None
+        
         super().save(*args, **kwargs)
     
     @property
@@ -246,45 +267,6 @@ class Payment(models.Model):
     
     def __str__(self):
         return f"Payment #{self.id} - {self.author.username} - {self.final_amount} ETB"
-    
-    def calculate_all(self):
-        """Calculate all amounts for this payment"""
-        royalty_rate = getattr(settings, 'ROYALTY_RATE', 70) if hasattr(settings, 'ROYALTY_RATE') else 70
-        abrehot_rate = 100 - royalty_rate
-        
-        self.royalty_rate = royalty_rate
-        self.abrehot_share_rate = abrehot_rate
-        
-        # Calculate royalty
-        self.author_royalty = self.gross_amount * (Decimal(royalty_rate) / Decimal(100))
-        self.abrehot_share = self.gross_amount * (Decimal(abrehot_rate) / Decimal(100))
-        
-        # Determine tax rate based on book genre
-        tax_rate = get_tax_rate(self.book)
-        self.tax_rate = tax_rate
-        
-        # Apply tax if above threshold
-        tax_threshold = getattr(settings, 'TAX_THRESHOLD', 500)
-        if self.author_royalty >= Decimal(str(tax_threshold)):
-            self.is_taxable = True
-            self.tax_amount = self.author_royalty * (Decimal(tax_rate) / Decimal(100))
-        else:
-            self.is_taxable = False
-            self.tax_amount = Decimal('0.00')
-        
-        # Calculate final amount
-        self.final_amount = self.author_royalty - self.tax_amount
-        
-        self.save()
-        return self
-    
-    @property
-    def is_paid(self):
-        return self.status == 'paid'
-    
-    @property
-    def is_pending(self):
-        return self.status in ['calculated', 'pending']
 
 
 class PaymentBatch(models.Model):

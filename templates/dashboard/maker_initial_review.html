@@ -1,0 +1,355 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Initial Review - {{ book.title }} | Abay Repository{% endblock %}
+
+{% block extra_css %}
+<style>
+    .review-container {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+    .book-info {
+        background: #f8f9fa;
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    .book-info h4 {
+        color: #1A1A1A;
+        margin-bottom: 0.5rem;
+    }
+    .book-info .meta {
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
+    .book-info .description {
+        margin-top: 1rem;
+        padding: 1rem;
+        background: white;
+        border-radius: 8px;
+        border: 1px solid #e9ecef;
+    }
+    .decision-card {
+        border: 2px solid #e9ecef;
+        border-radius: 12px;
+        padding: 1.25rem;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        height: 100%;
+    }
+    .decision-card:hover {
+        border-color: #DAA520;
+        background: #fff8f0;
+    }
+    .decision-card.selected {
+        border-color: #DAA520;
+        background: #fff8f0;
+        box-shadow: 0 0 0 3px rgba(218, 165, 32, 0.25);
+    }
+    .decision-card .icon {
+        font-size: 2.5rem;
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+    .decision-card .title {
+        font-weight: 600;
+        font-size: 1.1rem;
+    }
+    .decision-card .description {
+        font-size: 0.85rem;
+        color: #6c757d;
+    }
+    .decision-card.accept .icon { color: #28a745; }
+    .decision-card.revision .icon { color: #fd7e14; }
+    .decision-card.reject .icon { color: #dc3545; }
+    
+    .btn-gold {
+        background: linear-gradient(135deg, #DAA520, #B8860B);
+        color: #1A1A1A;
+        border: none;
+        font-weight: 600;
+        padding: 10px 30px;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+    }
+    .btn-gold:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(218, 165, 32, 0.4);
+        color: #1A1A1A;
+    }
+    .btn-outline-gold {
+        border: 2px solid #DAA520;
+        color: #DAA520;
+        background: transparent;
+        font-weight: 600;
+        padding: 10px 30px;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+    }
+    .btn-outline-gold:hover {
+        background: #DAA520;
+        color: #1A1A1A;
+        transform: translateY(-2px);
+    }
+    .form-control:focus, .form-select:focus {
+        border-color: #DAA520;
+        box-shadow: 0 0 0 0.2rem rgba(218, 165, 32, 0.25);
+    }
+    .status-badge {
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        display: inline-block;
+    }
+    .status-submitted { background: #17a2b8; color: white; }
+    .status-initial_review { background: #ffc107; color: #1A1A1A; }
+    .file-info {
+        background: #e9ecef;
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        margin-top: 0.5rem;
+    }
+    .file-info i {
+        color: #DAA520;
+        margin-right: 0.5rem;
+    }
+    .required-star {
+        color: red;
+        margin-left: 3px;
+    }
+    .card {
+        border-radius: 12px;
+        border: none;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    }
+    .card-header {
+        background: white;
+        border-bottom: 1px solid #e9ecef;
+        padding: 1rem 1.5rem;
+        border-radius: 12px 12px 0 0 !important;
+    }
+    .decision-badge {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        margin-top: 0.5rem;
+    }
+    .decision-badge.complete { background: #28a745; color: white; }
+    .decision-badge.revision { background: #fd7e14; color: white; }
+    .decision-badge.reject { background: #dc3545; color: white; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="review-container">
+        <div class="card shadow-sm">
+            <div class="card-header">
+                <h4 class="mb-0">
+                    <i class="fas fa-clipboard-check me-2" style="color: #DAA520;"></i>
+                    Initial Review
+                </h4>
+                <p class="text-muted mb-0 small">Review the manuscript and make an initial decision</p>
+            </div>
+            <div class="card-body">
+                <!-- Book Information -->
+                <div class="book-info">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h4>{{ book.title }}</h4>
+                            <p class="meta">
+                                <strong>Author:</strong> {{ book.author.get_full_name|default:book.author.username }}<br>
+                                <strong>Genre:</strong> {{ book.genre.name|default:"Uncategorized" }}<br>
+                                <strong>Language:</strong> {{ book.language|default:"English" }}<br>
+                                <strong>Status:</strong> <span class="status-badge status-{{ book.status }}">{{ book.get_status_display|default:book.status|title }}</span><br>
+                                <strong>Submitted:</strong> {{ book.submitted_at|date:"M d, Y H:i"|default:book.created_at|date:"M d, Y H:i" }}
+                            </p>
+                        </div>
+                        <div class="col-md-4 text-md-end">
+                            <a href="{% url 'books:detail' book.id %}" class="btn btn-outline-gold btn-sm" target="_blank">
+                                <i class="fas fa-eye me-1"></i> View Full Details
+                            </a>
+                            {% if book.file %}
+                                <div class="file-info mt-2">
+                                    <i class="fas fa-file-pdf"></i>
+                                    <a href="{{ book.file.url }}" target="_blank" class="text-dark">View Manuscript</a>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% if book.description %}
+                        <div class="description">
+                            <strong>Description:</strong>
+                            <p class="mb-0 mt-1">{{ book.description }}</p>
+                        </div>
+                    {% endif %}
+                    {% if book.keywords %}
+                        <div class="mt-2">
+                            <strong>Keywords:</strong> {{ book.keywords }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <form method="POST" id="reviewForm">
+                    {% csrf_token %}
+                    
+                    <!-- Decision Selection -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Decision <span class="required-star">*</span></label>
+                        <div class="row g-3">
+                            <!-- Complete - Forward to Checker -->
+                            <div class="col-md-4">
+                                <div class="decision-card accept" onclick="selectDecision(this, 'complete')">
+                                    <span class="icon"><i class="fas fa-check-circle"></i></span>
+                                    <div class="title">Complete — Forward to Checker</div>
+                                    <div class="description">The manuscript meets initial requirements. It will move to Awaiting Checker Assignment so you can assign a quality checker.</div>
+                                    <div class="form-check mt-2">
+                                        <input type="radio" name="decision" value="complete" class="form-check-input" required>
+                                        <label class="form-check-label">Select</label>
+                                    </div>
+                                    <span class="decision-badge complete">Forward</span>
+                                </div>
+                            </div>
+                            <!-- Needs Revision -->
+                            <div class="col-md-4">
+                                <div class="decision-card revision" onclick="selectDecision(this, 'needs_revision')">
+                                    <span class="icon"><i class="fas fa-edit"></i></span>
+                                    <div class="title">Needs Revision</div>
+                                    <div class="description">Book has potential but needs improvements. Provide detailed feedback for the author.</div>
+                                    <div class="form-check mt-2">
+                                        <input type="radio" name="decision" value="needs_revision" class="form-check-input" required>
+                                        <label class="form-check-label">Select</label>
+                                    </div>
+                                    <span class="decision-badge revision">Revision</span>
+                                </div>
+                            </div>
+                            <!-- Reject -->
+                            <div class="col-md-4">
+                                <div class="decision-card reject" onclick="selectDecision(this, 'reject')">
+                                    <span class="icon"><i class="fas fa-times-circle"></i></span>
+                                    <div class="title">Reject</div>
+                                    <div class="description">Book does not meet quality standards or guidelines. Provide clear reasons for rejection.</div>
+                                    <div class="form-check mt-2">
+                                        <input type="radio" name="decision" value="reject" class="form-check-input" required>
+                                        <label class="form-check-label">Select</label>
+                                    </div>
+                                    <span class="decision-badge reject">Reject</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Review Notes -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Review Notes</label>
+                        <textarea name="notes" class="form-control" rows="5" 
+                                  placeholder="Provide detailed feedback on your decision..."></textarea>
+                        <div class="form-text">
+                            <i class="fas fa-info-circle me-1"></i>
+                            These notes will be shared with the author if revision is needed or if rejected.
+                            For "Forward to Checker", notes are optional but recommended.
+                        </div>
+                    </div>
+
+                    <!-- Submit Buttons -->
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-gold flex-grow-1" id="submitBtn">
+                            <i class="fas fa-check me-2"></i> Submit Decision
+                        </button>
+                        <a href="{% url 'books:maker_dashboard' %}" class="btn btn-outline-gold">
+                            <i class="fas fa-times me-2"></i> Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function selectDecision(element, value) {
+        // Remove selected class from all decision cards
+        document.querySelectorAll('.decision-card').forEach(card => {
+            card.classList.remove('selected');
+        });
+        
+        // Add selected class to clicked card
+        element.classList.add('selected');
+        
+        // Check the radio button
+        const radio = element.querySelector('input[type="radio"]');
+        if (radio) {
+            radio.checked = true;
+        }
+        
+        // Update button text based on selection
+        const submitBtn = document.getElementById('submitBtn');
+        const decisionLabels = {
+            'complete': 'Forward to Checker',
+            'needs_revision': 'Request Revision',
+            'reject': 'Reject Book'
+        };
+        if (decisionLabels[value]) {
+            submitBtn.innerHTML = '<i class="fas fa-check me-2"></i> ' + decisionLabels[value];
+        }
+    }
+
+    // Form validation
+    document.getElementById('reviewForm').addEventListener('submit', function(e) {
+        const decision = document.querySelector('input[name="decision"]:checked');
+        if (!decision) {
+            e.preventDefault();
+            alert('Please select a decision.');
+            return;
+        }
+        
+        const notes = document.querySelector('textarea[name="notes"]');
+        const decisionValue = decision.value;
+        
+        // For 'complete' decision, show confirmation
+        if (decisionValue === 'complete') {
+            if (!confirm('Are you sure you want to forward this book to checker assignment?\n\n' +
+                        'The book will be moved to "Awaiting Checker" status and you can assign a quality checker.')) {
+                e.preventDefault();
+                return;
+            }
+            return;
+        }
+        
+        // For revision or rejection, require notes
+        if (decisionValue === 'needs_revision' || decisionValue === 'reject') {
+            if (!notes.value.trim() || notes.value.trim().length < 10) {
+                e.preventDefault();
+                alert('Please provide detailed notes (at least 10 characters) for revision or rejection.');
+                notes.focus();
+                return;
+            }
+        }
+        
+        if (!confirm('Are you sure you want to submit this decision? This action cannot be undone.')) {
+            e.preventDefault();
+            return;
+        }
+    });
+
+    // Auto-select first decision card if none selected
+    document.addEventListener('DOMContentLoaded', function() {
+        const firstCard = document.querySelector('.decision-card');
+        if (firstCard) {
+            const radio = firstCard.querySelector('input[type="radio"]');
+            if (radio) {
+                radio.checked = true;
+                firstCard.classList.add('selected');
+                
+                // Update button text
+                const submitBtn = document.getElementById('submitBtn');
+                submitBtn.innerHTML = '<i class="fas fa-check me-2"></i> Forward to Checker';
+            }
+        }
+    });
+</script>
+{% endblock %}

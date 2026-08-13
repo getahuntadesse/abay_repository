@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}My Publications - Abay Repository{% endblock %}
+
+{% block extra_css %}
+<style>
+    .publications-container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    .btn-gold {
+        background: linear-gradient(135deg, #DAA520, #B8860B);
+        color: #1A1A1A;
+        border: none;
+        padding: 8px 20px;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    .btn-gold:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(218, 165, 32, 0.4);
+        color: #1A1A1A;
+    }
+    .btn-outline-gold {
+        border: 2px solid #DAA520;
+        color: #DAA520;
+        background: transparent;
+        font-weight: 600;
+        padding: 8px 20px;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+    }
+    .btn-outline-gold:hover {
+        background: #DAA520;
+        color: #1A1A1A;
+        transform: translateY(-2px);
+    }
+    .table thead {
+        background: #1A1A1A;
+        color: white;
+    }
+    .table th {
+        padding: 1rem;
+    }
+    .table td {
+        padding: 1rem;
+        vertical-align: middle;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="publications-container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>
+                <i class="fas fa-book me-2" style="color: #DAA520;"></i>
+                My Publications
+            </h2>
+            <a href="{% url 'books:maker_dashboard' %}" class="btn btn-outline-gold">
+                <i class="fas fa-arrow-left me-2"></i> Back to Dashboard
+            </a>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table mb-0">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Author</th>
+                                <th>Price</th>
+                                <th>Downloads</th>
+                                <th>Published Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for book in books %}
+                            <tr>
+                                <td>
+                                    <strong>{{ book.title|truncatechars:50 }}</strong>
+                                    <br>
+                                    <small class="text-muted">ISBN: {{ book.isbn|default:"N/A" }}</small>
+                                </td>
+                                <td>{{ book.author.full_name|default:"Unknown" }}</td>
+                                <td>
+                                    {% if book.is_free %}
+                                        <span class="badge bg-success">FREE</span>
+                                    {% else %}
+                                        <strong>{{ book.price }} ETB</strong>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <i class="fas fa-download me-1 text-muted"></i>
+                                    {{ book.downloads_count|default:0|intcomma }}
+                                </td>
+                                <td>{{ book.published_at|date:"M d, Y" }}</td>
+                                <td>
+                                    <a href="{% url 'books:detail' book.id %}" class="btn btn-sm btn-gold">
+                                        <i class="fas fa-eye me-1"></i> View
+                                    </a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6" class="text-center py-5">
+                                    <i class="fas fa-inbox fa-3x mb-3 d-block text-muted"></i>
+                                    <h5>No Publications Yet</h5>
+                                    <p class="text-muted">You haven't published any books yet.</p>
+                                    <a href="{% url 'books:pending_approval' %}" class="btn btn-gold mt-2">
+                                        <i class="fas fa-check-circle me-2"></i> Review Pending Books
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -2,7 +2,7 @@
 {% load static %}
 {% load humanize %}
 
-{% block title %}Checker Dashboard | Abrehot Library{% endblock %}
+{% block title %}Checker Dashboard | Abay Repository{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -14,6 +14,11 @@
         --primary-darker: #1A1A1A;
         --primary-gray: #4A4A4A;
         --primary-gray-light: #6C6C6C;
+        --success-green: #28a745;
+        --danger-red: #dc3545;
+        --warning-yellow: #ffc107;
+        --info-blue: #17a2b8;
+        --purple: #6f42c1;
     }
 
     .dashboard-header {
@@ -23,6 +28,7 @@
         margin-bottom: 2rem;
         position: relative;
         overflow: hidden;
+        color: white;
     }
 
     .dashboard-header::before {
@@ -75,7 +81,7 @@
         background: white;
         border-radius: 16px;
         padding: 1.5rem;
-        margin-bottom: 1rem;
+        margin-bottom: 1.5rem;
         box-shadow: 0 5px 20px rgba(0,0,0,0.08);
         transition: all 0.3s ease;
         border-left: 4px solid var(--primary-gold);
@@ -86,42 +92,14 @@
         box-shadow: 0 10px 30px rgba(0,0,0,0.12);
     }
 
-    .rating-input {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        flex-wrap: wrap;
+    .review-card.overdue {
+        border-left-color: var(--danger-red);
+        background: #fff5f5;
     }
 
-    .rating-input input {
-        width: 100px;
-        text-align: center;
-        border-radius: 8px;
-        border: 1px solid #ddd;
-        padding: 0.5rem;
-    }
-
-    .criteria-label {
-        font-weight: 600;
-        min-width: 180px;
-    }
-
-    .score-display {
-        font-size: 2rem;
-        font-weight: bold;
-        padding: 0.5rem 1rem;
-        border-radius: 10px;
-        display: inline-block;
-    }
-
-    .score-pass {
-        background: linear-gradient(135deg, #28a74520, #28a74510);
-        color: #28a745;
-    }
-
-    .score-fail {
-        background: linear-gradient(135deg, #dc354520, #dc354510);
-        color: #dc3545;
+    .review-card.completed {
+        border-left-color: var(--success-green);
+        background: #f0fff4;
     }
 
     .btn-gold {
@@ -156,17 +134,77 @@
         transform: translateY(-2px);
     }
 
+    .btn-sm {
+        padding: 5px 12px;
+        font-size: 0.8rem;
+        border-radius: 20px;
+    }
+
+    .btn-success {
+        background: var(--success-green);
+        color: white;
+        border: none;
+        padding: 8px 20px;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-success:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+        color: white;
+    }
+
+    .btn-danger {
+        background: var(--danger-red);
+        color: white;
+        border: none;
+        padding: 8px 20px;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-danger:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(220, 53, 69, 0.4);
+        color: white;
+    }
+
+    .btn-warning {
+        background: var(--warning-yellow);
+        color: var(--primary-darker);
+        border: none;
+        padding: 8px 20px;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-warning:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(255, 193, 7, 0.4);
+        color: var(--primary-darker);
+    }
+
     .status-badge {
         padding: 0.35rem 0.75rem;
         border-radius: 20px;
         font-size: 0.75rem;
         font-weight: 600;
+        display: inline-block;
     }
 
-    .status-approved { background: #28a745; color: white; }
-    .status-rejected { background: #dc3545; color: white; }
-    .status-pending { background: #ffc107; color: var(--primary-dark); }
+    .status-approved { background: var(--success-green); color: white; }
+    .status-rejected { background: var(--danger-red); color: white; }
+    .status-pending { background: var(--warning-yellow); color: var(--primary-darker); }
     .status-revision { background: #fd7e14; color: white; }
+    .status-overdue { background: var(--danger-red); color: white; }
+    .status-completed { background: var(--success-green); color: white; }
+    .status-declined { background: #6c757d; color: white; }
+    .status-conflict { background: var(--danger-red); color: white; }
+    .status-in_progress { background: var(--info-blue); color: white; }
 
     .form-control:focus, .form-select:focus {
         border-color: var(--primary-gold);
@@ -186,13 +224,67 @@
         margin-bottom: 1rem;
     }
 
+    .revision-badge {
+        background: #fd7e14;
+        color: white;
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        display: inline-block;
+    }
+
+    .table thead {
+        background: var(--primary-darker);
+        color: white;
+    }
+
+    .table th {
+        padding: 1rem;
+    }
+
+    .table td {
+        padding: 1rem;
+        vertical-align: middle;
+    }
+
+    .workload-indicator {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        background: rgba(255,255,255,0.1);
+        border-radius: 8px;
+        margin-top: 0.5rem;
+    }
+
+    .workload-bar {
+        flex: 1;
+        height: 6px;
+        background: rgba(255,255,255,0.2);
+        border-radius: 3px;
+        overflow: hidden;
+    }
+
+    .workload-bar .fill {
+        height: 100%;
+        border-radius: 3px;
+        transition: width 0.5s ease;
+    }
+
+    .workload-bar .fill.low { background: var(--success-green); }
+    .workload-bar .fill.medium { background: var(--warning-yellow); }
+    .workload-bar .fill.high { background: var(--danger-red); }
+
     @media (max-width: 768px) {
-        .rating-input {
-            flex-direction: column;
-            align-items: flex-start;
+        .dashboard-header {
+            padding: 1.5rem;
         }
-        .criteria-label {
-            min-width: auto;
+        .stat-number {
+            font-size: 1.5rem;
+        }
+        .review-card {
+            padding: 1rem;
         }
     }
 </style>
@@ -204,17 +296,33 @@
     <div class="dashboard-header">
         <div class="row align-items-center">
             <div class="col-md-8">
-                <h1 class="text-white mb-2">
+                <h1 class="mb-2">
                     <i class="fas fa-search me-2" style="color: var(--primary-gold);"></i>
                     Quality Checker Dashboard
                 </h1>
-                <p class="text-white-50 mb-0">
+                <p class="mb-0 opacity-75">
                     <i class="fas fa-clipboard-list me-2"></i>
-                    Welcome back, <strong>{{ user.full_name }}</strong>. Review and validate book submissions for quality assurance.
+                    Welcome back, <strong>{{ user.full_name|default:user.username }}</strong>. 
+                    Review and validate book submissions for quality assurance.
                 </p>
+                <div class="workload-indicator mt-2">
+                    <span class="text-white-50 small">Your Workload:</span>
+                    <span class="fw-bold">{{ total_pending|default:0 }}</span>
+                    <span class="text-white-50 small">pending / </span>
+                    <span class="fw-bold">{{ total_reviewed|default:0 }}</span>
+                    <span class="text-white-50 small">reviewed</span>
+                    <div class="workload-bar">
+                        {% with total=total_pending|default:0|add:total_reviewed|default:0 %}
+                            {% if total > 0 %}
+                                {% widthratio total_pending|default:0 total 100 as workload %}
+                                <div class="fill {% if workload < 30 %}low{% elif workload < 60 %}medium{% else %}high{% endif %}" style="width: {{ workload }}%;"></div>
+                            {% endif %}
+                        {% endwith %}
+                    </div>
+                </div>
             </div>
             <div class="col-md-4 text-md-end mt-3 mt-md-0">
-                <a href="/books/browse/" class="btn btn-gold">
+                <a href="{% url 'books:browse' %}" class="btn btn-gold">
                     <i class="fas fa-book-open me-2"></i> Browse Library
                 </a>
             </div>
@@ -228,6 +336,9 @@
                 <div class="stat-icon"><i class="fas fa-clock"></i></div>
                 <div class="stat-number">{{ total_pending|default:0 }}</div>
                 <div class="stat-label">Pending Reviews</div>
+                {% if overdue_count|default:0 > 0 %}
+                    <small class="text-danger"><i class="fas fa-exclamation-circle"></i> {{ overdue_count }} overdue</small>
+                {% endif %}
             </div>
         </div>
         <div class="col-md-3">
@@ -253,135 +364,86 @@
         </div>
     </div>
 
+    <!-- Overdue Assignments Alert -->
+    {% if overdue_assignments %}
+    <div class="alert alert-danger border-0 shadow-sm mb-4">
+        <h5 class="alert-heading"><i class="fas fa-exclamation-triangle me-2"></i>Overdue Assignments</h5>
+        <p class="mb-0">You have <strong>{{ overdue_assignments.count }}</strong> overdue review assignment(s). Please complete them as soon as possible.</p>
+    </div>
+    {% endif %}
+
     <!-- Pending Reviews Section -->
     <div class="card shadow-sm mb-4">
         <div class="card-header bg-white border-0 py-3">
             <h5 class="mb-0">
                 <i class="fas fa-hourglass-half me-2" style="color: var(--primary-gold);"></i>
-                Books Pending Review ({{ total_pending|default:0 }})
+                Pending Review Assignments ({{ total_pending|default:0 }})
             </h5>
         </div>
         <div class="card-body">
-            {% if pending_books %}
-                {% for book in pending_books %}
-                <div class="review-card">
-                    <form method="POST" action="{% url 'accounts:process_checker_review' %}" id="reviewForm{{ book.id }}">
-                        {% csrf_token %}
-                        <input type="hidden" name="book_id" value="{{ book.id }}">
-                        
-                        <div class="row">
-                            <div class="col-lg-6 mb-4 mb-lg-0">
-                                <h4>{{ book.title }}</h4>
-                                <p class="text-muted">by {{ book.author.full_name|default:"Unknown Author" }}</p>
-                                
-                                <div class="mb-2">
-                                    <strong><i class="fas fa-tag me-1"></i> Genre:</strong> {{ book.genre.name|default:"Uncategorized" }}
+            {% if pending_assignments %}
+                {% for assignment in pending_assignments %}
+                <div class="review-card {% if assignment.is_overdue %}overdue{% endif %}">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <h4>{{ assignment.book.title }}</h4>
+                                    <p class="text-muted">by {{ assignment.book.author.full_name|default:"Unknown Author" }}</p>
                                 </div>
-                                <div class="mb-2">
-                                    <strong><i class="fas fa-language me-1"></i> Language:</strong> {{ book.language|default:"English" }}
-                                </div>
-                                <div class="mb-2">
-                                    <strong><i class="fas fa-money-bill me-1"></i> Price:</strong> 
-                                    {% if book.is_free %}FREE{% else %}{{ book.price }} ETB{% endif %}
-                                </div>
-                                <div class="mb-3">
-                                    <strong><i class="fas fa-align-left me-1"></i> Description:</strong>
-                                    <p class="mt-2 text-muted small">{{ book.description|truncatechars:300 }}</p>
-                                </div>
-                                
-                                {% if book.file %}
-                                <div class="mb-3">
-                                    <a href="{{ book.file.url }}" class="btn btn-outline-gold btn-sm" target="_blank">
-                                        <i class="fas fa-file-pdf me-1"></i> Preview Manuscript
-                                    </a>
-                                </div>
+                                {% if assignment.is_overdue %}
+                                    <span class="status-badge status-overdue">⚠️ Overdue</span>
+                                {% else %}
+                                    <span class="status-badge status-pending">Pending</span>
                                 {% endif %}
                             </div>
                             
-                            <div class="col-lg-6">
-                                <div class="card bg-light">
-                                    <div class="card-body">
-                                        <h5 class="card-title" style="color: var(--primary-gold);">
-                                            <i class="fas fa-star me-2"></i>Quality Assessment (Rate 0-10)
-                                        </h5>
-                                        
-                                        <div class="mb-3">
-                                            <div class="rating-input">
-                                                <span class="criteria-label">📚 Content Quality:</span>
-                                                <input type="number" name="content_quality" class="form-control" step="0.1" min="0" max="10" required onchange="calculateOverall(this.form)">
-                                                <span>/10</span>
-                                            </div>
-                                            <small class="text-muted">Accuracy, depth, originality, value</small>
-                                        </div>
-                                        
-                                        <div class="mb-3">
-                                            <div class="rating-input">
-                                                <span class="criteria-label">✍️ Editorial Quality:</span>
-                                                <input type="number" name="editorial_quality" class="form-control" step="0.1" min="0" max="10" required onchange="calculateOverall(this.form)">
-                                                <span>/10</span>
-                                            </div>
-                                            <small class="text-muted">Grammar, structure, readability, flow</small>
-                                        </div>
-                                        
-                                        <div class="mb-3">
-                                            <div class="rating-input">
-                                                <span class="criteria-label">🔧 Technical Quality:</span>
-                                                <input type="number" name="technical_quality" class="form-control" step="0.1" min="0" max="10" required onchange="calculateOverall(this.form)">
-                                                <span>/10</span>
-                                            </div>
-                                            <small class="text-muted">Formatting, file quality, metadata</small>
-                                        </div>
-                                        
-                                        <div class="mb-3">
-                                            <div class="rating-input">
-                                                <span class="criteria-label">⚖️ Copyright Compliance:</span>
-                                                <input type="number" name="copyright_compliance" class="form-control" step="0.1" min="0" max="10" required>
-                                                <span>/10</span>
-                                            </div>
-                                            <small class="text-muted">Original work, proper citations</small>
-                                        </div>
-                                        
-                                        <div class="mb-3">
-                                            <div class="rating-input">
-                                                <span class="criteria-label">🌍 Community Guidelines:</span>
-                                                <input type="number" name="community_guidelines" class="form-control" step="0.1" min="0" max="10" required>
-                                                <span>/10</span>
-                                            </div>
-                                            <small class="text-muted">Appropriate content, no violations</small>
-                                        </div>
-                                        
-                                        <hr>
-                                        
-                                        <div class="mb-3 text-center">
-                                            <strong>Overall Score:</strong>
-                                            <div class="score-display" id="overallScore{{ book.id }}">0.0</div>
-                                            <small class="text-muted">Passing threshold: <strong>7.0/10</strong></small>
-                                        </div>
-                                        
-                                        <div class="mb-3">
-                                            <label class="form-label">Review Comments</label>
-                                            <textarea name="comments" class="form-control" rows="4" 
-                                                      placeholder="Provide detailed feedback for the author. What's good? What needs improvement?"></textarea>
-                                        </div>
-                                        
-                                        <div class="mb-3">
-                                            <label class="form-label">Recommendation</label>
-                                            <select name="recommendation" class="form-select" required>
-                                                <option value="">Select Recommendation</option>
-                                                <option value="approved">✅ Pass to Maker - Send to Maker for Publication</option>
-                                                <option value="needs_revision">🔄 Request Revision - Needs Improvements</option>
-                                                <option value="rejected">❌ Reject - Not Suitable for Platform</option>
-                                            </select>
-                                        </div>
-                                        
-                                        <button type="submit" class="btn btn-gold w-100">
-                                            <i class="fas fa-paper-plane me-2"></i> Submit Review
-                                        </button>
-                                    </div>
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <p><strong><i class="fas fa-tag me-1"></i> Genre:</strong> {{ assignment.book.genre.name|default:"Uncategorized" }}</p>
+                                    <p><strong><i class="fas fa-language me-1"></i> Language:</strong> {{ assignment.book.language|default:"English" }}</p>
+                                    <p><strong><i class="fas fa-money-bill me-1"></i> Price:</strong> 
+                                        {% if assignment.book.is_free %}FREE{% else %}{{ assignment.book.price }} ETB{% endif %}
+                                    </p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong><i class="fas fa-calendar-alt me-1"></i> Due Date:</strong> 
+                                        <span class="{% if assignment.is_overdue %}text-danger{% endif %}">
+                                            {{ assignment.due_date|date:"M d, Y H:i" }}
+                                        </span>
+                                    </p>
+                                    <p><strong><i class="fas fa-file-alt me-1"></i> Version:</strong> v{{ assignment.book_version.version_number }}</p>
+                                    {% if assignment.instructions %}
+                                        <p><strong><i class="fas fa-info-circle me-1"></i> Instructions:</strong> {{ assignment.instructions|truncatechars:100 }}</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            {% if assignment.book.revision_notes %}
+                            <div class="alert alert-warning mt-2">
+                                <strong><i class="fas fa-history me-1"></i> Previous Revision Notes:</strong>
+                                <p class="mb-0 mt-1">{{ assignment.book.revision_notes }}</p>
+                            </div>
+                            {% endif %}
+
+                            <div class="mt-3">
+                                <div class="btn-group flex-wrap gap-1">
+                                    <a href="{% url 'books:checker_accept_assignment' assignment.id %}" class="btn btn-success btn-sm">
+                                        <i class="fas fa-check me-1"></i> Accept
+                                    </a>
+                                    <a href="{% url 'books:checker_decline_assignment' assignment.id %}" class="btn btn-danger btn-sm">
+                                        <i class="fas fa-times me-1"></i> Decline
+                                    </a>
+                                    <a href="{% url 'books:checker_conflict_assignment' assignment.id %}" class="btn btn-outline-danger btn-sm">
+                                        <i class="fas fa-exclamation-triangle me-1"></i> Conflict
+                                    </a>
+                                    <a href="{% url 'books:detail' assignment.book.id %}" class="btn btn-outline-gold btn-sm">
+                                        <i class="fas fa-eye me-1"></i> View Details
+                                    </a>
                                 </div>
                             </div>
                         </div>
-                    </form>
+                    </div>
                 </div>
                 {% endfor %}
             {% else %}
@@ -393,6 +455,73 @@
             {% endif %}
         </div>
     </div>
+
+    <!-- Active Reviews Section -->
+    {% if active_assignments %}
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-white border-0 py-3">
+            <h5 class="mb-0">
+                <i class="fas fa-edit me-2" style="color: var(--info-blue);"></i>
+                Active Reviews ({{ active_assignments.count }})
+            </h5>
+        </div>
+        <div class="card-body">
+            {% for assignment in active_assignments %}
+            <div class="review-card" style="border-left-color: var(--info-blue);">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h4>{{ assignment.book.title }}</h4>
+                        <p class="text-muted">by {{ assignment.book.author.full_name|default:"Unknown Author" }}</p>
+                        <span class="status-badge status-in_progress">In Progress</span>
+                        <p class="mt-2"><strong>Due:</strong> {{ assignment.due_date|date:"M d, Y H:i" }}</p>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <a href="{% url 'books:checker_submit_review' assignment.id %}" class="btn btn-gold">
+                            <i class="fas fa-pen me-1"></i> Submit Review
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Re-Review Books (Author Resubmitted) -->
+    {% if re_review_books %}
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-white border-0 py-3">
+            <h5 class="mb-0">
+                <i class="fas fa-sync-alt me-2" style="color: #fd7e14;"></i>
+                Books for Re-Review ({{ re_review_books.count }})
+            </h5>
+        </div>
+        <div class="card-body">
+            {% for book in re_review_books %}
+            <div class="review-card" style="border-left-color: #fd7e14;">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h4>{{ book.title }}</h4>
+                        <p class="text-muted">by {{ book.author.full_name|default:"Unknown Author" }}</p>
+                        <span class="revision-badge"><i class="fas fa-history me-1"></i> Resubmitted</span>
+                        {% if book.revision_notes %}
+                        <div class="mt-2">
+                            <strong>Author's Revision Notes:</strong>
+                            <p class="text-muted small mt-1">{{ book.revision_notes }}</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <a href="{% url 'books:detail' book.id %}" class="btn btn-outline-gold">
+                            <i class="fas fa-eye me-1"></i> View
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
 
     <!-- Recently Reviewed Books -->
     {% if reviewed_books %}
@@ -406,39 +535,78 @@
         <div class="card-body p-0">
             <div class="table-responsive">
                 <table class="table table-hover mb-0">
-                    <thead style="background: var(--primary-darker); color: white;">
+                    <thead>
                         <tr>
                             <th>Title</th>
                             <th>Author</th>
                             <th>Score</th>
-                            <th>Status</th>
+                            <th>Recommendation</th>
                             <th>Reviewed Date</th>
                             <th>Action</th>
-                         </thead>
+                        </tr>
+                    </thead>
                     <tbody>
                         {% for review in reviewed_books %}
                         <tr>
                             <td><strong>{{ review.book.title|truncatechars:50 }}</strong></td>
                             <td>{{ review.book.author.full_name|default:"Unknown" }}</td>
                             <td>
-                                <span class="score-display {% if review.overall_score >= 7 %}score-pass{% else %}score-fail{% endif %}" style="font-size: 1rem; padding: 0.25rem 0.5rem;">
+                                <span class="badge {% if review.overall_score >= 7 %}bg-success{% else %}bg-danger{% endif %}">
                                     {{ review.overall_score|floatformat:1 }}/10
                                 </span>
                             </td>
                             <td>
-                                <span class="status-badge status-{% if review.recommendation == 'approved' %}approved{% elif review.recommendation == 'needs_revision' %}revision{% else %}rejected{% endif %}">
-                                    {% if review.recommendation == 'approved' %}✅ Approved
-                                    {% elif review.recommendation == 'needs_revision' %}🔄 Revision
-                                    {% else %}❌ Rejected{% endif %}
+                                <span class="status-badge status-{% if review.recommendation == 'accept' %}approved{% elif review.recommendation == 'reject' %}rejected{% else %}revision{% endif %}">
+                                    {{ review.get_recommendation_display }}
                                 </span>
                             </td>
-                            <td>{{ review.created_at|date:"M d, Y" }}</td>
+                            <td>{{ review.submitted_at|date:"M d, Y" }}</td>
                             <td>
-                                <a href="/books/{{ review.book.id }}/" class="btn btn-sm btn-gold">
+                                <a href="{% url 'books:detail' review.book.id %}" class="btn btn-sm btn-gold">
                                     <i class="fas fa-eye"></i> View
                                 </a>
                             </td>
-                         </tr>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Completed Assignments -->
+    {% if completed_assignments %}
+    <div class="card shadow-sm mt-4">
+        <div class="card-header bg-white border-0 py-3">
+            <h5 class="mb-0">
+                <i class="fas fa-check-double me-2" style="color: var(--success-green);"></i>
+                Completed Assignments ({{ completed_assignments.count }})
+            </h5>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table mb-0">
+                    <thead>
+                        <tr>
+                            <th>Book</th>
+                            <th>Author</th>
+                            <th>Completed</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for assignment in completed_assignments %}
+                        <tr>
+                            <td><strong>{{ assignment.book.title|truncatechars:40 }}</strong></td>
+                            <td>{{ assignment.book.author.full_name|default:"Unknown" }}</td>
+                            <td>{{ assignment.completed_at|date:"M d, Y" }}</td>
+                            <td>
+                                <a href="{% url 'books:detail' assignment.book.id %}" class="btn btn-sm btn-outline-gold">
+                                    <i class="fas fa-eye"></i> View
+                                </a>
+                            </td>
+                        </tr>
                         {% endfor %}
                     </tbody>
                 </table>
@@ -479,55 +647,27 @@
             <div class="guidance-card">
                 <h5><i class="fas fa-check-circle me-2"></i>Recommendations Guide</h5>
                 <div class="mb-3">
-                    <strong>✅ Pass to Maker</strong>
+                    <strong>✅ Accept</strong>
                     <p class="text-muted small">Score ≥ 7.0, meets all quality standards</p>
                 </div>
                 <div class="mb-3">
                     <strong>🔄 Request Revision</strong>
                     <p class="text-muted small">Score 5.0-6.9, needs improvements but has potential</p>
                 </div>
-                <div>
+                <div class="mb-3">
                     <strong>❌ Reject</strong>
                     <p class="text-muted small">Score &lt; 5.0, serious quality issues or guideline violations</p>
+                </div>
+                <div class="mb-3">
+                    <strong><i class="fas fa-hand me-2"></i>Unable to Review</strong>
+                    <p class="text-muted small">Decline assignment if you cannot review it</p>
+                </div>
+                <div>
+                    <strong><i class="fas fa-exclamation-triangle me-2"></i>Conflict of Interest</strong>
+                    <p class="text-muted small">Declare conflict if you have any relationship with the author</p>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-<script>
-function calculateOverall(form) {
-    // Find the overall score display within the same form
-    var content = parseFloat(form.querySelector('[name="content_quality"]').value) || 0;
-    var editorial = parseFloat(form.querySelector('[name="editorial_quality"]').value) || 0;
-    var technical = parseFloat(form.querySelector('[name="technical_quality"]').value) || 0;
-    
-    var overall = (content + editorial + technical) / 3;
-    var overallDisplay = form.querySelector('.score-display');
-    if (overallDisplay) {
-        overallDisplay.textContent = overall.toFixed(1);
-        if (overall >= 7) {
-            overallDisplay.className = 'score-display score-pass';
-        } else {
-            overallDisplay.className = 'score-display score-fail';
-        }
-    }
-}
-
-// Add auto-calculation for all forms
-document.addEventListener('DOMContentLoaded', function() {
-    var forms = document.querySelectorAll('form[id^="reviewForm"]');
-    forms.forEach(function(form) {
-        var inputs = form.querySelectorAll('input[type="number"]');
-        inputs.forEach(function(input) {
-            input.addEventListener('change', function() {
-                calculateOverall(form);
-            });
-            input.addEventListener('input', function() {
-                calculateOverall(form);
-            });
-        });
-    });
-});
-</script>
 {% endblock %}

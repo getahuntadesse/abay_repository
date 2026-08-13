@@ -1,0 +1,19 @@
+{% extends 'emails/base_email.html' %}
+
+{% block content %}
+<h2>Book Upload Confirmation</h2>
+<p>Dear {{ user.full_name }},</p>
+<p>Your book <strong>"{{ book.title }}"</strong> has been successfully uploaded to Abay Repository.</p>
+
+<div class="status-box">
+    <p><strong>Status:</strong> Pending Review</p>
+    <p><strong>Uploaded:</strong> {{ book.created_at|date:"F j, Y, g:i a" }}</p>
+</div>
+
+<p>The book has been sent to our makers for initial review. You will receive updates as it progresses through our quality assurance process.</p>
+
+<p><a href="{{ site_url }}{% url 'books:detail' book.id %}" class="button">View Book Details</a></p>
+
+<p>Thank you for contributing to Abay Repository!</p>
+<p>Best regards,<br>The Abay Repository Team</p>
+{% endblock %}

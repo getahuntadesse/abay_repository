@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Declare Conflict of Interest — {{ assignment.book.title }} | Abay Repository{% endblock %}
+
+{% block extra_css %}
+<style>
+    :root { --primary-gold:#DAA520; --primary-gold-dark:#B8860B; --primary-darker:#1A1A1A; --primary-dark:#2C2C2C; }
+    .page-header { background: linear-gradient(135deg, var(--primary-darker) 0%, var(--primary-dark) 100%); border-radius: 20px; padding: 2rem; margin-bottom: 2rem; color: white; }
+    .form-card { background: white; border-radius: 16px; padding: 2rem; box-shadow: 0 5px 20px rgba(0,0,0,.08); border-left: 4px solid #ffc107; }
+    .info-box { background: #fff3cd; border: 1px solid #ffc107; border-radius: 10px; padding: 1rem; margin-bottom: 1.5rem; }
+    .btn-warning-custom { background: linear-gradient(135deg,#ffc107,#e0a800); color: #1A1A1A; border: none; font-weight: 600; padding: 10px 28px; border-radius: 25px; transition: all .3s; }
+    .btn-warning-custom:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255,193,7,.4); color: #1A1A1A; }
+    .btn-outline-gold { border: 2px solid var(--primary-gold); color: var(--primary-gold); background: transparent; font-weight: 600; padding: 10px 28px; border-radius: 25px; transition: all .3s; }
+    .btn-outline-gold:hover { background: var(--primary-gold); color: var(--primary-darker); }
+    .form-control:focus { border-color: #ffc107; box-shadow: 0 0 0 .2rem rgba(255,193,7,.25); }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4 mb-5" style="max-width:700px;">
+
+    <div class="page-header">
+        <h2 class="mb-1">
+            <i class="fas fa-exclamation-triangle me-2" style="color:#ffc107;"></i>
+            Declare Conflict of Interest
+        </h2>
+        <p class="mb-0 opacity-75">Declaring a conflict removes you from this review. The maker will be notified to reassign.</p>
+    </div>
+
+    <div class="form-card">
+        <div class="info-box">
+            <i class="fas fa-info-circle me-2"></i>
+            <strong>Why declare a conflict?</strong> You may have a personal or professional relationship with the author,
+            or a financial interest in the publication. Declaring protects the integrity of the review process.
+        </div>
+
+        <div class="mb-4 pb-3 border-bottom">
+            <h5 class="mb-1">{{ assignment.book.title }}</h5>
+            <p class="text-muted small mb-0">
+                by {{ assignment.book.author.full_name|default:assignment.book.author.username }} &nbsp;|&nbsp;
+                Assigned {{ assignment.assigned_at|date:"M d, Y" }}
+            </p>
+        </div>
+
+        <form method="POST">
+            {% csrf_token %}
+            <div class="mb-4">
+                <label for="reason" class="form-label fw-semibold">
+                    Nature of Conflict <span class="text-danger">*</span>
+                </label>
+                <textarea class="form-control" id="reason" name="reason" rows="5" required
+                          placeholder="e.g. I know the author personally and have collaborated with them on previous work, which may bias my assessment."></textarea>
+                <div class="form-text">This information is handled confidentially by the editorial team.</div>
+            </div>
+
+            <div class="d-flex gap-3">
+                <button type="submit" class="btn btn-warning-custom">
+                    <i class="fas fa-flag me-2"></i>Declare Conflict
+                </button>
+                <a href="{% url 'books:checker_dashboard' %}" class="btn btn-outline-gold">
+                    <i class="fas fa-arrow-left me-2"></i>Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+
+</div>
+{% endblock %}

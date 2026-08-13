@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Revise Book - {{ book.title }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .revision-form-container {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    .feedback-box {
+        background: #fff8f0;
+        border-left: 4px solid #fd7e14;
+        padding: 1.5rem;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+    }
+    .feedback-box h5 {
+        color: #fd7e14;
+    }
+    .btn-gold {
+        background: linear-gradient(135deg, #DAA520, #B8860B);
+        color: #1A1A1A;
+        border: none;
+        padding: 10px 25px;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    .btn-gold:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(218, 165, 32, 0.4);
+        color: #1A1A1A;
+    }
+    .btn-outline-secondary {
+        border: 2px solid #6c757d;
+        color: #6c757d;
+        background: transparent;
+        font-weight: 600;
+        padding: 10px 25px;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+    }
+    .btn-outline-secondary:hover {
+        background: #6c757d;
+        color: white;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="revision-form-container">
+        <!-- Header -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>
+                <i class="fas fa-edit text-warning me-2"></i>
+                Revise Book
+            </h2>
+            <a href="{% url 'books:my_books_author' %}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-2"></i> Back to My Books
+            </a>
+        </div>
+
+        <!-- Feedback Box -->
+        <div class="feedback-box">
+            <h5><i class="fas fa-comment-dots me-2"></i>Reviewer Feedback</h5>
+            <p class="mb-0">{{ book.revision_notes|default:"Please revise your book based on the reviewer's feedback." }}</p>
+            {% if book.checker_score %}
+            <div class="mt-2">
+                <strong>Quality Score:</strong> 
+                <span class="badge bg-warning text-dark">{{ book.checker_score|floatformat:1 }}/10</span>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Revision Form -->
+        <form method="POST" enctype="multipart/form-data" class="card shadow-sm">
+            {% csrf_token %}
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    Make the necessary changes below and resubmit your book for review.
+                </div>
+
+                <div class="mb-3">
+                    <label for="title" class="form-label">Title *</label>
+                    <input type="text" name="title" id="title" class="form-control" value="{{ book.title }}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="subtitle" class="form-label">Subtitle</label>
+                    <input type="text" name="subtitle" id="subtitle" class="form-control" value="{{ book.subtitle }}">
+                </div>
+
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description *</label>
+                    <textarea name="description" id="description" class="form-control" rows="5" required>{{ book.description }}</textarea>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="genre" class="form-label">Genre *</label>
+                        <select name="genre" id="genre" class="form-select" required>
+                            <option value="">Select Genre</option>
+                            {% for genre in genres %}
+                            <option value="{{ genre.id }}" {% if book.genre_id == genre.id %}selected{% endif %}>
+                                {{ genre.name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="language" class="form-label">Language *</label>
+                        <input type="text" name="language" id="language" class="form-control" value="{{ book.language|default:'English' }}" required>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="price" class="form-label">Price (ETB)</label>
+                        <input type="number" name="price" id="price" class="form-control" step="0.01" min="0" value="{{ book.price }}">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="form-check mt-4">
+                            <input type="checkbox" name="is_free" id="is_free" class="form-check-input" {% if book.is_free %}checked{% endif %}>
+                            <label for="is_free" class="form-check-label">Free Book</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="revision_notes" class="form-label">Revision Notes</label>
+                    <textarea name="revision_notes" id="revision_notes" class="form-control" rows="3" placeholder="Describe what changes you made..."></textarea>
+                </div>
+
+                <hr>
+
+                <h5 class="mb-3">File Uploads</h5>
+                <div class="mb-3">
+                    <label for="file" class="form-label">Book File (PDF)</label>
+                    <input type="file" name="file" id="file" class="form-control" accept=".pdf">
+                    {% if book.file %}
+                    <small class="text-muted">Current: {{ book.file.name|cut:"books/files/" }}</small>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3">
+                    <label for="cover_image" class="form-label">Cover Image</label>
+                    <input type="file" name="cover_image" id="cover_image" class="form-control" accept="image/*">
+                    {% if book.cover_image %}
+                    <small class="text-muted">Current: {{ book.cover_image.name|cut:"books/covers/" }}</small>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3">
+                    <label for="sample_file" class="form-label">Sample File</label>
+                    <input type="file" name="sample_file" id="sample_file" class="form-control" accept=".pdf">
+                    {% if book.sample_file %}
+                    <small class="text-muted">Current: {{ book.sample_file.name|cut:"books/samples/" }}</small>
+                    {% endif %}
+                </div>
+
+                <div class="d-flex gap-2 mt-4">
+                    <button type="submit" class="btn btn-gold">
+                        <i class="fas fa-paper-plane me-2"></i> Resubmit for Review
+                    </button>
+                    <a href="{% url 'books:my_books_author' %}" class="btn btn-outline-secondary">
+                        Cancel
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

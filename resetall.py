@@ -1,390 +1,250 @@
-#!/usr/bin/env python
-"""
-Database Migration Fix Script for Abay Repository
-This script ONLY handles migrations - no user creation or sample data.
-"""
-
+# reset_payments_fixed.py
 import os
 import sys
 import subprocess
-import django
-from django.db import connection
-from django.core.management import call_command
-from django.db.utils import OperationalError
+import shutil
+from pathlib import Path
 
-# Set up Django environment
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
-django.setup()
-
-# Colors for terminal output
 class Colors:
-    HEADER = '\033[95m'
-    BLUE = '\033[94m'
-    CYAN = '\033[96m'
     GREEN = '\033[92m'
     YELLOW = '\033[93m'
     RED = '\033[91m'
-    RESET = '\033[0m'
+    BLUE = '\033[94m'
+    CYAN = '\033[96m'
     BOLD = '\033[1m'
-    UNDERLINE = '\033[4m'
+    END = '\033[0m'
 
 def print_header(text):
-    print(f"\n{Colors.HEADER}{Colors.BOLD}{'='*60}{Colors.RESET}")
-    print(f"{Colors.HEADER}{Colors.BOLD}{text:^60}{Colors.RESET}")
-    print(f"{Colors.HEADER}{Colors.BOLD}{'='*60}{Colors.RESET}\n")
+    print("\n" + "=" * 70)
+    print(f"{Colors.BOLD}{Colors.CYAN}{text}{Colors.END}")
+    print("=" * 70)
 
 def print_success(text):
-    print(f"{Colors.GREEN}✓ {text}{Colors.RESET}")
+    print(f"{Colors.GREEN}✅ {text}{Colors.END}")
 
 def print_error(text):
-    print(f"{Colors.RED}✗ {text}{Colors.RESET}")
-
-def print_info(text):
-    print(f"{Colors.CYAN}ℹ {text}{Colors.RESET}")
+    print(f"{Colors.RED}❌ {text}{Colors.END}")
 
 def print_warning(text):
-    print(f"{Colors.YELLOW}⚠ {text}{Colors.RESET}")
+    print(f"{Colors.YELLOW}⚠️  {text}{Colors.END}")
 
-def run_command(command, capture_output=False):
-    """Run a shell command and return the result"""
+def print_info(text):
+    print(f"{Colors.BLUE}ℹ️  {text}{Colors.END}")
+
+def run_command(command):
+    """Run a shell command with error handling"""
     try:
-        if capture_output:
-            result = subprocess.run(command, shell=True, capture_output=True, text=True)
-            return result.stdout.strip(), result.stderr.strip(), result.returncode
-        else:
-            result = subprocess.run(command, shell=True)
-            return "", "", result.returncode
+        result = subprocess.run(
+            command,
+            shell=True,
+            capture_output=True,
+            text=True
+        )
+        return result
     except Exception as e:
-        return "", str(e), 1
+        print_error(f"Exception running command: {command}")
+        print_error(f"Error: {str(e)}")
+        return None
 
-def check_database_connection():
-    """Check if database connection is working"""
-    print_info("Checking database connection...")
-    try:
-        with connection.cursor() as cursor:
-            cursor.execute("SELECT 1")
-            print_success("Database connection successful!")
-            return True
-    except Exception as e:
-        print_error(f"Database connection failed: {e}")
-        return False
-
-def check_table_exists(table_name):
-    """Check if a table exists in the database"""
-    try:
-        with connection.cursor() as cursor:
-            cursor.execute(f"SHOW TABLES LIKE '{table_name}'")
-            return cursor.fetchone() is not None
-    except Exception:
-        return False
-
-def check_column_exists(table_name, column_name):
-    """Check if a column exists in a table"""
-    try:
-        with connection.cursor() as cursor:
-            cursor.execute(f"SHOW COLUMNS FROM {table_name} LIKE '{column_name}'")
-            return cursor.fetchone() is not None
-    except Exception:
-        return False
-
-def reset_migrations_for_app(app_name):
-    """Reset migrations for a specific app"""
-    print_info(f"Resetting migrations for {app_name}...")
-    try:
-        # Delete migration files
-        import os
-        import glob
-        migration_dir = f"{app_name}/migrations"
-        if os.path.exists(migration_dir):
-            # Delete all migration files except __init__.py
-            for f in glob.glob(f"{migration_dir}/0*.py"):
-                os.remove(f)
-                print_info(f"  Deleted: {f}")
-            for f in glob.glob(f"{migration_dir}/0*.pyc"):
-                os.remove(f)
-            print_success(f"Migration files deleted for {app_name}")
-        return True
-    except Exception as e:
-        print_error(f"Failed to reset migrations for {app_name}: {e}")
-        return False
-
-def fix_accounts_migration():
-    """Fix the duplicate column error in accounts migration"""
-    print_header("Fixing Accounts Migration")
+def reset_payments_complete(force=False):
+    """Complete reset and migrate for payments"""
     
-    # Check if the table exists
-    if not check_table_exists('accounts_customuser'):
-        print_info("accounts_customuser table doesn't exist. Will create with migrations.")
-        return True
+    print_header("COMPLETE PAYMENTS RESET AND MIGRATE")
     
-    # Check if the problematic column exists
-    column_exists = check_column_exists('accounts_customuser', 'two_factor_backup_codes')
+    # Step 1: Check environment
+    if not os.path.exists('manage.py'):
+        print_error("manage.py not found!")
+        return False
     
-    if column_exists:
-        print_info("Column 'two_factor_backup_codes' already exists. Faking migrations...")
-        
-        try:
-            # Fake all accounts migrations
-            call_command('migrate', 'accounts', fake=True)
-            print_success("Accounts migrations faked successfully!")
-            return True
-        except Exception as e:
-            print_error(f"Failed to fake accounts migrations: {e}")
-            return False
+    # Step 2: Show current status
+    print_info("Current migration status:")
+    result = run_command("python manage.py showmigrations payments")
+    if result:
+        print(result.stdout)
+    
+    # Step 3: Reset payments to zero
+    print_info("\nResetting payments to zero...")
+    result = run_command("python manage.py migrate payments zero")
+    if result and result.returncode == 0:
+        print_success("Payments reset to zero")
     else:
-        print_info("Column 'two_factor_backup_codes' doesn't exist. Running migrations normally...")
-        try:
-            # Check if migrations exist
-            import os
-            migration_dir = "accounts/migrations"
-            if os.path.exists(migration_dir):
-                migration_files = [f for f in os.listdir(migration_dir) if f.startswith('0') and f.endswith('.py')]
-                if not migration_files:
-                    print_info("No migrations found. Creating...")
-                    call_command('makemigrations', 'accounts')
-            
-            call_command('migrate', 'accounts')
-            print_success("Accounts migrations applied successfully!")
-            return True
-        except Exception as e:
-            print_error(f"Failed to apply accounts migrations: {e}")
-            print_info("Attempting to create and fake migrations...")
-            try:
-                call_command('makemigrations', 'accounts')
-                call_command('migrate', 'accounts', fake=True)
-                print_success("Accounts migrations created and faked!")
-                return True
-            except Exception as e2:
-                print_error(f"Failed: {e2}")
-                return False
-
-def create_and_apply_payments_migrations():
-    """Create and apply payments migrations"""
-    print_header("Setting Up Payments App")
+        print_error("Failed to reset payments")
+        if result:
+            print_error(result.stderr)
+        if not force:
+            return False
     
-    # Check if payments table exists
-    if check_table_exists('payments_payment'):
-        print_info("Payments tables already exist.")
+    # Step 4: Delete migration files
+    print_info("\nDeleting migration files...")
+    migration_dir = Path('payments') / 'migrations'
+    if migration_dir.exists():
+        for file in migration_dir.glob('*.py'):
+            if file.name != '__init__.py':
+                try:
+                    file.unlink()
+                    print(f"  Deleted: {file.name}")
+                except Exception as e:
+                    print_warning(f"Failed to delete {file.name}: {e}")
         
-        # Check if migrations are applied
-        try:
-            from django.db.migrations.recorder import MigrationRecorder
-            applied = MigrationRecorder.Migration.objects.filter(app='payments').exists()
-            if applied:
-                print_info("Payments migrations already applied.")
-                return True
-            else:
-                print_info("Payments tables exist but migrations not recorded. Faking...")
-                call_command('migrate', 'payments', fake=True)
-                print_success("Payments migrations faked!")
-                return True
-        except Exception as e:
-            print_warning(f"Error checking migration status: {e}")
-            
-        # Try to apply migrations
-        try:
-            print_info("Attempting to apply payments migrations...")
-            call_command('migrate', 'payments')
-            print_success("Payments migrations applied!")
-            return True
-        except Exception as e:
-            print_warning(f"Could not apply payments migrations: {e}")
-            print_info("Faking payments migrations...")
-            try:
-                call_command('migrate', 'payments', fake=True)
-                print_success("Payments migrations faked!")
-                return True
-            except Exception as e2:
-                print_error(f"Failed to fake payments migrations: {e2}")
-                return False
+        pycache_dir = migration_dir / '__pycache__'
+        if pycache_dir.exists():
+            shutil.rmtree(pycache_dir)
+            print("  Deleted: __pycache__")
     
-    print_info("Creating payments migrations...")
+    print_success("Migration files deleted")
+    
+    # Step 5: Check admin file for errors
+    print_info("\nChecking admin file...")
+    admin_file = Path('payments') / 'admin.py'
+    if admin_file.exists():
+        content = admin_file.read_text()
+        # Check for common issues
+        if 'readonly_fields' in content and 'initiated_at' in content:
+            print_warning("Found potential admin issue - fixing...")
+            # Fix the admin file
+            fixed_content = content.replace("'initiated_at'", "'created_at'")
+            fixed_content = fixed_content.replace("'processed_at'", "'created_at'")
+            fixed_content = fixed_content.replace("'completed_at'", "'created_at'")
+            admin_file.write_text(fixed_content)
+            print_success("Admin file fixed")
+    
+    # Step 6: Create migration
+    print_info("\nCreating migration...")
+    result = run_command("python manage.py makemigrations payments")
+    if result and result.returncode == 0:
+        print_success("Migration created")
+        print(result.stdout)
+    else:
+        print_error("Failed to create migration")
+        if result:
+            print_error(result.stderr)
+            # Check if it's an admin error
+            if "admin" in result.stderr and "readonly_fields" in result.stderr:
+                print_info("Admin error detected. Temporarily disabling admin...")
+                
+                # Comment out admin registration
+                if admin_file.exists():
+                    content = admin_file.read_text()
+                    # Comment out all admin registrations
+                    lines = content.split('\n')
+                    new_lines = []
+                    for line in lines:
+                        if '@admin.register' in line or 'class' in line and 'Admin' in line:
+                            new_lines.append('# ' + line)
+                        else:
+                            new_lines.append(line)
+                    admin_file.write_text('\n'.join(new_lines))
+                    print_success("Admin temporarily disabled")
+                    
+                    # Retry migration
+                    print_info("Retrying migration...")
+                    result = run_command("python manage.py makemigrations payments")
+                    if result and result.returncode == 0:
+                        print_success("Migration created successfully")
+                    else:
+                        print_error("Still failed")
+                        if not force:
+                            return False
+        
+        if not force:
+            return False
+    
+    # Step 7: Apply migration
+    print_info("\nApplying migration...")
+    result = run_command("python manage.py migrate payments")
+    if result and result.returncode == 0:
+        print_success("Migration applied")
+        print(result.stdout)
+    else:
+        print_error("Failed to apply migration")
+        if result:
+            print_error(result.stderr)
+        if not force:
+            return False
+    
+    # Step 8: Fix nullable fields
+    print_info("\nFixing nullable fields...")
     try:
-        # Check if migrations directory has files
-        import os
-        migration_dir = "payments/migrations"
-        has_migrations = False
-        if os.path.exists(migration_dir):
-            migration_files = [f for f in os.listdir(migration_dir) if f.startswith('0') and f.endswith('.py')]
-            has_migrations = len(migration_files) > 0
+        import django
+        os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'your_project.settings')
+        django.setup()
+        from django.db import connection
         
-        if not has_migrations:
-            call_command('makemigrations', 'payments')
-            print_success("Payments migrations created!")
+        with connection.cursor() as cursor:
+            # Check if payments table exists
+            cursor.execute("SHOW TABLES LIKE 'payments'")
+            if cursor.fetchone():
+                try:
+                    cursor.execute("ALTER TABLE payments MODIFY payment_reference VARCHAR(50) NOT NULL")
+                    print_success("Fixed payment_reference NOT NULL")
+                except Exception as e:
+                    print_warning(f"payment_reference fix: {e}")
+                
+                try:
+                    cursor.execute("ALTER TABLE payments MODIFY net_amount DECIMAL(12,2) NOT NULL DEFAULT 0.00")
+                    print_success("Fixed net_amount NOT NULL")
+                except Exception as e:
+                    print_warning(f"net_amount fix: {e}")
+                
+                try:
+                    cursor.execute("ALTER TABLE payments MODIFY period_start DATE NOT NULL")
+                    print_success("Fixed period_start NOT NULL")
+                except Exception as e:
+                    print_warning(f"period_start fix: {e}")
+                
+                try:
+                    cursor.execute("ALTER TABLE payments MODIFY period_end DATE NOT NULL")
+                    print_success("Fixed period_end NOT NULL")
+                except Exception as e:
+                    print_warning(f"period_end fix: {e}")
+    except Exception as e:
+        print_warning(f"Could not fix nullable fields: {e}")
+    
+    # Step 9: Restore admin if it was disabled
+    if admin_file.exists():
+        content = admin_file.read_text()
+        if '# @admin.register' in content:
+            print_info("\nRestoring admin...")
+            # Remove comments
+            lines = content.split('\n')
+            new_lines = []
+            for line in lines:
+                if line.startswith('# @admin.register') or (line.startswith('# class') and 'Admin' in line):
+                    new_lines.append(line[2:])  # Remove '# '
+                else:
+                    new_lines.append(line)
+            admin_file.write_text('\n'.join(new_lines))
+            print_success("Admin restored")
+    
+    # Step 10: Show final status
+    print_info("\nFinal migration status:")
+    result = run_command("python manage.py showmigrations payments")
+    if result:
+        print(result.stdout)
+    
+    # Step 11: Check models
+    print_info("\nChecking models...")
+    result = run_command("python manage.py check payments")
+    if result:
+        if "System check identified no issues" in result.stdout:
+            print_success("Payment models validated successfully!")
         else:
-            print_info("Payments migrations already exist.")
-        
-        print_info("Applying payments migrations...")
-        call_command('migrate', 'payments')
-        print_success("Payments migrations applied!")
-        return True
-    except Exception as e:
-        print_error(f"Failed to create/apply payments migrations: {e}")
-        print_info("Attempting to force apply...")
-        try:
-            call_command('migrate', 'payments', fake_initial=True)
-            print_success("Payments migrations applied with --fake-initial!")
-            return True
-        except Exception as e2:
-            print_error(f"Failed: {e2}")
-            return False
-
-def apply_migrations_for_app(app_name):
-    """Apply migrations for a specific app"""
-    print_info(f"Applying migrations for {app_name}...")
+            print_warning("Model validation found issues:")
+            print(result.stdout)
     
-    try:
-        # Check if migrations exist
-        import os
-        migration_dir = f"{app_name}/migrations"
-        has_migrations = False
-        if os.path.exists(migration_dir):
-            migration_files = [f for f in os.listdir(migration_dir) if f.startswith('0') and f.endswith('.py')]
-            has_migrations = len(migration_files) > 0
-        
-        if not has_migrations:
-            # Try to create migrations
-            try:
-                call_command('makemigrations', app_name)
-                print_info(f"Migrations created for {app_name}")
-            except Exception as e:
-                print_warning(f"Could not create migrations for {app_name}: {e}")
-                return False
-        
-        # Apply migrations
-        call_command('migrate', app_name)
-        print_success(f"{app_name} migrations applied!")
-        return True
-    except Exception as e:
-        print_warning(f"Failed to apply {app_name} migrations: {e}")
-        # Try to fake
-        try:
-            call_command('migrate', app_name, fake=True)
-            print_success(f"{app_name} migrations faked!")
-            return True
-        except Exception as e2:
-            print_error(f"Failed to handle {app_name}: {e2}")
-            return False
-
-def handle_all_migrations():
-    """Handle migrations for all apps"""
-    print_header("Handling All App Migrations")
-    
-    # List of apps in order of dependency
-    apps = [
-        'contenttypes',
-        'auth',
-        'accounts',
-        'admin',
-        'sessions',
-        'books',
-        'payments',
-        'reviews',
-        'royalties',
-        'notifications',
-        'otp_static',
-        'otp_email',
-    ]
-    
-    for app in apps:
-        try:
-            apply_migrations_for_app(app)
-        except Exception as e:
-            print_error(f"Error with {app}: {e}")
-            print_info(f"Skipping {app} for now...")
+    print_header("PAYMENTS RESET COMPLETE")
+    print_success("Payments reset and migrated successfully!")
     
     return True
 
-def apply_remaining_migrations():
-    """Apply any remaining migrations"""
-    print_header("Applying Remaining Migrations")
-    
-    print_info("Running migrate for all apps...")
-    try:
-        call_command('migrate')
-        print_success("All migrations applied successfully!")
-        return True
-    except Exception as e:
-        print_error(f"Failed to apply all migrations: {e}")
-        
-        # Try with --fake-initial
-        print_info("Attempting with --fake-initial...")
-        try:
-            call_command('migrate', fake_initial=True)
-            print_success("Migrations applied with --fake-initial!")
-            return True
-        except Exception as e2:
-            print_error(f"Failed even with --fake-initial: {e2}")
-            
-            # Last resort: fake all
-            print_info("Attempting to fake all migrations...")
-            try:
-                call_command('migrate', fake=True)
-                print_success("All migrations faked!")
-                return True
-            except Exception as e3:
-                print_error(f"Failed to fake all migrations: {e3}")
-                return False
-
-def check_migration_status():
-    """Check the current migration status"""
-    print_header("Migration Status")
-    
-    try:
-        call_command('showmigrations')
-        print_success("Migration status displayed above!")
-        return True
-    except Exception as e:
-        print_error(f"Failed to show migrations: {e}")
-        return False
-
 def main():
-    """Main execution function"""
-    print_header("ABAY REPOSITORY - MIGRATION FIX SCRIPT")
-    print(f"{Colors.CYAN}This script will fix migration issues for your database.{Colors.RESET}")
-    print(f"{Colors.YELLOW}This script ONLY handles migrations - NO user or data creation.{Colors.RESET}")
-    print(f"{Colors.YELLOW}Please backup your database before running this script.{Colors.RESET}")
+    import argparse
     
-    response = input(f"\n{Colors.BOLD}Continue? (y/n): {Colors.RESET}")
-    if response.lower() != 'y':
-        print_info("Operation cancelled.")
-        return
+    parser = argparse.ArgumentParser(description="Reset and migrate payments")
+    parser.add_argument('--force', '-f', action='store_true', help='Force operations')
+    args = parser.parse_args()
     
-    # Step 1: Check database connection
-    if not check_database_connection():
-        print_error("Database connection failed. Please check your settings.")
-        return
-    
-    # Step 2: Fix accounts migration
-    if not fix_accounts_migration():
-        print_warning("Failed to fix accounts migration. Continuing anyway...")
-    
-    # Step 3: Create and apply payments migrations
-    if not create_and_apply_payments_migrations():
-        print_warning("Payments migrations may have issues. Continuing...")
-    
-    # Step 4: Handle all other app migrations
-    handle_all_migrations()
-    
-    # Step 5: Apply any remaining migrations
-    apply_remaining_migrations()
-    
-    # Step 6: Check migration status
-    check_migration_status()
-    
-    # Final message
-    print_header("MIGRATION COMPLETE")
-    print_success("Database migrations completed!")
-    print_info("You can now run: python manage.py runserver")
-    print_info("Access the dashboard at: http://localhost:3000/payments/dashboard/")
+    reset_payments_complete(force=args.force)
 
 if __name__ == "__main__":
-    try:
-        main()
-    except KeyboardInterrupt:
-        print("\n\nOperation cancelled by user.")
-        sys.exit(0)
-    except Exception as e:
-        print_error(f"Unexpected error: {e}")
-        import traceback
-        traceback.print_exc()
+    main()

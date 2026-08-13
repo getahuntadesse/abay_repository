@@ -1,7 +1,8 @@
+<!-- books/templates/books/upload.html -->
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Upload Book - Abrehot Library{% endblock %}
+{% block title %}Upload Book - Abay Repository{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -14,6 +15,148 @@
         color: red;
         margin-left: 4px;
     }
+    .btn-gold {
+        background: linear-gradient(135deg, #DAA520, #B8860B);
+        color: #1A1A1A;
+        border: none;
+        font-weight: 600;
+        padding: 12px 30px;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+        font-size: 1rem;
+    }
+    .btn-gold:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(218, 165, 32, 0.4);
+        color: #1A1A1A;
+    }
+    .btn-outline-gold {
+        border: 2px solid #DAA520;
+        color: #DAA520;
+        background: transparent;
+        font-weight: 600;
+        padding: 12px 30px;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+        font-size: 1rem;
+    }
+    .btn-outline-gold:hover {
+        background: #DAA520;
+        color: #1A1A1A;
+        transform: translateY(-2px);
+    }
+    .btn-success-custom {
+        background: linear-gradient(135deg, #28a745, #1e7e34);
+        color: white;
+        border: none;
+        font-weight: 600;
+        padding: 12px 30px;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+        font-size: 1rem;
+    }
+    .btn-success-custom:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+        color: white;
+    }
+    .form-control:focus, .form-select:focus {
+        border-color: #DAA520;
+        box-shadow: 0 0 0 0.2rem rgba(218, 165, 32, 0.25);
+    }
+    .card-header {
+        background: linear-gradient(135deg, #1A1A1A, #2C2C2C);
+        color: white;
+        border-radius: 12px 12px 0 0;
+        padding: 1.25rem 1.5rem;
+    }
+    .card-header h4 {
+        margin: 0;
+    }
+    .file-upload-wrapper {
+        position: relative;
+        overflow: hidden;
+    }
+    .file-upload-wrapper input[type=file] {
+        position: absolute;
+        left: 0;
+        top: 0;
+        opacity: 0;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+    }
+    .file-upload-label {
+        display: block;
+        padding: 0.75rem 1rem;
+        background: #f8f9fa;
+        border: 2px dashed #dee2e6;
+        border-radius: 8px;
+        text-align: center;
+        color: #6c757d;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    .file-upload-label:hover {
+        border-color: #DAA520;
+        background: #fff8f0;
+    }
+    .file-upload-label i {
+        font-size: 1.5rem;
+        display: block;
+        margin-bottom: 0.5rem;
+        color: #DAA520;
+    }
+    .form-text {
+        font-size: 0.8rem;
+        color: #6c757d;
+    }
+    .card {
+        border-radius: 12px;
+        overflow: hidden;
+        border: none;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    }
+    .card-body {
+        padding: 1.5rem;
+    }
+    .divider {
+        border-top: 1px solid #e9ecef;
+        margin: 1.5rem 0;
+    }
+    .action-buttons {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+    .action-buttons .btn {
+        flex: 1;
+        min-width: 150px;
+    }
+    .submit-info {
+        background: #d4edda;
+        border: 1px solid #c3e6cb;
+        border-radius: 8px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        color: #155724;
+    }
+    .draft-info {
+        background: #fff3cd;
+        border: 1px solid #ffeaa7;
+        border-radius: 8px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        color: #856404;
+    }
+    @media (max-width: 768px) {
+        .card-body {
+            padding: 1rem;
+        }
+        .action-buttons .btn {
+            min-width: 100%;
+        }
+    }
 </style>
 {% endblock %}
 
@@ -21,26 +164,31 @@
 <div class="container mt-4">
     <div class="form-container">
         <div class="card shadow-sm">
-            <div class="card-header" style="background: linear-gradient(135deg, #1A1A1A, #2C2C2C); color: white;">
-                <h4 class="mb-0"><i class="fas fa-upload me-2"></i>Upload New Book</h4>
+            <div class="card-header">
+                <h4><i class="fas fa-upload me-2" style="color: #DAA520;"></i>Upload New Book</h4>
+                <p class="text-white-50 mb-0 small">Fill in the details below to submit your book for review</p>
             </div>
             <div class="card-body">
-                <form method="POST" enctype="multipart/form-data">
+                <form method="POST" enctype="multipart/form-data" id="uploadForm">
                     {% csrf_token %}
+                    
+                    <!-- Book Information -->
+                    <h6 class="text-muted mb-3"><i class="fas fa-info-circle me-2" style="color: #DAA520;"></i>Book Information</h6>
                     
                     <div class="mb-3">
                         <label class="form-label required-field">Title</label>
-                        <input type="text" name="title" class="form-control" required>
+                        <input type="text" name="title" class="form-control" required placeholder="Enter book title">
                     </div>
                     
                     <div class="mb-3">
                         <label class="form-label">Subtitle</label>
-                        <input type="text" name="subtitle" class="form-control">
+                        <input type="text" name="subtitle" class="form-control" placeholder="Enter subtitle (optional)">
                     </div>
                     
                     <div class="mb-3">
                         <label class="form-label required-field">Description</label>
-                        <textarea name="description" class="form-control" rows="5" required></textarea>
+                        <textarea name="description" class="form-control" rows="5" required placeholder="Provide a detailed description of your book"></textarea>
+                        <div class="form-text">Minimum 50 characters recommended</div>
                     </div>
                     
                     <div class="row">
@@ -60,82 +208,314 @@
                                 <option value="Amharic">Amharic</option>
                                 <option value="Arabic">Arabic</option>
                                 <option value="French">French</option>
+                                <option value="Spanish">Spanish</option>
+                                <option value="German">German</option>
+                                <option value="Italian">Italian</option>
+                                <option value="Portuguese">Portuguese</option>
+                                <option value="Russian">Russian</option>
+                                <option value="Chinese">Chinese</option>
+                                <option value="Japanese">Japanese</option>
+                                <option value="Korean">Korean</option>
+                                <option value="Other">Other</option>
                             </select>
                         </div>
                     </div>
                     
+                    <!-- Publication Details -->
+                    <h6 class="text-muted mt-4 mb-3"><i class="fas fa-book me-2" style="color: #DAA520;"></i>Publication Details</h6>
+                    
                     <div class="row">
                         <div class="col-md-4 mb-3">
                             <label class="form-label">Edition</label>
-                            <input type="text" name="edition" class="form-control" value="1">
+                            <input type="text" name="edition" class="form-control" value="1" placeholder="e.g., 1, 2, 3">
                         </div>
                         <div class="col-md-4 mb-3">
                             <label class="form-label">Page Count</label>
-                            <input type="number" name="page_count" class="form-control" min="0">
+                            <input type="number" name="page_count" class="form-control" min="0" placeholder="Number of pages">
                         </div>
                         <div class="col-md-4 mb-3">
                             <label class="form-label">Publication Year</label>
-                            <input type="number" name="publication_year" class="form-control" value="2024">
+                            <input type="number" name="publication_year" class="form-control" value="{% now 'Y' %}" min="1900" max="{% now 'Y' %}">
                         </div>
-                    </div>
-                    
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Price (ETB)</label>
-                            <input type="number" name="price" class="form-control" step="0.01" min="0" value="0">
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <div class="form-check mt-4">
-                                <input type="checkbox" name="is_free" class="form-check-input" id="is_free">
-                                <label class="form-check-label" for="is_free">Make this book FREE</label>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="mb-3">
-                        <label class="form-label">Keywords (comma separated)</label>
-                        <input type="text" name="keywords" class="form-control" placeholder="fiction, novel, bestseller">
                     </div>
                     
                     <div class="mb-3">
                         <label class="form-label">ISBN</label>
                         <input type="text" name="isbn" class="form-control" placeholder="978-3-16-148410-0">
+                        <div class="form-text">International Standard Book Number (optional)</div>
                     </div>
                     
                     <div class="mb-3">
-                        <label class="form-label">Book File (PDF/EPUB)</label>
-                        <input type="file" name="file" class="form-control" accept=".pdf,.epub">
+                        <label class="form-label">Keywords</label>
+                        <input type="text" name="keywords" class="form-control" placeholder="fiction, novel, bestseller, adventure">
+                        <div class="form-text">Comma separated keywords for better discoverability</div>
+                    </div>
+                    
+                    <!-- Pricing -->
+                    <h6 class="text-muted mt-4 mb-3"><i class="fas fa-tag me-2" style="color: #DAA520;"></i>Pricing</h6>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Price (ETB)</label>
+                            <input type="number" name="price" class="form-control" step="0.01" min="0" value="0" id="priceInput">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-check mt-4">
+                                <input type="checkbox" name="is_free" class="form-check-input" id="is_free" onchange="togglePrice()">
+                                <label class="form-check-label" for="is_free">Make this book <strong>FREE</strong></label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Files -->
+                    <h6 class="text-muted mt-4 mb-3"><i class="fas fa-file me-2" style="color: #DAA520;"></i>Files</h6>
+                    
+                    <div class="mb-3">
+                        <label class="form-label required-field">Book File (PDF/EPUB)</label>
+                        <div class="file-upload-wrapper">
+                            <div class="file-upload-label" id="fileLabel">
+                                <i class="fas fa-file-pdf"></i>
+                                <span>Click to upload or drag and drop</span>
+                                <div class="small text-muted">Supported formats: PDF, EPUB (Max 50MB)</div>
+                            </div>
+                            <input type="file" name="file" class="form-control" accept=".pdf,.epub" required onchange="updateFileLabel(this, 'fileLabel')">
+                        </div>
                     </div>
                     
                     <div class="mb-3">
                         <label class="form-label">Cover Image</label>
-                        <input type="file" name="cover_image" class="form-control" accept="image/*">
+                        <div class="file-upload-wrapper">
+                            <div class="file-upload-label" id="coverLabel">
+                                <i class="fas fa-image"></i>
+                                <span>Click to upload cover image</span>
+                                <div class="small text-muted">Recommended: 600x900px, JPG or PNG</div>
+                            </div>
+                            <input type="file" name="cover_image" class="form-control" accept="image/*" onchange="updateFileLabel(this, 'coverLabel')">
+                        </div>
                     </div>
                     
                     <div class="mb-3">
                         <label class="form-label">Sample File (Optional)</label>
-                        <input type="file" name="sample_file" class="form-control" accept=".pdf">
+                        <div class="file-upload-wrapper">
+                            <div class="file-upload-label" id="sampleLabel">
+                                <i class="fas fa-file-alt"></i>
+                                <span>Click to upload sample (optional)</span>
+                                <div class="small text-muted">First few pages of your book (PDF)</div>
+                            </div>
+                            <input type="file" name="sample_file" class="form-control" accept=".pdf" onchange="updateFileLabel(this, 'sampleLabel')">
+                        </div>
                     </div>
                     
-                    <hr>
-                    <button type="submit" class="btn btn-gold w-100">Submit for Review</button>
+                    <div class="divider"></div>
+                    
+                    <!-- Submit Action Buttons -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Choose Action</label>
+                        <div class="submit-info" id="submitInfo">
+                            <i class="fas fa-paper-plane me-2"></i>
+                            <strong>Submit for Review:</strong> Your book will be sent to the review team immediately. 
+                            You will receive notifications about the review progress.
+                        </div>
+                        <div class="draft-info" id="draftInfo" style="display: none;">
+                            <i class="fas fa-save me-2"></i>
+                            <strong>Save as Draft:</strong> Your book will be saved as a draft. 
+                            You can edit it later and submit when ready.
+                        </div>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button type="submit" name="submit_action" value="draft" class="btn btn-outline-gold" id="draftBtn">
+                            <i class="fas fa-save me-2"></i> Save as Draft
+                        </button>
+                        <button type="submit" name="submit_action" value="submit" class="btn btn-success-custom" id="submitBtn">
+                            <i class="fas fa-paper-plane me-2"></i> Submit for Review
+                        </button>
+                    </div>
+                    
+                    <div class="text-center mt-3">
+                        <small class="text-muted">
+                            <i class="fas fa-info-circle me-1"></i>
+                            Your book will be reviewed by our quality checkers before publication.
+                            You will be notified via email about the status.
+                        </small>
+                    </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
 
-<style>
-    .btn-gold {
-        background: linear-gradient(135deg, #DAA520, #B8860B);
-        color: #1A1A1A;
-        border: none;
-        font-weight: 600;
-        padding: 10px;
+<script>
+    // Toggle price field based on free checkbox
+    function togglePrice() {
+        const isFree = document.getElementById('is_free').checked;
+        const priceInput = document.getElementById('priceInput');
+        if (isFree) {
+            priceInput.value = 0;
+            priceInput.disabled = true;
+        } else {
+            priceInput.disabled = false;
+            priceInput.value = 0;
+        }
     }
-    .btn-gold:hover {
-        transform: translateY(-2px);
-        color: #1A1A1A;
+
+    // Update file upload label
+    function updateFileLabel(input, labelId) {
+        const label = document.getElementById(labelId);
+        if (input.files && input.files[0]) {
+            const fileName = input.files[0].name;
+            const fileSize = (input.files[0].size / 1024 / 1024).toFixed(2);
+            label.innerHTML = `
+                <i class="fas fa-check-circle" style="color: #28a745;"></i>
+                <span>${fileName}</span>
+                <div class="small text-muted">${fileSize} MB - Click to change</div>
+            `;
+            label.style.borderColor = '#28a745';
+            label.style.background = '#d4edda';
+        } else {
+            // Reset to default state based on which label it is
+            if (labelId === 'fileLabel') {
+                label.innerHTML = `
+                    <i class="fas fa-file-pdf"></i>
+                    <span>Click to upload or drag and drop</span>
+                    <div class="small text-muted">Supported formats: PDF, EPUB (Max 50MB)</div>
+                `;
+            } else if (labelId === 'coverLabel') {
+                label.innerHTML = `
+                    <i class="fas fa-image"></i>
+                    <span>Click to upload cover image</span>
+                    <div class="small text-muted">Recommended: 600x900px, JPG or PNG</div>
+                `;
+            } else if (labelId === 'sampleLabel') {
+                label.innerHTML = `
+                    <i class="fas fa-file-alt"></i>
+                    <span>Click to upload sample (optional)</span>
+                    <div class="small text-muted">First few pages of your book (PDF)</div>
+                `;
+            }
+            label.style.borderColor = '#dee2e6';
+            label.style.background = '#f8f9fa';
+        }
     }
-</style>
+
+    // Show/hide info based on button hover
+    document.getElementById('submitBtn').addEventListener('mouseenter', function() {
+        document.getElementById('submitInfo').style.display = 'block';
+        document.getElementById('draftInfo').style.display = 'none';
+    });
+
+    document.getElementById('draftBtn').addEventListener('mouseenter', function() {
+        document.getElementById('submitInfo').style.display = 'none';
+        document.getElementById('draftInfo').style.display = 'block';
+    });
+
+    document.getElementById('submitBtn').addEventListener('mouseleave', function() {
+        document.getElementById('submitInfo').style.display = 'block';
+        document.getElementById('draftInfo').style.display = 'none';
+    });
+
+    document.getElementById('draftBtn').addEventListener('mouseleave', function() {
+        document.getElementById('submitInfo').style.display = 'block';
+        document.getElementById('draftInfo').style.display = 'none';
+    });
+
+    // Form validation
+    document.getElementById('uploadForm').addEventListener('submit', function(e) {
+        const title = document.querySelector('input[name="title"]').value.trim();
+        const description = document.querySelector('textarea[name="description"]').value.trim();
+        const genre = document.querySelector('select[name="genre"]').value;
+        const language = document.querySelector('select[name="language"]').value;
+        const file = document.querySelector('input[name="file"]');
+
+        if (!title) {
+            e.preventDefault();
+            alert('Please enter a book title.');
+            document.querySelector('input[name="title"]').focus();
+            return;
+        }
+
+        if (description.length < 50) {
+            e.preventDefault();
+            alert('Please provide a description of at least 50 characters.');
+            document.querySelector('textarea[name="description"]').focus();
+            return;
+        }
+
+        if (!genre) {
+            e.preventDefault();
+            alert('Please select a genre.');
+            document.querySelector('select[name="genre"]').focus();
+            return;
+        }
+
+        if (!language) {
+            e.preventDefault();
+            alert('Please select a language.');
+            document.querySelector('select[name="language"]').focus();
+            return;
+        }
+
+        // Validate file is uploaded
+        if (!file.files || file.files.length === 0) {
+            e.preventDefault();
+            alert('Please upload your book file.');
+            file.focus();
+            return;
+        }
+
+        // Validate file size if file is uploaded
+        if (file.files && file.files[0]) {
+            const fileSize = file.files[0].size / 1024 / 1024;
+            if (fileSize > 50) {
+                e.preventDefault();
+                alert('File size exceeds 50MB limit. Please compress your file.');
+                file.value = '';
+                updateFileLabel(file, 'fileLabel');
+                return;
+            }
+        }
+
+        // Confirm submission if submitting
+        const submitAction = document.activeElement.value;
+        if (submitAction === 'submit') {
+            if (!confirm('Are you sure you want to submit this book for review? Once submitted, you will need to wait for the review process to complete.')) {
+                e.preventDefault();
+                return;
+            }
+        }
+    });
+
+    // Drag and drop support
+    document.querySelectorAll('.file-upload-wrapper').forEach(wrapper => {
+        const input = wrapper.querySelector('input[type="file"]');
+        const label = wrapper.querySelector('.file-upload-label');
+        
+        wrapper.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            label.style.borderColor = '#DAA520';
+            label.style.background = '#fff8f0';
+        });
+        
+        wrapper.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            label.style.borderColor = '#dee2e6';
+            label.style.background = '#f8f9fa';
+        });
+        
+        wrapper.addEventListener('drop', function(e) {
+            e.preventDefault();
+            label.style.borderColor = '#dee2e6';
+            label.style.background = '#f8f9fa';
+            if (e.dataTransfer.files.length > 0) {
+                input.files = e.dataTransfer.files;
+                updateFileLabel(input, label.id);
+            }
+        });
+    });
+
+    // Initialize price field
+    togglePrice();
+
+    console.log('Upload form loaded successfully!');
+</script>
 {% endblock %}

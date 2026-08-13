@@ -2,18 +2,20 @@
 {% load static %}
 {% load humanize %}
 
-{% block title %}Maker Dashboard | Abrehot Library{% endblock %}
+{% block title %}Maker Dashboard | Abay Repository{% endblock %}
 
 {% block extra_css %}
 <style>
     :root {
         --primary-gold: #DAA520;
         --primary-gold-dark: #B8860B;
-        --primary-gold-light: #F5D061;
         --primary-dark: #2C2C2C;
         --primary-darker: #1A1A1A;
-        --primary-gray: #4A4A4A;
-        --primary-gray-light: #6C6C6C;
+        --success-green: #28a745;
+        --danger-red: #dc3545;
+        --warning-yellow: #ffc107;
+        --info-blue: #17a2b8;
+        --purple: #6f42c1;
     }
 
     .dashboard-header {
@@ -23,6 +25,7 @@
         margin-bottom: 2rem;
         position: relative;
         overflow: hidden;
+        color: white;
     }
 
     .dashboard-header::before {
@@ -66,40 +69,9 @@
     }
 
     .stat-label {
-        color: var(--primary-gray);
+        color: #6c757d;
         font-size: 0.85rem;
         font-weight: 500;
-    }
-
-    .dashboard-card {
-        background: white;
-        border-radius: 16px;
-        padding: 1.5rem;
-        text-align: center;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-        transition: all 0.3s ease;
-        height: 100%;
-    }
-
-    .dashboard-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 35px rgba(0,0,0,0.12);
-    }
-
-    .icon-circle {
-        width: 70px;
-        height: 70px;
-        background: linear-gradient(135deg, var(--primary-darker), var(--primary-dark));
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 0 auto 1rem;
-    }
-
-    .icon-circle i {
-        font-size: 2rem;
-        color: var(--primary-gold);
     }
 
     .btn-gold {
@@ -110,6 +82,8 @@
         padding: 8px 20px;
         border-radius: 25px;
         transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
     }
 
     .btn-gold:hover {
@@ -126,12 +100,185 @@
         padding: 8px 20px;
         border-radius: 25px;
         transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
     }
 
     .btn-outline-gold:hover {
         background: var(--primary-gold);
         color: var(--primary-darker);
         transform: translateY(-2px);
+    }
+
+    .btn-sm {
+        padding: 5px 12px;
+        font-size: 0.8rem;
+        border-radius: 20px;
+    }
+
+    .status-badge {
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        display: inline-block;
+    }
+
+    .status-draft { background: #6c757d; color: white; }
+    .status-submitted { background: var(--info-blue); color: white; }
+    .status-initial_review { background: var(--warning-yellow); color: var(--primary-darker); }
+    .status-awaiting_checker { background: var(--purple); color: white; }
+    .status-under_review { background: var(--info-blue); color: white; }
+    .status-review_completed { background: var(--success-green); color: white; }
+    .status-revision_required { background: #fd7e14; color: white; }
+    .status-resubmitted { background: var(--info-blue); color: white; }
+    .status-accepted { background: var(--success-green); color: white; }
+    .status-rejected { background: var(--danger-red); color: white; }
+    .status-pending_publication { background: var(--warning-yellow); color: var(--primary-darker); }
+    .status-published { background: var(--success-green); color: white; }
+    .status-cancelled { background: #6c757d; color: white; }
+
+    .workflow-step {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem;
+        border-radius: 8px;
+        background: #f8f9fa;
+        margin-bottom: 0.5rem;
+    }
+
+    .workflow-step .step-icon {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: white;
+    }
+
+    .workflow-step .step-icon.completed { background: var(--success-green); }
+    .workflow-step .step-icon.active { background: var(--primary-gold); }
+    .workflow-step .step-icon.pending { background: #e9ecef; color: var(--primary-gray); }
+
+    .workflow-step .step-label {
+        font-size: 0.85rem;
+    }
+
+    .workflow-step .step-label.completed { color: var(--success-green); }
+    .workflow-step .step-label.active { color: var(--primary-gold); font-weight: 600; }
+    .workflow-step .step-label.pending { color: var(--primary-gray); }
+
+    .table thead th {
+        background: var(--primary-darker);
+        color: white;
+        padding: 0.75rem 1rem;
+        white-space: nowrap;
+    }
+
+    .table tbody td {
+        padding: 0.75rem 1rem;
+        vertical-align: middle;
+    }
+
+    .action-buttons .btn {
+        margin: 0 2px;
+        padding: 4px 10px;
+        font-size: 0.75rem;
+    }
+
+    .card {
+        border-radius: 12px;
+        border: none;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    }
+
+    .card-header {
+        background: white;
+        border-bottom: 1px solid #e9ecef;
+        padding: 1rem 1.5rem;
+        border-radius: 12px 12px 0 0 !important;
+    }
+
+    .table-row-highlight {
+        background-color: #fff8f0 !important;
+        border-left: 4px solid var(--primary-gold);
+    }
+
+    .assign-btn {
+        background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark));
+        color: var(--primary-darker);
+        border: none;
+        font-weight: 600;
+        padding: 5px 15px;
+        border-radius: 20px;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 0.8rem;
+    }
+
+    .assign-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(218, 165, 32, 0.4);
+        color: var(--primary-darker);
+    }
+
+    .publish-btn {
+        background: linear-gradient(135deg, #28a745, #1e7e34);
+        color: white;
+        border: none;
+        font-weight: 600;
+        padding: 5px 15px;
+        border-radius: 20px;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 0.8rem;
+    }
+
+    .publish-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+        color: white;
+    }
+
+    .reject-btn {
+        background: linear-gradient(135deg, #dc3545, #c82333);
+        color: white;
+        border: none;
+        font-weight: 600;
+        padding: 5px 15px;
+        border-radius: 20px;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 0.8rem;
+    }
+
+    .reject-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(220, 53, 69, 0.4);
+        color: white;
+    }
+
+    @media (max-width: 768px) {
+        .dashboard-header {
+            padding: 1.5rem;
+        }
+        .stat-number {
+            font-size: 1.5rem;
+        }
+        .table-responsive {
+            font-size: 0.85rem;
+        }
+        .action-buttons .btn {
+            padding: 3px 8px;
+            font-size: 0.7rem;
+        }
     }
 </style>
 {% endblock %}
@@ -142,17 +289,25 @@
     <div class="dashboard-header">
         <div class="row align-items-center">
             <div class="col-md-8">
-                <h1 class="text-white mb-2">
+                <h1 class="mb-2">
                     <i class="fas fa-tools me-2" style="color: var(--primary-gold);"></i>
                     Maker Dashboard
                 </h1>
-                <p class="text-white-50 mb-0">
+                <p class="mb-0 opacity-75">
                     <i class="fas fa-check-double me-2"></i>
-                    Welcome back, <strong>{{ user.full_name }}</strong>. Manage and publish approved books to the platform.
+                    Welcome back, <strong>{{ user.full_name|default:user.username }}</strong>. 
+                    Manage the editorial workflow and publish approved books.
                 </p>
+                <div class="mt-2">
+                    <span class="badge bg-info me-1">{{ submitted_books|default:0 }} Submitted</span>
+                    <span class="badge bg-warning text-dark me-1">{{ pending_initial|default:0 }} Initial Review</span>
+                    <span class="badge bg-purple me-1">{{ awaiting_checker|default:0 }} Awaiting Checker</span>
+                    <span class="badge bg-success me-1">{{ review_completed|default:0 }} Review Completed</span>
+                    <span class="badge bg-danger">{{ overdue_reviews|default:0 }} Overdue</span>
+                </div>
             </div>
             <div class="col-md-4 text-md-end mt-3 mt-md-0">
-                <a href="/books/browse/" class="btn btn-gold">
+                <a href="{% url 'books:browse' %}" class="btn btn-gold">
                     <i class="fas fa-book-open me-2"></i> Browse Library
                 </a>
             </div>
@@ -191,89 +346,180 @@
         </div>
     </div>
 
-    <!-- Action Cards -->
-    <div class="row g-4 mb-4">
-        <div class="col-md-6">
-            <div class="dashboard-card">
-                <div class="icon-circle">
-                    <i class="fas fa-clipboard-list"></i>
-                </div>
-                <h4>Review Pending Books</h4>
-                <p>Review books that have passed quality check and are ready for publication</p>
-                <a href="/books/pending-approval/" class="btn btn-gold mt-2">
-                    <i class="fas fa-arrow-right me-1"></i> Review Now
-                </a>
-            </div>
+    <!-- Workflow Status Overview -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">
+                <i class="fas fa-route me-2" style="color: var(--primary-gold);"></i>
+                Workflow Status Overview
+            </h5>
         </div>
-        <div class="col-md-6">
-            <div class="dashboard-card">
-                <div class="icon-circle">
-                    <i class="fas fa-history"></i>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="workflow-step">
+                        <span class="step-icon {% if submitted_books > 0 %}active{% else %}pending{% endif %}">
+                            <i class="fas fa-upload"></i>
+                        </span>
+                        <span class="step-label {% if submitted_books > 0 %}active{% else %}pending{% endif %}">
+                            Submitted ({{ submitted_books|default:0 }})
+                        </span>
+                    </div>
                 </div>
-                <h4>Publication History</h4>
-                <p>View all books you have published and track your publication history</p>
-                <a href="/books/my-publications/" class="btn btn-outline-gold mt-2">
-                    <i class="fas fa-history me-1"></i> View History
-                </a>
+                <div class="col-md-3">
+                    <div class="workflow-step">
+                        <span class="step-icon {% if pending_initial > 0 %}active{% else %}pending{% endif %}">
+                            <i class="fas fa-search"></i>
+                        </span>
+                        <span class="step-label {% if pending_initial > 0 %}active{% else %}pending{% endif %}">
+                            Initial Review ({{ pending_initial|default:0 }})
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="workflow-step">
+                        <span class="step-icon {% if awaiting_checker > 0 %}active{% else %}pending{% endif %}">
+                            <i class="fas fa-user-clock"></i>
+                        </span>
+                        <span class="step-label {% if awaiting_checker > 0 %}active{% else %}pending{% endif %}">
+                            Awaiting Checker ({{ awaiting_checker|default:0 }})
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="workflow-step">
+                        <span class="step-icon {% if under_review > 0 %}active{% else %}pending{% endif %}">
+                            <i class="fas fa-users"></i>
+                        </span>
+                        <span class="step-label {% if under_review > 0 %}active{% else %}pending{% endif %}">
+                            Under Review ({{ under_review|default:0 }})
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-md-3">
+                    <div class="workflow-step">
+                        <span class="step-icon {% if review_completed > 0 %}completed{% else %}pending{% endif %}">
+                            <i class="fas fa-check-double"></i>
+                        </span>
+                        <span class="step-label {% if review_completed > 0 %}completed{% else %}pending{% endif %}">
+                            Review Completed ({{ review_completed|default:0 }})
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="workflow-step">
+                        <span class="step-icon {% if revision_required > 0 %}active{% else %}pending{% endif %}">
+                            <i class="fas fa-edit"></i>
+                        </span>
+                        <span class="step-label {% if revision_required > 0 %}active{% else %}pending{% endif %}">
+                            Revision Required ({{ revision_required|default:0 }})
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="workflow-step">
+                        <span class="step-icon {% if accepted > 0 %}completed{% else %}pending{% endif %}">
+                            <i class="fas fa-check-circle"></i>
+                        </span>
+                        <span class="step-label {% if accepted > 0 %}completed{% else %}pending{% endif %}">
+                            Accepted ({{ accepted|default:0 }})
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="workflow-step">
+                        <span class="step-icon {% if published > 0 %}completed{% else %}pending{% endif %}">
+                            <i class="fas fa-book-open"></i>
+                        </span>
+                        <span class="step-label {% if published > 0 %}completed{% else %}pending{% endif %}">
+                            Published ({{ published|default:0 }})
+                        </span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Pending Approval Table -->
-    <div class="card shadow-sm">
-        <div class="card-header bg-white border-0 py-3">
+    <!-- ============================================================ -->
+    <!-- NEW SUBMISSIONS — Awaiting Maker Initial Review              -->
+    <!-- ============================================================ -->
+    <div class="card shadow-sm mb-4 border-start border-4 border-info" id="new-submissions">
+        <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="mb-0">
-                <i class="fas fa-clock me-2" style="color: var(--primary-gold);"></i>
-                Books Pending Approval
+                <i class="fas fa-inbox me-2" style="color: var(--info-blue);"></i>
+                New Submissions — Awaiting Initial Review
+                {% if new_submissions_count > 0 %}
+                    <span class="badge bg-danger ms-2">{{ new_submissions_count }} Urgent</span>
+                {% endif %}
             </h5>
+            <small class="text-muted">Step 1: Review completeness before assigning checkers</small>
         </div>
         <div class="card-body p-0">
             <div class="table-responsive">
                 <table class="table mb-0">
-                    <thead style="background: var(--primary-darker); color: white;">
+                    <thead>
                         <tr>
-                            <th>ID</th>
                             <th>Title</th>
                             <th>Author</th>
                             <th>Genre</th>
-                            <th>Quality Score</th>
-                            <th>Submitted Date</th>
+                            <th>Language</th>
+                            <th>Price</th>
+                            <th>Submitted</th>
+                            <th>Status</th>
                             <th>Actions</th>
-                        </thead>
+                        </tr>
+                    </thead>
                     <tbody>
-                        {% for book in pending_books %}
+                        {% for book in new_submissions %}
                         <tr>
-                            <td>{{ book.id }}</td>
                             <td>
-                                <strong>{{ book.title|truncatechars:40 }}</strong>
+                                <strong>{{ book.title|truncatechars:45 }}</strong>
                                 <br>
                                 <small class="text-muted">ISBN: {{ book.isbn|default:"N/A" }}</small>
                             </td>
-                            <td>{{ book.author.full_name|default:"Unknown" }}</td>
+                            <td>{{ book.author.get_full_name|default:book.author.username }}</td>
                             <td>{{ book.genre.name|default:"Uncategorized" }}</td>
+                            <td>{{ book.language|default:"English" }}</td>
                             <td>
-                                {% if book.checker_score %}
-                                    <span class="badge bg-success">{{ book.checker_score }}/10</span>
+                                {% if book.is_free %}
+                                    <span class="badge bg-success">FREE</span>
                                 {% else %}
-                                    <span class="text-muted">Pending</span>
+                                    {{ book.price }} ETB
                                 {% endif %}
                             </td>
-                            <td>{{ book.checker_reviewed_at|date:"M d, Y"|default:book.created_at|date:"M d, Y" }}</td>
                             <td>
-                                <a href="/books/{{ book.id }}/" class="btn btn-sm btn-outline-gold" title="View Details">
+                                {% if book.submitted_at %}
+                                    {{ book.submitted_at|date:"M d, Y" }}
+                                    <br>
+                                    <small class="text-muted">{{ book.submitted_at|timesince }} ago</small>
+                                {% else %}
+                                    {{ book.created_at|date:"M d, Y" }}
+                                    <br>
+                                    <small class="text-muted">{{ book.created_at|timesince }} ago</small>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <span class="status-badge status-{{ book.status }}">
+                                    {{ book.get_status_display|default:book.status|title }}
+                                </span>
+                            </td>
+                            <td class="action-buttons">
+                                <a href="{% url 'books:detail' book.id %}" class="btn btn-sm btn-outline-gold" title="View manuscript">
                                     <i class="fas fa-eye"></i>
                                 </a>
-                                <a href="/books/{{ book.id }}/publish/" class="btn btn-sm btn-gold" title="Publish Book">
-                                    <i class="fas fa-check-circle"></i> Publish
+                                <a href="{% url 'books:maker_initial_review' book.id %}" class="btn btn-sm btn-gold" title="Perform initial review">
+                                    <i class="fas fa-clipboard-check me-1"></i> Review
                                 </a>
                             </td>
                         </tr>
                         {% empty %}
                         <tr>
-                            <td colspan="7" class="text-center py-5">
-                                <i class="fas fa-check-circle fa-3x text-success mb-3 d-block"></i>
-                                <h5>No Books Pending Approval</h5>
-                                <p class="text-muted">All books have been published. Check back later for new submissions.</p>
+                            <td colspan="8" class="text-center py-5">
+                                <i class="fas fa-inbox fa-3x text-muted mb-3 d-block"></i>
+                                <h5 class="text-muted">No New Submissions</h5>
+                                <p class="text-muted small">All submitted manuscripts have been processed. New submissions will appear here.</p>
                             </td>
                         </tr>
                         {% endfor %}
@@ -283,30 +529,158 @@
         </div>
     </div>
 
-    <!-- Recently Published -->
-    {% if published_books %}
-    <div class="card shadow-sm mt-4">
-        <div class="card-header bg-white border-0 py-3">
+    <!-- ============================================================ -->
+    <!-- BOOKS NEEDING CHECKER ASSIGNMENT                             -->
+    <!-- ============================================================ -->
+    <div class="card shadow-sm mb-4 border-start border-4 border-purple" id="pending-assign">
+        <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="mb-0">
-                <i class="fas fa-check-circle me-2" style="color: var(--primary-gold);"></i>
-                Recently Published Books
+                <i class="fas fa-user-clock me-2" style="color: var(--purple);"></i>
+                Books Needing Checker Assignment
+                {% with total=awaiting_checker_books.count|add:pending_review_books.count %}
+                    {% if total > 0 %}
+                        <span class="badge bg-purple ms-2">{{ total }}</span>
+                    {% endif %}
+                {% endwith %}
             </h5>
+            <small class="text-muted">Step 2: Assign to quality checker</small>
         </div>
         <div class="card-body p-0">
             <div class="table-responsive">
                 <table class="table mb-0">
-                    <thead style="background: var(--primary-darker); color: white;">
-                        <tr><th>Title</th><th>Author</th><th>Price</th><th>Published Date</th><th>Downloads</th><th>Actions</th></tr>
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Author</th>
+                            <th>Genre</th>
+                            <th>Status</th>
+                            <th>Submitted</th>
+                            <th>Actions</th>
+                        </tr>
                     </thead>
                     <tbody>
-                        {% for book in published_books %}
+                        <!-- Show books that are awaiting checker (ready for assignment) -->
+                        {% for book in awaiting_checker_books %}
+                        <tr class="table-row-highlight">
+                            <td>
+                                <strong>{{ book.title|truncatechars:50 }}</strong>
+                                <br>
+                                <small class="text-muted">v{{ book.current_version|default:1 }}</small>
+                            </td>
+                            <td>{{ book.author.get_full_name|default:book.author.username }}</td>
+                            <td>{{ book.genre.name|default:"Uncategorized" }}</td>
+                            <td>
+                                <span class="status-badge status-awaiting_checker">
+                                    Awaiting Checker
+                                </span>
+                            </td>
+                            <td>
+                                {% if book.submitted_at %}
+                                    {{ book.submitted_at|date:"M d, Y" }}
+                                {% else %}
+                                    {{ book.created_at|date:"M d, Y" }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{% url 'books:maker_assign_checker' book.id %}" class="assign-btn">
+                                    <i class="fas fa-user-plus me-1"></i> Assign Checker
+                                </a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                            <!-- Show submitted/initial_review books if no awaiting_checker -->
+                            {% for book in pending_review_books %}
+                            <tr>
+                                <td>
+                                    <strong>{{ book.title|truncatechars:50 }}</strong>
+                                    <br>
+                                    <small class="text-muted">v{{ book.current_version|default:1 }}</small>
+                                </td>
+                                <td>{{ book.author.get_full_name|default:book.author.username }}</td>
+                                <td>{{ book.genre.name|default:"Uncategorized" }}</td>
+                                <td>
+                                    <span class="status-badge status-{{ book.status }}">
+                                        {{ book.get_status_display|default:book.status|title }}
+                                    </span>
+                                </td>
+                                <td>
+                                    {% if book.submitted_at %}
+                                        {{ book.submitted_at|date:"M d, Y" }}
+                                    {% else %}
+                                        {{ book.created_at|date:"M d, Y" }}
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="{% url 'books:maker_assign_checker' book.id %}" class="assign-btn">
+                                        <i class="fas fa-user-plus me-1"></i> Assign Checker
+                                    </a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6" class="text-center py-4 text-muted">
+                                    <i class="fas fa-check-circle fa-2x d-block mb-2 text-success"></i>
+                                    All books have been assigned to checkers
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- BOOKS UNDER REVIEW                                           -->
+    <!-- ============================================================ -->
+    {% if under_review > 0 %}
+    <div class="card shadow-sm mb-4 border-start border-4 border-info">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">
+                <i class="fas fa-spinner fa-spin me-2" style="color: var(--info-blue);"></i>
+                Books Under Review ({{ under_review|default:0 }})
+            </h5>
+            <small class="text-muted">Step 3: Checkers are reviewing these books</small>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table mb-0">
+                    <thead>
                         <tr>
-                            <td><strong>{{ book.title|truncatechars:50 }}</strong></td>
-                            <td>{{ book.author.full_name|default:"Unknown" }}</td>
-                            <td>{% if book.is_free %}FREE{% else %}{{ book.price }} ETB{% endif %}</td>
-                            <td>{{ book.published_at|date:"M d, Y" }}</td>
-                            <td>{{ book.downloads_count|default:0|intcomma }}</td>
-                            <td><a href="/books/{{ book.id }}/" class="btn btn-sm btn-outline-gold"><i class="fas fa-eye"></i> View</a></td>
+                            <th>Title</th>
+                            <th>Author</th>
+                            <th>Checker</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for book in under_review_books %}
+                        <tr>
+                            <td>
+                                <strong>{{ book.title|truncatechars:50 }}</strong>
+                                <br>
+                                <small class="text-muted">v{{ book.current_version|default:1 }}</small>
+                            </td>
+                            <td>{{ book.author.get_full_name|default:book.author.username }}</td>
+                            <td>
+                                {% if book.checker_assigned %}
+                                    {{ book.checker_assigned.get_full_name|default:book.checker_assigned.username }}
+                                {% else %}
+                                    <span class="text-muted">Not assigned</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <span class="status-badge status-under_review">
+                                    Under Review
+                                </span>
+                            </td>
+                            <td>
+                                <a href="{% url 'books:detail' book.id %}" class="btn btn-sm btn-outline-gold">
+                                    <i class="fas fa-eye"></i> View
+                                </a>
+                            </td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -315,5 +689,230 @@
         </div>
     </div>
     {% endif %}
+
+    <!-- ============================================================ -->
+    <!-- PENDING APPROVAL TABLE                                       -->
+    <!-- ============================================================ -->
+    <div class="card shadow-sm mb-4 border-start border-4 border-gold" id="pending">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">
+                <i class="fas fa-clock me-2" style="color: var(--primary-gold);"></i>
+                Books Pending Approval ({{ pending_count|default:0 }})
+            </h5>
+            <small class="text-muted">Step 4: Review checker feedback and approve</small>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table mb-0">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Author</th>
+                            <th>Genre</th>
+                            <th>Quality Score</th>
+                            <th>Reviews</th>
+                            <th>Reviewed Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for book in pending_books %}
+                        <tr>
+                            <td>
+                                <strong>{{ book.title|truncatechars:40 }}</strong>
+                                <br>
+                                <small class="text-muted">ISBN: {{ book.isbn|default:"N/A" }}</small>
+                            </td>
+                            <td>{{ book.author.get_full_name|default:book.author.username }}</td>
+                            <td>{{ book.genre.name|default:"Uncategorized" }}</td>
+                            <td>
+                                {% if book.checker_score %}
+                                    <span class="badge {% if book.checker_score >= 7 %}bg-success{% else %}bg-warning text-dark{% endif %}">
+                                        {{ book.checker_score|floatformat:1 }}/10
+                                    </span>
+                                {% else %}
+                                    <span class="text-muted">Pending</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {{ book.checker_reviews.count }} review(s)
+                            </td>
+                            <td>
+                                {% if book.checker_reviewed_at %}
+                                    {{ book.checker_reviewed_at|date:"M d, Y" }}
+                                {% else %}
+                                    {{ book.created_at|date:"M d, Y" }}
+                                {% endif %}
+                            </td>
+                            <td class="action-buttons">
+                                <a href="{% url 'books:detail' book.id %}" class="btn btn-sm btn-outline-gold" title="View Details">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a href="{% url 'books:maker_publish_book' book.id %}" class="publish-btn" title="Publish Book">
+                                    <i class="fas fa-check-circle"></i> Publish
+                                </a>
+                                <a href="{% url 'books:maker_reject_book' book.id %}" class="reject-btn" title="Reject or Send for Revision">
+                                    <i class="fas fa-times-circle"></i> Reject
+                                </a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="7" class="text-center py-5">
+                                <i class="fas fa-check-circle fa-3x text-success mb-3 d-block"></i>
+                                <h5>No Books Pending Approval</h5>
+                                <p class="text-muted">All books have been processed. Check back later for new submissions.</p>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- CONFLICTING REVIEWS                                          -->
+    <!-- ============================================================ -->
+    {% if conflicting_reviews %}
+    <div class="card shadow-sm mb-4 border-start border-4 border-danger">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">
+                <i class="fas fa-exclamation-triangle me-2" style="color: var(--danger-red);"></i>
+                Books with Conflicting Reviews ({{ conflicting_reviews.count }})
+            </h5>
+            <small class="text-muted">Need your decision to resolve conflicts</small>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table mb-0">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Author</th>
+                            <th>Reviews</th>
+                            <th>Recommendations</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for book in conflicting_reviews %}
+                        <tr>
+                            <td>
+                                <strong>{{ book.title|truncatechars:50 }}</strong>
+                                <br>
+                                <small class="text-muted">ISBN: {{ book.isbn|default:"N/A" }}</small>
+                            </td>
+                            <td>{{ book.author.get_full_name|default:book.author.username }}</td>
+                            <td>{{ book.checker_reviews.count }}</td>
+                            <td>
+                                {% for review in book.checker_reviews.all|slice:":3" %}
+                                    <span class="badge 
+                                        {% if review.recommendation == 'accept' %}bg-success
+                                        {% elif review.recommendation == 'reject' %}bg-danger
+                                        {% else %}bg-warning text-dark{% endif %}">
+                                        {{ review.get_recommendation_display }}
+                                    </span>
+                                {% endfor %}
+                                {% if book.checker_reviews.count > 3 %}
+                                    <span class="badge bg-secondary">+{{ book.checker_reviews.count|add:"-3" }}</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{% url 'books:maker_review_decision' book.id %}" class="btn btn-sm btn-gold">
+                                    <i class="fas fa-gavel me-1"></i> Make Decision
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- ============================================================ -->
+    <!-- RECENTLY PUBLISHED                                           -->
+    <!-- ============================================================ -->
+    {% if published_books %}
+    <div class="card shadow-sm mt-4 border-start border-4 border-success">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">
+                <i class="fas fa-check-circle me-2" style="color: var(--success-green);"></i>
+                Recently Published Books
+            </h5>
+            <small class="text-muted">Successfully published books</small>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table mb-0">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Author</th>
+                            <th>Price</th>
+                            <th>Published Date</th>
+                            <th>Downloads</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for book in published_books %}
+                        <tr>
+                            <td>
+                                <strong>{{ book.title|truncatechars:50 }}</strong>
+                                <br>
+                                <small class="text-muted">ISBN: {{ book.isbn|default:"N/A" }}</small>
+                            </td>
+                            <td>{{ book.author.get_full_name|default:book.author.username }}</td>
+                            <td>{% if book.is_free %}FREE{% else %}{{ book.price }} ETB{% endif %}</td>
+                            <td>{{ book.published_at|date:"M d, Y" }}</td>
+                            <td>{{ book.downloads_count|default:0|intcomma }}</td>
+                            <td>
+                                <a href="{% url 'books:detail' book.id %}" class="btn btn-sm btn-outline-gold">
+                                    <i class="fas fa-eye"></i> View
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- ============================================================ -->
+    <!-- MAKER INSTRUCTIONS                                           -->
+    <!-- ============================================================ -->
+    <div class="card shadow-sm mt-4">
+        <div class="card-body">
+            <h6><i class="fas fa-info-circle me-2" style="color: var(--primary-gold);"></i>Maker Responsibilities</h6>
+            <div class="row">
+                <div class="col-md-4">
+                    <ul class="list-unstyled small">
+                        <li><i class="fas fa-check-circle text-success me-1"></i> Review new submissions</li>
+                        <li><i class="fas fa-check-circle text-success me-1"></i> Assign checkers</li>
+                        <li><i class="fas fa-check-circle text-success me-1"></i> Review checker feedback</li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <ul class="list-unstyled small">
+                        <li><i class="fas fa-check-circle text-success me-1"></i> Request revisions when needed</li>
+                        <li><i class="fas fa-check-circle text-success me-1"></i> Make final decisions</li>
+                        <li><i class="fas fa-check-circle text-success me-1"></i> Publish approved books</li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <ul class="list-unstyled small">
+                        <li><i class="fas fa-check-circle text-success me-1"></i> Manage checker workload</li>
+                        <li><i class="fas fa-check-circle text-success me-1"></i> Resolve conflicts</li>
+                        <li><i class="fas fa-check-circle text-success me-1"></i> Maintain quality standards</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

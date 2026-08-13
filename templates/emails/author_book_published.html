@@ -1,0 +1,19 @@
+{% extends 'emails/base_email.html' %}
+
+{% block content %}
+<h2>🎉 Your Book is Published!</h2>
+<p>Dear {{ user.full_name }},</p>
+<p>We are delighted to inform you that your book <strong>"{{ book.title }}"</strong> has been published on Abay Repository!</p>
+
+<div class="status-box">
+    <p><strong>Published:</strong> {{ book.published_at|date:"F j, Y, g:i a" }}</p>
+    <p><strong>Price:</strong> {% if book.is_free %}FREE{% else %}{{ book.price }} ETB{% endif %}</p>
+</div>
+
+<p>Your book is now available to readers worldwide. Share the link with your audience!</p>
+
+<p><a href="{{ site_url }}{% url 'books:detail' book.id %}" class="button">View Published Book</a></p>
+
+<p>Thank you for choosing Abay Repository to share your work with the world.</p>
+<p>Best regards,<br>The Abay Repository Team</p>
+{% endblock %}

@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}Pending Approval - Abay Repository{% endblock %}
+
+{% block extra_css %}
+<style>
+    .pending-container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    .btn-gold {
+        background: linear-gradient(135deg, #DAA520, #B8860B);
+        color: #1A1A1A;
+        border: none;
+        padding: 8px 20px;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    .btn-gold:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(218, 165, 32, 0.4);
+        color: #1A1A1A;
+    }
+    .btn-outline-gold {
+        border: 2px solid #DAA520;
+        color: #DAA520;
+        background: transparent;
+        font-weight: 600;
+        padding: 8px 20px;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+    }
+    .btn-outline-gold:hover {
+        background: #DAA520;
+        color: #1A1A1A;
+        transform: translateY(-2px);
+    }
+    .status-badge {
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+    .status-checker_approved {
+        background: #6f42c1;
+        color: white;
+    }
+    .status-published {
+        background: #28a745;
+        color: white;
+    }
+    .table thead {
+        background: #1A1A1A;
+        color: white;
+    }
+    .table th {
+        padding: 1rem;
+    }
+    .table td {
+        padding: 1rem;
+        vertical-align: middle;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="pending-container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>
+                <i class="fas fa-clock me-2" style="color: #DAA520;"></i>
+                Books Pending Approval
+            </h2>
+            <a href="{% url 'books:maker_dashboard' %}" class="btn btn-outline-gold">
+                <i class="fas fa-arrow-left me-2"></i> Back to Dashboard
+            </a>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table mb-0">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Title</th>
+                                <th>Author</th>
+                                <th>Genre</th>
+                                <th>Quality Score</th>
+                                <th>Checker</th>
+                                <th>Reviewed Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for book in books %}
+                            <tr>
+                                <td>#{{ book.id }}</td>
+                                <td>
+                                    <strong>{{ book.title|truncatechars:40 }}</strong>
+                                    <br>
+                                    <small class="text-muted">ISBN: {{ book.isbn|default:"N/A" }}</small>
+                                </td>
+                                <td>{{ book.author.full_name|default:"Unknown" }}</td>
+                                <td>{{ book.genre.name|default:"Uncategorized" }}</td>
+                                <td>
+                                    {% if book.checker_score %}
+                                        <span class="badge bg-success">{{ book.checker_score|floatformat:1 }}/10</span>
+                                    {% else %}
+                                        <span class="text-muted">Pending</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ book.checker_assigned.full_name|default:"Not assigned" }}</td>
+                                <td>{{ book.checker_reviewed_at|date:"M d, Y"|default:"-" }}</td>
+                                <td>
+                                    <div class="btn-group">
+                                        <a href="{% url 'books:detail' book.id %}" class="btn btn-sm btn-outline-gold" title="View Details">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="{% url 'books:maker_publish_book' book.id %}" class="btn btn-sm btn-gold" title="Publish Book">
+                                            <i class="fas fa-check-circle"></i> Publish
+                                        </a>
+                                        <a href="{% url 'books:maker_reject_book' book.id %}" class="btn btn-sm btn-danger" title="Reject or Send for Revision">
+                                            <i class="fas fa-times-circle"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="8" class="text-center py-5">
+                                    <i class="fas fa-check-circle fa-3x text-success mb-3 d-block"></i>
+                                    <h5>No Books Pending Approval</h5>
+                                    <p class="text-muted">All books have been published or processed.</p>
+                                    <a href="{% url 'books:maker_dashboard' %}" class="btn btn-gold mt-2">
+                                        <i class="fas fa-arrow-left me-2"></i> Go to Dashboard
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,437 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Submit Review — {{ assignment.book.title }} | Abay Repository{% endblock %}
+
+{% block extra_css %}
+<style>
+    :root {
+        --primary-gold: #DAA520;
+        --primary-gold-dark: #B8860B;
+        --primary-darker: #1A1A1A;
+        --primary-dark: #2C2C2C;
+        --success-green: #28a745;
+        --danger-red: #dc3545;
+        --info-blue: #17a2b8;
+        --warning-yellow: #ffc107;
+    }
+
+    .page-header {
+        background: linear-gradient(135deg, var(--primary-darker) 0%, var(--primary-dark) 100%);
+        border-radius: 20px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        color: white;
+        position: relative;
+        overflow: hidden;
+    }
+    .page-header::before {
+        content: '';
+        position: absolute;
+        top: -50%; right: -50%;
+        width: 200%; height: 200%;
+        background: radial-gradient(circle, rgba(218,165,32,0.08) 0%, transparent 70%);
+    }
+
+    .info-card {
+        background: white;
+        border-radius: 16px;
+        padding: 1.5rem;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        border-left: 4px solid var(--primary-gold);
+        margin-bottom: 1.5rem;
+    }
+
+    .form-card {
+        background: white;
+        border-radius: 16px;
+        padding: 2rem;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        margin-bottom: 1.5rem;
+    }
+
+    .score-row {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    .score-row:last-child { border-bottom: none; }
+    .score-label { flex: 0 0 200px; font-weight: 500; }
+    .score-stars { display: flex; gap: 0.4rem; }
+    .star-btn {
+        width: 36px; height: 36px;
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        background: white;
+        cursor: pointer;
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: var(--primary-darker);
+        transition: all 0.2s ease;
+        display: flex; align-items: center; justify-content: center;
+    }
+    .star-btn:hover, .star-btn.active {
+        background: var(--primary-gold);
+        border-color: var(--primary-gold);
+        color: white;
+    }
+    .score-value { min-width: 30px; font-weight: 700; color: var(--primary-gold); }
+
+    .recommendation-card {
+        border: 2px solid #e9ecef;
+        border-radius: 12px;
+        padding: 1rem 1.25rem;
+        cursor: pointer;
+        transition: all 0.25s ease;
+        margin-bottom: 0.75rem;
+    }
+    .recommendation-card:hover { transform: translateY(-2px); }
+    .recommendation-card.accept { border-left: 5px solid var(--success-green); }
+    .recommendation-card.accept:hover, .recommendation-card.accept.selected { border-color: var(--success-green); background: rgba(40,167,69,0.06); }
+    .recommendation-card.minor_revision { border-left: 5px solid var(--warning-yellow); }
+    .recommendation-card.minor_revision:hover, .recommendation-card.minor_revision.selected { border-color: var(--warning-yellow); background: rgba(255,193,7,0.06); }
+    .recommendation-card.major_revision { border-left: 5px solid #fd7e14; }
+    .recommendation-card.major_revision:hover, .recommendation-card.major_revision.selected { border-color: #fd7e14; background: rgba(253,126,20,0.06); }
+    .recommendation-card.reject { border-left: 5px solid var(--danger-red); }
+    .recommendation-card.reject:hover, .recommendation-card.reject.selected { border-color: var(--danger-red); background: rgba(220,53,69,0.06); }
+
+    .btn-gold {
+        background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark));
+        color: var(--primary-darker);
+        border: none;
+        font-weight: 600;
+        padding: 10px 28px;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+    }
+    .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(218,165,32,0.4); color: var(--primary-darker); }
+
+    .btn-outline-gold {
+        border: 2px solid var(--primary-gold);
+        color: var(--primary-gold);
+        background: transparent;
+        font-weight: 600;
+        padding: 10px 28px;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+    }
+    .btn-outline-gold:hover { background: var(--primary-gold); color: var(--primary-darker); transform: translateY(-2px); }
+
+    .form-control:focus, .form-select:focus {
+        border-color: var(--primary-gold);
+        box-shadow: 0 0 0 0.2rem rgba(218,165,32,0.25);
+    }
+
+    .due-badge {
+        display: inline-block;
+        padding: 0.3rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+
+    @media (max-width: 768px) {
+        .score-row { flex-direction: column; align-items: flex-start; }
+        .score-label { flex: none; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4 mb-5">
+
+    <!-- Header -->
+    <div class="page-header">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="mb-1">
+                    <i class="fas fa-pen-alt me-2" style="color: var(--primary-gold);"></i>
+                    Submit Review
+                </h1>
+                <p class="mb-0 opacity-75">
+                    Reviewing: <strong>{{ assignment.book.title }}</strong>
+                </p>
+            </div>
+            <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                <a href="{% url 'books:checker_dashboard' %}" class="btn btn-outline-gold">
+                    <i class="fas fa-arrow-left me-2"></i> Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Left: Book info + instructions -->
+        <div class="col-lg-4">
+            <div class="info-card">
+                <h6 class="text-muted text-uppercase small fw-bold mb-3">Manuscript</h6>
+                <h5 class="mb-1">{{ assignment.book.title }}</h5>
+                <p class="text-muted small mb-3">by {{ assignment.book.author.full_name|default:assignment.book.author.username }}</p>
+
+                <div class="mb-2">
+                    <i class="fas fa-tag me-1 text-muted"></i>
+                    {{ assignment.book.genre.name|default:"Uncategorized" }}
+                </div>
+                <div class="mb-2">
+                    <i class="fas fa-language me-1 text-muted"></i>
+                    {{ assignment.book.language|default:"English" }}
+                </div>
+                <div class="mb-2">
+                    <i class="fas fa-calendar-alt me-1 text-muted"></i>
+                    Due: <span class="{% if assignment.is_overdue %}text-danger fw-bold{% endif %}">
+                        {{ assignment.due_date|date:"M d, Y H:i" }}
+                    </span>
+                </div>
+
+                {% if assignment.is_overdue %}
+                    <div class="alert alert-danger p-2 mt-2 small">
+                        <i class="fas fa-exclamation-triangle me-1"></i> This review is overdue.
+                    </div>
+                {% endif %}
+
+                <div class="mt-3">
+                    <a href="{% url 'books:detail' assignment.book.id %}" class="btn btn-outline-gold btn-sm w-100" target="_blank">
+                        <i class="fas fa-eye me-2"></i>Read Manuscript
+                    </a>
+                </div>
+            </div>
+
+            {% if assignment.instructions %}
+            <div class="info-card" style="border-left-color: var(--info-blue);">
+                <h6 class="text-muted text-uppercase small fw-bold mb-2">
+                    <i class="fas fa-info-circle me-1" style="color:var(--info-blue);"></i>
+                    Maker's Instructions
+                </h6>
+                <p class="small mb-0">{{ assignment.instructions }}</p>
+            </div>
+            {% endif %}
+
+            <!-- Scoring guide -->
+            <div class="info-card" style="border-left-color: #6c757d;">
+                <h6 class="text-muted text-uppercase small fw-bold mb-3">Score Guide</h6>
+                <div class="small">
+                    <div class="d-flex justify-content-between mb-1"><span><strong>5</strong> — Excellent</span></div>
+                    <div class="d-flex justify-content-between mb-1"><span><strong>4</strong> — Good</span></div>
+                    <div class="d-flex justify-content-between mb-1"><span><strong>3</strong> — Average</span></div>
+                    <div class="d-flex justify-content-between mb-1"><span><strong>2</strong> — Below average</span></div>
+                    <div class="d-flex justify-content-between"><span><strong>1</strong> — Poor</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right: Review form -->
+        <div class="col-lg-8">
+            <form method="POST" enctype="multipart/form-data" id="reviewForm">
+                {% csrf_token %}
+
+                <!-- Quality Scores -->
+                <div class="form-card">
+                    <h5 class="mb-4">
+                        <i class="fas fa-star me-2" style="color:var(--primary-gold);"></i>
+                        Quality Scores
+                    </h5>
+
+                    {% for field_name, label in scores %}
+                    <div class="score-row">
+                        <div class="score-label">{{ label }}</div>
+                        <div class="score-stars" data-field="{{ field_name }}">
+                            {% for i in "12345" %}
+                            <button type="button"
+                                    class="star-btn"
+                                    data-value="{{ forloop.counter }}"
+                                    onclick="setScore('{{ field_name }}', {{ forloop.counter }})">
+                                {{ forloop.counter }}
+                            </button>
+                            {% endfor %}
+                        </div>
+                        <span class="score-value" id="val-{{ field_name }}">—</span>
+                        <input type="hidden" name="{{ field_name }}" id="{{ field_name }}" value="">
+                    </div>
+                    {% endfor %}
+
+                    <!-- Overall score (auto-calculated) -->
+                    <div class="score-row mt-2" style="background:#f8f9fa;padding:.75rem;border-radius:8px;">
+                        <div class="score-label"><strong>Overall Score</strong> <small class="text-muted">(auto)</small></div>
+                        <div class="flex-grow-1">
+                            <div class="progress" style="height:8px;">
+                                <div class="progress-bar bg-warning" id="overallBar" style="width:0%"></div>
+                            </div>
+                        </div>
+                        <span class="score-value fw-bold" id="overallScore">—</span>
+                        <input type="hidden" name="overall_score" id="overall_score" value="">
+                    </div>
+                </div>
+
+                <!-- Recommendation -->
+                <div class="form-card">
+                    <h5 class="mb-4">
+                        <i class="fas fa-thumbs-up me-2" style="color:var(--primary-gold);"></i>
+                        Recommendation <span class="text-danger">*</span>
+                    </h5>
+                    <input type="hidden" name="recommendation" id="recommendation" required>
+
+                    <div class="recommendation-card accept" onclick="setRecommendation('accept', this)">
+                        <div class="form-check mb-0">
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="fas fa-check-circle text-success fa-lg"></i>
+                                <div>
+                                    <strong>Accept</strong>
+                                    <p class="text-muted small mb-0">The manuscript meets quality standards and is ready for publication.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="recommendation-card minor_revision" onclick="setRecommendation('minor_revision', this)">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="fas fa-pencil-alt text-warning fa-lg"></i>
+                            <div>
+                                <strong>Minor Revision</strong>
+                                <p class="text-muted small mb-0">Small corrections needed — can be accepted after revisions.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="recommendation-card major_revision" onclick="setRecommendation('major_revision', this)">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="fas fa-tools" style="color:#fd7e14;" ></i>
+                            <div class="ms-1">
+                                <strong>Major Revision</strong>
+                                <p class="text-muted small mb-0">Significant improvements needed before publication can be considered.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="recommendation-card reject" onclick="setRecommendation('reject', this)">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="fas fa-times-circle text-danger fa-lg"></i>
+                            <div>
+                                <strong>Reject</strong>
+                                <p class="text-muted small mb-0">The manuscript does not meet minimum quality standards.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Comments -->
+                <div class="form-card">
+                    <h5 class="mb-4">
+                        <i class="fas fa-comment-alt me-2" style="color:var(--primary-gold);"></i>
+                        Review Comments
+                    </h5>
+
+                    <div class="mb-4">
+                        <label for="overall_comment" class="form-label fw-semibold">
+                            Overall Assessment <span class="text-danger">*</span>
+                        </label>
+                        <textarea class="form-control" id="overall_comment" name="overall_comment" rows="5"
+                                  placeholder="Provide a comprehensive assessment of the manuscript…" required></textarea>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="author_visible_comments" class="form-label fw-semibold">
+                            Comments for Author
+                        </label>
+                        <textarea class="form-control" id="author_visible_comments" name="author_visible_comments" rows="4"
+                                  placeholder="Constructive feedback the author will see. Be specific and helpful."></textarea>
+                        <div class="form-text">These comments will be shared with the author.</div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="required_corrections" class="form-label fw-semibold">
+                            Required Corrections
+                        </label>
+                        <textarea class="form-control" id="required_corrections" name="required_corrections" rows="3"
+                                  placeholder="List specific corrections the author must make (if any)."></textarea>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="internal_comments" class="form-label fw-semibold">
+                            Internal Notes <small class="text-muted">(not shown to author)</small>
+                        </label>
+                        <textarea class="form-control" id="internal_comments" name="internal_comments" rows="3"
+                                  placeholder="Notes for the editorial team only."></textarea>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="annotated_file" class="form-label fw-semibold">
+                            Annotated File <small class="text-muted">(optional)</small>
+                        </label>
+                        <input type="file" class="form-control" id="annotated_file" name="annotated_file"
+                               accept=".pdf,.doc,.docx">
+                        <div class="form-text">Upload an annotated version of the manuscript if applicable.</div>
+                    </div>
+
+                    <div class="d-flex gap-3">
+                        <button type="submit" class="btn btn-gold" id="submitBtn">
+                            <i class="fas fa-paper-plane me-2"></i>Submit Review
+                        </button>
+                        <a href="{% url 'books:checker_dashboard' %}" class="btn btn-outline-gold">
+                            <i class="fas fa-save me-2"></i>Save & Return Later
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+const scoreFields = ['content_quality','originality','completeness','structure','language_quality','technical_quality'];
+
+function setScore(field, value) {
+    // Update hidden input
+    document.getElementById(field).value = value;
+    document.getElementById('val-' + field).textContent = value + '/5';
+
+    // Highlight buttons
+    const stars = document.querySelectorAll(`[data-field="${field}"] .star-btn`);
+    stars.forEach(btn => {
+        btn.classList.toggle('active', parseInt(btn.dataset.value) <= value);
+    });
+
+    updateOverall();
+}
+
+function updateOverall() {
+    const vals = scoreFields.map(f => parseInt(document.getElementById(f).value) || 0);
+    const filled = vals.filter(v => v > 0);
+    if (filled.length === 0) return;
+    const avg = filled.reduce((a, b) => a + b, 0) / filled.length;
+    const rounded = Math.round(avg * 10) / 10;
+    document.getElementById('overallScore').textContent = rounded + '/5';
+    document.getElementById('overall_score').value = Math.round(avg);
+    document.getElementById('overallBar').style.width = (avg / 5 * 100) + '%';
+}
+
+function setRecommendation(value, el) {
+    document.querySelectorAll('.recommendation-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    document.getElementById('recommendation').value = value;
+}
+
+document.getElementById('reviewForm').addEventListener('submit', function(e) {
+    const rec = document.getElementById('recommendation').value;
+    if (!rec) {
+        e.preventDefault();
+        alert('Please select a recommendation before submitting.');
+        return;
+    }
+    const comment = document.getElementById('overall_comment').value.trim();
+    if (!comment) {
+        e.preventDefault();
+        alert('Please provide an overall assessment comment.');
+        document.getElementById('overall_comment').focus();
+        return;
+    }
+});
+</script>
+{% endblock %}
+{% endblock %}
+
+{% block extra_context %}
+{% comment %}Pass score fields from view via context{% endcomment %}
+{% endblock %}

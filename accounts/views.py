@@ -1,4 +1,4 @@
-# accounts/views.py
+# accounts/views.py - Updated with logging
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -29,11 +29,12 @@ from cryptography.hazmat.primitives.asymmetric import rsa
 
 from .forms import LoginForm, ClientRegistrationForm, AuthorRegistrationForm
 from .models import CustomUser, AuthorProfile, ClientProfile
-from books.models import Book, Genre
+from books.models import Book, Genre, BookReview
 from reviews.models import QualityReview
 
 # Set up logger
 logger = logging.getLogger(__name__)
+
 
 # ============================================
 # FAYDA OIDC HELPERS
@@ -127,30 +128,23 @@ def generate_pkce():
 
 
 def process_fayda_picture(picture_data):
-    """
-    Process and normalize Fayda picture data.
-    Returns a properly formatted data URL or None.
-    """
+    """Process and normalize Fayda picture data."""
     if not picture_data:
         logger.warning("No picture data provided")
         return None
     
     logger.info(f"Processing picture data, type: {type(picture_data)}")
     
-    # If it's already a valid data URL, return it
     if isinstance(picture_data, str) and picture_data.startswith('data:image') and ';base64,' in picture_data:
-        # Validate it has actual data after the comma
         try:
             header, data = picture_data.split(',', 1)
             if data and len(data) > 10:
-                # Try to decode to ensure it's valid base64
                 base64.b64decode(data)
                 logger.info("Picture is a valid data URL")
                 return picture_data
         except Exception as e:
             logger.error(f"Invalid data URL: {str(e)}")
     
-    # If it's a URL, try to download and convert
     if isinstance(picture_data, str) and picture_data.startswith(('http://', 'https://')):
         logger.info(f"Picture is a URL, downloading...")
         try:
@@ -166,16 +160,11 @@ def process_fayda_picture(picture_data):
         except Exception as e:
             logger.error(f"Error downloading picture: {str(e)}")
     
-    # Try to decode as base64
     if isinstance(picture_data, str):
         try:
-            # Clean the string
             cleaned_data = re.sub(r'\s+', '', picture_data)
-            
-            # Check if it's valid base64
             image_data = base64.b64decode(cleaned_data)
             if image_data and len(image_data) > 100:
-                # Determine image type
                 mime_type = 'image/jpeg'
                 if len(image_data) >= 4:
                     if image_data[:4] in [b'\xff\xd8\xff\xe0', b'\xff\xd8\xff\xe1']:
@@ -193,9 +182,7 @@ def process_fayda_picture(picture_data):
         except Exception as e:
             logger.error(f"Error decoding base64: {str(e)}")
     
-    # If it's a string that looks like base64
     if isinstance(picture_data, str) and len(picture_data) > 50:
-        # Check if it's mostly base64 characters
         if re.match(r'^[A-Za-z0-9+/=]+$', picture_data[:50]):
             try:
                 image_data = base64.b64decode(picture_data)
@@ -206,14 +193,12 @@ def process_fayda_picture(picture_data):
             except Exception as e:
                 logger.error(f"Error decoding raw base64: {str(e)}")
     
-    # If picture_data is a dict, try to extract picture
     if isinstance(picture_data, dict):
         for key in ['picture', 'image', 'photo', 'profile_picture', 'url', 'value']:
             if key in picture_data and picture_data[key]:
                 logger.info(f"Found picture in dict key: {key}")
                 return process_fayda_picture(picture_data[key])
     
-    # If it's a list, try to get first item
     if isinstance(picture_data, list) and picture_data:
         logger.info("Picture is a list, using first item")
         return process_fayda_picture(picture_data[0])
@@ -223,34 +208,27 @@ def process_fayda_picture(picture_data):
 
 
 def validate_picture_data_url(data_url):
-    """
-    Validate that a string is a properly formatted data URL.
-    Returns True if valid, False otherwise.
-    """
+    """Validate that a string is a properly formatted data URL."""
     if not data_url or not isinstance(data_url, str):
         return False
     
-    # Check if it starts with the correct prefix
     if not data_url.startswith('data:image'):
         logger.warning(f"Invalid data URL prefix")
         return False
     
-    # Check if it contains the base64 marker
     if ';base64,' not in data_url:
         logger.warning(f"Missing base64 marker in data URL")
         return False
     
-    # Split and check if there's data after the comma
     try:
         header, data = data_url.split(',', 1)
         if not data or len(data) < 10:
             logger.warning("No data or too short after comma in data URL")
             return False
         
-        # Try to decode the base64 data
         try:
             decoded = base64.b64decode(data)
-            if len(decoded) < 100:  # Too small to be a valid image
+            if len(decoded) < 100:
                 logger.warning(f"Decoded image too small: {len(decoded)} bytes")
                 return False
             logger.info(f"Valid data URL with {len(decoded)} bytes of image data")
@@ -265,10 +243,7 @@ def validate_picture_data_url(data_url):
 
 
 def save_fayda_picture(user, picture_data):
-    """
-    Save the Fayda profile picture to the user's profile.
-    Returns True if successful, False otherwise.
-    """
+    """Save the Fayda profile picture to the user's profile."""
     if not picture_data:
         logger.info("No picture data provided to save")
         return False
@@ -276,19 +251,16 @@ def save_fayda_picture(user, picture_data):
     logger.info(f"Attempting to save picture for user {user.username}")
     
     try:
-        # Process the picture to get a clean data URL
         processed_picture = process_fayda_picture(picture_data)
         
         if not processed_picture:
             logger.warning("Could not process picture data")
             return False
         
-        # Validate the processed picture
         if not validate_picture_data_url(processed_picture):
             logger.warning("Processed picture failed validation")
             return False
         
-        # Extract the actual image data from the data URL
         try:
             header, encoded = processed_picture.split(',', 1)
             image_data = base64.b64decode(encoded)
@@ -297,7 +269,6 @@ def save_fayda_picture(user, picture_data):
                 logger.error("No image data after decoding")
                 return False
             
-            # Determine file extension
             mime_type = header.split(':')[1].split(';')[0]
             extension = 'jpg'
             if 'jpeg' in mime_type or 'jpg' in mime_type:
@@ -309,12 +280,9 @@ def save_fayda_picture(user, picture_data):
             elif 'webp' in mime_type:
                 extension = 'webp'
             
-            # Create a unique filename
             filename = f"fayda_{user.username}_{uuid.uuid4().hex[:8]}.{extension}"
             
-            # Save to user profile
             if hasattr(user, 'profile_image'):
-                # Delete old image if exists
                 if user.profile_image:
                     try:
                         user.profile_image.delete(save=False)
@@ -411,15 +379,52 @@ def role_based_redirect(user):
         'admin': 'accounts:admin_dashboard',
         'finance': 'accounts:finance_dashboard',
         'author': 'accounts:author_dashboard',
-        'checker': 'accounts:checker_dashboard',
-        'maker': 'accounts:maker_dashboard',
+        'checker': 'books:checker_dashboard',
+        'maker': 'books:maker_dashboard',
         'client': 'accounts:client_dashboard',
     }
     return role_redirects.get(user.role, 'accounts:client_dashboard')
 
 
 # ============================================
-# ACCOUNT VIEWS
+# HOME VIEW WITH DATABASE STATISTICS
+# ============================================
+
+def home_view(request):
+    """Home page view with statistics from database"""
+    from django.db.models import Sum
+    from books.models import Book, Genre
+    from accounts.models import CustomUser
+    
+    # Get statistics from database
+    total_books = Book.objects.filter(status='published').count()
+    total_readers = CustomUser.objects.filter(role='client', is_active=True).count()
+    total_authors = CustomUser.objects.filter(role='author', is_active=True).count()
+    total_downloads = Book.objects.filter(status='published').aggregate(
+        total=Sum('downloads_count')
+    )['total'] or 0
+    
+    # Get featured books
+    featured_books = Book.objects.filter(
+        status='published'
+    ).select_related('author').order_by('-downloads_count', '-created_at')[:8]
+    
+    # Get genres
+    genres = Genre.objects.filter(is_active=True)[:10]
+    
+    context = {
+        'total_books': total_books,
+        'total_readers': total_readers,
+        'total_authors': total_authors,
+        'total_downloads': total_downloads,
+        'featured_books': featured_books,
+        'genres': genres,
+    }
+    return render(request, 'home.html', context)
+
+
+# ============================================
+# ACCOUNT VIEWS - UPDATED WITH LOGGING
 # ============================================
 
 @sensitive_post_parameters()
@@ -432,7 +437,7 @@ def login_view(request):
     
     client_ip = get_client_ip(request)
     if is_ip_blocked(client_ip):
-        logger.warning(f"Blocked IP attempted login: {client_ip}")
+        logger.warning(f"AUTH - Blocked IP attempted login: {client_ip}")
         messages.error(request, 'Too many failed login attempts. Please try again later.')
         return render(request, 'accounts/login.html', {'form': LoginForm()})
     
@@ -445,6 +450,7 @@ def login_view(request):
             
             attempts = get_login_attempts(client_ip)
             if attempts >= 5:
+                logger.warning(f"AUTH - Too many attempts for {username} from {client_ip}")
                 messages.error(request, f'Too many failed attempts. Please wait {30 - (attempts - 5) * 3} minutes.')
                 return render(request, 'accounts/login.html', {'form': form})
             
@@ -452,27 +458,24 @@ def login_view(request):
             
             if user is not None and user.is_active:
                 reset_login_attempts(client_ip)
-                
-                if user.two_factor_enabled:
-                    request.session['pre_2fa_user_id'] = user.id
-                    request.session['pre_2fa_remember'] = remember
-                    messages.warning(request, '2FA is not fully implemented yet. Please contact support.')
-                    login(request, user)
-                    messages.success(request, f'Welcome back, {user.full_name}!')
-                    return redirect(role_based_redirect(user))
+                login(request, user)
+                if not remember:
+                    request.session.set_expiry(0)
                 else:
-                    login(request, user)
-                    if not remember:
-                        request.session.set_expiry(0)
-                    else:
-                        request.session.set_expiry(1209600)
-                    logger.info(f"Successful login: User={username}, IP={client_ip}")
-                    messages.success(request, f'Welcome back, {user.full_name}!')
-                    return redirect(role_based_redirect(user))
+                    request.session.set_expiry(1209600)
+                
+                # Log successful login
+                logger.info(f"AUTH - Login successful: User={username}, IP={client_ip}, Role={user.role}")
+                
+                messages.success(request, f'Welcome back, {user.full_name}!')
+                return redirect(role_based_redirect(user))
             else:
                 attempts = increment_login_attempts(client_ip)
                 remaining = 5 - attempts
-                logger.warning(f"Failed login attempt: Username={username}, IP={client_ip}, Attempts={attempts}")
+                
+                # Log failed login
+                logger.warning(f"AUTH - Login failed: Username={username}, IP={client_ip}, Attempts={attempts}")
+                
                 if remaining <= 0:
                     messages.error(request, 'Too many failed attempts. Please try again later.')
                 else:
@@ -490,7 +493,10 @@ def logout_view(request):
     if request.user.is_authenticated:
         username = request.user.username
         client_ip = get_client_ip(request)
-        logger.info(f"User logged out: {username}, IP={client_ip}")
+        
+        # Log logout
+        logger.info(f"AUTH - User logged out: {username}, IP={client_ip}")
+        
         request.session.flush()
         logout(request)
         messages.info(request, 'You have been logged out successfully.')
@@ -515,7 +521,10 @@ def register_view(request):
         elif form.is_valid():
             user = form.save()
             client_ip = get_client_ip(request)
-            logger.info(f"New user registered: {user.username}, IP={client_ip}")
+            
+            # Log registration
+            logger.info(f"AUTH - New user registered: {user.username}, IP={client_ip}, Role=client")
+            
             login(request, user)
             messages.success(request, f'Welcome to Abrehot Library, {user.full_name}!')
             return redirect(role_based_redirect(user))
@@ -531,9 +540,7 @@ def register_view(request):
 @ensure_csrf_cookie
 @never_cache
 def register_author(request):
-    """
-    Author registration view with Fayda verification requirement.
-    """
+    """Author registration view with Fayda verification requirement."""
     if request.user.is_authenticated:
         return redirect(role_based_redirect(request.user))
 
@@ -543,13 +550,11 @@ def register_author(request):
     
     logger.info(f"Register author - verified: {is_verified}")
     
-    # Process the picture for display if it exists
     display_picture = ''
     if stored_picture:
         display_picture = stored_picture
         logger.info(f"Using stored_picture for display, length: {len(stored_picture)}")
     elif verified_data and verified_data.get('picture'):
-        # Process the picture and store it in session for display
         raw_picture = verified_data.get('picture')
         logger.info(f"Processing picture from verified_data, type: {type(raw_picture)}")
         
@@ -582,9 +587,10 @@ def register_author(request):
             try:
                 user = form.save()
                 client_ip = get_client_ip(request)
-                logger.info(f"New author registered: {user.username}, IP={client_ip}")
                 
-                # Save the Fayda picture if available
+                # Log author registration
+                logger.info(f"AUTH - New author registered: {user.username}, IP={client_ip}")
+                
                 picture_to_save = display_picture or stored_picture
                 if picture_to_save:
                     logger.info("Attempting to save Fayda picture")
@@ -592,7 +598,6 @@ def register_author(request):
                 
                 login(request, user)
                 
-                # Clean up session
                 request.session.pop('fayda_verified_data', None)
                 request.session.pop('fayda_verified', None)
                 request.session.pop('fayda_picture', None)
@@ -634,7 +639,7 @@ def register_author(request):
     context = {
         'form': form,
         'verified_data': verified_data,
-        'fayda_picture': display_picture,  # Pass the processed picture to template
+        'fayda_picture': display_picture,
         'debug': settings.DEBUG,
         'verification_required': False,
     }
@@ -653,6 +658,7 @@ def dashboard_redirect(request):
 @login_required
 def setup_2fa(request):
     """Setup Two-Factor Authentication - Placeholder"""
+    logger.info(f"2FA setup accessed by user: {request.user.username}")
     messages.info(request, '2FA setup feature is coming soon.')
     return redirect('accounts:profile')
 
@@ -660,6 +666,7 @@ def setup_2fa(request):
 @login_required
 def verify_2fa(request):
     """Verify Two-Factor Authentication - Placeholder"""
+    logger.info(f"2FA verification accessed by user: {request.user.username}")
     messages.info(request, '2FA verification feature is coming soon.')
     return redirect('accounts:profile')
 
@@ -667,6 +674,7 @@ def verify_2fa(request):
 @login_required
 def disable_2fa(request):
     """Disable Two-Factor Authentication - Placeholder"""
+    logger.info(f"2FA disable accessed by user: {request.user.username}")
     messages.info(request, '2FA disable feature is coming soon.')
     return redirect('accounts:profile')
 
@@ -674,19 +682,18 @@ def disable_2fa(request):
 @login_required
 def backup_codes(request):
     """View backup codes for 2FA - Placeholder"""
+    logger.info(f"2FA backup codes accessed by user: {request.user.username}")
     messages.info(request, '2FA backup codes feature is coming soon.')
     return redirect('accounts:profile')
 
 
 # ============================================
-# FAYDA OIDC VIEWS
+# FAYDA OIDC VIEWS - UPDATED WITH LOGGING
 # ============================================
 
 @csrf_exempt
 def oidc_initiate(request):
-    """
-    Initiate OIDC flow with Fayda eSignet.
-    """
+    """Initiate OIDC flow with Fayda eSignet."""
     if request.method != 'POST':
         return JsonResponse({
             'success': False,
@@ -698,6 +705,8 @@ def oidc_initiate(request):
         national_id = data.get('national_id')
         state = data.get('state')
         nonce = data.get('nonce')
+        
+        logger.info(f"OIDC Initiate - National ID: {national_id[:4] if national_id else 'None'}****")
         
         if not national_id:
             return JsonResponse({
@@ -797,9 +806,7 @@ def oidc_initiate(request):
 
 @csrf_exempt
 def oidc_callback(request):
-    """
-    Handle OIDC callback from Fayda - API endpoint for frontend JavaScript.
-    """
+    """Handle OIDC callback from Fayda - API endpoint for frontend JavaScript."""
     if request.method != 'POST':
         return JsonResponse({
             'success': False,
@@ -832,6 +839,7 @@ def oidc_callback(request):
         private_key_b64 = getattr(settings, 'FAYDA_PRIVATE_KEY_B64', None)
         
         if not all([client_id, token_url, userinfo_url, redirect_uri, private_key_b64]):
+            logger.error("Fayda configuration missing")
             return JsonResponse({
                 'success': False,
                 'message': 'Fayda is not properly configured.'
@@ -841,6 +849,7 @@ def oidc_callback(request):
         signed_jwt = generate_signed_jwt(client_id, token_url, private_key_b64)
         
         if not signed_jwt:
+            logger.error("Failed to generate signed JWT")
             return JsonResponse({
                 'success': False,
                 'message': 'Failed to generate client assertion.'
@@ -878,6 +887,7 @@ def oidc_callback(request):
         access_token = token_data.get('access_token')
         
         if not access_token:
+            logger.error("No access token received from Fayda")
             return JsonResponse({
                 'success': False,
                 'message': 'No access token received from Fayda.'
@@ -918,7 +928,6 @@ def oidc_callback(request):
         
         logger.info(f"Decoded userinfo keys: {list(decoded_user_info.keys())}")
         
-        # Extract date of birth
         dob = ''
         possible_dob_fields = ['birthdate', 'date_of_birth', 'dob', 'birthDate', 'birth_date']
         for field in possible_dob_fields:
@@ -933,7 +942,6 @@ def oidc_callback(request):
             else:
                 dob = str(dob)
         
-        # Extract gender
         gender = ''
         possible_gender_fields = ['gender', 'sex', 'gender_code', 'genderCode']
         for field in possible_gender_fields:
@@ -945,7 +953,6 @@ def oidc_callback(request):
         if gender is not None:
             gender = str(gender)
         
-        # Extract and process picture - CRITICAL: Get the raw picture and process it
         picture = ''
         picture_original = decoded_user_info.get('picture', '')
         
@@ -954,10 +961,8 @@ def oidc_callback(request):
             if isinstance(picture_original, str):
                 logger.info(f"Original picture preview: {picture_original[:200]}...")
             
-            # Process the picture
             processed_picture = process_fayda_picture(picture_original)
             if processed_picture:
-                # Validate the processed picture
                 if validate_picture_data_url(processed_picture):
                     picture = processed_picture
                     logger.info(f"Picture processed successfully, length: {len(picture)}")
@@ -984,24 +989,23 @@ def oidc_callback(request):
         
         logger.info(f"Picture stored in user_data: {bool(picture)}")
         
-        # Store in session
         request.session['fayda_verified_data'] = user_data
         request.session['fayda_verified'] = True
         
-        # Store picture separately for template access
         if picture:
             request.session['fayda_picture'] = picture
             logger.info("Picture stored in session['fayda_picture']")
         else:
-            # Remove any existing picture from session
             request.session.pop('fayda_picture', None)
             logger.warning("No picture to store in session")
         
-        # Clean up
         request.session.pop('fayda_state', None)
         request.session.pop('fayda_national_id', None)
         request.session.pop('fayda_nonce', None)
         request.session.pop('fayda_code_verifier', None)
+        
+        # Log successful verification
+        logger.info(f"OIDC - Fayda verification successful for national ID: {user_data['national_id'][:4]}****")
         
         return JsonResponse({
             'success': True,
@@ -1011,11 +1015,13 @@ def oidc_callback(request):
         })
         
     except requests.exceptions.Timeout:
+        logger.error("Fayda service timeout")
         return JsonResponse({
             'success': False,
             'message': 'Fayda service timeout. Please try again.'
         }, status=503)
     except requests.exceptions.ConnectionError:
+        logger.error("Could not connect to Fayda service")
         return JsonResponse({
             'success': False,
             'message': 'Could not connect to Fayda service. Please try again later.'
@@ -1038,10 +1044,7 @@ def oidc_callback(request):
 
 @csrf_exempt
 def oidc_callback_view(request):
-    """
-    Handle OIDC callback from Fayda via GET request.
-    This is the endpoint that Fayda redirects to after authentication.
-    """
+    """Handle OIDC callback from Fayda via GET request."""
     code = request.GET.get('code')
     state = request.GET.get('state')
     error = request.GET.get('error')
@@ -1057,10 +1060,12 @@ def oidc_callback_view(request):
         return redirect('accounts:register_author')
     
     if not code:
+        logger.warning("Authorization code not provided in callback")
         messages.error(request, 'Authorization code not provided.')
         return redirect('accounts:register_author')
     
     if not state:
+        logger.warning("State parameter not provided in callback")
         messages.error(request, 'State parameter not provided.')
         return redirect('accounts:register_author')
     
@@ -1086,6 +1091,7 @@ def oidc_callback_view(request):
         signed_jwt = generate_signed_jwt(client_id, token_url, private_key_b64)
         
         if not signed_jwt:
+            logger.error("Failed to generate signed JWT")
             messages.error(request, 'Failed to generate authentication token.')
             return redirect('accounts:register_author')
         
@@ -1120,6 +1126,7 @@ def oidc_callback_view(request):
         access_token = token_data.get('access_token')
         
         if not access_token:
+            logger.error("No access token received from Fayda")
             messages.error(request, 'No access token received from Fayda.')
             return redirect('accounts:register_author')
         
@@ -1155,7 +1162,6 @@ def oidc_callback_view(request):
         
         logger.info(f"Decoded userinfo keys: {list(decoded_user_info.keys())}")
         
-        # Extract date of birth
         dob = ''
         possible_dob_fields = ['birthdate', 'date_of_birth', 'dob', 'birthDate', 'birth_date']
         for field in possible_dob_fields:
@@ -1170,7 +1176,6 @@ def oidc_callback_view(request):
             else:
                 dob = str(dob)
         
-        # Extract gender
         gender = ''
         possible_gender_fields = ['gender', 'sex', 'gender_code', 'genderCode']
         for field in possible_gender_fields:
@@ -1182,7 +1187,6 @@ def oidc_callback_view(request):
         if gender is not None:
             gender = str(gender)
         
-        # Extract and process picture
         picture = ''
         picture_original = decoded_user_info.get('picture', '')
         
@@ -1191,7 +1195,6 @@ def oidc_callback_view(request):
             if isinstance(picture_original, str):
                 logger.info(f"Original picture preview: {picture_original[:200]}...")
             
-            # Process the picture
             processed_picture = process_fayda_picture(picture_original)
             if processed_picture:
                 if validate_picture_data_url(processed_picture):
@@ -1220,11 +1223,9 @@ def oidc_callback_view(request):
         
         logger.info(f"Picture stored in user_data: {bool(picture)}")
         
-        # Store in session
         request.session['fayda_verified_data'] = user_data
         request.session['fayda_verified'] = True
         
-        # Store picture separately for template access
         if picture:
             request.session['fayda_picture'] = picture
             logger.info("Picture stored in session['fayda_picture']")
@@ -1232,11 +1233,13 @@ def oidc_callback_view(request):
             request.session.pop('fayda_picture', None)
             logger.warning("No picture to store in session")
         
-        # Clean up
         request.session.pop('fayda_state', None)
         request.session.pop('fayda_national_id', None)
         request.session.pop('fayda_nonce', None)
         request.session.pop('fayda_code_verifier', None)
+        
+        # Log successful verification
+        logger.info(f"OIDC - Fayda verification successful for user: {user_data['full_name']}")
         
         messages.success(request, f'Fayda verification successful! Welcome {user_data["full_name"]}.')
         return redirect('accounts:register_author')
@@ -1260,136 +1263,147 @@ def oidc_callback_view(request):
 
 
 # ============================================
-# DASHBOARD VIEWS
+# DASHBOARD VIEWS - UPDATED WITH LOGGING
 # ============================================
 
 @login_required
 def admin_dashboard(request):
-    """Admin dashboard with comprehensive payment data"""
+    """Admin dashboard with comprehensive data from database"""
     if request.user.role != 'admin':
+        logger.warning(f"Unauthorized admin dashboard access attempt by {request.user.username} (role: {request.user.role})")
         messages.error(request, 'You do not have permission to access this page.')
         return redirect(role_based_redirect(request.user))
 
-    today = timezone.now().date()
-    week_start = today - timedelta(days=7)
-    month_start = today.replace(day=1)
-
-    # Initialize payment variables
-    telebirr_sales = 0
-    cbe_sales = 0
-    total_sales = 0
-    today_sales = 0
-    week_sales = 0
-    month_sales = 0
-    monthly_sales = 0
-    total_royalties = 0
-    pending_payouts = 0
-    completed_payouts = 0
-    payment_methods = {}
-    recent_transactions = []
-    author_earnings = []
-
     try:
-        from payments.models import Purchase, PaymentTransaction, Payment
+        from books.models import Book
+        from django.db.models import Sum
         
-        completed_purchases = Purchase.objects.filter(status='completed')
+        logger.info(f"Admin dashboard accessed by: {request.user.username}")
         
-        def sum_amount(qs):
-            result = qs.aggregate(total=Sum('amount'))['total']
-            return result if result is not None else 0
+        # System Statistics
+        total_users = CustomUser.objects.count()
+        total_authors = CustomUser.objects.filter(role='author', is_active=True).count()
+        total_readers = CustomUser.objects.filter(role='client', is_active=True).count()
+        total_books = Book.objects.count()
+        published_books = Book.objects.filter(status='published').count()
+        pending_books = Book.objects.filter(status__in=['pending_review', 'in_review']).count()
+        total_downloads = Book.objects.aggregate(total=Sum('downloads_count'))['total'] or 0
 
-        total_sales = sum_amount(completed_purchases)
-        today_sales = sum_amount(completed_purchases.filter(created_at__date=today))
-        week_sales = sum_amount(completed_purchases.filter(created_at__date__gte=week_start, created_at__date__lte=today))
-        month_sales = sum_amount(completed_purchases.filter(created_at__date__gte=month_start, created_at__date__lte=today))
-        monthly_sales = month_sales
+        today = timezone.now().date()
+        week_start = today - timedelta(days=7)
+        month_start = today.replace(day=1)
 
-        if hasattr(Purchase, 'payment_method'):
-            methods = Purchase.objects.filter(status='completed').values_list('payment_method', flat=True).distinct()
-            for method in methods:
-                if method:
-                    method_total = sum_amount(completed_purchases.filter(payment_method__icontains=method))
-                    payment_methods[method] = float(method_total)
+        # Payment Statistics
+        telebirr_sales = 0
+        cbe_sales = 0
+        total_sales = 0
+        today_sales = 0
+        week_sales = 0
+        month_sales = 0
+        monthly_sales = 0
+        total_royalties = 0
+        pending_payouts = 0
+        completed_payouts = 0
+
+        try:
+            from payments.models import Purchase, Payment
             
-            telebirr_sales = sum_amount(completed_purchases.filter(payment_method__icontains='telebirr'))
-            cbe_sales = sum_amount(completed_purchases.filter(Q(payment_method__icontains='cbe') | Q(payment_method__icontains='cbe_birr')))
-        
-        if hasattr(Payment, 'objects'):
+            completed_purchases = Purchase.objects.filter(status='completed')
+            
+            def sum_amount(qs):
+                result = qs.aggregate(total=Sum('amount'))['total']
+                return result if result is not None else 0
+
+            total_sales = sum_amount(completed_purchases)
+            today_sales = sum_amount(completed_purchases.filter(created_at__date=today))
+            week_sales = sum_amount(completed_purchases.filter(created_at__date__gte=week_start, created_at__date__lte=today))
+            month_sales = sum_amount(completed_purchases.filter(created_at__date__gte=month_start, created_at__date__lte=today))
+            monthly_sales = month_sales
+
+            if hasattr(Purchase, 'payment_method'):
+                telebirr_sales = sum_amount(completed_purchases.filter(payment_method__icontains='telebirr'))
+                cbe_sales = sum_amount(completed_purchases.filter(Q(payment_method__icontains='cbe') | Q(payment_method__icontains='cbe_birr')))
+            
             total_royalties = Payment.objects.aggregate(total=Sum('final_amount'))['total'] or 0
             pending_payouts = Payment.objects.filter(status__in=['calculated', 'pending']).aggregate(total=Sum('final_amount'))['total'] or 0
             completed_payouts = Payment.objects.filter(status='paid').aggregate(total=Sum('final_amount'))['total'] or 0
-            recent_transactions = Payment.objects.all().order_by('-created_at')[:10]
-            author_earnings = Payment.objects.values('author__username', 'author__full_name').annotate(
-                total_earned=Sum('final_amount')
-            ).order_by('-total_earned')[:10]
 
-    except ImportError:
-        pass
+        except ImportError:
+            pass
+        except Exception as e:
+            logger.error(f"Error fetching payment data: {str(e)}")
+
+        context = {
+            'user': request.user,
+            'total_users': total_users,
+            'total_authors': total_authors,
+            'total_readers': total_readers,
+            'total_books': total_books,
+            'published_books': published_books,
+            'pending_books': pending_books,
+            'total_downloads': total_downloads,
+            'total_sales': total_sales,
+            'today_sales': today_sales,
+            'week_sales': week_sales,
+            'month_sales': month_sales,
+            'monthly_sales': monthly_sales,
+            'telebirr_sales': telebirr_sales,
+            'cbe_sales': cbe_sales,
+            'total_royalties': total_royalties,
+            'pending_payouts': pending_payouts,
+            'completed_payouts': completed_payouts,
+        }
+        
+        return render(request, 'dashboard/admin_dashboard.html', context)
+        
     except Exception as e:
-        logger.error(f"Error fetching payment data: {str(e)}")
-
-    context = {
-        'user': request.user,
-        'total_users': CustomUser.objects.count(),
-        'total_authors': CustomUser.objects.filter(role='author').count(),
-        'total_readers': CustomUser.objects.filter(role='client').count(),
-        'total_books': Book.objects.count(),
-        'published_books': Book.objects.filter(status='published').count(),
-        'pending_books': Book.objects.filter(status='pending_review').count(),
-        'total_downloads': Book.objects.aggregate(total=Sum('downloads_count'))['total'] or 0,
-        'total_revenue': total_sales,
-        'total_sales': total_sales,
-        'monthly_sales': monthly_sales,
-        'telebirr_sales': telebirr_sales,
-        'cbe_sales': cbe_sales,
-        'today_sales': today_sales,
-        'week_sales': week_sales,
-        'month_sales': month_sales,
-        'total_royalties': total_royalties,
-        'pending_payouts': pending_payouts,
-        'completed_payouts': completed_payouts,
-        'recent_transactions': recent_transactions,
-        'author_earnings': author_earnings,
-        'payment_methods': payment_methods,
-    }
-    return render(request, 'dashboard/admin_dashboard.html', context)
+        logger.error(f"Error in admin_dashboard: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        messages.error(request, f'Error loading dashboard: {str(e)}')
+        return redirect('home')
 
 
 @login_required
 def finance_dashboard(request):
     """Finance dashboard for managing author payments."""
     if request.user.role != 'finance' and request.user.role != 'admin':
+        logger.warning(f"Unauthorized finance dashboard access attempt by {request.user.username} (role: {request.user.role})")
         messages.error(request, 'You do not have permission to access this page.')
         return redirect(role_based_redirect(request.user))
 
-    author_payments = []
-    recent_transactions_data = []
-    total_revenue = 0
-    total_paid = 0
-    pending_payouts = 0
-    total_authors = 0
-    total_transactions = 0
-    pending_count = 0
-    paid_this_month = 0
-    telebirr_percentage = 0
-    cbe_percentage = 0
-
     try:
-        from payments.models import Payment, Purchase, PaymentTransaction
+        from payments.models import Payment, Purchase
+        from django.db.models import Sum, Max, Avg
         
+        logger.info(f"Finance dashboard accessed by: {request.user.username}")
+
         all_payments = Payment.objects.all()
         
         total_revenue = all_payments.aggregate(total=Sum('final_amount'))['total'] or 0
         total_paid = all_payments.filter(status='paid').aggregate(total=Sum('final_amount'))['total'] or 0
         pending_payouts = all_payments.filter(status__in=['calculated', 'pending']).aggregate(total=Sum('final_amount'))['total'] or 0
         
+        # Calculate tax summary
+        total_tax_withheld = all_payments.aggregate(total=Sum('tax_amount'))['total'] or 0
+        total_royalties = all_payments.aggregate(total=Sum('gross_amount'))['total'] or 0
+        total_net_payable = all_payments.aggregate(total=Sum('final_amount'))['total'] or 0
+        
+        # Culture tax vs other tax
+        culture_tax = all_payments.filter(tax_rate=5).aggregate(total=Sum('tax_amount'))['total'] or 0
+        other_tax = all_payments.filter(tax_rate=10).aggregate(total=Sum('tax_amount'))['total'] or 0
+        
         author_data = all_payments.values(
             'author__id', 'author__username', 'author__full_name', 'author__phone'
         ).annotate(
             total_amount=Sum('final_amount'),
-            latest_date=Max('created_at')
+            latest_date=Max('created_at'),
+            total_tax=Sum('tax_amount'),
+            tax_rate=Avg('tax_rate'),
+            gross_amount=Sum('gross_amount')
         ).order_by('-latest_date')
         
+        author_payments = []
         for author in author_data[:50]:
             latest_payment = all_payments.filter(author_id=author['author__id']).order_by('-created_at').first()
             author_payments.append({
@@ -1398,12 +1412,16 @@ def finance_dashboard(request):
                 'author_username': author['author__username'],
                 'phone': author['author__phone'] or 'N/A',
                 'amount': author['total_amount'] or 0,
+                'gross_amount': author['gross_amount'] or 0,
+                'tax_amount': author['total_tax'] or 0,
+                'tax_rate': author['tax_rate'] or 0,
+                'net_payable': (author['total_amount'] or 0),
                 'status': latest_payment.status if latest_payment else 'pending',
                 'payment_method': 'telebirr',
                 'date': author['latest_date'] or timezone.now(),
             })
         
-        total_authors = CustomUser.objects.filter(role='author').count()
+        total_authors = CustomUser.objects.filter(role='author', is_active=True).count()
         total_transactions = all_payments.count()
         pending_count = all_payments.filter(status__in=['calculated', 'pending']).count()
         
@@ -1413,12 +1431,15 @@ def finance_dashboard(request):
             created_at__gte=month_start
         ).aggregate(total=Sum('final_amount'))['total'] or 0
         
-        telebirr_count = PaymentTransaction.objects.filter(payment_method__icontains='telebirr').count()
-        cbe_count = PaymentTransaction.objects.filter(payment_method__icontains='cbe').count()
+        # Payment method percentages
+        telebirr_count = Purchase.objects.filter(payment_method__icontains='telebirr').count()
+        cbe_count = Purchase.objects.filter(Q(payment_method__icontains='cbe') | Q(payment_method__icontains='cbe_birr')).count()
         total_methods = telebirr_count + cbe_count
         telebirr_percentage = round((telebirr_count / total_methods * 100) if total_methods > 0 else 0)
         cbe_percentage = round((cbe_count / total_methods * 100) if total_methods > 0 else 0)
         
+        # Recent transactions
+        recent_transactions_data = []
         recent_transactions = all_payments.select_related('author').order_by('-created_at')[:20]
         for tx in recent_transactions:
             recent_transactions_data.append({
@@ -1427,131 +1448,184 @@ def finance_dashboard(request):
                 'status': tx.status,
                 'payment_method': 'telebirr',
                 'date': tx.created_at,
+                'tax_amount': tx.tax_amount or 0,
+                'tax_rate': tx.tax_rate or 0,
             })
 
-    except ImportError as e:
-        logger.warning(f"Payment models not available: {e}")
-        total_authors = CustomUser.objects.filter(role='author').count()
+        context = {
+            'user': request.user,
+            'author_payments': author_payments,
+            'recent_transactions': recent_transactions_data,
+            'total_revenue': total_revenue,
+            'total_paid': total_paid,
+            'pending_payouts': pending_payouts,
+            'total_authors': total_authors,
+            'total_transactions': total_transactions,
+            'pending_count': pending_count,
+            'paid_this_month': paid_this_month,
+            'telebirr_percentage': telebirr_percentage,
+            'cbe_percentage': cbe_percentage,
+            'total_royalties': total_royalties,
+            'total_tax_withheld': total_tax_withheld,
+            'total_net_payable': total_net_payable,
+            'culture_tax': culture_tax,
+            'other_tax': other_tax,
+        }
+        
+        return render(request, 'dashboard/finance_dashboard.html', context)
+        
     except Exception as e:
-        logger.error(f"Error in finance dashboard: {str(e)}")
-
-    context = {
-        'user': request.user,
-        'author_payments': author_payments,
-        'recent_transactions': recent_transactions_data,
-        'total_revenue': total_revenue,
-        'total_paid': total_paid,
-        'pending_payouts': pending_payouts,
-        'total_authors': total_authors,
-        'total_transactions': total_transactions,
-        'pending_count': pending_count,
-        'paid_this_month': paid_this_month,
-        'telebirr_percentage': telebirr_percentage,
-        'cbe_percentage': cbe_percentage,
-    }
-    return render(request, 'dashboard/finance_dashboard.html', context)
+        logger.error(f"Error in finance_dashboard: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        messages.error(request, f'Error loading dashboard: {str(e)}')
+        return redirect('home')
 
 
 @login_required
 def author_dashboard(request):
+    """Author dashboard with statistics from database"""
     if request.user.role != 'author':
+        logger.warning(f"Unauthorized author dashboard access attempt by {request.user.username} (role: {request.user.role})")
         messages.error(request, 'You do not have permission to access this page.')
         return redirect(role_based_redirect(request.user))
 
-    user = request.user
-    books = Book.objects.filter(author=user).order_by('-created_at')
-    
-    total_books = books.count()
-    published_books = books.filter(status='published').count()
-    pending_review = books.filter(status='pending_review').count()
-    in_review = books.filter(status='in_review').count()
-    needs_revision = books.filter(status='needs_revision').count()
-    rejected = books.filter(status='rejected').count()
-    checker_approved = books.filter(status='checker_approved').count()
-    total_downloads = books.aggregate(total=Sum('downloads_count'))['total'] or 0
-    recent_books = books[:10]
-    
     try:
-        for book in recent_books:
-            quality_review = QualityReview.objects.filter(book=book, review_type='checker').first()
-            book.quality_review_score = quality_review.overall_score if quality_review else None
-    except Exception as e:
-        logger.error(f"Error fetching quality reviews: {str(e)}")
-    
-    total_earned = 0
-    total_paid = 0
-    pending_earnings = 0
-    total_tax = 0
-    
-    try:
+        from books.models import Book
         from payments.models import Payment
+        from django.db.models import Sum
+        
+        logger.info(f"Author dashboard accessed by: {request.user.username}")
+        
+        user = request.user
+        books = Book.objects.filter(author=user).order_by('-created_at')
+        
+        total_books = books.count()
+        published_books = books.filter(status='published').count()
+        pending_review = books.filter(status='pending_review').count()
+        in_review = books.filter(status='in_review').count()
+        needs_revision = books.filter(status='needs_revision').count()
+        rejected = books.filter(status='rejected').count()
+        checker_approved = books.filter(status='checker_approved').count()
+        maker_revision_needed = books.filter(status='maker_revision_needed').count()
+        total_downloads = books.aggregate(total=Sum('downloads_count'))['total'] or 0
+        recent_books = books[:10]
+        
+        # Get books needing revision
+        needs_revision_books = books.filter(status='needs_revision')[:10]
+        
+        # Earnings
         payments = Payment.objects.filter(author=user)
         total_earned = payments.aggregate(total=Sum('final_amount'))['total'] or 0
         total_paid = payments.filter(status='paid').aggregate(total=Sum('final_amount'))['total'] or 0
         pending_earnings = payments.filter(status__in=['calculated', 'pending']).aggregate(total=Sum('final_amount'))['total'] or 0
-        total_tax = payments.aggregate(total=Sum('tax_amount'))['total'] or 0
-    except ImportError:
-        pass
-    except Exception as e:
-        logger.error(f"Error fetching payment data: {str(e)}")
-    
-    try:
-        author_profile = AuthorProfile.objects.get(user=user)
-    except AuthorProfile.DoesNotExist:
-        author_profile = None
 
-    context = {
-        'user': user,
-        'author_profile': author_profile,
-        'total_books': total_books,
-        'published_books': published_books,
-        'pending_review': pending_review,
-        'in_review': in_review,
-        'needs_revision': needs_revision,
-        'rejected': rejected,
-        'checker_approved': checker_approved,
-        'total_downloads': total_downloads,
-        'recent_books': recent_books,
-        'total_earned': total_earned,
-        'total_paid': total_paid,
-        'pending_earnings': pending_earnings,
-        'total_tax': total_tax,
-    }
-    return render(request, 'dashboard/author_dashboard.html', context)
+        context = {
+            'user': user,
+            'recent_books': recent_books,
+            'needs_revision_books': needs_revision_books,
+            'total_books': total_books,
+            'published_books': published_books,
+            'pending_review': pending_review,
+            'in_review': in_review,
+            'needs_revision': needs_revision,
+            'rejected': rejected,
+            'checker_approved': checker_approved,
+            'maker_revision_needed': maker_revision_needed,
+            'total_downloads': total_downloads,
+            'total_earned': total_earned,
+            'total_paid': total_paid,
+            'pending_earnings': pending_earnings,
+        }
+        
+        return render(request, 'dashboard/author_dashboard.html', context)
+        
+    except Exception as e:
+        logger.error(f"Error in author_dashboard: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        messages.error(request, f'Error loading dashboard: {str(e)}')
+        return redirect('home')
 
 
 @login_required
 def checker_dashboard(request):
+    """Checker dashboard — redirects to canonical books:checker_dashboard."""
     if request.user.role != 'checker':
+        logger.warning(f"Unauthorized checker dashboard access attempt by {request.user.username} (role: {request.user.role})")
+        messages.error(request, 'You do not have permission to access this page.')
+        return redirect(role_based_redirect(request.user))
+    
+    logger.info(f"Checker dashboard accessed by: {request.user.username} - redirecting to books app")
+    return redirect('books:checker_dashboard')
+
+
+@login_required
+def maker_dashboard(request):
+    """Maker dashboard — redirects to canonical books:maker_dashboard."""
+    if request.user.role != 'maker':
+        logger.warning(f"Unauthorized maker dashboard access attempt by {request.user.username} (role: {request.user.role})")
+        messages.error(request, 'You do not have permission to access this page.')
+        return redirect(role_based_redirect(request.user))
+    
+    logger.info(f"Maker dashboard accessed by: {request.user.username} - redirecting to books app")
+    return redirect('books:maker_dashboard')
+
+
+@login_required
+def client_dashboard(request):
+    """Client dashboard with statistics from database"""
+    if request.user.role != 'client':
+        logger.warning(f"Unauthorized client dashboard access attempt by {request.user.username} (role: {request.user.role})")
         messages.error(request, 'You do not have permission to access this page.')
         return redirect(role_based_redirect(request.user))
 
-    pending_books = Book.objects.filter(status='pending_review').order_by('created_at')
-    reviewed_books = QualityReview.objects.filter(reviewer=request.user, review_type='checker').select_related('book', 'book__author').order_by('-created_at')[:20]
+    try:
+        from payments.models import Purchase
+        from books.models import Wishlist, Book
+        from django.db.models import Sum
+        import random
+        
+        logger.info(f"Client dashboard accessed by: {request.user.username}")
 
-    total_pending = pending_books.count()
-    total_reviewed = reviewed_books.count()
-    avg_score = reviewed_books.aggregate(avg=Avg('overall_score'))['avg'] or 0
+        purchases = Purchase.objects.filter(user=request.user, status='completed')
+        purchases_count = purchases.count()
+        total_spent = purchases.aggregate(total=Sum('amount'))['total'] or 0
+        wishlist_count = Wishlist.objects.filter(client=request.user).count()
+        recent_purchases = purchases.select_related('book', 'book__author').order_by('-created_at')[:10]
 
-    current_month = timezone.now().month
-    current_year = timezone.now().year
-    reviewed_this_month = QualityReview.objects.filter(reviewer=request.user, review_type='checker', created_at__year=current_year, created_at__month=current_month).count()
+        total_downloads = 0
+        for purchase in recent_purchases:
+            if purchase.book:
+                total_downloads += purchase.book.downloads_count or 0
 
-    context = {
-        'user': request.user,
-        'pending_books': pending_books,
-        'reviewed_books': reviewed_books,
-        'total_pending': total_pending,
-        'total_reviewed': total_reviewed,
-        'avg_score': avg_score,
-        'reviewed_this_month': reviewed_this_month,
-    }
-    return render(request, 'dashboard/checker_dashboard.html', context)
+        # Get recommended books (random published books)
+        recommended_books = Book.objects.filter(status='published').order_by('?')[:4]
+
+        context = {
+            'user': request.user,
+            'purchases_count': purchases_count,
+            'recent_purchases': recent_purchases,
+            'wishlist_count': wishlist_count,
+            'total_spent': total_spent,
+            'total_downloads': total_downloads,
+            'recommended_books': recommended_books,
+        }
+        
+        return render(request, 'dashboard/client_dashboard.html', context)
+        
+    except Exception as e:
+        logger.error(f"Error in client_dashboard: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        messages.error(request, f'Error loading dashboard: {str(e)}')
+        return redirect('home')
 
 
 @login_required
 def process_checker_review(request):
     if request.user.role != 'checker':
+        logger.warning(f"Unauthorized checker review attempt by {request.user.username} (role: {request.user.role})")
         messages.error(request, 'You do not have permission to perform this action.')
         return redirect(role_based_redirect(request.user))
 
@@ -1573,6 +1647,8 @@ def process_checker_review(request):
         return redirect('accounts:checker_dashboard')
 
     try:
+        from books.models import Book, BookReview
+        
         book = Book.objects.get(id=book_id)
         scores = [
             float(content_quality),
@@ -1588,10 +1664,26 @@ def process_checker_review(request):
 
         overall_score = sum(scores) / len(scores)
 
+        # Create BookReview
+        review = BookReview.objects.create(
+            book=book,
+            reviewer=request.user,
+            content_quality=float(content_quality),
+            editorial_quality=float(editorial_quality),
+            technical_quality=float(technical_quality),
+            copyright_compliance=float(copyright_compliance) if copyright_compliance else 0,
+            community_guidelines=float(community_guidelines) if community_guidelines else 0,
+            overall_score=round(overall_score, 1),
+            comments=sanitize_input(comments),
+            recommendation=recommendation
+        )
+
+        # Update book status
         if recommendation == 'approved':
             book.status = 'checker_approved'
         elif recommendation == 'needs_revision':
             book.status = 'needs_revision'
+            book.revision_notes = comments or 'Please revise based on feedback.'
         else:
             book.status = 'rejected'
 
@@ -1599,32 +1691,21 @@ def process_checker_review(request):
         book.checker_score = round(overall_score, 1)
         book.save()
 
-        quality_review, created = QualityReview.objects.update_or_create(
-            book=book,
-            reviewer=request.user,
-            review_type='checker',
-            defaults={
-                'content_quality': float(content_quality),
-                'editorial_quality': float(editorial_quality),
-                'technical_quality': float(technical_quality),
-                'overall_score': round(overall_score, 1),
-                'comments': sanitize_input(comments),
-                'recommendation': recommendation,
-                'updated_at': timezone.now(),
-            }
-        )
-
-        if created:
-            quality_review.created_at = timezone.now()
-            quality_review.save()
+        # Log successful review
+        logger.info(f"Checker review submitted by {request.user.username} for book '{book.title}' (ID: {book.id}) - Score: {overall_score:.1f}")
 
         messages.success(request, f'Review for "{book.title}" submitted successfully!')
+        
     except Book.DoesNotExist:
+        logger.error(f"Book not found for review: {book_id}")
         messages.error(request, 'Book not found.')
-    except ValueError:
-        messages.error(request, 'Invalid score values.')
+    except ValueError as e:
+        logger.error(f"Invalid score values in review: {str(e)}")
+        messages.error(request, f'Invalid score values: {str(e)}')
     except Exception as e:
         logger.error(f"Error processing review: {str(e)}")
+        import traceback
+        traceback.print_exc()
         messages.error(request, f'An error occurred: {str(e)}')
 
     return redirect('accounts:checker_dashboard')
@@ -1633,10 +1714,14 @@ def process_checker_review(request):
 @login_required
 def view_book_for_review(request, book_id):
     if request.user.role != 'checker':
+        logger.warning(f"Unauthorized view book for review attempt by {request.user.username}")
         messages.error(request, 'You do not have permission to access this page.')
         return redirect(role_based_redirect(request.user))
 
     book = get_object_or_404(Book, id=book_id, status='pending_review')
+    
+    logger.info(f"Book view for review accessed by {request.user.username} for book '{book.title}' (ID: {book.id})")
+    
     context = {
         'user': request.user,
         'book': book,
@@ -1645,33 +1730,9 @@ def view_book_for_review(request, book_id):
 
 
 @login_required
-def maker_dashboard(request):
-    if request.user.role != 'maker':
-        messages.error(request, 'You do not have permission to access this page.')
-        return redirect(role_based_redirect(request.user))
-
-    pending_books = Book.objects.filter(status='checker_approved').order_by('checker_reviewed_at')
-    published_books = Book.objects.filter(status='published', published_at__month=timezone.now().month).order_by('-published_at')[:10]
-
-    pending_count = pending_books.count()
-    approved_count = Book.objects.filter(status='published', published_at__month=timezone.now().month).count()
-    total_published = Book.objects.filter(status='published').count()
-
-    context = {
-        'user': request.user,
-        'pending_books': pending_books,
-        'published_books': published_books,
-        'pending_count': pending_count,
-        'approved_count': approved_count,
-        'published_count': approved_count,
-        'total_published': total_published,
-    }
-    return render(request, 'dashboard/maker_dashboard.html', context)
-
-
-@login_required
 def publish_book(request, book_id):
     if request.user.role != 'maker':
+        logger.warning(f"Unauthorized publish attempt by {request.user.username} (role: {request.user.role})")
         messages.error(request, 'You do not have permission to perform this action.')
         return redirect(role_based_redirect(request.user))
 
@@ -1682,6 +1743,10 @@ def publish_book(request, book_id):
         book.published_at = timezone.now()
         book.maker_approved_at = timezone.now()
         book.save()
+        
+        # Log publication
+        logger.info(f"Book '{book.title}' (ID: {book.id}) published by {request.user.username}")
+        
         messages.success(request, f'Book "{book.title}" has been published successfully!')
         return redirect('accounts:maker_dashboard')
 
@@ -1692,51 +1757,138 @@ def publish_book(request, book_id):
     return render(request, 'books/publish_confirm.html', context)
 
 
-@login_required
-def client_dashboard(request):
-    if request.user.role != 'client':
-        messages.error(request, 'You do not have permission to access this page.')
-        return redirect(role_based_redirect(request.user))
-
-    try:
-        from payments.models import Purchase
-        from books.models import Wishlist
-
-        purchases = Purchase.objects.filter(user=request.user, status='completed')
-        wishlist_count = Wishlist.objects.filter(user=request.user).count()
-        total_spent = purchases.aggregate(total=Sum('amount'))['total'] or 0
-
-        context = {
-            'user': request.user,
-            'purchases_count': purchases.count(),
-            'recent_purchases': purchases.order_by('-created_at')[:10],
-            'wishlist_count': wishlist_count,
-            'total_spent': total_spent,
-        }
-    except ImportError:
-        context = {
-            'user': request.user,
-            'purchases_count': 0,
-            'recent_purchases': [],
-            'wishlist_count': 0,
-            'total_spent': 0,
-        }
-    except Exception as e:
-        logger.error(f"Error in client_dashboard: {str(e)}")
-        context = {
-            'user': request.user,
-            'purchases_count': 0,
-            'recent_purchases': [],
-            'wishlist_count': 0,
-            'total_spent': 0,
-        }
-
-    return render(request, 'dashboard/client_dashboard.html', context)
-
+# ============================================
+# PROFILE VIEW WITH STATISTICS FROM DATABASE - UPDATED WITH LOGGING
+# ============================================
 
 @login_required
 def profile_view(request):
-    return render(request, 'accounts/profile.html', {'user': request.user})
+    """View user profile with statistics from database"""
+    user = request.user
+    
+    logger.info(f"Profile viewed by: {user.username} (ID: {user.id})")
+    
+    context = {'user': user}
+    
+    # Fetch statistics for Author role
+    if user.role == 'author':
+        try:
+            from books.models import Book
+            from payments.models import Payment
+            from django.db.models import Sum
+            
+            books = Book.objects.filter(author=user)
+            
+            total_books = books.count()
+            published_books = books.filter(status='published').count()
+            pending_review = books.filter(status='pending_review').count()
+            in_review = books.filter(status='in_review').count()
+            needs_revision = books.filter(status='needs_revision').count()
+            rejected = books.filter(status='rejected').count()
+            
+            total_downloads = books.aggregate(total=Sum('downloads_count'))['total'] or 0
+            total_views = books.aggregate(total=Sum('views_count'))['total'] or 0
+            
+            payments = Payment.objects.filter(author=user)
+            total_earned = payments.aggregate(total=Sum('final_amount'))['total'] or 0
+            total_paid = payments.filter(status='paid').aggregate(total=Sum('final_amount'))['total'] or 0
+            pending_earnings = payments.filter(status__in=['calculated', 'pending']).aggregate(total=Sum('final_amount'))['total'] or 0
+            
+            context['author_stats'] = {
+                'total_books': total_books,
+                'published_books': published_books,
+                'pending_review': pending_review,
+                'in_review': in_review,
+                'needs_revision': needs_revision,
+                'rejected': rejected,
+                'total_downloads': total_downloads,
+                'total_views': total_views,
+                'total_earned': total_earned,
+                'total_paid': total_paid,
+                'pending_earnings': pending_earnings,
+            }
+            
+            logger.info(f"Author stats for {user.username}: {context['author_stats']}")
+            
+        except ImportError as e:
+            logger.warning(f"Could not import models for author stats: {e}")
+            context['author_stats'] = {
+                'total_books': 0,
+                'published_books': 0,
+                'pending_review': 0,
+                'in_review': 0,
+                'needs_revision': 0,
+                'rejected': 0,
+                'total_downloads': 0,
+                'total_views': 0,
+                'total_earned': 0,
+                'total_paid': 0,
+                'pending_earnings': 0,
+            }
+        except Exception as e:
+            logger.error(f"Error fetching author stats: {str(e)}")
+            context['author_stats'] = {
+                'total_books': 0,
+                'published_books': 0,
+                'pending_review': 0,
+                'in_review': 0,
+                'needs_revision': 0,
+                'rejected': 0,
+                'total_downloads': 0,
+                'total_views': 0,
+                'total_earned': 0,
+                'total_paid': 0,
+                'pending_earnings': 0,
+            }
+    
+    # Fetch statistics for Client role
+    elif user.role == 'client':
+        try:
+            from payments.models import Purchase
+            from books.models import Wishlist
+            from django.db.models import Sum
+            
+            purchases = Purchase.objects.filter(user=user, status='completed')
+            purchases_count = purchases.count()
+            total_spent = purchases.aggregate(total=Sum('amount'))['total'] or 0
+            wishlist_count = Wishlist.objects.filter(client=user).count()
+            recent_purchases = purchases.select_related('book', 'book__author').order_by('-completed_at')[:10]
+            
+            total_downloads = 0
+            for purchase in recent_purchases:
+                if purchase.book:
+                    total_downloads += purchase.book.downloads_count or 0
+            
+            context['client_stats'] = {
+                'purchases_count': purchases_count,
+                'total_spent': total_spent,
+                'wishlist_count': wishlist_count,
+                'total_downloads': total_downloads,
+                'recent_purchases': recent_purchases,
+            }
+            
+            logger.info(f"Client stats for {user.username}: {context['client_stats']}")
+            
+        except ImportError as e:
+            logger.warning(f"Could not import models for client stats: {e}")
+            context['client_stats'] = {
+                'purchases_count': 0,
+                'total_spent': 0,
+                'wishlist_count': 0,
+                'total_downloads': 0,
+                'recent_purchases': [],
+            }
+        except Exception as e:
+            logger.error(f"Error fetching client stats: {str(e)}")
+            context['client_stats'] = {
+                'purchases_count': 0,
+                'total_spent': 0,
+                'wishlist_count': 0,
+                'total_downloads': 0,
+                'recent_purchases': [],
+            }
+    
+    return render(request, 'accounts/profile.html', context)
 
 
 @login_required
@@ -1752,11 +1904,15 @@ def profile_edit(request):
 
         if request.FILES.get('profile_image'):
             if request.FILES['profile_image'].size > 5 * 1024 * 1024:
+                logger.warning(f"Profile image too large for user {user.username}: {request.FILES['profile_image'].size} bytes")
                 messages.error(request, 'Profile image size must be less than 5MB.')
                 return render(request, 'accounts/profile_edit.html', {'user': user})
             user.profile_image = request.FILES['profile_image']
 
         user.save()
+        
+        logger.info(f"Profile updated for user: {user.username} (ID: {user.id})")
+        
         messages.success(request, 'Profile updated successfully!')
         return redirect('accounts:profile')
 

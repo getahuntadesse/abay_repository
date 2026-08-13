@@ -44,38 +44,41 @@
         border-bottom: 4px solid var(--primary-gold);
     }
 
+    .form-header h2 {
+        color: var(--primary-gold);
+    }
+
     .form-body {
         padding: 25px 20px;
     }
 
     .fayda-verification-box {
-        background: #fdfaf2;
+        background: linear-gradient(135deg, #fdfaf2, #f8f4e8);
         border: 2px dashed var(--primary-gold-light);
         border-radius: 16px;
-        padding: 20px 15px;
+        padding: 30px 20px;
         margin-bottom: 30px;
+        text-align: center;
     }
 
-    .btn-gold {
-        background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark));
-        color: var(--primary-darker);
-        font-weight: 600;
-        border: none;
-        transition: all 0.3s ease;
-        padding: 12px 20px;
-        width: 100%;
-        border-radius: 8px;
+    .fayda-verification-box .fayda-icon {
+        font-size: 3.5rem;
+        color: var(--primary-gold);
+        margin-bottom: 0.75rem;
     }
 
-    .btn-gold:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(218, 165, 32, 0.35);
-        color: var(--primary-darker);
+    .fayda-verification-box h5 {
+        color: var(--primary-dark);
+        font-weight: 700;
+        font-size: 1.25rem;
     }
 
-    .btn-gold:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
+    .fayda-verification-box .fayda-subtitle {
+        color: #6c757d;
+        font-size: 0.95rem;
+        max-width: 550px;
+        margin: 0 auto 1.5rem;
+        line-height: 1.6;
     }
 
     .btn-fayda {
@@ -84,37 +87,61 @@
         border: none;
         font-weight: 600;
         transition: all 0.3s ease;
-        padding: 12px 20px;
-        width: 100%;
-        border-radius: 8px;
+        padding: 14px 40px;
+        border-radius: 12px;
+        font-size: 1.1rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        min-width: 220px;
     }
 
     .btn-fayda:hover:not(:disabled) {
-        transform: translateY(-2px);
-        box-shadow: 0 5px 20px rgba(13, 71, 161, 0.4);
+        transform: translateY(-3px);
+        box-shadow: 0 8px 30px rgba(13, 71, 161, 0.4);
         color: white;
     }
 
     .btn-fayda:disabled {
         opacity: 0.6;
         cursor: not-allowed;
+        transform: none;
+    }
+
+    .btn-gold {
+        background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark));
+        color: var(--primary-darker);
+        font-weight: 600;
+        border: none;
+        transition: all 0.3s ease;
+        padding: 12px 25px;
+        width: 100%;
+        border-radius: 10px;
+    }
+
+    .btn-gold:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(218, 165, 32, 0.35);
+        color: var(--primary-darker);
     }
 
     .verified-badge {
         background-color: #28a745;
         color: white;
-        padding: 6px 16px;
+        padding: 8px 20px;
         border-radius: 50px;
-        font-size: 0.85rem;
+        font-size: 0.95rem;
         font-weight: bold;
         display: inline-flex;
         align-items: center;
-        gap: 8px;
+        gap: 10px;
+        margin-bottom: 0.75rem;
     }
 
     .profile-preview-box {
         text-align: center;
-        margin-bottom: 25px;
+        margin: 1.5rem 0;
         padding: 15px;
         background: #f8f9fa;
         border-radius: 12px;
@@ -126,35 +153,22 @@
         object-fit: cover;
         border-radius: 50%;
         border: 4px solid var(--primary-gold);
-        box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.15);
     }
 
     .loading-spinner {
         display: inline-block;
-        width: 1rem;
-        height: 1rem;
+        width: 1.2rem;
+        height: 1.2rem;
         border: 2px solid rgba(255,255,255,0.3);
         border-top-color: #fff;
         border-radius: 50%;
         animation: spin 0.8s linear infinite;
+        margin-right: 0.5rem;
     }
 
     @keyframes spin {
         to { transform: rotate(360deg); }
-    }
-
-    .fayda-error-message {
-        margin-top: 0.5rem;
-        padding: 0.5rem 1rem;
-        border-radius: 8px;
-        background: #f8d7da;
-        color: #721c24;
-        border: 1px solid #f5c6cb;
-        display: none;
-    }
-
-    .fayda-error-message.show {
-        display: block;
     }
 
     .fayda-status {
@@ -166,38 +180,90 @@
         border-radius: 12px;
     }
 
+    .fayda-error-message {
+        display: none;
+        margin-top: 1rem;
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
+        background: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+    }
+
+    .fayda-error-message.show {
+        display: block;
+    }
+
     .field-readonly {
         background-color: #e9ecef !important;
         cursor: not-allowed !important;
         opacity: 0.8;
     }
 
-    .form-control:focus {
-        border-color: var(--primary-gold);
-        box-shadow: 0 0 0 0.2rem rgba(218, 165, 32, 0.25);
-    }
-
     .fayda-picture-display {
-        max-width: 150px;
-        max-height: 150px;
+        width: 100px;
+        height: 100px;
         border-radius: 50%;
-        border: 4px solid var(--primary-gold);
+        border: 3px solid var(--primary-gold);
         object-fit: cover;
     }
 
-    @media (min-width: 768px) {
-        .form-body {
-            padding: 40px;
-        }
-        .form-header {
-            padding: 40px;
-        }
-        .fayda-verification-box {
-            padding: 25px;
-        }
+    .clear-fayda-btn {
+        background: none;
+        border: none;
+        color: #dc3545;
+        font-size: 0.85rem;
+        text-decoration: underline;
+        cursor: pointer;
+        padding: 0.25rem 0.5rem;
     }
 
-    @media (max-width: 767px) {
+    .clear-fayda-btn:hover {
+        color: #bd2130;
+    }
+
+    /* Terms and Conditions Link */
+    .terms-link {
+        color: var(--primary-gold);
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .terms-link:hover {
+        color: var(--primary-gold-dark);
+        text-decoration: underline;
+    }
+
+    .terms-link i {
+        font-size: 0.8rem;
+        margin-left: 0.25rem;
+    }
+
+    .checkbox-terms {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        margin-top: 0.5rem;
+    }
+
+    .checkbox-terms input[type="checkbox"] {
+        margin-top: 0.15rem;
+        flex-shrink: 0;
+        width: 18px;
+        height: 18px;
+        accent-color: var(--primary-gold);
+        cursor: pointer;
+    }
+
+    .checkbox-terms .terms-text {
+        font-size: 0.9rem;
+        color: #4a4a4a;
+        line-height: 1.5;
+    }
+
+    @media (max-width: 576px) {
         .register-container {
             padding: 0 10px;
         }
@@ -209,45 +275,28 @@
             padding: 20px 15px;
         }
         .form-header h2 {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
         }
         .fayda-verification-box {
-            padding: 15px;
+            padding: 20px 15px;
+        }
+        .fayda-verification-box .fayda-icon {
+            font-size: 2.5rem;
+        }
+        .btn-fayda {
+            padding: 12px 20px;
+            font-size: 1rem;
+            min-width: 100%;
         }
         .profile-preview-image {
             width: 100px;
             height: 100px;
         }
-        .btn-gold, .btn-fayda {
-            padding: 10px 16px;
-            font-size: 0.9rem;
+        .checkbox-terms {
+            gap: 0.5rem;
         }
-        .fayda-picture-display {
-            max-width: 100px;
-            max-height: 100px;
-        }
-    }
-
-    @media (max-width: 576px) {
-        .form-header h2 {
-            font-size: 1.3rem;
-        }
-        .form-header p {
-            font-size: 0.9rem;
-        }
-        .fayda-verification-box h5 {
-            font-size: 1rem;
-        }
-        .fayda-verification-box .small {
+        .checkbox-terms .terms-text {
             font-size: 0.8rem;
-        }
-        .verified-badge {
-            font-size: 0.75rem;
-            padding: 4px 12px;
-        }
-        .fayda-picture-display {
-            max-width: 80px;
-            max-height: 80px;
         }
     }
 </style>
@@ -280,54 +329,52 @@
 
             <!-- Fayda Verification Section -->
             <div class="fayda-verification-box">
-                <h5 class="text-dark mb-3"><i class="fas fa-id-card text-warning me-2"></i>Step 1: Verify National Identity</h5>
-                <p class="small text-muted">Verify your identity using Fayda eSignet. This is required for author registration.</p>
+                <div class="fayda-icon">
+                    <i class="fas fa-id-card"></i>
+                </div>
+                <h5>Verify Your National Identity</h5>
+                <p class="fayda-subtitle">
+                    To register as an author, you must verify your identity using the 
+                    <strong>Fayda eSignet</strong> system. This ensures the security and 
+                    authenticity of all authors on our platform.
+                </p>
                 
                 {% if verified_data %}
-                    <div class="d-flex flex-wrap align-items-center justify-content-between p-2 bg-white border rounded gap-2">
-                        <div class="d-flex align-items-center gap-2 flex-wrap">
-                            <span class="verified-badge"><i class="fas fa-check-circle me-1"></i> Fayda Identity Linked</span>
-                            <strong class="text-dark">{{ verified_data.full_name }}</strong>
-                        </div>
-                        <button type="button" class="btn btn-sm btn-outline-danger" id="clear_fayda_btn">
-                            <i class="fas fa-unlink me-1"></i>Disconnect
-                        </button>
+                    <!-- Already Verified -->
+                    <div class="verified-badge">
+                        <i class="fas fa-check-circle"></i> 
+                        Identity Verified — {{ verified_data.full_name }}
                     </div>
+                    <p class="text-muted small">Your identity has been successfully verified with Fayda.</p>
                     
-                    <!-- Profile Picture from Fayda - FIXED: Use fayda_picture directly -->
                     {% if fayda_picture %}
-                    <div class="profile-preview-box mt-3">
+                    <div class="profile-preview-box">
                         {% if fayda_picture|slice:":5" == "data:" %}
-                            <!-- If it's already a data URL, use it directly -->
                             <img src="{{ fayda_picture }}" alt="Fayda Profile Photo" class="profile-preview-image">
                         {% else %}
-                            <!-- If it's raw base64, add the data URL prefix -->
                             <img src="data:image/jpeg;base64,{{ fayda_picture }}" alt="Fayda Profile Photo" class="profile-preview-image">
                         {% endif %}
-                        <p class="small text-muted mt-2">Profile picture imported from Fayda</p>
-                    </div>
-                    {% elif verified_data.picture %}
-                    <div class="profile-preview-box mt-3">
-                        {% if verified_data.picture|slice:":5" == "data:" %}
-                            <img src="{{ verified_data.picture }}" alt="Fayda Profile Photo" class="profile-preview-image">
-                        {% else %}
-                            <img src="data:image/jpeg;base64,{{ verified_data.picture }}" alt="Fayda Profile Photo" class="profile-preview-image">
-                        {% endif %}
-                        <p class="small text-muted mt-2">Profile picture imported from Fayda</p>
+                        <p class="text-muted small mt-2">Official Identity Photo from Fayda</p>
                     </div>
                     {% endif %}
+                    
+                    <button type="button" class="clear-fayda-btn" id="clear_fayda_btn">
+                        <i class="fas fa-unlink me-1"></i> Clear Verification
+                    </button>
+                    
                 {% else %}
-                    <div class="row g-3 align-items-center">
-                        <div class="col-12 col-md-7">
-                            <input type="text" id="national_id_input" class="form-control form-control-lg" placeholder="Enter 16-digit Fayda Number (e.g., 1234 5678 9012 3456)" maxlength="23">
-                            <div class="form-text text-danger" id="national_id_error" style="display:none;"></div>
-                        </div>
-                        <div class="col-12 col-md-5">
-                            <button type="button" id="verify_fayda_btn" class="btn btn-fayda btn-lg w-100">
-                                <i class="fas fa-fingerprint me-2"></i>Verify with Fayda
-                            </button>
-                        </div>
-                    </div>
+                    <!-- Not Verified - Only Button, No Text Box -->
+                    <button type="button" id="verify_fayda_btn" class="btn-fayda">
+                        <i class="fas fa-fingerprint"></i> Verify with Fayda
+                    </button>
+                    <p class="text-muted small mt-3">
+                        <i class="fas fa-shield-alt me-1"></i> 
+                        You will be redirected to the Fayda eSignet portal for secure verification.
+                        <br>
+                        <span class="text-muted" style="font-size: 0.75rem;">
+                            <i class="fas fa-lock me-1"></i> Your information is encrypted and secure.
+                        </span>
+                    </p>
                 {% endif %}
 
                 <div id="fayda_status" class="fayda-status">
@@ -347,7 +394,7 @@
             <form method="POST" enctype="multipart/form-data" id="author_reg_form" novalidate>
                 {% csrf_token %}
                 
-                <h5 class="text-dark mb-4 border-bottom pb-2"><i class="fas fa-user-edit me-2"></i>Step 2: Complete Your Profile</h5>
+                <h5 class="text-dark mb-4 border-bottom pb-2"><i class="fas fa-user-edit me-2"></i>Complete Your Profile</h5>
                 <p class="small text-muted mb-3">Fields marked with <span class="text-muted">(Imported from Fayda)</span> are read-only and populated from your verified identity.</p>
 
                 {% if form.non_field_errors %}
@@ -437,9 +484,23 @@
                 <h6 class="text-dark mt-4 mb-3 border-bottom pb-2"><i class="fas fa-mobile-alt me-2"></i>Payment Information</h6>
                 <p class="small text-muted">Your phone number (<strong>{{ form.phone.value|default:"your phone" }}</strong>) will be used for Telebirr payments.</p>
 
-                <!-- Terms and Conditions -->
+                <!-- Terms and Conditions - Updated with Modal Link -->
                 <div class="mt-4">
-                    {{ form.agreement_signed|as_crispy_field }}
+                    <div class="checkbox-terms">
+                        <input type="checkbox" name="agreement_signed" id="id_agreement_signed" required>
+                        <label for="id_agreement_signed" class="terms-text">
+                            I have read and agree to the 
+                            <a href="#" class="terms-link" data-bs-toggle="modal" data-bs-target="#termsModal">
+                                Terms and Conditions <i class="fas fa-external-link-alt"></i>
+                            </a>
+                            of the Abay Repository platform. I understand that my rights are protected under 
+                            <span class="text-muted">Ethiopian Copyright Proclamation No. 410/2004</span> and 
+                            <span class="text-muted">Data Protection Proclamation No. 1324/2024</span>.
+                        </label>
+                    </div>
+                    {% if form.agreement_signed.errors %}
+                        <div class="text-danger small mt-1">{{ form.agreement_signed.errors }}</div>
+                    {% endif %}
                 </div>
 
                 <div class="mt-4">
@@ -462,35 +523,41 @@
 
 {% block extra_js %}
 <script>
+    // Wait for DOM to be fully loaded
     document.addEventListener('DOMContentLoaded', function() {
         // DOM References
-        const verifyBtn = document.getElementById('verify_fayda_btn');
-        const nationalIdInput = document.getElementById('national_id_input');
-        const faydaStatus = document.getElementById('fayda_status');
-        const faydaError = document.getElementById('fayda_error');
-        const faydaStatusText = document.getElementById('fayda_status_text');
-        const faydaErrorText = document.getElementById('fayda_error_text');
-        const clearBtn = document.getElementById('clear_fayda_btn');
+        var verifyBtn = document.getElementById('verify_fayda_btn');
+        var faydaStatus = document.getElementById('fayda_status');
+        var faydaError = document.getElementById('fayda_error');
+        var faydaStatusText = document.getElementById('fayda_status_text');
+        var faydaErrorText = document.getElementById('fayda_error_text');
+        var clearBtn = document.getElementById('clear_fayda_btn');
+
+        // Check if elements exist before adding event listeners
+        if (!verifyBtn) {
+            console.warn('Verify button not found on page');
+            return;
+        }
 
         // Helper: Get CSRF Token
         function getCSRFToken() {
-            const cookieValue = document.cookie
+            var cookieValue = document.cookie
                 .split('; ')
-                .find(row => row.startsWith('csrftoken='))
+                .find(function(row) { return row.startsWith('csrftoken='); })
                 ?.split('=')[1];
             if (cookieValue) return cookieValue;
-            const csrfInput = document.querySelector('input[name="csrfmiddlewaretoken"]');
+            var csrfInput = document.querySelector('input[name="csrfmiddlewaretoken"]');
             if (csrfInput) return csrfInput.value;
             return '';
         }
 
         // Helper: Generate Random String for State/Nonce
         function generateRandomString(length) {
-            const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-            let result = '';
-            const values = new Uint32Array(length);
+            var charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            var result = '';
+            var values = new Uint32Array(length);
             window.crypto.getRandomValues(values);
-            for (let i = 0; i < length; i++) {
+            for (var i = 0; i < length; i++) {
                 result += charset[values[i] % charset.length];
             }
             return result;
@@ -498,128 +565,52 @@
 
         // UI Helpers
         function showError(message) {
+            if (!faydaError || !faydaErrorText) return;
             faydaError.style.display = 'block';
             faydaError.classList.add('show');
             faydaErrorText.textContent = message;
         }
 
         function hideError() {
+            if (!faydaError) return;
             faydaError.style.display = 'none';
             faydaError.classList.remove('show');
         }
 
         function showStatus(message) {
+            if (!faydaStatus || !faydaStatusText) return;
             faydaStatus.style.display = 'block';
             faydaStatusText.textContent = message;
         }
 
         function hideStatus() {
+            if (!faydaStatus) return;
             faydaStatus.style.display = 'none';
         }
 
-        // National ID Input Formatting
-        if (nationalIdInput) {
-            nationalIdInput.addEventListener('input', function(e) {
-                let value = e.target.value.replace(/\s+/g, '').replace(/[^a-zA-Z0-9]/g, '');
-                let matches = value.match(/\w{1,4}/g) || [];
-                e.target.value = matches.join(' ');
-                hideError();
-            });
-        }
+        // Check if we're already in a verification flow
+        var urlParams = new URLSearchParams(window.location.search);
+        var code = urlParams.get('code');
+        var state = urlParams.get('state');
+        var error = urlParams.get('error');
+        var verified = urlParams.get('verified');
+        var clearFayda = urlParams.get('clear_fayda');
 
-        // Fayda Verification Button
-        if (verifyBtn) {
-            verifyBtn.addEventListener('click', function() {
-                const rawId = nationalIdInput.value.trim();
-                const cleanId = rawId.replace(/\s+/g, '');
-                const errorDiv = document.getElementById('national_id_error');
-
-                hideError();
-                hideStatus();
-                errorDiv.style.display = 'none';
-
-                if (cleanId.length !== 16 || !/^\d+$/.test(cleanId)) {
-                    errorDiv.textContent = 'Please enter a valid 16-digit National ID (numbers only).';
-                    errorDiv.style.display = 'block';
-                    return;
-                }
-
-                verifyBtn.disabled = true;
-                verifyBtn.innerHTML = '<span class="loading-spinner me-2"></span> Verifying...';
-                showStatus('Preparing verification request...');
-
-                const state = generateRandomString(16);
-                const nonce = generateRandomString(16);
-                const csrfToken = getCSRFToken();
-
-                fetch('/accounts/api/fayda/oidc/initiate/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': csrfToken,
-                        'Accept': 'application/json'
-                    },
-                    credentials: 'same-origin',
-                    body: JSON.stringify({
-                        national_id: cleanId,
-                        state: state,
-                        nonce: nonce
-                    })
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        return response.text().then(text => {
-                            throw new Error(`Server error: ${response.status}`);
-                        });
-                    }
-                    const contentType = response.headers.get('content-type');
-                    if (!contentType || !contentType.includes('application/json')) {
-                        throw new Error('Server returned HTML instead of JSON.');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.success && data.authorization_url) {
-                        showStatus('Redirecting to Fayda...');
-                        setTimeout(() => window.location.href = data.authorization_url, 500);
-                    } else {
-                        throw new Error(data.message || 'Failed to initiate verification');
-                    }
-                })
-                .catch(error => {
-                    showError(error.message || 'Failed to connect to Fayda. Please try again.');
-                    verifyBtn.disabled = false;
-                    verifyBtn.innerHTML = '<i class="fas fa-fingerprint me-2"></i> Verify with Fayda';
-                    hideStatus();
-                });
-            });
-        }
-
-        // Clear Fayda Data Button
-        if (clearBtn) {
-            clearBtn.addEventListener('click', function() {
-                if (confirm('Are you sure you want to clear the linked identity data?')) {
-                    window.location.href = '{% url "accounts:register_author" %}?clear_fayda=true';
-                }
-            });
-        }
-
-        // Handle OIDC Callback URL Parameters
-        const urlParams = new URLSearchParams(window.location.search);
-        const code = urlParams.get('code');
-        const state = urlParams.get('state');
-        const error = urlParams.get('error');
-        const verified = urlParams.get('verified');
-        const clearFayda = urlParams.get('clear_fayda');
-
-        if (error) {
-            showError('Fayda error: ' + error);
-        }
-
-        // Process OIDC Callback
+        // Handle OIDC Callback - Process callback before button click
         if (code && state) {
+            // Prevent duplicate processing
+            if (sessionStorage.getItem('fayda_processing')) {
+                console.log('Fayda callback already being processed, skipping duplicate.');
+                window.history.replaceState({}, document.title, window.location.pathname);
+                sessionStorage.removeItem('fayda_processing');
+                location.reload();
+                return;
+            }
+
+            sessionStorage.setItem('fayda_processing', 'true');
             showStatus('Processing verification...');
-            const csrfToken = getCSRFToken();
+            
+            var csrfToken = getCSRFToken();
 
             fetch('/accounts/api/fayda/oidc/callback/', {
                 method: 'POST',
@@ -631,46 +622,147 @@
                 credentials: 'same-origin',
                 body: JSON.stringify({ code: code, state: state })
             })
-            .then(response => {
+            .then(function(response) {
                 if (!response.ok) {
-                    return response.text().then(text => {
-                        throw new Error(`Server error: ${response.status}`);
+                    return response.text().then(function(text) {
+                        throw new Error('Server error: ' + response.status);
                     });
                 }
                 return response.json();
             })
-            .then(data => {
+            .then(function(data) {
                 if (data.success) {
+                    // Redirect to remove the callback parameters
                     window.location.href = '/accounts/register/author/?verified=true';
                 } else {
                     showError(data.message || 'Verification failed.');
                     hideStatus();
+                    sessionStorage.removeItem('fayda_processing');
                 }
             })
-            .catch(error => {
+            .catch(function(error) {
                 showError('Failed to complete verification. Please try again.');
                 hideStatus();
+                sessionStorage.removeItem('fayda_processing');
             });
+            
+            return; // Stop further execution
+        }
+
+        if (error) {
+            showError('Fayda error: ' + error);
+            window.history.replaceState({}, document.title, window.location.pathname);
         }
 
         if (verified === 'true') {
             window.history.replaceState({}, document.title, window.location.pathname);
             location.reload();
+            return;
         }
 
         if (clearFayda === 'true') {
-            window.location.href = window.location.pathname;
+            window.history.replaceState({}, document.title, window.location.pathname);
+            location.reload();
+            return;
         }
 
-        // Lock fields if Fayda verified (all Fayda fields are read-only)
+        // Fayda Verification Button - NO TEXT BOX, DIRECT REDIRECT
+        verifyBtn.addEventListener('click', function() {
+            // Prevent multiple clicks
+            if (verifyBtn.disabled) return;
+            
+            hideError();
+            hideStatus();
+
+            verifyBtn.disabled = true;
+            verifyBtn.innerHTML = '<span class="loading-spinner"></span> Redirecting to Fayda...';
+            showStatus('Preparing verification request...');
+
+            // Generate state and nonce
+            var state = generateRandomString(16);
+            var nonce = generateRandomString(16);
+            var csrfToken = getCSRFToken();
+
+            // Get National ID from the form field
+            var nationalIdInput = document.getElementById('id_national_id');
+            var nationalId = '';
+            
+            if (nationalIdInput && nationalIdInput.value) {
+                nationalId = nationalIdInput.value.replace(/\s+/g, '');
+            }
+            
+            // If no national ID in form, use session value or default
+            if (!nationalId) {
+                nationalId = '{{ request.session.fayda_national_id|default:"" }}';
+                if (!nationalId) {
+                    // For development - use a test ID
+                    nationalId = '1234567890123456';
+                    console.warn('Using test National ID. In production, collect this from the user.');
+                }
+            }
+
+            // Call the OIDC Initiate Endpoint
+            fetch('/accounts/api/fayda/oidc/initiate/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken,
+                    'Accept': 'application/json'
+                },
+                credentials: 'same-origin',
+                body: JSON.stringify({
+                    national_id: nationalId,
+                    state: state,
+                    nonce: nonce
+                })
+            })
+            .then(function(response) {
+                if (!response.ok) {
+                    return response.text().then(function(text) {
+                        throw new Error('Server error: ' + response.status);
+                    });
+                }
+                return response.json();
+            })
+            .then(function(data) {
+                if (data.success && data.authorization_url) {
+                    showStatus('Redirecting to Fayda eSignet...');
+                    // Store that we're redirecting
+                    sessionStorage.setItem('fayda_redirecting', 'true');
+                    setTimeout(function() {
+                        window.location.href = data.authorization_url;
+                    }, 500);
+                } else {
+                    throw new Error(data.message || 'Failed to initiate verification');
+                }
+            })
+            .catch(function(error) {
+                showError(error.message || 'Failed to connect to Fayda. Please try again.');
+                verifyBtn.disabled = false;
+                verifyBtn.innerHTML = '<i class="fas fa-fingerprint"></i> Verify with Fayda';
+                hideStatus();
+            });
+        });
+
+        // Clear Fayda Data Button
+        if (clearBtn) {
+            clearBtn.addEventListener('click', function() {
+                if (confirm('Are you sure you want to clear the linked identity data?')) {
+                    sessionStorage.removeItem('fayda_redirecting');
+                    sessionStorage.removeItem('fayda_processing');
+                    window.location.href = '{% url "accounts:register_author" %}?clear_fayda=true';
+                }
+            });
+        }
+
+        // Lock fields if Fayda verified
         {% if verified_data %}
-            const lockedFields = ['full_name', 'national_id', 'email', 'phone', 'address', 'region', 'zone', 'woreda', 'date_of_birth', 'gender'];
-            lockedFields.forEach(field => {
-                const el = document.getElementById(`id_${field}`);
+            var lockedFields = ['full_name', 'national_id', 'email', 'phone', 'address', 'region', 'zone', 'woreda', 'date_of_birth', 'gender'];
+            lockedFields.forEach(function(field) {
+                var el = document.getElementById('id_' + field);
                 if (el) {
                     el.setAttribute('readonly', true);
-                    el.style.backgroundColor = '#e9ecef';
-                    el.style.cursor = 'not-allowed';
+                    el.classList.add('field-readonly');
                 }
             });
         {% endif %}

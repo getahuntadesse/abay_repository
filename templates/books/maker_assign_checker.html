@@ -1,0 +1,288 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Assign Checker — {{ book.title }} | Abay Repository{% endblock %}
+
+{% block extra_css %}
+<style>
+    :root {
+        --primary-gold: #DAA520;
+        --primary-gold-dark: #B8860B;
+        --primary-darker: #1A1A1A;
+        --primary-dark: #2C2C2C;
+        --primary-gray: #4A4A4A;
+        --success-green: #28a745;
+        --danger-red: #dc3545;
+        --info-blue: #17a2b8;
+        --purple: #6f42c1;
+    }
+
+    .page-header {
+        background: linear-gradient(135deg, var(--primary-darker) 0%, var(--primary-dark) 100%);
+        border-radius: 20px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        color: white;
+        position: relative;
+        overflow: hidden;
+    }
+    .page-header::before {
+        content: '';
+        position: absolute;
+        top: -50%; right: -50%;
+        width: 200%; height: 200%;
+        background: radial-gradient(circle, rgba(218,165,32,0.08) 0%, transparent 70%);
+    }
+
+    .book-info-card {
+        background: white;
+        border-radius: 16px;
+        padding: 1.5rem;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        border-left: 4px solid var(--primary-gold);
+        margin-bottom: 1.5rem;
+    }
+
+    .form-card {
+        background: white;
+        border-radius: 16px;
+        padding: 2rem;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    }
+
+    .checker-card {
+        border: 2px solid #e9ecef;
+        border-radius: 12px;
+        padding: 1rem 1.25rem;
+        cursor: pointer;
+        transition: all 0.25s ease;
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+    .checker-card:hover { border-color: var(--primary-gold); background: rgba(218,165,32,0.04); }
+    .checker-card.selected { border-color: var(--primary-gold); background: rgba(218,165,32,0.08); }
+
+    .workload-pill {
+        display: inline-block;
+        padding: 0.2rem 0.6rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+    .workload-low { background: #d4edda; color: #155724; }
+    .workload-medium { background: #fff3cd; color: #856404; }
+    .workload-high { background: #f8d7da; color: #721c24; }
+
+    .btn-gold {
+        background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark));
+        color: var(--primary-darker);
+        border: none;
+        font-weight: 600;
+        padding: 10px 28px;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+    }
+    .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(218,165,32,0.4); color: var(--primary-darker); }
+
+    .btn-outline-gold {
+        border: 2px solid var(--primary-gold);
+        color: var(--primary-gold);
+        background: transparent;
+        font-weight: 600;
+        padding: 10px 28px;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+    }
+    .btn-outline-gold:hover { background: var(--primary-gold); color: var(--primary-darker); transform: translateY(-2px); }
+
+    .form-control:focus, .form-select:focus {
+        border-color: var(--primary-gold);
+        box-shadow: 0 0 0 0.2rem rgba(218,165,32,0.25);
+    }
+
+    .meta-badge {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        background: #f0f0f0;
+        font-size: 0.8rem;
+        font-weight: 500;
+        margin: 0.2rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4 mb-5">
+
+    <!-- Header -->
+    <div class="page-header">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="mb-1">
+                    <i class="fas fa-user-check me-2" style="color: var(--primary-gold);"></i>
+                    Assign Checker
+                </h1>
+                <p class="mb-0 opacity-75">Select a quality checker and set a review deadline.</p>
+            </div>
+            <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                <a href="{% url 'books:maker_dashboard' %}" class="btn btn-outline-gold">
+                    <i class="fas fa-arrow-left me-2"></i> Back to Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Left: Book info -->
+        <div class="col-lg-4">
+            <div class="book-info-card">
+                <h6 class="text-muted text-uppercase small fw-bold mb-3">Manuscript</h6>
+                <h4 class="mb-1">{{ book.title }}</h4>
+                {% if book.manuscript_id %}
+                    <small class="text-muted d-block mb-2">{{ book.manuscript_id }}</small>
+                {% endif %}
+                <div class="mb-3">
+                    <span class="meta-badge"><i class="fas fa-user me-1"></i>{{ book.author.full_name|default:book.author.username }}</span>
+                    <span class="meta-badge"><i class="fas fa-tag me-1"></i>{{ book.genre.name|default:"Uncategorized" }}</span>
+                    <span class="meta-badge"><i class="fas fa-language me-1"></i>{{ book.language|default:"English" }}</span>
+                </div>
+                {% if book.description %}
+                    <p class="text-muted small">{{ book.description|truncatechars:200 }}</p>
+                {% endif %}
+                <div class="mt-3">
+                    <a href="{% url 'books:detail' book.id %}" class="btn btn-outline-gold btn-sm w-100" target="_blank">
+                        <i class="fas fa-eye me-2"></i>Preview Manuscript
+                    </a>
+                </div>
+            </div>
+
+            {% if not checkers %}
+            <div class="alert alert-warning rounded-3">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                <strong>No checkers available.</strong> Please ensure active checker accounts exist before assigning.
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Right: Assignment form -->
+        <div class="col-lg-8">
+            <div class="form-card">
+                <h5 class="mb-4">
+                    <i class="fas fa-tasks me-2" style="color: var(--primary-gold);"></i>
+                    Assignment Details
+                </h5>
+
+                <form method="POST" id="assignForm">
+                    {% csrf_token %}
+
+                    <!-- Checker selection -->
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">Select Checker <span class="text-danger">*</span></label>
+                        <p class="text-muted small mb-3">Checkers are ordered by current workload (lightest first).</p>
+
+                        <input type="hidden" name="checker_id" id="selectedChecker" required>
+
+                        {% for checker in checkers %}
+                        <div class="checker-card" id="checker-{{ checker.id }}" onclick="selectChecker({{ checker.id }}, '{{ checker.full_name|default:checker.username }}')">
+                            <div class="flex-shrink-0">
+                                <div style="width:45px;height:45px;border-radius:50%;background:linear-gradient(135deg,#1A1A1A,#2C2C2C);display:flex;align-items:center;justify-content:center;color:var(--primary-gold);font-weight:700;">
+                                    {{ checker.full_name|default:checker.username|first|upper }}
+                                </div>
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <strong>{{ checker.full_name|default:checker.username }}</strong>
+                                    {% if checker.active_assignments == 0 %}
+                                        <span class="workload-pill workload-low">Free ({{ checker.active_assignments }} active)</span>
+                                    {% elif checker.active_assignments <= 2 %}
+                                        <span class="workload-pill workload-medium">{{ checker.active_assignments }} active</span>
+                                    {% else %}
+                                        <span class="workload-pill workload-high">{{ checker.active_assignments }} active — busy</span>
+                                    {% endif %}
+                                </div>
+                                <small class="text-muted">{{ checker.email }}</small>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="text-center py-4 text-muted">
+                            <i class="fas fa-user-slash fa-2x mb-2 d-block"></i>
+                            No active checkers found.
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Due date -->
+                    <div class="mb-4">
+                        <label for="due_date" class="form-label fw-semibold">
+                            Review Deadline <span class="text-danger">*</span>
+                        </label>
+                        <input type="datetime-local"
+                               class="form-control"
+                               id="due_date"
+                               name="due_date"
+                               required
+                               min="{{ today_min }}">
+                        <div class="form-text">Set a realistic deadline. The checker will be notified about overdue reviews.</div>
+                    </div>
+
+                    <!-- Instructions -->
+                    <div class="mb-4">
+                        <label for="instructions" class="form-label fw-semibold">Instructions for Checker</label>
+                        <textarea class="form-control"
+                                  id="instructions"
+                                  name="instructions"
+                                  rows="4"
+                                  placeholder="Any specific aspects to focus on, known issues, or context the checker should know…"></textarea>
+                    </div>
+
+                    <!-- Submit -->
+                    <div class="d-flex gap-3">
+                        <button type="submit" class="btn btn-gold" id="submitBtn" {% if not checkers %}disabled{% endif %}>
+                            <i class="fas fa-user-plus me-2"></i>Assign Checker
+                        </button>
+                        <a href="{% url 'books:maker_dashboard' %}" class="btn btn-outline-gold">
+                            <i class="fas fa-times me-2"></i>Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% block extra_js %}
+<script>
+function selectChecker(id, name) {
+    // Clear all selections
+    document.querySelectorAll('.checker-card').forEach(el => el.classList.remove('selected'));
+    // Mark selected
+    document.getElementById('checker-' + id).classList.add('selected');
+    // Set hidden input
+    document.getElementById('selectedChecker').value = id;
+}
+
+document.getElementById('assignForm').addEventListener('submit', function(e) {
+    if (!document.getElementById('selectedChecker').value) {
+        e.preventDefault();
+        alert('Please select a checker before submitting.');
+    }
+});
+
+// Set minimum datetime to now + 1 hour
+const now = new Date();
+now.setHours(now.getHours() + 24); // default to 24h from now
+const pad = n => String(n).padStart(2, '0');
+const defaultDue = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}`;
+document.getElementById('due_date').value = defaultDue;
+
+const minNow = new Date();
+minNow.setHours(minNow.getHours() + 1);
+const minVal = `${minNow.getFullYear()}-${pad(minNow.getMonth()+1)}-${pad(minNow.getDate())}T${pad(minNow.getHours())}:${pad(minNow.getMinutes())}`;
+document.getElementById('due_date').min = minVal;
+</script>
+{% endblock %}
+{% endblock %}

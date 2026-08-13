@@ -411,8 +411,9 @@ def dashboard_redirect(request):
     role_redirects = {
         'admin': 'accounts:admin_dashboard',
         'author': 'accounts:author_dashboard',
-        'checker': 'accounts:checker_dashboard',
-        'maker': 'accounts:maker_dashboard',
+        # checker and maker dashboards live canonically in the books app
+        'checker': 'books:checker_dashboard',
+        'maker': 'books:maker_dashboard',
         'client': 'accounts:client_dashboard',
     }
     redirect_url = role_redirects.get(user.role, 'accounts:client_dashboard')

@@ -1,0 +1,403 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Initial Review — {{ book.title }} | Abay Repository{% endblock %}
+
+{% block extra_css %}
+<style>
+    :root {
+        --primary-gold: #DAA520;
+        --primary-gold-dark: #B8860B;
+        --primary-darker: #1A1A1A;
+        --primary-dark: #2C2C2C;
+        --primary-gray: #4A4A4A;
+        --success-green: #28a745;
+        --danger-red: #dc3545;
+        --info-blue: #17a2b8;
+    }
+
+    .review-header {
+        background: linear-gradient(135deg, var(--primary-darker) 0%, var(--primary-dark) 100%);
+        border-radius: 20px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        color: white;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .review-header::before {
+        content: '';
+        position: absolute;
+        top: -50%; right: -50%;
+        width: 200%; height: 200%;
+        background: radial-gradient(circle, rgba(218,165,32,0.08) 0%, transparent 70%);
+    }
+
+    .manuscript-info-card {
+        background: white;
+        border-radius: 16px;
+        padding: 1.5rem;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        border-left: 4px solid var(--primary-gold);
+        margin-bottom: 1.5rem;
+    }
+
+    .decision-card {
+        background: white;
+        border-radius: 16px;
+        padding: 2rem;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    }
+
+    .decision-option {
+        border: 2px solid #e9ecef;
+        border-radius: 12px;
+        padding: 1.25rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-bottom: 1rem;
+    }
+
+    .decision-option:hover {
+        border-color: var(--primary-gold);
+        background: rgba(218,165,32,0.04);
+    }
+
+    .decision-option input[type="radio"]:checked + label,
+    .decision-option.selected {
+        border-color: var(--primary-gold);
+        background: rgba(218,165,32,0.06);
+    }
+
+    .decision-option.approve { border-left: 4px solid var(--success-green); }
+    .decision-option.approve:hover,
+    .decision-option.approve.selected { border-color: var(--success-green); background: rgba(40,167,69,0.05); }
+
+    .decision-option.incomplete { border-left: 4px solid var(--danger-red); }
+    .decision-option.incomplete:hover,
+    .decision-option.incomplete.selected { border-color: var(--danger-red); background: rgba(220,53,69,0.05); }
+
+    .btn-gold {
+        background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark));
+        color: var(--primary-darker);
+        border: none;
+        font-weight: 600;
+        padding: 10px 28px;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+    }
+    .btn-gold:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(218,165,32,0.4);
+        color: var(--primary-darker);
+    }
+
+    .btn-outline-gold {
+        border: 2px solid var(--primary-gold);
+        color: var(--primary-gold);
+        background: transparent;
+        font-weight: 600;
+        padding: 10px 28px;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+    }
+    .btn-outline-gold:hover {
+        background: var(--primary-gold);
+        color: var(--primary-darker);
+        transform: translateY(-2px);
+    }
+
+    .checklist-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    .checklist-item:last-child { border-bottom: none; }
+    .checklist-item i { margin-top: 2px; font-size: 1rem; }
+
+    .form-control:focus, .form-select:focus {
+        border-color: var(--primary-gold);
+        box-shadow: 0 0 0 0.2rem rgba(218,165,32,0.25);
+    }
+
+    .meta-badge {
+        display: inline-block;
+        padding: 0.3rem 0.8rem;
+        border-radius: 20px;
+        background: #f0f0f0;
+        font-size: 0.8rem;
+        font-weight: 500;
+        margin: 0.2rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4 mb-5">
+
+    <!-- Header -->
+    <div class="review-header">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="mb-1">
+                    <i class="fas fa-clipboard-check me-2" style="color: var(--primary-gold);"></i>
+                    Initial Review
+                </h1>
+                <p class="mb-0 opacity-75">
+                    Review the completeness of this manuscript before forwarding to a checker.
+                </p>
+            </div>
+            <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                <a href="{% url 'books:maker_dashboard' %}" class="btn btn-outline-gold">
+                    <i class="fas fa-arrow-left me-2"></i> Back to Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Left: Manuscript details -->
+        <div class="col-lg-5">
+            <div class="manuscript-info-card">
+                <h5 class="mb-3">
+                    <i class="fas fa-book me-2" style="color: var(--primary-gold);"></i>
+                    Manuscript Details
+                </h5>
+
+                <h4 class="mb-1">{{ book.title }}</h4>
+                {% if book.subtitle %}
+                    <p class="text-muted mb-2">{{ book.subtitle }}</p>
+                {% endif %}
+
+                <div class="mb-3">
+                    {% if book.manuscript_id %}
+                        <span class="meta-badge"><i class="fas fa-barcode me-1"></i>{{ book.manuscript_id }}</span>
+                    {% endif %}
+                    <span class="meta-badge"><i class="fas fa-tag me-1"></i>{{ book.genre.name|default:"Uncategorized" }}</span>
+                    <span class="meta-badge"><i class="fas fa-language me-1"></i>{{ book.language|default:"English" }}</span>
+                    {% if book.is_free %}
+                        <span class="meta-badge bg-success text-white"><i class="fas fa-gift me-1"></i>FREE</span>
+                    {% else %}
+                        <span class="meta-badge"><i class="fas fa-money-bill me-1"></i>{{ book.price }} ETB</span>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3">
+                    <strong>Author:</strong>
+                    {{ book.author.full_name|default:book.author.username }}
+                    <br>
+                    <small class="text-muted">{{ book.author.email }}</small>
+                </div>
+
+                {% if book.description %}
+                <div class="mb-3">
+                    <strong>Description:</strong>
+                    <p class="text-muted small mt-1">{{ book.description|truncatechars:300 }}</p>
+                </div>
+                {% endif %}
+
+                <div class="mb-2">
+                    <strong>Submitted:</strong>
+                    {{ book.submitted_at|date:"N j, Y g:i A"|default:book.created_at|date:"N j, Y g:i A" }}
+                </div>
+
+                {% if book.file %}
+                <div class="mt-3">
+                    <a href="{% url 'books:detail' book.id %}" class="btn btn-outline-gold btn-sm w-100">
+                        <i class="fas fa-eye me-2"></i>View Full Manuscript
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Checklist -->
+            <div class="manuscript-info-card" style="border-left-color: var(--info-blue);">
+                <h6 class="mb-3">
+                    <i class="fas fa-tasks me-2" style="color: var(--info-blue);"></i>
+                    Initial Review Checklist
+                </h6>
+
+                <div class="checklist-item">
+                    <i class="fas fa-{% if book.file %}check-circle text-success{% else %}times-circle text-danger{% endif %}"></i>
+                    <div>
+                        <strong>Manuscript File</strong>
+                        <br><small class="text-muted">
+                            {% if book.file %}File uploaded ✓{% else %}No file attached — cannot proceed{% endif %}
+                        </small>
+                    </div>
+                </div>
+
+                <div class="checklist-item">
+                    <i class="fas fa-{% if book.title and book.description %}check-circle text-success{% else %}times-circle text-danger{% endif %}"></i>
+                    <div>
+                        <strong>Title & Description</strong>
+                        <br><small class="text-muted">
+                            {% if book.title and book.description %}Complete ✓{% else %}Incomplete{% endif %}
+                        </small>
+                    </div>
+                </div>
+
+                <div class="checklist-item">
+                    <i class="fas fa-{% if book.genre %}check-circle text-success{% else %}exclamation-circle text-warning{% endif %}"></i>
+                    <div>
+                        <strong>Genre Category</strong>
+                        <br><small class="text-muted">
+                            {% if book.genre %}{{ book.genre.name }} ✓{% else %}Not categorized{% endif %}
+                        </small>
+                    </div>
+                </div>
+
+                <div class="checklist-item">
+                    <i class="fas fa-{% if book.cover_image %}check-circle text-success{% else %}exclamation-circle text-warning{% endif %}"></i>
+                    <div>
+                        <strong>Cover Image</strong>
+                        <br><small class="text-muted">
+                            {% if book.cover_image %}Uploaded ✓{% else %}Missing (optional but recommended){% endif %}
+                        </small>
+                    </div>
+                </div>
+
+                <div class="checklist-item">
+                    <i class="fas fa-{% if book.price or book.is_free %}check-circle text-success{% else %}exclamation-circle text-warning{% endif %}"></i>
+                    <div>
+                        <strong>Pricing</strong>
+                        <br><small class="text-muted">
+                            {% if book.is_free %}Free ✓{% elif book.price %}{{ book.price }} ETB ✓{% else %}No price set{% endif %}
+                        </small>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Right: Decision form -->
+        <div class="col-lg-7">
+            <div class="decision-card">
+                <h5 class="mb-4">
+                    <i class="fas fa-gavel me-2" style="color: var(--primary-gold);"></i>
+                    Your Decision
+                </h5>
+
+                <form method="POST" id="initialReviewForm">
+                    {% csrf_token %}
+
+                    <!-- Decision options -->
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold mb-3">Select a decision:</label>
+
+                        <div class="decision-option approve" id="opt-complete" onclick="selectDecision('complete')">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="decision" id="dec-complete" value="complete" required>
+                                <label class="form-check-label w-100" for="dec-complete" style="cursor:pointer;">
+                                    <div class="d-flex align-items-center gap-2 mb-1">
+                                        <i class="fas fa-check-circle text-success fa-lg"></i>
+                                        <strong>Complete — Forward to Checker</strong>
+                                    </div>
+                                    <small class="text-muted">
+                                        The manuscript meets initial requirements. It will move to
+                                        <em>Awaiting Checker Assignment</em> so you can assign a quality checker.
+                                    </small>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="decision-option incomplete" id="opt-incomplete" onclick="selectDecision('incomplete')">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="decision" id="dec-incomplete" value="incomplete" required>
+                                <label class="form-check-label w-100" for="dec-incomplete" style="cursor:pointer;">
+                                    <div class="d-flex align-items-center gap-2 mb-1">
+                                        <i class="fas fa-undo-alt text-danger fa-lg"></i>
+                                        <strong>Incomplete — Return to Author</strong>
+                                    </div>
+                                    <small class="text-muted">
+                                        The manuscript is missing required information or files. It will be
+                                        returned to the author with your notes for completion.
+                                    </small>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Notes -->
+                    <div class="mb-4">
+                        <label for="notes" class="form-label fw-semibold">
+                            Review Notes
+                            <span id="notesRequired" class="text-danger d-none">*</span>
+                        </label>
+                        <textarea
+                            class="form-control"
+                            id="notes"
+                            name="notes"
+                            rows="5"
+                            placeholder="Add notes for the author or for internal records. Required when returning to author."
+                        ></textarea>
+                        <div class="form-text" id="notesHint">Optional for approval, required when returning to author.</div>
+                    </div>
+
+                    <!-- Submit -->
+                    <div class="d-flex gap-3">
+                        <button type="submit" class="btn btn-gold" id="submitBtn">
+                            <i class="fas fa-paper-plane me-2"></i>Submit Decision
+                        </button>
+                        <a href="{% url 'books:maker_dashboard' %}" class="btn btn-outline-gold">
+                            <i class="fas fa-times me-2"></i>Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% block extra_js %}
+<script>
+function selectDecision(value) {
+    // Update radio buttons
+    document.getElementById('dec-complete').checked = (value === 'complete');
+    document.getElementById('dec-incomplete').checked = (value === 'incomplete');
+
+    // Update visual selection
+    document.querySelectorAll('.decision-option').forEach(el => el.classList.remove('selected'));
+    document.getElementById('opt-' + value).classList.add('selected');
+
+    // Toggle notes required indicator
+    const notesRequired = document.getElementById('notesRequired');
+    const notesHint = document.getElementById('notesHint');
+    const notesField = document.getElementById('notes');
+
+    if (value === 'incomplete') {
+        notesRequired.classList.remove('d-none');
+        notesField.setAttribute('required', 'required');
+        notesField.placeholder = 'Explain what is missing or needs to be corrected (required).';
+        notesHint.textContent = 'Required: Describe what the author needs to fix.';
+    } else {
+        notesRequired.classList.add('d-none');
+        notesField.removeAttribute('required');
+        notesField.placeholder = 'Add notes for the author or for internal records. Optional.';
+        notesHint.textContent = 'Optional for approval, required when returning to author.';
+    }
+}
+
+document.getElementById('initialReviewForm').addEventListener('submit', function(e) {
+    const decision = document.querySelector('input[name="decision"]:checked');
+    if (!decision) {
+        e.preventDefault();
+        alert('Please select a decision before submitting.');
+        return;
+    }
+    if (decision.value === 'incomplete') {
+        const notes = document.getElementById('notes').value.trim();
+        if (!notes) {
+            e.preventDefault();
+            alert('Please provide notes explaining what needs to be corrected when returning to author.');
+            document.getElementById('notes').focus();
+        }
+    }
+});
+</script>
+{% endblock %}
+{% endblock %}

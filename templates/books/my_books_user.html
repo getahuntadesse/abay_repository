@@ -1,0 +1,661 @@
+<!-- templates/books/my_books_user.html -->
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}My Library - Abay Repository{% endblock %}
+
+{% block extra_css %}
+<style>
+    :root {
+        --primary-gold: #DAA520;
+        --primary-gold-dark: #B8860B;
+        --primary-dark: #2C2C2C;
+        --primary-darker: #1A1A1A;
+        --primary-gray: #6c757d;
+    }
+
+    .page-header {
+        background: linear-gradient(135deg, var(--primary-dark), var(--primary-darker));
+        padding: 2rem 0;
+        border-radius: 15px;
+        margin-bottom: 2rem;
+        color: white;
+        border-bottom: 3px solid var(--primary-gold);
+    }
+
+    .page-header h2 {
+        color: var(--primary-gold);
+    }
+
+    .page-header .subtitle {
+        color: rgba(255,255,255,0.7);
+        font-size: 0.95rem;
+    }
+
+    .stat-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1.25rem 1rem;
+        text-align: center;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+        height: 100%;
+        border: none;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .stat-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--primary-gold), var(--primary-gold-dark));
+    }
+
+    .stat-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+    }
+
+    .stat-card .stat-number {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--primary-gold);
+        line-height: 1.2;
+    }
+
+    .stat-card .stat-label {
+        font-size: 0.85rem;
+        color: var(--primary-gray);
+        margin-top: 0.25rem;
+    }
+
+    .stat-card .stat-icon {
+        font-size: 1.5rem;
+        color: var(--primary-gold);
+        opacity: 0.3;
+        position: absolute;
+        right: 0.75rem;
+        bottom: 0.75rem;
+    }
+
+    /* Book Card - Enhanced */
+    .book-card {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        border: 1px solid rgba(0,0,0,0.04);
+    }
+
+    .book-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+    }
+
+    .book-card .book-image-wrapper {
+        position: relative;
+        overflow: hidden;
+        background: #f8f9fa;
+        padding-top: 140%;
+    }
+
+    .book-card .book-cover {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    .book-card:hover .book-cover {
+        transform: scale(1.03);
+    }
+
+    .book-card .book-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.4);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    .book-card:hover .book-overlay {
+        opacity: 1;
+    }
+
+    .book-card .book-overlay .btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+        border-radius: 8px;
+        min-width: 80px;
+        text-align: center;
+    }
+
+    .book-card .book-info {
+        padding: 1rem;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .book-card .book-title {
+        font-weight: 600;
+        font-size: 1rem;
+        color: var(--primary-dark);
+        margin-bottom: 0.25rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        min-height: 2.6rem;
+        line-height: 1.3;
+    }
+
+    .book-card .book-title a {
+        color: var(--primary-dark);
+        text-decoration: none;
+    }
+
+    .book-card .book-title a:hover {
+        color: var(--primary-gold);
+    }
+
+    .book-card .book-author {
+        font-size: 0.85rem;
+        color: var(--primary-gray);
+        margin-bottom: 0.5rem;
+    }
+
+    .book-card .book-author a {
+        color: var(--primary-gray);
+        text-decoration: none;
+    }
+
+    .book-card .book-author a:hover {
+        color: var(--primary-gold);
+    }
+
+    .book-card .book-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.25rem;
+        margin-top: auto;
+        padding-top: 0.5rem;
+        border-top: 1px solid #f0f0f0;
+        font-size: 0.75rem;
+        color: var(--primary-gray);
+    }
+
+    .book-card .book-meta .meta-item {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+
+    .book-card .book-meta .meta-item i {
+        color: var(--primary-gold);
+        font-size: 0.7rem;
+    }
+
+    .badge-purchased {
+        background: #d4edda;
+        color: #155724;
+        font-weight: 600;
+        padding: 0.2rem 0.6rem;
+        border-radius: 20px;
+        font-size: 0.65rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+
+    .badge-free {
+        background: #cce5ff;
+        color: #004085;
+        font-weight: 600;
+        padding: 0.2rem 0.6rem;
+        border-radius: 20px;
+        font-size: 0.65rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+
+    .btn-gold {
+        background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark));
+        color: var(--primary-dark);
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.4rem;
+        padding: 0.4rem 0.9rem;
+        font-size: 0.8rem;
+    }
+
+    .btn-gold:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(218, 165, 32, 0.3);
+        color: var(--primary-dark);
+    }
+
+    .btn-outline-gold {
+        border: 2px solid var(--primary-gold);
+        color: var(--primary-gold);
+        background: transparent;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.4rem;
+        padding: 0.4rem 0.9rem;
+        font-size: 0.8rem;
+    }
+
+    .btn-outline-gold:hover {
+        background: var(--primary-gold);
+        color: var(--primary-dark);
+        transform: translateY(-2px);
+    }
+
+    .btn-white {
+        background: rgba(255,255,255,0.9);
+        color: var(--primary-dark);
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.4rem;
+        padding: 0.4rem 0.9rem;
+        font-size: 0.8rem;
+    }
+
+    .btn-white:hover {
+        background: white;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        color: var(--primary-dark);
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 4rem 1rem;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    }
+
+    .empty-state i {
+        font-size: 4rem;
+        color: #dee2e6;
+        margin-bottom: 1rem;
+    }
+
+    .empty-state h4 {
+        color: #6c757d;
+        margin-bottom: 0.5rem;
+    }
+
+    .empty-state p {
+        color: #adb5bd;
+        max-width: 400px;
+        margin: 0 auto 1.5rem;
+    }
+
+    .search-bar {
+        background: white;
+        border-radius: 12px;
+        padding: 0.5rem 1rem;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 1.5rem;
+        border: 1px solid #e9ecef;
+    }
+
+    .search-bar input {
+        border: none;
+        outline: none;
+        flex: 1;
+        padding: 0.5rem 0;
+        font-size: 0.95rem;
+        background: transparent;
+    }
+
+    .search-bar input::placeholder {
+        color: #adb5bd;
+    }
+
+    .search-bar button {
+        background: none;
+        border: none;
+        color: var(--primary-gold);
+        font-size: 1.1rem;
+        cursor: pointer;
+        padding: 0.25rem 0.5rem;
+    }
+
+    .sort-filter {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        margin-bottom: 1.5rem;
+    }
+
+    .sort-filter .filter-label {
+        font-size: 0.85rem;
+        color: var(--primary-gray);
+        font-weight: 500;
+    }
+
+    .sort-filter select {
+        padding: 0.35rem 0.75rem;
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        background: white;
+        color: var(--primary-dark);
+        outline: none;
+        cursor: pointer;
+    }
+
+    .sort-filter select:focus {
+        border-color: var(--primary-gold);
+    }
+
+    /* Responsive */
+    @media (max-width: 576px) {
+        .page-header h2 {
+            font-size: 1.3rem;
+        }
+        .page-header .subtitle {
+            font-size: 0.85rem;
+        }
+        .stat-card .stat-number {
+            font-size: 1.5rem;
+        }
+        .book-card .book-cover {
+            height: auto;
+        }
+        .book-card .book-overlay {
+            opacity: 1;
+            background: rgba(0,0,0,0.3);
+        }
+        .book-card .book-overlay .btn {
+            padding: 0.35rem 0.7rem;
+            font-size: 0.7rem;
+            min-width: 60px;
+        }
+        .sort-filter {
+            flex-direction: column;
+            align-items: stretch;
+        }
+        .sort-filter .filter-label {
+            margin-bottom: 0.25rem;
+        }
+    }
+
+    @media (min-width: 768px) {
+        .book-card .book-image-wrapper {
+            padding-top: 130%;
+        }
+    }
+
+    @media (min-width: 992px) {
+        .book-card .book-image-wrapper {
+            padding-top: 120%;
+        }
+    }
+
+    /* Animation */
+    .fade-in {
+        animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <div>
+                    <h2>
+                        <i class="fas fa-book-open me-2" style="color: var(--primary-gold);"></i>
+                        My Library
+                    </h2>
+                    <p class="subtitle mb-0">All the books you've purchased and can read</p>
+                </div>
+                <div>
+                    <a href="{% url 'books:browse' %}" class="btn btn-outline-gold btn-sm">
+                        <i class="fas fa-search me-2"></i> Browse More Books
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-md-3">
+            <div class="stat-card">
+                <div class="stat-number">{{ total_books }}</div>
+                <div class="stat-label">Books in Library</div>
+                <div class="stat-icon"><i class="fas fa-book"></i></div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="stat-card">
+                <div class="stat-number">{{ purchases|length }}</div>
+                <div class="stat-label">Total Purchases</div>
+                <div class="stat-icon"><i class="fas fa-shopping-cart"></i></div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="stat-card">
+                <div class="stat-number">{{ total_downloads|default:0|intcomma }}</div>
+                <div class="stat-label">Total Downloads</div>
+                <div class="stat-icon"><i class="fas fa-download"></i></div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="stat-card">
+                <div class="stat-number">{{ total_read_time|default:0 }}</div>
+                <div class="stat-label">Reading Time (min)</div>
+                <div class="stat-icon"><i class="fas fa-clock"></i></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search and Filter -->
+    <div class="row g-3 mb-3">
+        <div class="col-md-6">
+            <div class="search-bar">
+                <i class="fas fa-search" style="color: var(--primary-gold);"></i>
+                <input type="text" id="searchBooks" placeholder="Search your library..." onkeyup="filterBooks()">
+                <button type="button" onclick="clearSearch()"><i class="fas fa-times"></i></button>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="sort-filter justify-content-md-end">
+                <span class="filter-label"><i class="fas fa-sort me-1"></i> Sort by:</span>
+                <select id="sortBooks" onchange="sortBooks()">
+                    <option value="newest">Newest First</option>
+                    <option value="oldest">Oldest First</option>
+                    <option value="title">Title A-Z</option>
+                    <option value="author">Author A-Z</option>
+                    <option value="downloads">Most Downloaded</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Books Grid -->
+    {% if books %}
+    <div class="row g-4" id="booksGrid">
+        {% for book in books %}
+        <div class="col-md-4 col-sm-6 fade-in book-item" 
+             data-title="{{ book.title|lower }}" 
+             data-author="{{ book.author.full_name|lower|default:book.author.username|lower }}"
+             data-date="{{ book.published_at|date:'U'|default:book.created_at|date:'U' }}"
+             data-downloads="{{ book.downloads_count }}">
+            <div class="book-card">
+                <div class="book-image-wrapper">
+                    {% if book.cover_image %}
+                    <img src="{{ book.cover_image.url }}" alt="{{ book.title }}" class="book-cover" loading="lazy">
+                    {% else %}
+                    <img src="{% static 'images/default-cover.jpg' %}" alt="{{ book.title }}" class="book-cover" loading="lazy">
+                    {% endif %}
+                    <div class="book-overlay">
+                        <a href="{% url 'books:download' book.id %}" class="btn btn-white" title="Download">
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                        <a href="{% url 'books:detail' book.id %}" class="btn btn-gold" title="View Details">
+                            <i class="fas fa-eye"></i> View
+                        </a>
+                    </div>
+                </div>
+                <div class="book-info">
+                    <div class="book-title">
+                        <a href="{% url 'books:detail' book.id %}">{{ book.title }}</a>
+                    </div>
+                    <div class="book-author">
+                        by <a href="{% url 'books:author_books' book.author.id %}">{{ book.author.full_name|default:book.author.username }}</a>
+                    </div>
+                    <div class="book-meta">
+                        <span class="meta-item">
+                            <i class="fas fa-download"></i> {{ book.downloads_count|intcomma }}
+                        </span>
+                        <span class="meta-item">
+                            <i class="fas fa-eye"></i> {{ book.views_count|intcomma }}
+                        </span>
+                        <span>
+                            {% if book.is_free %}
+                            <span class="badge-free"><i class="fas fa-gift"></i> Free</span>
+                            {% else %}
+                            <span class="badge-purchased"><i class="fas fa-check-circle"></i> Purchased</span>
+                            {% endif %}
+                        </span>
+                    </div>
+                    <div class="book-meta mt-1" style="border-top: none; padding-top: 0;">
+                        <span class="meta-item">
+                            <i class="fas fa-calendar-alt"></i> 
+                            {{ book.published_at|default:book.created_at|date:"M d, Y" }}
+                        </span>
+                        <span class="meta-item">
+                            <i class="fas fa-tag"></i> 
+                            {{ book.genre.name|default:"Uncategorized" }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <!-- Empty State -->
+    <div class="empty-state">
+        <i class="fas fa-book"></i>
+        <h4>Your Library is Empty</h4>
+        <p>You haven't purchased any books yet. Browse our collection and start your reading journey!</p>
+        <a href="{% url 'books:browse' %}" class="btn btn-gold">
+            <i class="fas fa-search me-2"></i> Explore Books
+        </a>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+    // Search filter function
+    function filterBooks() {
+        const input = document.getElementById('searchBooks');
+        const filter = input.value.toLowerCase();
+        const items = document.querySelectorAll('.book-item');
+        
+        items.forEach(item => {
+            const title = item.getAttribute('data-title') || '';
+            const author = item.getAttribute('data-author') || '';
+            const match = title.includes(filter) || author.includes(filter);
+            item.style.display = match ? '' : 'none';
+        });
+    }
+
+    // Clear search
+    function clearSearch() {
+        document.getElementById('searchBooks').value = '';
+        filterBooks();
+    }
+
+    // Sort function
+    function sortBooks() {
+        const sortBy = document.getElementById('sortBooks').value;
+        const grid = document.getElementById('booksGrid');
+        const items = Array.from(grid.querySelectorAll('.book-item'));
+        
+        items.sort((a, b) => {
+            switch(sortBy) {
+                case 'newest':
+                    return parseInt(b.getAttribute('data-date')) - parseInt(a.getAttribute('data-date'));
+                case 'oldest':
+                    return parseInt(a.getAttribute('data-date')) - parseInt(b.getAttribute('data-date'));
+                case 'title':
+                    return a.getAttribute('data-title').localeCompare(b.getAttribute('data-title'));
+                case 'author':
+                    return a.getAttribute('data-author').localeCompare(b.getAttribute('data-author'));
+                case 'downloads':
+                    return parseInt(b.getAttribute('data-downloads')) - parseInt(a.getAttribute('data-downloads'));
+                default:
+                    return 0;
+            }
+        });
+        
+        items.forEach(item => grid.appendChild(item));
+    }
+
+    // Enter key triggers search
+    document.getElementById('searchBooks').addEventListener('keyup', function(e) {
+        if (e.key === 'Enter') {
+            filterBooks();
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'emails/base_email.html' %}
+
+{% block content %}
+<h2>✅ Book Approved by Checker</h2>
+<p>Dear {{ user.full_name }},</p>
+<p>Great news! Your book <strong>"{{ book.title }}"</strong> has been approved by our quality checker.</p>
+
+<div class="status-box">
+    <p><strong>Overall Score:</strong> <span class="score-high">{{ review.overall_score|floatformat:1 }}/10</span></p>
+    <p><strong>Content Quality:</strong> {{ review.content_quality|floatformat:1 }}/10</p>
+    <p><strong>Editorial Quality:</strong> {{ review.editorial_quality|floatformat:1 }}/10</p>
+    <p><strong>Technical Quality:</strong> {{ review.technical_quality|floatformat:1 }}/10</p>
+</div>
+
+{% if review.comments %}
+<div class="status-box">
+    <p><strong>Reviewer Comments:</strong></p>
+    <p>{{ review.comments }}</p>
+</div>
+{% endif %}
+
+<p>Your book is now being reviewed by our maker team for final publication. You will receive another notification once it's published.</p>
+
+<p><a href="{{ site_url }}{% url 'books:detail' book.id %}" class="button">View Your Book</a></p>
+
+<p>Congratulations on reaching this milestone!</p>
+<p>Best regards,<br>The Abay Repository Team</p>
+{% endblock %}

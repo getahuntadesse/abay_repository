@@ -343,10 +343,41 @@
         font-weight: 800;
     }
 
+    .log-level.PAYMENT {
+        background: rgba(218, 165, 32, 0.3);
+        color: var(--primary-gold);
+    }
+
+    .log-level.AUTH {
+        background: rgba(111, 66, 193, 0.3);
+        color: #6f42c1;
+    }
+
+    .log-level.SECURITY {
+        background: rgba(220, 53, 69, 0.3);
+        color: #dc3545;
+    }
+
     .log-message {
         flex: 1;
         word-break: break-word;
         font-size: 0.75rem;
+    }
+
+    .log-message .highlight-payment {
+        color: var(--primary-gold);
+    }
+
+    .log-message .highlight-auth {
+        color: #6f42c1;
+    }
+
+    .log-message .highlight-error {
+        color: #dc3545;
+    }
+
+    .log-message .highlight-success {
+        color: #28a745;
     }
 
     .log-controls {
@@ -460,6 +491,37 @@
         font-weight: 700;
         margin-left: 0.5rem;
     }
+
+    .log-statistics {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .log-stat-item {
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: 0.5rem;
+        text-align: center;
+    }
+
+    .log-stat-item .count {
+        font-size: 1.25rem;
+        font-weight: 700;
+    }
+
+    .log-stat-item .label {
+        font-size: 0.65rem;
+        color: var(--primary-gray-light);
+        text-transform: uppercase;
+    }
+
+    .log-stat-item .count.info { color: #28a745; }
+    .log-stat-item .count.warning { color: #ffc107; }
+    .log-stat-item .count.error { color: #dc3545; }
+    .log-stat-item .count.payment { color: var(--primary-gold); }
+    .log-stat-item .count.auth { color: #6f42c1; }
 
     /* Quick Action Buttons */
     .quick-actions {
@@ -597,6 +659,10 @@
                         <i class="fas fa-calendar-alt me-1"></i>
                         {% now "F j, Y" %}
                     </span>
+                    <span class="status-badge ms-2" style="background: rgba(23, 162, 184, 0.15); border-color: rgba(23, 162, 184, 0.3); color: #17a2b8;">
+                        <i class="fas fa-file-alt me-1"></i>
+                        Logs: <span id="logFileSize">0 KB</span>
+                    </span>
                 </div>
             </div>
             <div class="col-md-4 text-md-end mt-3 mt-md-0">
@@ -605,7 +671,7 @@
                         <i class="fas fa-cog"></i>
                         Admin Panel
                     </a>
-                    <a href="#" class="quick-action-btn">
+                    <a href="{% url 'books:upload' %}" class="quick-action-btn">
                         <i class="fas fa-plus-circle"></i>
                         Add Book
                     </a>
@@ -719,7 +785,7 @@
                     </div>
                     <div>
                         <div class="stat-number">
-                            <span class="currency">$</span>{{ total_sales|default:0|floatformat:2|intcomma }}
+                            <span class="currency">ETB</span> {{ total_sales|default:0|floatformat:2|intcomma }}
                         </div>
                         <div class="stat-label">Total Revenue</div>
                     </div>
@@ -737,19 +803,19 @@
                     <div class="col-md-4">
                         <div class="revenue-mini-card">
                             <div class="label">Today</div>
-                            <div class="value">${{ today_sales|default:0|floatformat:2 }}</div>
+                            <div class="value">ETB {{ today_sales|default:0|floatformat:2 }}</div>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="revenue-mini-card">
                             <div class="label">This Week</div>
-                            <div class="value">${{ week_sales|default:0|floatformat:2 }}</div>
+                            <div class="value">ETB {{ week_sales|default:0|floatformat:2 }}</div>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="revenue-mini-card">
                             <div class="label">This Month</div>
-                            <div class="value">${{ monthly_sales|default:0|floatformat:2 }}</div>
+                            <div class="value">ETB {{ month_sales|default:0|floatformat:2 }}</div>
                         </div>
                     </div>
                 </div>
@@ -758,17 +824,17 @@
                 <div>
                     <div class="d-flex justify-content-between align-items-center mb-2">
                         <span class="fw-bold">Payment Method Breakdown</span>
-                        <span class="text-muted">Total: ${{ total_sales|default:0|floatformat:2 }}</span>
+                        <span class="text-muted">Total: ETB {{ total_sales|default:0|floatformat:2 }}</span>
                     </div>
 
                     {% with total=telebirr_sales|default:0|add:cbe_sales|default:0 %}
                         <div class="progress">
                             {% if total > 0 %}
                                 <div class="progress-bar bg-info" style="width: {% widthratio telebirr_sales|default:0 total 100 %}%;">
-                                    Telebirr ${{ telebirr_sales|default:0|floatformat:2 }}
+                                    Telebirr ETB {{ telebirr_sales|default:0|floatformat:2 }}
                                 </div>
                                 <div class="progress-bar bg-primary" style="width: {% widthratio cbe_sales|default:0 total 100 %}%;">
-                                    CBE ${{ cbe_sales|default:0|floatformat:2 }}
+                                    CBE ETB {{ cbe_sales|default:0|floatformat:2 }}
                                 </div>
                             {% else %}
                                 <div class="progress-bar bg-secondary" style="width: 100%;">
@@ -779,11 +845,11 @@
                         <div class="payment-legend">
                             <span class="legend-item">
                                 <span class="legend-color telebirr"></span>
-                                Telebirr: ${{ telebirr_sales|default:0|floatformat:2 }}
+                                Telebirr: ETB {{ telebirr_sales|default:0|floatformat:2 }}
                             </span>
                             <span class="legend-item">
                                 <span class="legend-color cbe"></span>
-                                CBE Birr: ${{ cbe_sales|default:0|floatformat:2 }}
+                                CBE Birr: ETB {{ cbe_sales|default:0|floatformat:2 }}
                             </span>
                             {% if total == 0 %}
                                 <span class="legend-item text-muted">No payments recorded yet</span>
@@ -825,11 +891,11 @@
                     </div>
                     <div class="stat-list-item">
                         <span class="label"><i class="fas fa-chart-line me-2"></i>Monthly Revenue</span>
-                        <span class="value" style="color: var(--primary-gold);">${{ monthly_sales|default:0|floatformat:2 }}</span>
+                        <span class="value" style="color: var(--primary-gold);">ETB {{ month_sales|default:0|floatformat:2 }}</span>
                     </div>
                     <div class="stat-list-item">
                         <span class="label"><i class="fas fa-credit-card me-2"></i>Total Revenue</span>
-                        <span class="value" style="color: var(--primary-gold);">${{ total_sales|default:0|floatformat:2 }}</span>
+                        <span class="value" style="color: var(--primary-gold);">ETB {{ total_sales|default:0|floatformat:2 }}</span>
                     </div>
                 </div>
             </div>
@@ -859,6 +925,12 @@
                         <button class="btn-filter" data-level="ERROR">
                             Error <span class="count" id="countError">0</span>
                         </button>
+                        <button class="btn-filter" data-level="PAYMENT">
+                            Payment <span class="count" id="countPayment">0</span>
+                        </button>
+                        <button class="btn-filter" data-level="AUTH">
+                            Auth <span class="count" id="countAuth">0</span>
+                        </button>
                         <button class="btn-filter" data-level="DEBUG">
                             Debug <span class="count" id="countDebug">0</span>
                         </button>
@@ -873,6 +945,31 @@
                         </button>
                     </div>
                 </div>
+                
+                <!-- Log Statistics -->
+                <div class="log-statistics" id="logStatistics">
+                    <div class="log-stat-item">
+                        <div class="count info" id="statInfo">0</div>
+                        <div class="label">Info</div>
+                    </div>
+                    <div class="log-stat-item">
+                        <div class="count warning" id="statWarning">0</div>
+                        <div class="label">Warnings</div>
+                    </div>
+                    <div class="log-stat-item">
+                        <div class="count error" id="statError">0</div>
+                        <div class="label">Errors</div>
+                    </div>
+                    <div class="log-stat-item">
+                        <div class="count payment" id="statPayment">0</div>
+                        <div class="label">Payments</div>
+                    </div>
+                    <div class="log-stat-item">
+                        <div class="count auth" id="statAuth">0</div>
+                        <div class="label">Auth Events</div>
+                    </div>
+                </div>
+                
                 <div class="log-container" id="logContainer">
                     <div class="no-logs" id="noLogs">
                         <i class="fas fa-terminal"></i>
@@ -882,6 +979,8 @@
                 </div>
                 <div class="mt-2 text-end">
                     <small class="text-muted" id="logUpdateTime">Last updated: {% now "F j, Y H:i:s" %}</small>
+                    <span class="text-muted mx-2">|</span>
+                    <small class="text-muted" id="logFileInfo">Log file: logs.txt</small>
                 </div>
             </div>
         </div>
@@ -896,6 +995,9 @@
                 <span class="mx-2">|</span>
                 <i class="fas fa-version me-1"></i>
                 Abay Repository v{{ APP_VERSION|default:"1.0.0" }}
+                <span class="mx-2">|</span>
+                <i class="fas fa-file-alt me-1"></i>
+                Logs stored in: <code>logs.txt</code>
             </div>
         </div>
     </div>
@@ -934,13 +1036,25 @@
                         logData = data.logs;
                         renderLogs(logData);
                         updateCounts(logData);
+                        updateStatistics(logData);
                         document.getElementById('logUpdateTime').textContent = 'Last updated: ' + new Date().toLocaleString();
+                        
+                        // Update log file info
+                        if (data.file_size) {
+                            const size = data.file_size;
+                            if (size < 1024) {
+                                document.getElementById('logFileSize').textContent = size + ' B';
+                            } else if (size < 1048576) {
+                                document.getElementById('logFileSize').textContent = (size / 1024).toFixed(1) + ' KB';
+                            } else {
+                                document.getElementById('logFileSize').textContent = (size / 1048576).toFixed(1) + ' MB';
+                            }
+                        }
                         
                         // Check for new logs
                         if (logData.length > lastLogCount) {
                             const newCount = logData.length - lastLogCount;
-                            const logContainer = document.getElementById('logContainer');
-                            if (newCount > 0 && !logContainer.querySelector('.no-logs')) {
+                            if (newCount > 0) {
                                 // Show notification
                                 const notification = document.createElement('div');
                                 notification.className = 'alert alert-info alert-dismissible fade show py-1 mb-1';
@@ -1001,18 +1115,30 @@
 
             // Show latest logs first (most recent at top)
             let html = '';
-            const displayLogs = filteredLogs.slice(0, 100); // Limit to 100 logs for performance
+            const displayLogs = filteredLogs.slice(0, 100);
             
             displayLogs.forEach(function(log) {
-                const levelClass = log.level || 'INFO';
-                const timestamp = log.timestamp || new Date().toISOString();
-                const message = log.message || 'No message';
+                let levelClass = log.level || 'INFO';
+                let message = log.message || 'No message';
+                let timestamp = log.timestamp || new Date().toISOString();
+                
+                // Highlight specific message types
+                let messageClass = '';
+                if (levelClass === 'PAYMENT') {
+                    messageClass = 'highlight-payment';
+                } else if (levelClass === 'AUTH') {
+                    messageClass = 'highlight-auth';
+                } else if (levelClass === 'ERROR' || levelClass === 'CRITICAL') {
+                    messageClass = 'highlight-error';
+                } else if (message.includes('success') || message.includes('completed')) {
+                    messageClass = 'highlight-success';
+                }
                 
                 html += `
                     <div class="log-entry" data-level="${levelClass}">
                         <span class="log-timestamp">${formatTimestamp(timestamp)}</span>
                         <span class="log-level ${levelClass}">${levelClass}</span>
-                        <span class="log-message">${escapeHtml(message)}</span>
+                        <span class="log-message ${messageClass}">${escapeHtml(message)}</span>
                     </div>
                 `;
             });
@@ -1058,13 +1184,32 @@
             const error = logs.filter(l => l.level === 'ERROR').length;
             const debug = logs.filter(l => l.level === 'DEBUG').length;
             const critical = logs.filter(l => l.level === 'CRITICAL').length;
+            const payment = logs.filter(l => l.level === 'PAYMENT').length;
+            const auth = logs.filter(l => l.level === 'AUTH').length;
 
             document.getElementById('countAll').textContent = total;
             document.getElementById('countInfo').textContent = info;
             document.getElementById('countWarning').textContent = warning;
             document.getElementById('countError').textContent = error;
+            document.getElementById('countPayment').textContent = payment;
+            document.getElementById('countAuth').textContent = auth;
             document.getElementById('countDebug').textContent = debug;
             document.getElementById('countCritical').textContent = critical;
+        }
+
+        // Update statistics
+        function updateStatistics(logs) {
+            const info = logs.filter(l => l.level === 'INFO').length;
+            const warning = logs.filter(l => l.level === 'WARNING').length;
+            const error = logs.filter(l => l.level === 'ERROR').length;
+            const payment = logs.filter(l => l.level === 'PAYMENT').length;
+            const auth = logs.filter(l => l.level === 'AUTH').length;
+
+            document.getElementById('statInfo').textContent = info;
+            document.getElementById('statWarning').textContent = warning;
+            document.getElementById('statError').textContent = error;
+            document.getElementById('statPayment').textContent = payment;
+            document.getElementById('statAuth').textContent = auth;
         }
 
         // Filter logs by level
@@ -1158,11 +1303,6 @@
         window.addEventListener('beforeunload', function() {
             stopAutoRefresh();
         });
-
-        // Auto-refresh stats every 60 seconds (optional)
-        // setInterval(function() {
-        //     location.reload();
-        // }, 60000);
     });
 </script>
 {% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'emails/base_email.html' %}
+
+{% block content %}
+<h2>New Book Ready for Review</h2>
+<p>Dear {{ user.full_name }},</p>
+<p>A new book has been uploaded and is ready for your review.</p>
+
+<div class="status-box">
+    <p><strong>Title:</strong> {{ book.title }}</p>
+    <p><strong>Author:</strong> {{ book.author.full_name }}</p>
+    <p><strong>Genre:</strong> {{ book.genre.name|default:"Not specified" }}</p>
+    <p><strong>Language:</strong> {{ book.language|default:"English" }}</p>
+</div>
+
+<p>Please review this book and assign it to an appropriate checker for quality assessment.</p>
+
+<p><a href="{{ site_url }}{% url 'books:detail' book.id %}" class="button">Review Book</a></p>
+
+<p>Best regards,<br>The Abay Repository Team</p>
+{% endblock %}

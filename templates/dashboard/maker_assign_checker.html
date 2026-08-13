@@ -1,0 +1,231 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Assign Checker - {{ book.title }} | Abay Repository{% endblock %}
+
+{% block extra_css %}
+<style>
+    .form-container {
+        max-width: 700px;
+        margin: 0 auto;
+    }
+    .btn-gold {
+        background: linear-gradient(135deg, #DAA520, #B8860B);
+        color: #1A1A1A;
+        border: none;
+        font-weight: 600;
+        padding: 10px 25px;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+    }
+    .btn-gold:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(218, 165, 32, 0.4);
+        color: #1A1A1A;
+    }
+    .btn-outline-gold {
+        border: 2px solid #DAA520;
+        color: #DAA520;
+        background: transparent;
+        font-weight: 600;
+        padding: 10px 25px;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+    }
+    .btn-outline-gold:hover {
+        background: #DAA520;
+        color: #1A1A1A;
+        transform: translateY(-2px);
+    }
+    .book-info-card {
+        background: #f8f9fa;
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    .book-info-card h5 {
+        color: #1A1A1A;
+        margin-bottom: 0.5rem;
+    }
+    .book-info-card .meta {
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
+    .checker-card {
+        border: 2px solid #e9ecef;
+        border-radius: 12px;
+        padding: 1rem;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    .checker-card:hover {
+        border-color: #DAA520;
+        background: #fff8f0;
+    }
+    .checker-card.selected {
+        border-color: #DAA520;
+        background: #fff8f0;
+        box-shadow: 0 0 0 3px rgba(218, 165, 32, 0.25);
+    }
+    .checker-card .name {
+        font-weight: 600;
+    }
+    .checker-card .workload {
+        font-size: 0.8rem;
+        color: #6c757d;
+    }
+    .checker-card .workload .badge {
+        font-size: 0.7rem;
+    }
+    .form-control:focus, .form-select:focus {
+        border-color: #DAA520;
+        box-shadow: 0 0 0 0.2rem rgba(218, 165, 32, 0.25);
+    }
+    .required-star {
+        color: red;
+        margin-left: 3px;
+    }
+    .card {
+        border-radius: 12px;
+        border: none;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    }
+    .card-header {
+        background: white;
+        border-bottom: 1px solid #e9ecef;
+        padding: 1rem 1.5rem;
+        border-radius: 12px 12px 0 0 !important;
+    }
+    .status-badge {
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        display: inline-block;
+    }
+    .status-awaiting_checker { background: #6f42c1; color: white; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="form-container">
+        <div class="card shadow-sm">
+            <div class="card-header">
+                <h4 class="mb-0">
+                    <i class="fas fa-user-plus me-2" style="color: #DAA520;"></i>
+                    Assign Checker
+                </h4>
+                <p class="text-muted mb-0 small">Select a quality checker to review this book</p>
+            </div>
+            <div class="card-body">
+                <!-- Book Information -->
+                <div class="book-info-card">
+                    <h5>{{ book.title }}</h5>
+                    <p class="meta">
+                        <strong>Author:</strong> {{ book.author.get_full_name|default:book.author.username }}<br>
+                        <strong>Genre:</strong> {{ book.genre.name|default:"Uncategorized" }}<br>
+                        <strong>Status:</strong> <span class="status-badge status-{{ book.status }}">{{ book.get_status_display|default:book.status|title }}</span><br>
+                        <strong>Submitted:</strong> {{ book.submitted_at|date:"M d, Y"|default:book.created_at|date:"M d, Y" }}
+                    </p>
+                </div>
+
+                <form method="POST">
+                    {% csrf_token %}
+                    
+                    <!-- Select Checker -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Select Checker <span class="required-star">*</span></label>
+                        {% if checkers %}
+                            <div class="row g-3">
+                                {% for checker in checkers %}
+                                <div class="col-md-6">
+                                    <div class="checker-card" onclick="selectChecker(this, {{ checker.id }})">
+                                        <div class="d-flex justify-content-between align-items-start">
+                                            <div>
+                                                <div class="name">{{ checker.get_full_name|default:checker.username }}</div>
+                                                <div class="workload">
+                                                    Active Assignments: 
+                                                    <span class="badge {% if checker.active_assignments == 0 %}bg-success{% elif checker.active_assignments <= 2 %}bg-warning{% else %}bg-danger{% endif %}">
+                                                        {{ checker.active_assignments|default:0 }}
+                                                    </span>
+                                                </div>
+                                                <div class="text-muted small">{{ checker.email|default:"" }}</div>
+                                            </div>
+                                            <div class="form-check">
+                                                <input type="radio" name="checker_id" value="{{ checker.id }}" class="form-check-input" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <div class="alert alert-warning">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                No active checkers available. Please add checkers to the system.
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Due Date -->
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Due Date <span class="required-star">*</span></label>
+                        <input type="datetime-local" name="due_date" class="form-control" required 
+                               value="{% now 'Y-m-d' %}T{% now 'H:i' %}">
+                        <div class="form-text">Set the deadline for the checker to complete the review.</div>
+                    </div>
+
+                    <!-- Instructions -->
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Instructions (Optional)</label>
+                        <textarea name="instructions" class="form-control" rows="4" 
+                                  placeholder="Provide any specific instructions for the checker..."></textarea>
+                        <div class="form-text">Add any special requirements or focus areas for the review.</div>
+                    </div>
+
+                    <!-- Submit Buttons -->
+                    <div class="d-flex gap-2 mt-4">
+                        <button type="submit" class="btn btn-gold flex-grow-1">
+                            <i class="fas fa-check me-2"></i> Assign Checker
+                        </button>
+                        <a href="{% url 'books:maker_dashboard' %}" class="btn btn-outline-gold">
+                            <i class="fas fa-times me-2"></i> Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function selectChecker(element, checkerId) {
+        // Remove selected class from all checkers
+        document.querySelectorAll('.checker-card').forEach(card => {
+            card.classList.remove('selected');
+        });
+        
+        // Add selected class to clicked checker
+        element.classList.add('selected');
+        
+        // Check the radio button
+        const radio = element.querySelector('input[type="radio"]');
+        if (radio) {
+            radio.checked = true;
+        }
+    }
+
+    // Auto-select first checker if available
+    document.addEventListener('DOMContentLoaded', function() {
+        const firstChecker = document.querySelector('.checker-card');
+        if (firstChecker) {
+            const radio = firstChecker.querySelector('input[type="radio"]');
+            if (radio) {
+                radio.checked = true;
+                firstChecker.classList.add('selected');
+            }
+        }
+    });
+</script>
+{% endblock %}

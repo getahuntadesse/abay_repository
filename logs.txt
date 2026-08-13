@@ -1,0 +1,896 @@
+# Abay Repository Log File
+# Created: 2026-08-12T11:18:47.879197
+# ============================================================
+
+# Logging started at 2026-08-12 11:18:47
+# ============================================================
+
+[2026-08-12 11:18:48] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-08-12 11:18:48] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-08-12 11:18:52] WARNING django.server - "GET /admin/logs/ HTTP/1.1" 404 8558
+[2026-08-12 11:19:52] WARNING django.server - "GET /admin/logs/ HTTP/1.1" 404 8558
+[2026-08-12 11:20:52] WARNING django.server - "GET /admin/logs/ HTTP/1.1" 404 8558
+[2026-08-12 11:21:38] WARNING django.server - "GET /admin/logs/ HTTP/1.1" 404 8558
+[2026-08-12 11:21:38] WARNING django.server - "GET /admin/logs/ HTTP/1.1" 404 8558
+[2026-08-12 11:21:39] INFO django.server - "GET / HTTP/1.1" 200 53087
+[2026-08-12 11:21:42] INFO django.server - "GET /accounts/dashboard/ HTTP/1.1" 302 0
+[2026-08-12 11:21:43] INFO django.server - "GET /accounts/dashboard/admin/ HTTP/1.1" 200 69435
+[2026-08-12 11:21:43] WARNING django.server - "GET /admin/logs/ HTTP/1.1" 404 8558
+[2026-08-12 11:21:53] WARNING django.server - "GET /admin/logs/ HTTP/1.1" 404 8558
+[2026-08-12 11:22:03] WARNING django.server - "GET /admin/logs/ HTTP/1.1" 404 8558
+[2026-08-12 11:22:13] WARNING django.server - "GET /admin/logs/ HTTP/1.1" 404 8558
+[2026-08-12 11:22:23] WARNING django.server - "GET /admin/logs/ HTTP/1.1" 404 8558
+[2026-08-12 11:22:33] WARNING django.server - "GET /admin/logs/ HTTP/1.1" 404 8558
+[2026-08-12 11:22:41] INFO django.server - "GET / HTTP/1.1" 200 53087
+[2026-08-12 11:22:45] INFO django.server - "GET /accounts/dashboard/ HTTP/1.1" 302 0
+[2026-08-12 11:22:45] INFO django.server - "GET /accounts/dashboard/admin/ HTTP/1.1" 200 69435
+[2026-08-12 11:22:45] WARNING django.server - "GET /admin/logs/ HTTP/1.1" 404 8558
+[2026-08-12 11:22:55] WARNING django.server - "GET /admin/logs/ HTTP/1.1" 404 8558
+[2026-08-12 11:23:00] WARNING django.server - "GET /admin/logs/ HTTP/1.1" 404 8558
+[2026-08-12 11:23:03] INFO django.server - "GET / HTTP/1.1" 200 53087
+[2026-08-12 11:23:06] INFO django.server - "GET /accounts/dashboard/ HTTP/1.1" 302 0
+[2026-08-12 11:23:06] INFO django.server - "GET /accounts/dashboard/admin/ HTTP/1.1" 200 69435
+[2026-08-12 11:23:06] WARNING django.server - "GET /admin/logs/ HTTP/1.1" 404 8558
+[2026-08-12 11:23:09] INFO django.server - "GET /accounts/profile/ HTTP/1.1" 200 40354
+[2026-08-12 11:23:11] INFO django.server - "GET /accounts/dashboard/ HTTP/1.1" 302 0
+[2026-08-12 11:23:11] INFO django.server - "GET /accounts/dashboard/admin/ HTTP/1.1" 200 69435
+[2026-08-12 11:23:12] WARNING django.server - "GET /admin/logs/ HTTP/1.1" 404 8558
+[2026-08-12 11:23:22] WARNING django.server - "GET /admin/logs/ HTTP/1.1" 404 8558
+[2026-08-12 11:23:32] WARNING django.server - "GET /admin/logs/ HTTP/1.1" 404 8558
+[2026-08-12 11:23:42] WARNING django.server - "GET /admin/logs/ HTTP/1.1" 404 8558
+[2026-08-12 11:23:51] AUTH INFO - User logged out: admin, IP=127.0.0.1
+[2026-08-12 11:23:51] INFO accounts.views - User logged out: admin, IP=127.0.0.1
+[2026-08-12 11:23:51] INFO accounts.views - User logged out: admin, IP=127.0.0.1
+[2026-08-12 11:23:51] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-08-12 11:23:51] INFO django.server - "GET / HTTP/1.1" 200 53164
+[2026-08-12 11:23:54] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 29419
+[2026-08-12 11:24:00] AUTH INFO - Successful login: User=maker, IP=127.0.0.1
+[2026-08-12 11:24:00] INFO accounts.views - Successful login: User=maker, IP=127.0.0.1
+[2026-08-12 11:24:00] INFO accounts.views - Successful login: User=maker, IP=127.0.0.1
+[2026-08-12 11:24:00] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-08-12 11:24:00] INFO books.views - Maker dashboard: 1 new submissions found
+[2026-08-12 11:24:00] INFO books.views - Maker dashboard: 1 new submissions found
+[2026-08-12 11:24:00] INFO books.views -   - 2: Django - submitted - submitted_at: 2026-08-12 06:29:48.149361+00:00
+[2026-08-12 11:24:00] INFO books.views -   - 2: Django - submitted - submitted_at: 2026-08-12 06:29:48.149361+00:00
+[2026-08-12 11:24:00] INFO django.server - "GET /books/maker/dashboard/ HTTP/1.1" 200 51755
+[2026-08-12 11:24:13] INFO django.server - "GET /books/maker/initial-review/2/ HTTP/1.1" 200 42879
+[2026-08-12 11:24:19] ERROR books.views - Error in initial review: Invalid decision: complete
+[2026-08-12 11:24:19] ERROR books.views - Error in initial review: Invalid decision: complete
+[2026-08-12 11:24:19] INFO django.server - "POST /books/maker/initial-review/2/ HTTP/1.1" 200 43236
+[2026-08-12 11:24:58] INFO django.server - "GET / HTTP/1.1" 200 53087
+[2026-08-12 11:25:01] AUTH INFO - User logged out: maker, IP=127.0.0.1
+[2026-08-12 11:25:01] INFO accounts.views - User logged out: maker, IP=127.0.0.1
+[2026-08-12 11:25:01] INFO accounts.views - User logged out: maker, IP=127.0.0.1
+[2026-08-12 11:25:01] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-08-12 11:25:01] INFO django.server - "GET / HTTP/1.1" 200 53164
+[2026-08-12 11:25:13] AUTH INFO - Register author - verified: False
+[2026-08-12 11:25:13] INFO accounts.views - Register author - verified: False
+[2026-08-12 11:25:13] INFO accounts.views - Register author - verified: False
+[2026-08-12 11:25:13] INFO django.server - "GET /accounts/register/author/ HTTP/1.1" 200 59655
+[2026-08-12 11:25:16] INFO django.server - "GET / HTTP/1.1" 200 52810
+[2026-08-12 11:26:26] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 29419
+[2026-08-12 11:26:32] AUTH INFO - Successful login: User=admin, IP=127.0.0.1
+[2026-08-12 11:26:32] INFO accounts.views - Successful login: User=admin, IP=127.0.0.1
+[2026-08-12 11:26:32] INFO accounts.views - Successful login: User=admin, IP=127.0.0.1
+[2026-08-12 11:26:32] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-08-12 11:26:32] INFO django.server - "GET /accounts/dashboard/admin/ HTTP/1.1" 200 69770
+[2026-08-12 11:26:32] WARNING django.server - "GET /admin/logs/ HTTP/1.1" 404 8558
+[2026-08-12 11:26:42] WARNING django.server - "GET /admin/logs/ HTTP/1.1" 404 8558
+[2026-08-12 11:26:52] WARNING django.server - "GET /admin/logs/ HTTP/1.1" 404 8558
+[2026-08-12 11:27:02] WARNING django.server - "GET /admin/logs/ HTTP/1.1" 404 8558
+[2026-08-12 11:27:13] WARNING django.server - "GET /admin/logs/ HTTP/1.1" 404 8558
+[2026-08-12 11:27:23] WARNING django.server - "GET /admin/logs/ HTTP/1.1" 404 8558
+[2026-08-12 11:27:33] WARNING django.server - "GET /admin/logs/ HTTP/1.1" 404 8558
+[2026-08-12 11:27:43] WARNING django.server - "GET /admin/logs/ HTTP/1.1" 404 8558
+[2026-08-12 11:27:53] WARNING django.server - "GET /admin/logs/ HTTP/1.1" 404 8558
+[2026-08-12 11:28:03] WARNING django.server - "GET /admin/logs/ HTTP/1.1" 404 8558
+[2026-08-12 11:28:52] WARNING django.server - "GET /admin/logs/ HTTP/1.1" 404 8558
+[2026-08-12 11:29:52] WARNING django.server - "GET /admin/logs/ HTTP/1.1" 404 8558
+[2026-08-12 11:30:52] WARNING django.server - "GET /admin/logs/ HTTP/1.1" 404 8558
+[2026-08-12 11:31:52] WARNING django.server - "GET /admin/logs/ HTTP/1.1" 404 8558
+[2026-08-12 11:32:19] INFO django.utils.autoreload - C:\abay_repository\accounts\views.py changed, reloading.
+[2026-08-12 11:32:19] INFO django.utils.autoreload - C:\abay_repository\accounts\views.py changed, reloading.
+[2026-08-12 11:32:20] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-08-12 11:32:20] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-08-12 11:32:24] WARNING django.server - "GET /admin/logs/ HTTP/1.1" 404 8558
+[2026-08-12 11:32:24] WARNING django.server - "GET /admin/logs/ HTTP/1.1" 404 8558
+[2026-08-12 11:32:26] INFO django.server - "GET / HTTP/1.1" 200 53087
+[2026-08-12 11:32:29] INFO django.server - "GET /accounts/dashboard/ HTTP/1.1" 302 0
+[2026-08-12 11:32:29] AUTH INFO - Admin dashboard accessed by: admin
+[2026-08-12 11:32:29] INFO accounts.views - Admin dashboard accessed by: admin
+[2026-08-12 11:32:29] INFO accounts.views - Admin dashboard accessed by: admin
+[2026-08-12 11:32:29] INFO django.server - "GET /accounts/dashboard/admin/ HTTP/1.1" 200 69435
+[2026-08-12 11:32:29] WARNING django.server - "GET /admin/logs/ HTTP/1.1" 404 8558
+[2026-08-12 11:32:39] WARNING django.server - "GET /admin/logs/ HTTP/1.1" 404 8558
+[2026-08-12 11:32:49] WARNING django.server - "GET /admin/logs/ HTTP/1.1" 404 8558
+[2026-08-12 11:32:59] WARNING django.server - "GET /admin/logs/ HTTP/1.1" 404 8558
+[2026-08-12 11:33:09] WARNING django.server - "GET /admin/logs/ HTTP/1.1" 404 8558
+[2026-08-12 11:33:19] WARNING django.server - "GET /admin/logs/ HTTP/1.1" 404 8558
+[2026-08-12 11:33:29] WARNING django.server - "GET /admin/logs/ HTTP/1.1" 404 8558
+[2026-08-12 11:33:39] WARNING django.server - "GET /admin/logs/ HTTP/1.1" 404 8558
+[2026-08-12 11:33:46] AUTH INFO - AUTH - User logged out: admin, IP=127.0.0.1
+[2026-08-12 11:33:46] INFO accounts.views - AUTH - User logged out: admin, IP=127.0.0.1
+[2026-08-12 11:33:46] INFO accounts.views - AUTH - User logged out: admin, IP=127.0.0.1
+[2026-08-12 11:33:46] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-08-12 11:33:46] INFO django.server - "GET / HTTP/1.1" 200 53164
+[2026-08-12 11:33:55] ERROR django.request - Internal Server Error: /accounts/login/
+Traceback (most recent call last):
+  File "C:\abay_repository\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\abay_repository\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\C4S\AppData\Local\Programs\Python\Python39\lib\contextlib.py", line 79, in inner
+    return func(*args, **kwds)
+  File "C:\abay_repository\venv\lib\site-packages\django\views\decorators\debug.py", line 92, in sensitive_post_parameters_wrapper
+    return view(request, *args, **kwargs)
+  File "C:\abay_repository\venv\lib\site-packages\django\utils\decorators.py", line 134, in _wrapper_view
+    response = view_func(request, *args, **kwargs)
+  File "C:\abay_repository\venv\lib\site-packages\django\utils\decorators.py", line 134, in _wrapper_view
+    response = view_func(request, *args, **kwargs)
+  File "C:\abay_repository\venv\lib\site-packages\django\views\decorators\cache.py", line 62, in _wrapper_view_func
+    response = view_func(request, *args, **kwargs)
+  File "C:\abay_repository\accounts\views.py", line 488, in login_view
+    return render(request, 'accounts/login.html', {'form': form})
+  File "C:\abay_repository\venv\lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 175, in render
+    return self._render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\loader_tags.py", line 63, in render
+    result = block.nodelist.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\defaulttags.py", line 471, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "C:\abay_repository\venv\lib\site-packages\django\urls\base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "C:\abay_repository\venv\lib\site-packages\django\urls\resolvers.py", line 828, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'password_reset' not found. 'password_reset' is not a valid view function or pattern name.
+[2026-08-12 11:33:55] ERROR django.request log.log_response:241 - Internal Server Error: /accounts/login/
+Traceback (most recent call last):
+  File "C:\abay_repository\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\abay_repository\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\C4S\AppData\Local\Programs\Python\Python39\lib\contextlib.py", line 79, in inner
+    return func(*args, **kwds)
+  File "C:\abay_repository\venv\lib\site-packages\django\views\decorators\debug.py", line 92, in sensitive_post_parameters_wrapper
+    return view(request, *args, **kwargs)
+  File "C:\abay_repository\venv\lib\site-packages\django\utils\decorators.py", line 134, in _wrapper_view
+    response = view_func(request, *args, **kwargs)
+  File "C:\abay_repository\venv\lib\site-packages\django\utils\decorators.py", line 134, in _wrapper_view
+    response = view_func(request, *args, **kwargs)
+  File "C:\abay_repository\venv\lib\site-packages\django\views\decorators\cache.py", line 62, in _wrapper_view_func
+    response = view_func(request, *args, **kwargs)
+  File "C:\abay_repository\accounts\views.py", line 488, in login_view
+    return render(request, 'accounts/login.html', {'form': form})
+  File "C:\abay_repository\venv\lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 175, in render
+    return self._render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\loader_tags.py", line 63, in render
+    result = block.nodelist.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\defaulttags.py", line 471, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "C:\abay_repository\venv\lib\site-packages\django\urls\base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "C:\abay_repository\venv\lib\site-packages\django\urls\resolvers.py", line 828, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'password_reset' not found. 'password_reset' is not a valid view function or pattern name.
+[2026-08-12 11:33:55] ERROR django.server - "GET /accounts/login/ HTTP/1.1" 500 213643
+[2026-08-12 11:36:35] INFO django.utils.autoreload - C:\abay_repository\accounts\urls.py changed, reloading.
+[2026-08-12 11:36:35] INFO django.utils.autoreload - C:\abay_repository\accounts\urls.py changed, reloading.
+[2026-08-12 11:36:36] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-08-12 11:36:36] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-08-12 11:41:22] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 32128
+[2026-08-12 11:41:25] AUTH INFO - AUTH - Login successful: User=admin, IP=127.0.0.1, Role=admin
+[2026-08-12 11:41:25] INFO accounts.views - AUTH - Login successful: User=admin, IP=127.0.0.1, Role=admin
+[2026-08-12 11:41:25] INFO accounts.views - AUTH - Login successful: User=admin, IP=127.0.0.1, Role=admin
+[2026-08-12 11:41:25] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-08-12 11:41:25] AUTH INFO - Admin dashboard accessed by: admin
+[2026-08-12 11:41:25] INFO accounts.views - Admin dashboard accessed by: admin
+[2026-08-12 11:41:25] INFO accounts.views - Admin dashboard accessed by: admin
+[2026-08-12 11:41:25] INFO django.server - "GET /accounts/dashboard/admin/ HTTP/1.1" 200 69770
+[2026-08-12 11:41:25] WARNING django.server - "GET /admin/logs/ HTTP/1.1" 404 8558
+[2026-08-12 11:41:35] WARNING django.server - "GET /admin/logs/ HTTP/1.1" 404 8558
+[2026-08-12 11:41:46] WARNING django.server - "GET /admin/logs/ HTTP/1.1" 404 8558
+[2026-08-12 11:41:46] AUTH INFO - AUTH - User logged out: admin, IP=127.0.0.1
+[2026-08-12 11:41:46] INFO accounts.views - AUTH - User logged out: admin, IP=127.0.0.1
+[2026-08-12 11:41:46] INFO accounts.views - AUTH - User logged out: admin, IP=127.0.0.1
+[2026-08-12 11:41:46] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-08-12 11:41:46] INFO django.server - "GET / HTTP/1.1" 200 53164
+[2026-08-12 11:41:47] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 32128
+[2026-08-12 11:41:53] AUTH INFO - AUTH - Login successful: User=author, IP=127.0.0.1, Role=author
+[2026-08-12 11:41:53] INFO accounts.views - AUTH - Login successful: User=author, IP=127.0.0.1, Role=author
+[2026-08-12 11:41:53] INFO accounts.views - AUTH - Login successful: User=author, IP=127.0.0.1, Role=author
+[2026-08-12 11:41:53] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-08-12 11:41:53] AUTH INFO - Author dashboard accessed by: author
+[2026-08-12 11:41:53] INFO accounts.views - Author dashboard accessed by: author
+[2026-08-12 11:41:53] INFO accounts.views - Author dashboard accessed by: author
+[2026-08-12 11:41:53] INFO django.server - "GET /accounts/dashboard/author/ HTTP/1.1" 200 41897
+[2026-08-12 11:42:04] AUTH INFO - AUTH - User logged out: author, IP=127.0.0.1
+[2026-08-12 11:42:04] INFO accounts.views - AUTH - User logged out: author, IP=127.0.0.1
+[2026-08-12 11:42:04] INFO accounts.views - AUTH - User logged out: author, IP=127.0.0.1
+[2026-08-12 11:42:04] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-08-12 11:42:04] INFO django.server - "GET / HTTP/1.1" 200 53164
+[2026-08-12 11:42:06] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 32128
+[2026-08-12 11:42:11] AUTH INFO - AUTH - Login successful: User=maker, IP=127.0.0.1, Role=maker
+[2026-08-12 11:42:11] INFO accounts.views - AUTH - Login successful: User=maker, IP=127.0.0.1, Role=maker
+[2026-08-12 11:42:11] INFO accounts.views - AUTH - Login successful: User=maker, IP=127.0.0.1, Role=maker
+[2026-08-12 11:42:11] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-08-12 11:42:11] INFO books.views - Maker dashboard: 1 new submissions found
+[2026-08-12 11:42:11] INFO books.views - Maker dashboard: 1 new submissions found
+[2026-08-12 11:42:11] INFO books.views -   - 2: Django - submitted - submitted_at: 2026-08-12 06:29:48.149361+00:00
+[2026-08-12 11:42:11] INFO books.views -   - 2: Django - submitted - submitted_at: 2026-08-12 06:29:48.149361+00:00
+[2026-08-12 11:42:11] INFO django.server - "GET /books/maker/dashboard/ HTTP/1.1" 200 51756
+[2026-08-12 11:42:24] INFO django.server - "GET /books/maker/initial-review/2/ HTTP/1.1" 200 42879
+[2026-08-12 11:42:34] ERROR books.views - Error in initial review: Invalid decision: complete
+[2026-08-12 11:42:34] ERROR books.views - Error in initial review: Invalid decision: complete
+[2026-08-12 11:42:34] INFO django.server - "POST /books/maker/initial-review/2/ HTTP/1.1" 200 43236
+[2026-08-12 11:42:54] ERROR books.views - Error in initial review: Invalid decision: incomplete
+[2026-08-12 11:42:54] ERROR books.views - Error in initial review: Invalid decision: incomplete
+[2026-08-12 11:42:54] INFO django.server - "POST /books/maker/initial-review/2/ HTTP/1.1" 200 43238
+[2026-08-12 11:43:13] AUTH INFO - AUTH - User logged out: maker, IP=127.0.0.1
+[2026-08-12 11:43:13] INFO accounts.views - AUTH - User logged out: maker, IP=127.0.0.1
+[2026-08-12 11:43:13] INFO accounts.views - AUTH - User logged out: maker, IP=127.0.0.1
+[2026-08-12 11:43:13] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-08-12 11:43:13] INFO django.server - "GET / HTTP/1.1" 200 53164
+[2026-08-12 11:43:24] AUTH INFO - Register author - verified: False
+[2026-08-12 11:43:24] INFO accounts.views - Register author - verified: False
+[2026-08-12 11:43:24] INFO accounts.views - Register author - verified: False
+[2026-08-12 11:43:24] INFO django.server - "GET /accounts/register/author/ HTTP/1.1" 200 59655
+[2026-08-12 11:43:27] INFO django.server - "GET / HTTP/1.1" 200 52810
+[2026-08-12 11:43:31] INFO django.server - "GET /accounts/register/client/ HTTP/1.1" 200 49321
+[2026-08-12 11:43:34] AUTH INFO - Register author - verified: False
+[2026-08-12 11:43:34] INFO accounts.views - Register author - verified: False
+[2026-08-12 11:43:34] INFO accounts.views - Register author - verified: False
+[2026-08-12 11:43:34] INFO django.server - "GET /accounts/register/author/ HTTP/1.1" 200 59655
+[2026-08-12 11:43:36] INFO django.server - "GET / HTTP/1.1" 200 52810
+[2026-08-12 11:49:23] INFO django.server - "GET / HTTP/1.1" 200 52810
+[2026-08-12 11:49:25] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 32128
+[2026-08-12 11:49:31] AUTH INFO - AUTH - Login successful: User=maker, IP=127.0.0.1, Role=maker
+[2026-08-12 11:49:31] INFO accounts.views - AUTH - Login successful: User=maker, IP=127.0.0.1, Role=maker
+[2026-08-12 11:49:31] INFO accounts.views - AUTH - Login successful: User=maker, IP=127.0.0.1, Role=maker
+[2026-08-12 11:49:31] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-08-12 11:49:31] INFO books.views - Maker dashboard: 1 new submissions found
+[2026-08-12 11:49:31] INFO books.views - Maker dashboard: 1 new submissions found
+[2026-08-12 11:49:31] INFO books.views -   - 2: Django - submitted - submitted_at: 2026-08-12 06:29:48.149361+00:00
+[2026-08-12 11:49:31] INFO books.views -   - 2: Django - submitted - submitted_at: 2026-08-12 06:29:48.149361+00:00
+[2026-08-12 11:49:31] INFO django.server - "GET /books/maker/dashboard/ HTTP/1.1" 200 50726
+[2026-08-12 11:49:38] INFO django.server - "GET /books/maker/assign-checker/1/ HTTP/1.1" 200 41668
+[2026-08-12 11:49:49] INFO django.server - "POST /books/maker/assign-checker/1/ HTTP/1.1" 302 0
+[2026-08-12 11:49:49] INFO django.server - "GET /books/maker/assign-checker/1/ HTTP/1.1" 200 42031
+[2026-08-12 11:49:53] INFO django.server - "GET /books/maker/assign-checker/1/ HTTP/1.1" 200 41668
+[2026-08-12 11:50:01] INFO django.server - "GET /accounts/dashboard/ HTTP/1.1" 302 0
+[2026-08-12 11:50:01] INFO books.views - Maker dashboard: 1 new submissions found
+[2026-08-12 11:50:01] INFO books.views - Maker dashboard: 1 new submissions found
+[2026-08-12 11:50:02] INFO books.views -   - 2: Django - submitted - submitted_at: 2026-08-12 06:29:48.149361+00:00
+[2026-08-12 11:50:02] INFO books.views -   - 2: Django - submitted - submitted_at: 2026-08-12 06:29:48.149361+00:00
+[2026-08-12 11:50:02] INFO django.server - "GET /books/maker/dashboard/ HTTP/1.1" 200 50391
+[2026-08-12 11:50:07] INFO django.server - "GET /books/maker/initial-review/2/ HTTP/1.1" 200 42879
+[2026-08-12 11:50:13] ERROR books.views - Error in initial review: Invalid decision: complete
+[2026-08-12 11:50:13] ERROR books.views - Error in initial review: Invalid decision: complete
+[2026-08-12 11:50:13] INFO django.server - "POST /books/maker/initial-review/2/ HTTP/1.1" 200 43236
+[2026-08-12 11:50:34] ERROR books.views - Error in initial review: Invalid decision: complete
+[2026-08-12 11:50:34] ERROR books.views - Error in initial review: Invalid decision: complete
+[2026-08-12 11:50:34] INFO django.server - "POST /books/maker/initial-review/2/ HTTP/1.1" 200 43236
+[2026-08-12 11:52:57] ERROR books.views - Error in initial review: Invalid decision: complete
+[2026-08-12 11:52:57] ERROR books.views - Error in initial review: Invalid decision: complete
+[2026-08-12 11:52:57] INFO django.server - "POST /books/maker/initial-review/2/ HTTP/1.1" 200 43236
+[2026-08-12 12:08:28] INFO django.utils.autoreload - C:\abay_repository\books\views.py changed, reloading.
+[2026-08-12 12:08:28] INFO django.utils.autoreload - C:\abay_repository\books\views.py changed, reloading.
+[2026-08-12 12:08:29] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-08-12 12:08:29] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-08-12 12:10:16] INFO django.utils.autoreload - C:\abay_repository\books\urls.py changed, reloading.
+[2026-08-12 12:10:16] INFO django.utils.autoreload - C:\abay_repository\books\urls.py changed, reloading.
+[2026-08-12 12:10:17] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-08-12 12:10:17] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-08-12 12:11:52] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-08-12 12:11:52] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-08-12 12:12:37] INFO django.utils.autoreload - C:\abay_repository\books\urls.py changed, reloading.
+[2026-08-12 12:12:37] INFO django.utils.autoreload - C:\abay_repository\books\urls.py changed, reloading.
+[2026-08-12 12:12:38] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-08-12 12:12:38] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-08-12 12:13:04] INFO django.utils.autoreload - C:\abay_repository\books\views.py changed, reloading.
+[2026-08-12 12:13:04] INFO django.utils.autoreload - C:\abay_repository\books\views.py changed, reloading.
+[2026-08-12 12:13:05] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-08-12 12:13:05] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-08-12 12:15:52] ERROR books.views - Error in initial review: Invalid decision: complete
+[2026-08-12 12:15:52] ERROR books.views - Error in initial review: Invalid decision: complete
+[2026-08-12 12:15:52] INFO django.server - "POST /books/maker/initial-review/2/ HTTP/1.1" 200 43236
+[2026-08-12 12:16:09] ERROR books.views - Error in initial review: Invalid decision: incomplete
+[2026-08-12 12:16:09] ERROR books.views - Error in initial review: Invalid decision: incomplete
+[2026-08-12 12:16:09] INFO django.server - "POST /books/maker/initial-review/2/ HTTP/1.1" 200 43238
+[2026-08-12 12:17:52] INFO django.utils.autoreload - C:\abay_repository\books\views.py changed, reloading.
+[2026-08-12 12:17:52] INFO django.utils.autoreload - C:\abay_repository\books\views.py changed, reloading.
+[2026-08-12 12:17:53] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-08-12 12:17:53] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-08-12 12:18:13] INFO django.utils.autoreload - C:\abay_repository\books\urls.py changed, reloading.
+[2026-08-12 12:18:13] INFO django.utils.autoreload - C:\abay_repository\books\urls.py changed, reloading.
+[2026-08-12 12:18:14] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-08-12 12:18:14] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-08-12 12:18:31] INFO django.utils.autoreload - C:\abay_repository\config\urls.py changed, reloading.
+[2026-08-12 12:18:31] INFO django.utils.autoreload - C:\abay_repository\config\urls.py changed, reloading.
+[2026-08-12 12:18:32] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-08-12 12:18:32] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-08-12 12:18:59] INFO django.server - "GET / HTTP/1.1" 200 53087
+[2026-08-12 12:19:03] INFO django.server - "GET /accounts/dashboard/ HTTP/1.1" 302 0
+[2026-08-12 12:19:03] INFO books.views - Maker dashboard: 1 new submissions found
+[2026-08-12 12:19:03] INFO books.views - Maker dashboard: 1 new submissions found
+[2026-08-12 12:19:03] INFO books.views -   - 2: Django - submitted - submitted_at: 2026-08-12 06:29:48.149361+00:00
+[2026-08-12 12:19:03] INFO books.views -   - 2: Django - submitted - submitted_at: 2026-08-12 06:29:48.149361+00:00
+[2026-08-12 12:19:03] INFO django.server - "GET /books/maker/dashboard/ HTTP/1.1" 200 50391
+[2026-08-12 12:19:12] INFO django.server - "GET /books/maker/initial-review/2/ HTTP/1.1" 200 40014
+[2026-08-12 12:19:32] INFO books.views - Initial review for book 2 completed. Decision: complete
+[2026-08-12 12:19:32] INFO books.views - Initial review for book 2 completed. Decision: complete
+[2026-08-12 12:19:32] INFO django.server - "POST /books/maker/initial-review/2/ HTTP/1.1" 302 0
+[2026-08-12 12:19:32] INFO books.views - Maker dashboard: 0 new submissions found
+[2026-08-12 12:19:32] INFO books.views - Maker dashboard: 0 new submissions found
+[2026-08-12 12:19:33] INFO django.server - "GET /books/maker/dashboard/ HTTP/1.1" 200 50643
+[2026-08-12 12:19:42] INFO django.server - "GET /books/maker/assign-checker/2/ HTTP/1.1" 200 39176
+[2026-08-12 12:19:53] INFO books.views - Notification sent to checker checker
+[2026-08-12 12:19:53] INFO books.views - Notification sent to checker checker
+[2026-08-12 12:19:53] INFO django.server - "POST /books/maker/assign-checker/2/ HTTP/1.1" 302 0
+[2026-08-12 12:19:53] INFO books.views - Maker dashboard: 0 new submissions found
+[2026-08-12 12:19:53] INFO books.views - Maker dashboard: 0 new submissions found
+[2026-08-12 12:19:53] INFO django.server - "GET /books/maker/dashboard/ HTTP/1.1" 200 51503
+[2026-08-12 12:19:57] AUTH INFO - AUTH - User logged out: maker, IP=127.0.0.1
+[2026-08-12 12:19:57] INFO accounts.views - AUTH - User logged out: maker, IP=127.0.0.1
+[2026-08-12 12:19:57] INFO accounts.views - AUTH - User logged out: maker, IP=127.0.0.1
+[2026-08-12 12:19:57] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-08-12 12:19:57] INFO django.server - "GET / HTTP/1.1" 200 53164
+[2026-08-12 12:19:58] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 32128
+[2026-08-12 12:20:06] AUTH INFO - AUTH - Login successful: User=checker, IP=127.0.0.1, Role=checker
+[2026-08-12 12:20:06] INFO accounts.views - AUTH - Login successful: User=checker, IP=127.0.0.1, Role=checker
+[2026-08-12 12:20:06] INFO accounts.views - AUTH - Login successful: User=checker, IP=127.0.0.1, Role=checker
+[2026-08-12 12:20:06] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-08-12 12:20:06] INFO django.server - "GET /books/checker/dashboard/ HTTP/1.1" 200 43081
+[2026-08-12 12:22:08] AUTH INFO - AUTH - User logged out: checker, IP=127.0.0.1
+[2026-08-12 12:22:08] INFO accounts.views - AUTH - User logged out: checker, IP=127.0.0.1
+[2026-08-12 12:22:08] INFO accounts.views - AUTH - User logged out: checker, IP=127.0.0.1
+[2026-08-12 12:22:08] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-08-12 12:22:08] INFO django.server - "GET / HTTP/1.1" 200 53164
+[2026-08-12 12:23:38] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 32128
+[2026-08-12 12:23:44] AUTH INFO - AUTH - Login successful: User=author, IP=127.0.0.1, Role=author
+[2026-08-12 12:23:44] INFO accounts.views - AUTH - Login successful: User=author, IP=127.0.0.1, Role=author
+[2026-08-12 12:23:44] INFO accounts.views - AUTH - Login successful: User=author, IP=127.0.0.1, Role=author
+[2026-08-12 12:23:44] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-08-12 12:23:44] AUTH INFO - Author dashboard accessed by: author
+[2026-08-12 12:23:44] INFO accounts.views - Author dashboard accessed by: author
+[2026-08-12 12:23:44] INFO accounts.views - Author dashboard accessed by: author
+[2026-08-12 12:23:44] INFO django.server - "GET /accounts/dashboard/author/ HTTP/1.1" 200 41908
+[2026-08-12 12:23:57] INFO django.server - "GET /books/2/ HTTP/1.1" 302 0
+[2026-08-12 12:23:57] INFO django.server - "GET /books/browse/ HTTP/1.1" 200 55732
+[2026-08-12 12:24:00] AUTH INFO - Author dashboard accessed by: author
+[2026-08-12 12:24:00] INFO accounts.views - Author dashboard accessed by: author
+[2026-08-12 12:24:00] INFO accounts.views - Author dashboard accessed by: author
+[2026-08-12 12:24:00] INFO django.server - "GET /accounts/dashboard/author/ HTTP/1.1" 200 41573
+[2026-08-12 12:24:04] AUTH INFO - AUTH - User logged out: author, IP=127.0.0.1
+[2026-08-12 12:24:04] INFO accounts.views - AUTH - User logged out: author, IP=127.0.0.1
+[2026-08-12 12:24:04] INFO accounts.views - AUTH - User logged out: author, IP=127.0.0.1
+[2026-08-12 12:24:04] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-08-12 12:24:04] INFO django.server - "GET / HTTP/1.1" 200 53164
+[2026-08-12 12:24:06] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 32128
+[2026-08-12 12:24:40] AUTH INFO - AUTH - Login successful: User=checker, IP=127.0.0.1, Role=checker
+[2026-08-12 12:24:40] INFO accounts.views - AUTH - Login successful: User=checker, IP=127.0.0.1, Role=checker
+[2026-08-12 12:24:40] INFO accounts.views - AUTH - Login successful: User=checker, IP=127.0.0.1, Role=checker
+[2026-08-12 12:24:40] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-08-12 12:24:40] INFO django.server - "GET /books/checker/dashboard/ HTTP/1.1" 200 43081
+[2026-08-12 12:24:56] INFO books.views - Checker checker accepted assignment 1
+[2026-08-12 12:24:56] INFO books.views - Checker checker accepted assignment 1
+[2026-08-12 12:24:56] INFO django.server - "GET /books/checker/accept/1/ HTTP/1.1" 302 0
+[2026-08-12 12:24:56] INFO django.server - "GET /books/checker/dashboard/ HTTP/1.1" 200 41139
+[2026-08-12 12:25:08] AUTH INFO - AUTH - User logged out: checker, IP=127.0.0.1
+[2026-08-12 12:25:08] INFO accounts.views - AUTH - User logged out: checker, IP=127.0.0.1
+[2026-08-12 12:25:08] INFO accounts.views - AUTH - User logged out: checker, IP=127.0.0.1
+[2026-08-12 12:25:08] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-08-12 12:25:08] INFO django.server - "GET / HTTP/1.1" 200 53164
+[2026-08-12 12:25:09] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 32128
+[2026-08-12 12:25:17] AUTH INFO - AUTH - Login successful: User=maker, IP=127.0.0.1, Role=maker
+[2026-08-12 12:25:17] INFO accounts.views - AUTH - Login successful: User=maker, IP=127.0.0.1, Role=maker
+[2026-08-12 12:25:17] INFO accounts.views - AUTH - Login successful: User=maker, IP=127.0.0.1, Role=maker
+[2026-08-12 12:25:17] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-08-12 12:25:17] INFO books.views - Maker dashboard: 0 new submissions found
+[2026-08-12 12:25:17] INFO books.views - Maker dashboard: 0 new submissions found
+[2026-08-12 12:25:17] INFO django.server - "GET /books/maker/dashboard/ HTTP/1.1" 200 51482
+[2026-08-12 12:25:36] INFO django.server - "GET /books/2/ HTTP/1.1" 200 36941
+[2026-08-12 12:25:36] INFO django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 200 273594
+[2026-08-12 12:26:01] INFO books.views - Maker dashboard: 0 new submissions found
+[2026-08-12 12:26:01] INFO books.views - Maker dashboard: 0 new submissions found
+[2026-08-12 12:26:01] INFO django.server - "GET /books/maker/dashboard/ HTTP/1.1" 200 51147
+[2026-08-12 12:28:17] INFO django.server - "GET /books/maker/assign-checker/1/ HTTP/1.1" 200 39192
+[2026-08-12 12:28:34] INFO django.server - "POST /books/maker/assign-checker/1/ HTTP/1.1" 302 0
+[2026-08-12 12:28:34] INFO django.server - "GET /books/maker/assign-checker/1/ HTTP/1.1" 200 39555
+[2026-08-12 12:28:38] INFO django.server - "GET /books/maker/assign-checker/1/ HTTP/1.1" 200 39192
+[2026-08-12 12:28:40] INFO books.views - Maker dashboard: 0 new submissions found
+[2026-08-12 12:28:40] INFO books.views - Maker dashboard: 0 new submissions found
+[2026-08-12 12:28:40] INFO django.server - "GET /books/maker/dashboard/ HTTP/1.1" 200 51147
+[2026-08-12 12:28:51] AUTH INFO - AUTH - User logged out: maker, IP=127.0.0.1
+[2026-08-12 12:28:51] INFO accounts.views - AUTH - User logged out: maker, IP=127.0.0.1
+[2026-08-12 12:28:51] INFO accounts.views - AUTH - User logged out: maker, IP=127.0.0.1
+[2026-08-12 12:28:51] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-08-12 12:28:51] INFO django.server - "GET / HTTP/1.1" 200 53164
+[2026-08-12 12:28:52] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 32128
+[2026-08-12 12:28:58] AUTH INFO - AUTH - Login successful: User=checker, IP=127.0.0.1, Role=checker
+[2026-08-12 12:28:58] INFO accounts.views - AUTH - Login successful: User=checker, IP=127.0.0.1, Role=checker
+[2026-08-12 12:28:58] INFO accounts.views - AUTH - Login successful: User=checker, IP=127.0.0.1, Role=checker
+[2026-08-12 12:28:58] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-08-12 12:28:58] INFO django.server - "GET /books/checker/dashboard/ HTTP/1.1" 200 41135
+[2026-08-12 12:29:08] INFO django.server - "GET /books/checker/submit-review/1/ HTTP/1.1" 200 58024
+[2026-08-12 12:30:41] INFO books.views - Review submitted for book 2 by checker checker
+[2026-08-12 12:30:41] INFO books.views - Review submitted for book 2 by checker checker
+[2026-08-12 12:30:41] INFO django.server - "POST /books/checker/submit-review/1/ HTTP/1.1" 302 0
+[2026-08-12 12:30:41] INFO django.server - "GET /books/checker/dashboard/ HTTP/1.1" 200 42976
+[2026-08-12 12:30:47] AUTH INFO - AUTH - User logged out: checker, IP=127.0.0.1
+[2026-08-12 12:30:47] INFO accounts.views - AUTH - User logged out: checker, IP=127.0.0.1
+[2026-08-12 12:30:47] INFO accounts.views - AUTH - User logged out: checker, IP=127.0.0.1
+[2026-08-12 12:30:47] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-08-12 12:30:47] INFO django.server - "GET / HTTP/1.1" 200 53164
+[2026-08-12 12:30:50] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 32128
+[2026-08-12 12:30:55] AUTH INFO - AUTH - Login successful: User=maker, IP=127.0.0.1, Role=maker
+[2026-08-12 12:30:55] INFO accounts.views - AUTH - Login successful: User=maker, IP=127.0.0.1, Role=maker
+[2026-08-12 12:30:55] INFO accounts.views - AUTH - Login successful: User=maker, IP=127.0.0.1, Role=maker
+[2026-08-12 12:30:55] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-08-12 12:30:55] INFO books.views - Maker dashboard: 0 new submissions found
+[2026-08-12 12:30:55] INFO books.views - Maker dashboard: 0 new submissions found
+[2026-08-12 12:30:55] INFO django.server - "GET /books/maker/dashboard/ HTTP/1.1" 200 50688
+[2026-08-12 12:31:04] INFO django.server - "GET /books/maker/publish/2/ HTTP/1.1" 200 35412
+[2026-08-12 12:31:14] INFO books.views - Book 2 published by maker
+[2026-08-12 12:31:14] INFO books.views - Book 2 published by maker
+[2026-08-12 12:31:14] INFO django.server - "POST /books/maker/publish/2/ HTTP/1.1" 302 0
+[2026-08-12 12:31:14] INFO books.views - Maker dashboard: 0 new submissions found
+[2026-08-12 12:31:14] INFO books.views - Maker dashboard: 0 new submissions found
+[2026-08-12 12:31:14] INFO django.server - "GET /books/maker/dashboard/ HTTP/1.1" 200 51296
+[2026-08-12 12:31:18] INFO django.server - "GET /books/browse/ HTTP/1.1" 200 57133
+[2026-08-12 12:31:18] INFO django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 200 273594
+[2026-08-12 12:31:24] INFO django.server - "GET /books/2/ HTTP/1.1" 200 38656
+[2026-08-12 12:31:28] INFO django.server - "POST /books/2/purchase/ HTTP/1.1" 302 0
+[2026-08-12 12:31:28] INFO django.server - "GET /books/2/purchase/ HTTP/1.1" 200 47694
+[2026-08-12 12:31:45] AUTH INFO - AUTH - User logged out: maker, IP=127.0.0.1
+[2026-08-12 12:31:45] INFO accounts.views - AUTH - User logged out: maker, IP=127.0.0.1
+[2026-08-12 12:31:45] INFO accounts.views - AUTH - User logged out: maker, IP=127.0.0.1
+[2026-08-12 12:31:45] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-08-12 12:31:45] INFO django.server - "GET / HTTP/1.1" 200 54866
+[2026-08-12 12:31:51] INFO django.server - "GET /books/2/ HTTP/1.1" 200 37281
+[2026-08-12 12:35:42] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 32128
+[2026-08-12 12:35:45] AUTH INFO - AUTH - Login successful: User=admin, IP=127.0.0.1, Role=admin
+[2026-08-12 12:35:45] INFO accounts.views - AUTH - Login successful: User=admin, IP=127.0.0.1, Role=admin
+[2026-08-12 12:35:45] INFO accounts.views - AUTH - Login successful: User=admin, IP=127.0.0.1, Role=admin
+[2026-08-12 12:35:45] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-08-12 12:35:45] AUTH INFO - Admin dashboard accessed by: admin
+[2026-08-12 12:35:45] INFO accounts.views - Admin dashboard accessed by: admin
+[2026-08-12 12:35:45] INFO accounts.views - Admin dashboard accessed by: admin
+[2026-08-12 12:35:45] INFO django.server - "GET /accounts/dashboard/admin/ HTTP/1.1" 200 69770
+[2026-08-12 12:35:45] WARNING django.server - "GET /admin/logs/ HTTP/1.1" 404 8558
+[2026-08-12 12:35:49] AUTH INFO - AUTH - User logged out: admin, IP=127.0.0.1
+[2026-08-12 12:35:49] INFO accounts.views - AUTH - User logged out: admin, IP=127.0.0.1
+[2026-08-12 12:35:49] INFO accounts.views - AUTH - User logged out: admin, IP=127.0.0.1
+[2026-08-12 12:35:49] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-08-12 12:35:49] INFO django.server - "GET / HTTP/1.1" 200 54866
+[2026-08-12 12:35:50] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 32128
+[2026-08-12 12:35:56] INFO django.server - "POST /accounts/login/ HTTP/1.1" 200 32944
+[2026-08-12 12:36:17] AUTH INFO - AUTH - Login successful: User=finance_officer, IP=127.0.0.1, Role=finance
+[2026-08-12 12:36:17] INFO accounts.views - AUTH - Login successful: User=finance_officer, IP=127.0.0.1, Role=finance
+[2026-08-12 12:36:17] INFO accounts.views - AUTH - Login successful: User=finance_officer, IP=127.0.0.1, Role=finance
+[2026-08-12 12:36:17] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-08-12 12:36:17] AUTH INFO - Finance dashboard accessed by: finance_officer
+[2026-08-12 12:36:17] INFO accounts.views - Finance dashboard accessed by: finance_officer
+[2026-08-12 12:36:17] INFO accounts.views - Finance dashboard accessed by: finance_officer
+[2026-08-12 12:36:17] INFO django.server - "GET /accounts/dashboard/finance/ HTTP/1.1" 200 70329
+[2026-08-12 12:39:27] INFO django.server - "GET / HTTP/1.1" 200 54799
+[2026-08-12 12:39:32] INFO django.server - "GET /accounts/dashboard/ HTTP/1.1" 302 0
+[2026-08-12 12:39:32] AUTH INFO - Finance dashboard accessed by: finance_officer
+[2026-08-12 12:39:32] INFO accounts.views - Finance dashboard accessed by: finance_officer
+[2026-08-12 12:39:32] INFO accounts.views - Finance dashboard accessed by: finance_officer
+[2026-08-12 12:39:32] INFO django.server - "GET /accounts/dashboard/finance/ HTTP/1.1" 200 71915
+[2026-08-12 12:39:55] AUTH INFO - AUTH - User logged out: finance_officer, IP=127.0.0.1
+[2026-08-12 12:39:55] INFO accounts.views - AUTH - User logged out: finance_officer, IP=127.0.0.1
+[2026-08-12 12:39:55] INFO accounts.views - AUTH - User logged out: finance_officer, IP=127.0.0.1
+[2026-08-12 12:39:55] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-08-12 12:39:55] INFO django.server - "GET / HTTP/1.1" 200 54866
+[2026-08-12 12:40:02] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 32128
+[2026-08-12 12:40:08] AUTH INFO - AUTH - Login successful: User=admin, IP=127.0.0.1, Role=admin
+[2026-08-12 12:40:08] INFO accounts.views - AUTH - Login successful: User=admin, IP=127.0.0.1, Role=admin
+[2026-08-12 12:40:08] INFO accounts.views - AUTH - Login successful: User=admin, IP=127.0.0.1, Role=admin
+[2026-08-12 12:40:08] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-08-12 12:40:08] AUTH INFO - Admin dashboard accessed by: admin
+[2026-08-12 12:40:08] INFO accounts.views - Admin dashboard accessed by: admin
+[2026-08-12 12:40:08] INFO accounts.views - Admin dashboard accessed by: admin
+[2026-08-12 12:40:08] INFO django.server - "GET /accounts/dashboard/admin/ HTTP/1.1" 200 69770
+[2026-08-12 12:40:08] WARNING django.server - "GET /admin/logs/ HTTP/1.1" 404 8558
+[2026-08-12 12:40:15] AUTH INFO - AUTH - User logged out: admin, IP=127.0.0.1
+[2026-08-12 12:40:15] INFO accounts.views - AUTH - User logged out: admin, IP=127.0.0.1
+[2026-08-12 12:40:15] INFO accounts.views - AUTH - User logged out: admin, IP=127.0.0.1
+[2026-08-12 12:40:15] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-08-12 12:40:15] INFO django.server - "GET / HTTP/1.1" 200 54866
+[2026-08-12 12:40:16] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 32128
+[2026-08-12 12:40:28] AUTH INFO - AUTH - Login successful: User=maker, IP=127.0.0.1, Role=maker
+[2026-08-12 12:40:28] INFO accounts.views - AUTH - Login successful: User=maker, IP=127.0.0.1, Role=maker
+[2026-08-12 12:40:28] INFO accounts.views - AUTH - Login successful: User=maker, IP=127.0.0.1, Role=maker
+[2026-08-12 12:40:28] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-08-12 12:40:28] INFO books.views - Maker dashboard: 0 new submissions found
+[2026-08-12 12:40:28] INFO books.views - Maker dashboard: 0 new submissions found
+[2026-08-12 12:40:28] INFO django.server - "GET /books/maker/dashboard/ HTTP/1.1" 200 51264
+[2026-08-12 12:40:58] INFO django.server - "GET /books/2/ HTTP/1.1" 200 38656
+[2026-08-12 12:41:07] INFO django.server - "POST /books/2/purchase/ HTTP/1.1" 302 0
+[2026-08-12 12:41:07] INFO django.server - "GET /books/2/purchase/ HTTP/1.1" 200 47694
+[2026-08-12 12:41:25] INFO django.server - "POST /books/2/purchase/ HTTP/1.1" 302 0
+[2026-08-12 12:41:25] ERROR django.request - Internal Server Error: /books/payment/1/
+Traceback (most recent call last):
+  File "C:\abay_repository\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\abay_repository\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\C4S\AppData\Local\Programs\Python\Python39\lib\contextlib.py", line 79, in inner
+    return func(*args, **kwds)
+  File "C:\abay_repository\venv\lib\site-packages\django\views\decorators\csrf.py", line 56, in wrapper_view
+    return view_func(*args, **kwargs)
+  File "C:\abay_repository\venv\lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\abay_repository\books\views.py", line 1463, in process_payment
+    return render(request, 'books/payment.html', context)
+  File "C:\abay_repository\venv\lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 175, in render
+    return self._render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\loader_tags.py", line 63, in render
+    result = block.nodelist.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\defaulttags.py", line 471, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "C:\abay_repository\venv\lib\site-packages\django\urls\base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "C:\abay_repository\venv\lib\site-packages\django\urls\resolvers.py", line 828, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'process_payment' not found. 'process_payment' is not a valid view function or pattern name.
+[2026-08-12 12:41:25] ERROR django.request log.log_response:241 - Internal Server Error: /books/payment/1/
+Traceback (most recent call last):
+  File "C:\abay_repository\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\abay_repository\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\C4S\AppData\Local\Programs\Python\Python39\lib\contextlib.py", line 79, in inner
+    return func(*args, **kwds)
+  File "C:\abay_repository\venv\lib\site-packages\django\views\decorators\csrf.py", line 56, in wrapper_view
+    return view_func(*args, **kwargs)
+  File "C:\abay_repository\venv\lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\abay_repository\books\views.py", line 1463, in process_payment
+    return render(request, 'books/payment.html', context)
+  File "C:\abay_repository\venv\lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 175, in render
+    return self._render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\loader_tags.py", line 63, in render
+    result = block.nodelist.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\defaulttags.py", line 471, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "C:\abay_repository\venv\lib\site-packages\django\urls\base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "C:\abay_repository\venv\lib\site-packages\django\urls\resolvers.py", line 828, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'process_payment' not found. 'process_payment' is not a valid view function or pattern name.
+[2026-08-12 12:41:25] ERROR django.server - "GET /books/payment/1/ HTTP/1.1" 500 229594
+[2026-08-12 12:41:28] INFO django.server - "GET /books/2/purchase/ HTTP/1.1" 200 47074
+[2026-08-12 12:41:32] INFO books.views - Payment record created for author author: 210.000 ETB
+[2026-08-12 12:41:32] INFO books.views - Payment record created for author author: 210.000 ETB
+[2026-08-12 12:41:32] INFO django.server - "POST /books/2/purchase/ HTTP/1.1" 302 0
+[2026-08-12 12:41:32] ERROR django.request - Internal Server Error: /books/my-books/user/
+Traceback (most recent call last):
+  File "C:\abay_repository\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\abay_repository\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\C4S\AppData\Local\Programs\Python\Python39\lib\contextlib.py", line 79, in inner
+    return func(*args, **kwds)
+  File "C:\abay_repository\venv\lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\abay_repository\books\views.py", line 1516, in my_books_user
+    return render(request, 'books/my_books_user.html', context)
+  File "C:\abay_repository\venv\lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 175, in render
+    return self._render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\loader_tags.py", line 63, in render
+    result = block.nodelist.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\defaulttags.py", line 321, in render
+    return nodelist.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\defaulttags.py", line 238, in render
+    nodelist.append(node.render_annotated(context))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1064, in render
+    output = self.filter_expression.resolve(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 742, in resolve
+    new_obj = func(obj, *arg_vals)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\defaultfilters.py", line 772, in date
+    return formats.date_format(value, arg)
+  File "C:\abay_repository\venv\lib\site-packages\django\utils\formats.py", line 158, in date_format
+    return dateformat.format(
+  File "C:\abay_repository\venv\lib\site-packages\django\utils\dateformat.py", line 324, in format
+    return df.format(format_string)
+  File "C:\abay_repository\venv\lib\site-packages\django\utils\dateformat.py", line 48, in format
+    pieces.append(str(getattr(self, piece)()))
+  File "C:\abay_repository\venv\lib\site-packages\django\utils\dateformat.py", line 297, in U
+    value = datetime.combine(value, time.min)
+TypeError: combine() argument 1 must be datetime.date, not str
+[2026-08-12 12:41:32] ERROR django.request log.log_response:241 - Internal Server Error: /books/my-books/user/
+Traceback (most recent call last):
+  File "C:\abay_repository\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\abay_repository\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\C4S\AppData\Local\Programs\Python\Python39\lib\contextlib.py", line 79, in inner
+    return func(*args, **kwds)
+  File "C:\abay_repository\venv\lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\abay_repository\books\views.py", line 1516, in my_books_user
+    return render(request, 'books/my_books_user.html', context)
+  File "C:\abay_repository\venv\lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 175, in render
+    return self._render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\loader_tags.py", line 63, in render
+    result = block.nodelist.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\defaulttags.py", line 321, in render
+    return nodelist.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\defaulttags.py", line 238, in render
+    nodelist.append(node.render_annotated(context))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1064, in render
+    output = self.filter_expression.resolve(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 742, in resolve
+    new_obj = func(obj, *arg_vals)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\defaultfilters.py", line 772, in date
+    return formats.date_format(value, arg)
+  File "C:\abay_repository\venv\lib\site-packages\django\utils\formats.py", line 158, in date_format
+    return dateformat.format(
+  File "C:\abay_repository\venv\lib\site-packages\django\utils\dateformat.py", line 324, in format
+    return df.format(format_string)
+  File "C:\abay_repository\venv\lib\site-packages\django\utils\dateformat.py", line 48, in format
+    pieces.append(str(getattr(self, piece)()))
+  File "C:\abay_repository\venv\lib\site-packages\django\utils\dateformat.py", line 297, in U
+    value = datetime.combine(value, time.min)
+TypeError: combine() argument 1 must be datetime.date, not str
+[2026-08-12 12:41:32] ERROR django.server - "GET /books/my-books/user/ HTTP/1.1" 500 248316
+[2026-08-12 12:41:35] INFO django.server - "GET /books/2/purchase/ HTTP/1.1" 302 0
+[2026-08-12 12:41:35] INFO django.server - "GET /books/2/ HTTP/1.1" 200 38894
+[2026-08-12 12:41:46] INFO django.server - "GET /accounts/dashboard/ HTTP/1.1" 302 0
+[2026-08-12 12:41:46] INFO books.views - Maker dashboard: 0 new submissions found
+[2026-08-12 12:41:46] INFO books.views - Maker dashboard: 0 new submissions found
+[2026-08-12 12:41:46] INFO django.server - "GET /books/maker/dashboard/ HTTP/1.1" 200 50929
+[2026-08-12 12:42:00] AUTH INFO - AUTH - User logged out: maker, IP=127.0.0.1
+[2026-08-12 12:42:00] INFO accounts.views - AUTH - User logged out: maker, IP=127.0.0.1
+[2026-08-12 12:42:00] INFO accounts.views - AUTH - User logged out: maker, IP=127.0.0.1
+[2026-08-12 12:42:00] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-08-12 12:42:00] INFO django.server - "GET / HTTP/1.1" 200 54866
+[2026-08-12 12:42:01] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 32128
+[2026-08-12 12:42:04] AUTH INFO - AUTH - Login successful: User=finance_officer, IP=127.0.0.1, Role=finance
+[2026-08-12 12:42:04] INFO accounts.views - AUTH - Login successful: User=finance_officer, IP=127.0.0.1, Role=finance
+[2026-08-12 12:42:04] INFO accounts.views - AUTH - Login successful: User=finance_officer, IP=127.0.0.1, Role=finance
+[2026-08-12 12:42:04] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-08-12 12:42:04] AUTH INFO - Finance dashboard accessed by: finance_officer
+[2026-08-12 12:42:04] INFO accounts.views - Finance dashboard accessed by: finance_officer
+[2026-08-12 12:42:04] INFO accounts.views - Finance dashboard accessed by: finance_officer
+[2026-08-12 12:42:04] INFO django.server - "GET /accounts/dashboard/finance/ HTTP/1.1" 200 75840
+[2026-08-12 12:42:43] WARNING django.server - "POST /payments/api/process/ HTTP/1.1" 404 5642
+[2026-08-12 13:07:40] INFO django.server - "GET / HTTP/1.1" 200 54799
+[2026-08-12 13:07:40] INFO django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 200 273594
+[2026-08-12 13:13:22] INFO django.server - "GET / HTTP/1.1" 200 63141
+[2026-08-12 13:14:00] INFO django.server - "GET / HTTP/1.1" 200 54799
+[2026-08-12 13:16:38] INFO django.server - "GET / HTTP/1.1" 200 82003
+[2026-08-12 13:17:23] AUTH INFO - AUTH - User logged out: finance_officer, IP=127.0.0.1
+[2026-08-12 13:17:23] INFO accounts.views - AUTH - User logged out: finance_officer, IP=127.0.0.1
+[2026-08-12 13:17:23] INFO accounts.views - AUTH - User logged out: finance_officer, IP=127.0.0.1
+[2026-08-12 13:17:24] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-08-12 13:17:24] INFO django.server - "GET / HTTP/1.1" 200 82070
+[2026-08-12 13:17:26] AUTH INFO - Register author - verified: False
+[2026-08-12 13:17:26] INFO accounts.views - Register author - verified: False
+[2026-08-12 13:17:26] INFO accounts.views - Register author - verified: False
+[2026-08-12 13:17:26] INFO django.server - "GET /accounts/register/author/ HTTP/1.1" 200 86859
+[2026-08-12 13:19:48] AUTH INFO - Register author - verified: False
+[2026-08-12 13:19:48] INFO accounts.views - Register author - verified: False
+[2026-08-12 13:19:48] INFO accounts.views - Register author - verified: False
+[2026-08-12 13:19:48] INFO django.server - "GET /accounts/register/author/ HTTP/1.1" 200 88129
+[2026-08-12 13:20:15] AUTH INFO - OIDC Initiate - National ID: 1234****
+[2026-08-12 13:20:15] INFO accounts.views - OIDC Initiate - National ID: 1234****
+[2026-08-12 13:20:15] INFO accounts.views - OIDC Initiate - National ID: 1234****
+[2026-08-12 13:20:15] AUTH INFO - Authorization URL generated successfully
+[2026-08-12 13:20:15] INFO accounts.views - Authorization URL generated successfully
+[2026-08-12 13:20:15] INFO accounts.views - Authorization URL generated successfully
+[2026-08-12 13:20:15] INFO django.server - "POST /accounts/api/fayda/oidc/initiate/ HTTP/1.1" 200 1057
+[2026-08-12 13:21:43] AUTH INFO - Register author - verified: False
+[2026-08-12 13:21:43] INFO accounts.views - Register author - verified: False
+[2026-08-12 13:21:43] INFO accounts.views - Register author - verified: False
+[2026-08-12 13:21:43] INFO django.server - "GET /accounts/register/author/ HTTP/1.1" 200 88145
+[2026-08-12 13:23:16] INFO django.server - "GET / HTTP/1.1" 200 81716
+[2026-08-12 13:25:22] INFO django.server - "GET / HTTP/1.1" 200 80704
+[2026-08-12 13:26:13] INFO django.server - "GET / HTTP/1.1" 200 80549
+[2026-08-12 13:26:58] AUTH INFO - Register author - verified: False
+[2026-08-12 13:26:58] INFO accounts.views - Register author - verified: False
+[2026-08-12 13:26:58] INFO accounts.views - Register author - verified: False
+[2026-08-12 13:26:58] INFO django.server - "GET /accounts/register/author/ HTTP/1.1" 200 86978
+[2026-08-12 16:13:59] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-08-12 16:13:59] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-08-12 16:14:26] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-08-12 16:14:26] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-08-12 16:14:56] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-08-12 16:14:56] INFO django.utils.autoreload - Watching for file changes with StatReloader

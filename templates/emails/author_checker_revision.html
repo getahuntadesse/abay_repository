@@ -1,0 +1,34 @@
+{% extends 'emails/base_email.html' %}
+
+{% block content %}
+<h2>🔄 Book Needs Revision</h2>
+<p>Dear {{ user.full_name }},</p>
+<p>Your book <strong>"{{ book.title }}"</strong> needs revision based on our quality checker's feedback.</p>
+
+<div class="status-box">
+    <p><strong>Overall Score:</strong> <span class="score-medium">{{ review.overall_score|floatformat:1 }}/10</span></p>
+</div>
+
+{% if review.comments %}
+<div class="status-box" style="border-left-color: #ffc107;">
+    <p><strong>Reviewer Feedback:</strong></p>
+    <p>{{ review.comments }}</p>
+</div>
+{% endif %}
+
+<p><strong>Score Breakdown:</strong></p>
+<ul>
+    <li>Content Quality: {{ review.content_quality|floatformat:1 }}/10</li>
+    <li>Editorial Quality: {{ review.editorial_quality|floatformat:1 }}/10</li>
+    <li>Technical Quality: {{ review.technical_quality|floatformat:1 }}/10</li>
+    <li>Copyright Compliance: {{ review.copyright_compliance|floatformat:1 }}/10</li>
+    <li>Community Guidelines: {{ review.community_guidelines|floatformat:1 }}/10</li>
+</ul>
+
+<p>Please make the necessary revisions and resubmit your book for review.</p>
+
+<p><a href="{{ site_url }}{% url 'books:edit' book.id %}" class="button">Edit Your Book</a></p>
+
+<p>We look forward to seeing your improved work!</p>
+<p>Best regards,<br>The Abay Repository Team</p>
+{% endblock %}
