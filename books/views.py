@@ -6,7 +6,7 @@ from django.utils import timezone
 from django.db.models import Q, Sum, Count, Avg
 from django.core.paginator import Paginator
 from django.views.generic import TemplateView
-from django.http import HttpResponse, JsonResponse, FileResponse
+from django.http import StreamingHttpResponse,  HttpResponse, JsonResponse, FileResponse
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
@@ -515,13 +515,13 @@ class TelebirrPayment:
         self.app_key = getattr(settings, 'TELEBIRR_APP_SECRET', 'SIM-KEY-' + ''.join(random.choices(string.ascii_uppercase + string.digits, k=32)))
         self.short_code = getattr(settings, 'TELEBIRR_MERCHANT_CODE', '101011')
         self.merchant_app_id = getattr(settings, 'TELEBIRR_MERCHANT_APP_ID', '930231098009602')
-        self.api_url = getattr(settings, 'TELEBIRR_BASE_URL', 'https://api.telebirr.et/simulator/v1')
+        self.api_url = getattr(settings, 'TELEBIRR_BASE_URL', 'https://196.188.120.3:38443/apiaccess/payment/gateway')
         self.callback_url = getattr(settings, 'TELEBIRR_CALLBACK_URL', '')
         self.return_url = getattr(settings, 'TELEBIRR_RETURN_URL', '')
         self.request = request
         self.verify_ssl = getattr(settings, 'TELEBIRR_VERIFY_SSL', False)
-        self.use_simulated = getattr(settings, 'USE_SIMULATED_PAYMENT', True)
-        self.telebirr_enabled = getattr(settings, 'TELEBIRR_ENABLED', False)
+        self.use_simulated = False  # production only — simulation disabled
+        self.telebirr_enabled = getattr(settings, 'TELEBIRR_ENABLED', True)
         self.simulate_success_rate = 0.95
         self.simulate_delay = 2
     
@@ -647,7 +647,7 @@ class TelebirrPayment:
                     'transaction_id': transaction_id,
                     'message': 'Payment initiated successfully',
                     'is_real_payment': False,
-                    'is_simulated': True,
+                    'is_simulated': False,
                     'simulation_data': {
                         'processing_time': result.get('processing_time', '2.0s'),
                         'reference': result.get('reference', transaction_id),
@@ -665,7 +665,7 @@ class TelebirrPayment:
                     'error': error_msg,
                     'error_code': error_code,
                     'transaction_id': transaction_id,
-                    'is_simulated': True
+                    'is_simulated': False
                 }
                 
         except Exception as e:
@@ -674,7 +674,7 @@ class TelebirrPayment:
             return {
                 'success': False,
                 'error': str(e),
-                'is_simulated': True
+                'is_simulated': False
             }
     
     def verify_payment(self, transaction_id):
@@ -699,8 +699,8 @@ class TelebirrPayment:
                 'amount': '100.00',
                 'payment_method': 'telebirr',
                 'verification_time': datetime.now().isoformat(),
-                'is_debug': True,
-                'is_simulated': True,
+                'is_debug': False,
+                'is_simulated': False,
                 'message': 'Payment verified successfully (simulated)'
             }
                 
@@ -709,7 +709,7 @@ class TelebirrPayment:
             return {
                 'success': False,
                 'error': str(e),
-                'is_simulated': True
+                'is_simulated': False
             }
 
 
@@ -718,41 +718,36 @@ class TelebirrPayment:
 # =============================================
 
 def get_available_payment_methods():
-    """Get available payment methods for display"""
-    methods = []
-    
-    methods.append({
-        'id': 'telebirr',
-        'name': 'Telebirr',
-        'icon': 'fas fa-mobile-alt',
-        'description': 'Pay with Telebirr mobile money',
-        'color': 'success',
-        'badge': 'Popular',
-        'show_badge': True,
-        'simulated': getattr(settings, 'USE_SIMULATED_PAYMENT', True),
-    })
-    
-    methods.append({
-        'id': 'cbe',
-        'name': 'CBE Birr',
-        'icon': 'fas fa-university',
-        'description': 'Pay with CBE Birr banking',
-        'color': 'primary',
-        'badge': 'Secure',
-        'show_badge': True,
-    })
-    
-    methods.append({
-        'id': 'bank_transfer',
-        'name': 'Bank Transfer',
-        'icon': 'fas fa-building-columns',
-        'description': 'Pay via bank transfer',
-        'color': 'info',
-        'badge': '',
-        'show_badge': False,
-    })
-    
-    return methods
+    """Get available payment methods for display (Telebirr, Chapa, PayPal)."""
+    return [
+        {
+            'id': 'telebirr',
+            'name': 'Telebirr',
+            'icon': 'fas fa-mobile-alt',
+            'description': 'Pay with Telebirr mobile money',
+            'color': 'success',
+            'badge': 'Popular',
+            'show_badge': True,
+        },
+        {
+            'id': 'chapa',
+            'name': 'Chapa',
+            'icon': 'fas fa-credit-card',
+            'description': 'Card, bank & mobile money via Chapa',
+            'color': 'primary',
+            'badge': 'Cards',
+            'show_badge': True,
+        },
+        {
+            'id': 'paypal',
+            'name': 'PayPal',
+            'icon': 'fab fa-paypal',
+            'description': 'Pay with PayPal account or card',
+            'color': 'info',
+            'badge': 'International',
+            'show_badge': True,
+        },
+    ]
 
 
 def get_tax_rate(book):
@@ -906,7 +901,7 @@ def telebirr_pay_process(request, transaction_id):
                 
                 create_payment_record(purchase)
                 
-                messages.success(request, f'Payment successful! "{purchase.book.title}" added to your library.')
+                messages.success(request, f'Payment successful! "{purchase.book.title}" added to your library. Open it in the reader.')
                 return redirect('books:my_books_user')
                 
         except Exception as e:
@@ -1013,7 +1008,7 @@ def telebirr_return(request):
                 return redirect('books:browse')
             
             if purchase.status == 'completed':
-                messages.success(request, f'Payment successful! "{purchase.book.title}" added to your library.')
+                messages.success(request, f'Payment successful! "{purchase.book.title}" added to your library. Open it in the reader.')
                 return redirect('books:my_books_user')
             
             purchase.status = 'completed'
@@ -1028,7 +1023,7 @@ def telebirr_return(request):
             
             create_payment_record(purchase)
             
-            messages.success(request, f'Payment successful! "{purchase.book.title}" added to your library.')
+            messages.success(request, f'Payment successful! "{purchase.book.title}" added to your library. Open it in the reader.')
             return redirect('books:my_books_user')
                     
     except Exception as e:
@@ -1068,7 +1063,7 @@ def telebirr_simulate(request, transaction_id):
             
             create_payment_record(purchase)
             
-            messages.success(request, f'Payment simulated successfully! "{purchase.book.title}" added to your library.')
+            messages.success(request, f'Payment simulated successfully! "{purchase.book.title}" added to your library. Open it in the reader.')
             return redirect('books:my_books_user')
             
     except Exception as e:
@@ -1247,7 +1242,7 @@ def purchase_book(request, book_id):
         if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
             return JsonResponse({'success': False, 'error': 'You already own this book'}, status=400)
         messages.warning(request, 'You already own this book.')
-        return redirect('books:detail', book_id=book_id)
+        return redirect('books:read', book_id=book_id)
     
     if book.price == 0 or book.is_free:
         try:
@@ -1258,8 +1253,8 @@ def purchase_book(request, book_id):
                     amount=Decimal('0.00'),
                     status='completed',
                     payment_method='free',
-                    transaction_reference='FREE-DOWNLOAD',
-                    purchase_reference='FREE-DOWNLOAD',
+                    transaction_reference='FREE-READ',
+                    purchase_reference='FREE-READ',
                     completed_at=timezone.now(),
                 )
                 
@@ -1271,14 +1266,14 @@ def purchase_book(request, book_id):
                 if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
                     return JsonResponse({
                         'success': True,
-                        'message': 'Book downloaded successfully!',
+                        'message': 'Book unlocked for reading!',
                         'free': True,
                         'transaction_id': purchase.transaction_id,
-                        'download_url': reverse('books:download', kwargs={'book_id': book.id})
+                        'read_url': reverse('books:read', kwargs={'book_id': book.id})
                     })
                 
-                messages.success(request, f'You have successfully downloaded "{book.title}"!')
-                return redirect('books:detail', book_id=book_id)
+                messages.success(request, f'You can now read "{book.title}" in the online reader.')
+                return redirect('books:read', book_id=book_id)
         except Exception as e:
             logger.error(f"Free book purchase error: {str(e)}")
             messages.error(request, 'An error occurred. Please try again.')
@@ -1286,14 +1281,20 @@ def purchase_book(request, book_id):
     
     if request.method == 'GET':
         payment_methods = get_available_payment_methods()
+        paypal_cfg = getattr(settings, 'PAYPAL_CONFIG', {}) or {}
+        chapa_cfg = getattr(settings, 'CHAPA_CONFIG', {}) or {}
         context = {
             'book': book,
             'payment_methods': payment_methods,
             'amount': book.price,
             'user': request.user,
             'debug': settings.DEBUG,
-            'use_simulated': getattr(settings, 'USE_SIMULATED_PAYMENT', True),
-            'telebirr_enabled': getattr(settings, 'TELEBIRR_ENABLED', False),
+            'use_simulated': False,
+            'telebirr_enabled': True,
+            'paypal_client_id': paypal_cfg.get('CLIENT_ID') or getattr(settings, 'PAYPAL_CLIENT_ID', ''),
+            'paypal_currency': paypal_cfg.get('CURRENCY') or getattr(settings, 'PAYPAL_CURRENCY', 'USD'),
+            'paypal_mode': paypal_cfg.get('MODE') or getattr(settings, 'PAYPAL_MODE', 'sandbox'),
+            'chapa_public_key': chapa_cfg.get('PUBLIC_KEY') or getattr(settings, 'CHAPA_PUBLIC_KEY', ''),
         }
         return render(request, 'books/payment_methods.html', context)
     
@@ -1355,10 +1356,10 @@ def purchase_book(request, book_id):
                             'success': True,
                             'message': 'Payment successful!',
                             'transaction_id': purchase.transaction_id,
-                            'download_url': reverse('books:download', kwargs={'book_id': book.id})
+                            'read_url': reverse('books:read', kwargs={'book_id': book.id})
                         })
                     
-                    messages.success(request, f'Payment successful! You can download "{book.title}"')
+                    messages.success(request, f'Payment successful! You can read it in the online reader "{book.title}"')
                     return redirect('books:my_books_user')
                 
                 elif payment_method == 'bank_transfer':
@@ -1417,7 +1418,7 @@ def process_payment(request, purchase_id):
                     result = {'success': False, 'error': 'Unsupported payment method'}
                 
                 if result.get('success'):
-                    is_simulated = result.get('is_debug', False) or result.get('is_simulated', False)
+                    is_simulated = False  # simulation disabled
                     
                     if is_simulated:
                         purchase.status = 'completed'
@@ -1516,105 +1517,171 @@ def my_books_user(request):
     return render(request, 'books/my_books_user.html', context)
 
 
+
 # =============================================
-# BOOK DOWNLOAD
+# BOOK READER (downloads disabled)
 # =============================================
 
-@login_required
-def download_book(request, book_id):
+def _user_can_read_book(user, book):
+    """Free books: readable by all. Paid: completed purchase (or staff/author)."""
     from payments.models import Purchase
-    
-    try:
-        book = get_object_or_404(Book, id=book_id, status=Book.STATUS_PUBLISHED)
-    except Book.DoesNotExist:
-        messages.error(request, 'Book not found.')
-        return redirect('books:browse')
-    
-    has_access = False
-    
     if book.is_free or book.price == 0:
-        has_access = True
-    elif request.user.is_authenticated:
-        has_access = Purchase.objects.filter(
-            user=request.user,
-            book=book,
-            status='completed'
-        ).exists()
-    
-    if not has_access:
-        messages.error(request, 'You do not have permission to download this book.')
-        return redirect('books:detail', book_id=book_id)
-    
+        return True
+    if not user.is_authenticated:
+        return False
+    if getattr(user, "role", None) in ("admin", "maker") or user.is_superuser:
+        return True
+    if getattr(book, "author_id", None) == user.id:
+        return True
+    return Purchase.objects.filter(user=user, book=book, status="completed").exists()
+
+
+def download_book(request, book_id):
+    """Downloads are disabled — redirect to the in-app reader."""
+    messages.info(
+        request,
+        "Downloading is not available. You can read this book in the online reader.",
+    )
+    return redirect("books:read", book_id=book_id)
+
+
+def read_book(request, book_id):
+    """Professional in-app reader. No file download."""
+    book = get_object_or_404(Book, id=book_id, status=Book.STATUS_PUBLISHED)
+    is_free = book.is_free or book.price == 0
+
+    if not is_free and not request.user.is_authenticated:
+        messages.error(request, "Please log in to read this book.")
+        from django.conf import settings as dj_settings
+        return redirect(f"{dj_settings.LOGIN_URL}?next=/books/{book_id}/read/")
+
+    if not _user_can_read_book(request.user, book):
+        messages.error(request, "Purchase this book to read it in the online reader.")
+        return redirect("books:detail", book_id=book_id)
+
     if not book.file:
-        messages.error(request, 'File not available for download.')
-        return redirect('books:detail', book_id=book_id)
-    
-    if not default_storage.exists(book.file.name):
-        messages.error(request, 'File not found on server. Please contact support.')
-        return redirect('books:detail', book_id=book_id)
-    
+        messages.error(request, "This book has no readable file yet.")
+        return redirect("books:detail", book_id=book_id)
+
     try:
-        book.downloads_count += 1
-        book.save()
-        
-        file_path = book.file.path
-        
-        mime_type, _ = mimetypes.guess_type(file_path)
-        if not mime_type:
-            mime_type = 'application/octet-stream'
-        
-        with open(file_path, 'rb') as f:
-            response = HttpResponse(f.read(), content_type=mime_type)
-            response['Content-Disposition'] = f'attachment; filename="{book.file.name.split("/")[-1]}"'
-            response['Content-Length'] = os.path.getsize(file_path)
-            
-            logger.info(f"Book downloaded: {book.title} by {request.user.username}")
-            return response
-            
-    except FileNotFoundError:
-        logger.error(f"File not found: {book.file.name}")
-        messages.error(request, 'File not found on server. Please contact support.')
-        return redirect('books:detail', book_id=book_id)
-    except Exception as e:
-        logger.error(f"Download error: {str(e)}")
-        messages.error(request, 'An error occurred while downloading the file. Please try again.')
-        return redirect('books:detail', book_id=book_id)
+        book.views_count = (book.views_count or 0) + 1
+        book.save(update_fields=["views_count"])
+    except Exception:
+        pass
+
+    name = (getattr(book.file, "name", "") or "").lower()
+    ext = (book.get_file_extension() or "").lower()
+    if not ext and "." in name:
+        ext = "." + name.rsplit(".", 1)[-1]
+    is_pdf = ext == ".pdf" or name.endswith(".pdf")
+    is_epub = ext == ".epub" or name.endswith(".epub")
+    is_txt = ext in (".txt", ".text") or name.endswith(".txt")
+    context = {
+        "book": book,
+        "file_ext": ext,
+        "is_pdf": is_pdf,
+        "is_epub": is_epub,
+        "is_txt": is_txt,
+        "content_url": reverse("books:content", kwargs={"book_id": book.id}),
+        "download_allowed": False,
+    }
+    return render(request, "books/reader.html", context)
 
 
-@login_required
 def read_free_book(request, book_id):
+    """Free books use the same reader (no download)."""
+    return read_book(request, book_id)
+
+
+def stream_book_content(request, book_id):
+    """
+    Stream book bytes for the online reader (inline only).
+    Supports HTTP Range for PDF.js. Sends cookies/session auth via same-origin fetch.
+    """
+    import mimetypes
+    import os
+    import re
+    from django.core.files.storage import default_storage
+    from django.http import FileResponse, HttpResponse
+
+    book = get_object_or_404(Book, id=book_id, status=Book.STATUS_PUBLISHED)
+    if not _user_can_read_book(request.user, book):
+        return HttpResponse("Forbidden — purchase or login required", status=403)
+    if not book.file:
+        return HttpResponse("Not found", status=404)
+
     try:
-        book = get_object_or_404(Book, id=book_id, is_free=True, status=Book.STATUS_PUBLISHED)
-        
-        if not book.file:
-            messages.error(request, 'Book file not available.')
-            return redirect('books:detail', book_id=book_id)
-        
-        book.downloads_count += 1
-        book.views_count += 1
-        book.save()
-        
-        if book.file.name.lower().endswith('.pdf'):
+        if not default_storage.exists(book.file.name):
+            return HttpResponse("File missing on storage", status=404)
+    except Exception:
+        pass
+
+    try:
+        # Prefer local path; fall back to storage open()
+        try:
             file_path = book.file.path
-            with open(file_path, 'rb') as f:
-                response = HttpResponse(f.read(), content_type='application/pdf')
-                response['Content-Disposition'] = f'inline; filename="{book.file.name.split("/")[-1]}"'
-                return response
-        
-        return redirect(book.file.url)
-        
-    except Book.DoesNotExist:
-        messages.error(request, 'Book not found or not available for free reading.')
-        return redirect('books:browse')
+            file_size = os.path.getsize(file_path)
+            file_handle = open(file_path, "rb")
+        except Exception:
+            file_handle = default_storage.open(book.file.name, "rb")
+            try:
+                file_size = file_handle.size
+            except Exception:
+                file_handle.seek(0, os.SEEK_END)
+                file_size = file_handle.tell()
+                file_handle.seek(0)
+            file_path = book.file.name
+
+        mime_type, _ = mimetypes.guess_type(str(file_path))
+        if not mime_type:
+            ext = (book.get_file_extension() or "").lower()
+            mime_type = {
+                ".pdf": "application/pdf",
+                ".epub": "application/epub+zip",
+                ".txt": "text/plain; charset=utf-8",
+            }.get(ext, "application/octet-stream")
+
+        safe_name = os.path.basename(str(book.file.name)).replace('"', "")
+        range_header = request.META.get("HTTP_RANGE", "").strip()
+
+        # Range support for PDF.js progressive loading
+        if range_header and file_size:
+            match = re.match(r"bytes=(\d+)-(\d*)", range_header)
+            if match:
+                start = int(match.group(1))
+                end = int(match.group(2)) if match.group(2) else file_size - 1
+                end = min(end, file_size - 1)
+                if start > end or start >= file_size:
+                    file_handle.close()
+                    resp = HttpResponse(status=416)
+                    resp["Content-Range"] = f"bytes */{file_size}"
+                    return resp
+                length = end - start + 1
+                file_handle.seek(start)
+                data = file_handle.read(length)
+                file_handle.close()
+                resp = HttpResponse(data, status=206, content_type=mime_type)
+                resp["Content-Range"] = f"bytes {start}-{end}/{file_size}"
+                resp["Accept-Ranges"] = "bytes"
+                resp["Content-Length"] = length
+                resp["Content-Disposition"] = f'inline; filename="{safe_name}"'
+                resp["X-Content-Type-Options"] = "nosniff"
+                resp["Cache-Control"] = "private, max-age=3600"
+                resp["Access-Control-Allow-Credentials"] = "true"
+                return resp
+
+        response = FileResponse(file_handle, content_type=mime_type)
+        response["Content-Disposition"] = f'inline; filename="{safe_name}"'
+        response["Content-Length"] = file_size
+        response["Accept-Ranges"] = "bytes"
+        response["X-Content-Type-Options"] = "nosniff"
+        response["Cache-Control"] = "private, max-age=3600"
+        response["Access-Control-Allow-Credentials"] = "true"
+        return response
     except Exception as e:
-        logger.error(f"Error in read_free_book: {str(e)}")
-        messages.error(request, 'An error occurred while loading the book.')
-        return redirect('books:detail', book_id=book_id)
+        logger.exception("stream_book_content error: %s", e)
+        return HttpResponse("Error reading file", status=500)
 
-
-# =============================================
-# WISHLIST FUNCTIONS
-# =============================================
 
 @csrf_exempt
 @login_required

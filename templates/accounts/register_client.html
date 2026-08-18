@@ -1,227 +1,295 @@
-{% extends 'base.html' %}
-{% load static %}
-{% load crispy_forms_tags %}
-
-{% block title %}Reader Registration | Abrehot Library{% endblock %}
-
-{% block extra_css %}
-<style>
-    :root {
-        --primary-gold: #DAA520;
-        --primary-gold-dark: #B8860B;
-        --primary-gold-light: #F5D061;
-        --primary-dark: #2C2C2C;
-        --primary-darker: #1A1A1A;
-        --primary-gray: #4A4A4A;
-        --primary-gray-light: #6C6C6C;
-    }
-
-    .register-container {
-        max-width: 950px;
-        margin: 0 auto;
-    }
-
-    .form-card {
-        background: white;
-        border-radius: 24px;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
-        overflow: hidden;
-        transition: transform 0.3s ease;
-    }
-
-    .form-card:hover {
-        transform: translateY(-5px);
-    }
-
-    .form-header {
-        background: linear-gradient(135deg, var(--primary-darker), var(--primary-dark));
-        padding: 2.5rem;
-        text-align: center;
-        color: white;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .form-header::before {
-        content: '';
-        position: absolute;
-        top: -50%;
-        right: -50%;
-        width: 200%;
-        height: 200%;
-        background: radial-gradient(circle, rgba(218, 165, 32, 0.1) 0%, transparent 70%);
-        transform: rotate(45deg);
-    }
-
-    .form-header i {
-        font-size: 3.5rem;
-        color: var(--primary-gold);
-        margin-bottom: 1rem;
-        position: relative;
-        z-index: 1;
-    }
-
-    .form-header h2 {
-        font-size: 1.75rem;
-        font-weight: 700;
-        margin-bottom: 0.5rem;
-        position: relative;
-        z-index: 1;
-    }
-
-    .form-header p {
-        position: relative;
-        z-index: 1;
-        opacity: 0.85;
-    }
-
-    .form-body {
-        padding: 2.5rem;
-    }
-
-    .section-title {
-        font-size: 0.85rem;
-        font-weight: 700;
-        color: var(--primary-darker);
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        margin-bottom: 1.25rem;
-        border-bottom: 2px solid var(--primary-gold);
-        display: inline-block;
-        padding-bottom: 0.5rem;
-    }
-
-    .benefits {
-        background: linear-gradient(135deg, #F8F9FA, #F0F1F3);
-        border-radius: 16px;
-        padding: 1.5rem;
-        margin-top: 1.5rem;
-        border-left: 4px solid var(--primary-gold);
-    }
-
-    .benefits ul {
-        margin-bottom: 0;
-        padding-left: 1.2rem;
-    }
-
-    .benefits li {
-        font-size: 0.85rem;
-        margin-bottom: 0.5rem;
-        color: var(--primary-gray);
-        transition: all 0.3s ease;
-    }
-
-    .benefits li:hover {
-        color: var(--primary-darker);
-        transform: translateX(5px);
-    }
-
-    .btn-register {
-        background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark));
-        color: var(--primary-darker);
-        border: none;
-        padding: 14px 28px;
-        border-radius: 12px;
-        font-weight: 700;
-        width: 100%;
-        transition: all 0.3s ease;
-        font-size: 1rem;
-    }
-
-    .btn-register:hover:not(:disabled) {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(218, 165, 32, 0.35);
-        color: var(--primary-darker);
-    }
-
-    .btn-register:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-    }
-
-    .terms-link {
-        color: var(--primary-gold);
-        text-decoration: none;
-        font-weight: 600;
-        transition: color 0.3s ease;
-    }
-
-    .terms-link:hover {
-        color: var(--primary-gold-dark);
-        text-decoration: underline;
-    }
-
-    .password-strength {
-        height: 4px;
-        margin-top: 0.5rem;
-        border-radius: 2px;
-        background: #e9ecef;
-        transition: all 0.3s ease;
-    }
-
-    .strength-weak { background: #dc3545; width: 25%; }
-    .strength-medium { background: #ffc107; width: 50%; }
-    .strength-strong { background: #28a745; width: 75%; }
-    .strength-very-strong { background: #28a745; width: 100%; }
-
-    .password-match-success {
-        color: #28a745;
-        font-size: 0.75rem;
-        margin-top: 0.25rem;
-    }
-
-    .password-match-error {
-        color: #dc3545;
-        font-size: 0.75rem;
-        margin-top: 0.25rem;
-    }
-
-    .error-message {
-        color: #dc3545;
-        font-size: 0.75rem;
-        margin-top: 0.25rem;
-    }
-
-    .form-control.error {
-        border-color: #dc3545;
-    }
-
-    .form-control:focus {
-        border-color: var(--primary-gold);
-        box-shadow: 0 0 0 0.2rem rgba(218, 165, 32, 0.25);
-    }
-
-    .btn-gold {
-        background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark));
-        color: var(--primary-darker);
-        border: none;
-        padding: 8px 24px;
-        border-radius: 25px;
-        font-weight: 600;
-        transition: all 0.3s ease;
-    }
-
-    .btn-gold:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(218, 165, 32, 0.3);
-        color: var(--primary-darker);
-    }
-
-    @media (max-width: 768px) {
-        .form-body {
-            padding: 1.5rem;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reader Registration | Abrehot Library</title>
+    <!-- Font Awesome 6 (free) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <!-- Bootstrap 5 (light) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        :root {
+            --primary-gold: #DAA520;
+            --primary-gold-dark: #B8860B;
+            --primary-gold-light: #F5D061;
+            --primary-dark: #2C2C2C;
+            --primary-darker: #1A1A1A;
+            --primary-gray: #4A4A4A;
+            --primary-gray-light: #6C6C6C;
         }
+
+        .register-container {
+            max-width: 950px;
+            margin: 0 auto;
+        }
+
+        .form-card {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .form-card:hover {
+            transform: translateY(-5px);
+        }
+
         .form-header {
-            padding: 1.5rem;
+            background: linear-gradient(135deg, var(--primary-darker), var(--primary-dark));
+            padding: 2.5rem;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
         }
-        .form-header i {
-            font-size: 2.5rem;
-        }
-    }
-</style>
-{% endblock %}
 
-{% block content %}
+        .form-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(218, 165, 32, 0.1) 0%, transparent 70%);
+            transform: rotate(45deg);
+        }
+
+        .form-header i {
+            font-size: 3.5rem;
+            color: var(--primary-gold);
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .form-header h2 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .form-header p {
+            position: relative;
+            z-index: 1;
+            opacity: 0.85;
+        }
+
+        .form-body {
+            padding: 2.5rem;
+        }
+
+        .section-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--primary-darker);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 1.25rem;
+            border-bottom: 2px solid var(--primary-gold);
+            display: inline-block;
+            padding-bottom: 0.5rem;
+        }
+
+        .benefits {
+            background: linear-gradient(135deg, #F8F9FA, #F0F1F3);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            border-left: 4px solid var(--primary-gold);
+        }
+
+        .benefits ul {
+            margin-bottom: 0;
+            padding-left: 1.2rem;
+        }
+
+        .benefits li {
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-gray);
+            transition: all 0.3s ease;
+        }
+
+        .benefits li:hover {
+            color: var(--primary-darker);
+            transform: translateX(5px);
+        }
+
+        .btn-register {
+            background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark));
+            color: var(--primary-darker);
+            border: none;
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-weight: 700;
+            width: 100%;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .btn-register:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(218, 165, 32, 0.35);
+            color: var(--primary-darker);
+        }
+
+        .btn-register:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .terms-link {
+            color: var(--primary-gold);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .terms-link:hover {
+            color: var(--primary-gold-dark);
+            text-decoration: underline;
+        }
+
+        .password-strength {
+            height: 4px;
+            margin-top: 0.5rem;
+            border-radius: 2px;
+            background: #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .strength-weak { background: #dc3545; width: 25%; }
+        .strength-medium { background: #ffc107; width: 50%; }
+        .strength-strong { background: #28a745; width: 75%; }
+        .strength-very-strong { background: #28a745; width: 100%; }
+
+        .password-match-success {
+            color: #28a745;
+            font-size: 0.75rem;
+            margin-top: 0.25rem;
+        }
+
+        .password-match-error {
+            color: #dc3545;
+            font-size: 0.75rem;
+            margin-top: 0.25rem;
+        }
+
+        .error-message {
+            color: #dc3545;
+            font-size: 0.75rem;
+            margin-top: 0.25rem;
+        }
+
+        .form-control.error {
+            border-color: #dc3545;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-gold);
+            box-shadow: 0 0 0 0.2rem rgba(218, 165, 32, 0.25);
+        }
+
+        .btn-gold {
+            background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark));
+            color: var(--primary-darker);
+            border: none;
+            padding: 8px 24px;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-gold:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(218, 165, 32, 0.3);
+            color: var(--primary-darker);
+        }
+
+        @media (max-width: 768px) {
+            .form-body {
+                padding: 1.5rem;
+            }
+            .form-header {
+                padding: 1.5rem;
+            }
+            .form-header i {
+                font-size: 2.5rem;
+            }
+        }
+
+        /* checkbox styling */
+        .checkbox-terms {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-top: 0.5rem;
+        }
+
+        .checkbox-terms input[type="checkbox"] {
+            margin-top: 0.15rem;
+            flex-shrink: 0;
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary-gold);
+            cursor: pointer;
+        }
+
+        .checkbox-terms .terms-text {
+            font-size: 0.9rem;
+            color: #4a4a4a;
+            line-height: 1.5;
+        }
+
+        .terms-link i {
+            font-size: 0.75rem;
+            margin-left: 0.2rem;
+        }
+
+        /* modal content style */
+        .modal-body h6 {
+            color: var(--primary-darker);
+            font-weight: 700;
+            margin-top: 1.25rem;
+        }
+        .modal-body h6:first-of-type {
+            margin-top: 0;
+        }
+        .modal-body p {
+            font-size: 0.92rem;
+            line-height: 1.6;
+            color: #2d2d2d;
+        }
+        .modal-body ul {
+            padding-left: 1.2rem;
+        }
+        .modal-body ul li {
+            font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+        }
+        .terms-section {
+            padding: 0.25rem 0;
+        }
+        .terms-section .section-label {
+            font-weight: 700;
+            color: var(--primary-gold-dark);
+            border-bottom: 1px solid var(--primary-gold-light);
+            padding-bottom: 0.25rem;
+            display: inline-block;
+            margin-top: 1rem;
+        }
+        .terms-section .section-label:first-of-type {
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+
 <div class="container mt-5 mb-5">
     <div class="register-container">
         <div class="form-card">
@@ -231,18 +299,12 @@
                 <p class="mb-0">Join Abrehot Library and start your reading journey today</p>
             </div>
             <div class="form-body">
+
                 <form method="POST" novalidate id="registerForm">
-                    {% csrf_token %}
+                    <!-- CSRF placeholder -->
+                    <input type="hidden" name="csrfmiddlewaretoken" value="demo123" />
 
-                    {% if form.non_field_errors %}
-                        <div class="alert alert-danger">
-                            {% for error in form.non_field_errors %}
-                                {{ error }}
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-
-                    <!-- Personal Information Section -->
+                    <!-- Personal Information -->
                     <div class="mb-4">
                         <h6 class="section-title"><i class="fas fa-user me-2"></i>Personal Information</h6>
                     </div>
@@ -252,18 +314,16 @@
                             <label for="full_name" class="form-label fw-bold">
                                 Full Name <span class="text-danger">*</span>
                             </label>
-                            <input type="text" name="full_name" id="full_name" class="form-control" value="{{ form.full_name.value|default:'' }}" required>
-                            {% if form.full_name.errors %}
-                                <div class="text-danger small mt-1">{{ form.full_name.errors.0 }}</div>
-                            {% endif %}
+                            <input type="text" name="full_name" id="full_name" class="form-control" placeholder="Abebe Kebede" required />
+                            <div class="error-message" id="fullNameError"></div>
                         </div>
                         <div class="col-md-6">
                             <label for="username" class="form-label fw-bold">
                                 Username <span class="text-danger">*</span>
                             </label>
-                            <input type="text" name="username" id="username" class="form-control" value="{{ form.username.value|default:'' }}" required>
+                            <input type="text" name="username" id="username" class="form-control" placeholder="abebe_k" required />
                             <small class="text-muted">Letters, digits and @/./+/-/_ only.</small>
-                            <div id="usernameError" class="error-message"></div>
+                            <div class="error-message" id="usernameError"></div>
                         </div>
                     </div>
 
@@ -272,20 +332,20 @@
                             <label for="email" class="form-label fw-bold">
                                 Email Address <span class="text-danger">*</span>
                             </label>
-                            <input type="email" name="email" id="email" class="form-control" value="{{ form.email.value|default:'' }}" required>
-                            <div id="emailError" class="error-message"></div>
+                            <input type="email" name="email" id="email" class="form-control" placeholder="abebe@example.com" required />
+                            <div class="error-message" id="emailError"></div>
                         </div>
                         <div class="col-md-6">
                             <label for="phone" class="form-label fw-bold">
                                 Phone Number <span class="text-danger">*</span>
                             </label>
-                            <input type="tel" name="phone" id="phone" class="form-control" placeholder="09XXXXXXXX" value="{{ form.phone.value|default:'' }}" required>
+                            <input type="tel" name="phone" id="phone" class="form-control" placeholder="0912345678" required />
                             <small class="text-muted">Format: 09XXXXXXXX</small>
-                            <div id="phoneError" class="error-message"></div>
+                            <div class="error-message" id="phoneError"></div>
                         </div>
                     </div>
 
-                    <!-- Demographics Section -->
+                    <!-- Demographics -->
                     <div class="mb-4 mt-4">
                         <h6 class="section-title"><i class="fas fa-map-marker-alt me-2"></i>Demographics (Optional)</h6>
                     </div>
@@ -293,40 +353,40 @@
                     <div class="row g-3">
                         <div class="col-md-4">
                             <label for="date_of_birth" class="form-label fw-bold">Date of Birth</label>
-                            <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" value="{{ form.date_of_birth.value|default:'' }}">
+                            <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" />
                         </div>
                         <div class="col-md-4">
                             <label for="gender" class="form-label fw-bold">Gender</label>
                             <select class="form-select" id="gender" name="gender">
                                 <option value="">Select Gender</option>
-                                <option value="M" {% if form.gender.value == 'M' %}selected{% endif %}>Male</option>
-                                <option value="F" {% if form.gender.value == 'F' %}selected{% endif %}>Female</option>
-                                <option value="O" {% if form.gender.value == 'O' %}selected{% endif %}>Other</option>
+                                <option value="M">Male</option>
+                                <option value="F">Female</option>
+                                <option value="O">Other</option>
                             </select>
                         </div>
                         <div class="col-md-4">
                             <label for="region" class="form-label fw-bold">Region</label>
-                            <input type="text" class="form-control" id="region" name="region" placeholder="e.g., Addis Ababa" value="{{ form.region.value|default:'' }}">
+                            <input type="text" class="form-control" id="region" name="region" placeholder="e.g., Addis Ababa" />
                         </div>
                     </div>
 
                     <div class="row g-3 mt-2">
                         <div class="col-md-6">
                             <label for="zone" class="form-label fw-bold">Zone / Subcity</label>
-                            <input type="text" class="form-control" id="zone" name="zone" placeholder="e.g., Bole" value="{{ form.zone.value|default:'' }}">
+                            <input type="text" class="form-control" id="zone" name="zone" placeholder="e.g., Bole" />
                         </div>
                         <div class="col-md-6">
                             <label for="woreda" class="form-label fw-bold">Woreda</label>
-                            <input type="text" class="form-control" id="woreda" name="woreda" placeholder="e.g., Woreda 03" value="{{ form.woreda.value|default:'' }}">
+                            <input type="text" class="form-control" id="woreda" name="woreda" placeholder="e.g., Woreda 03" />
                         </div>
                     </div>
 
                     <div class="mt-3">
                         <label for="address" class="form-label fw-bold">Address</label>
-                        <textarea class="form-control" id="address" name="address" rows="2" placeholder="Your residential address">{{ form.address.value|default:'' }}</textarea>
+                        <textarea class="form-control" id="address" name="address" rows="2" placeholder="Your residential address"></textarea>
                     </div>
 
-                    <!-- Security Section -->
+                    <!-- Security -->
                     <div class="mb-4 mt-4">
                         <h6 class="section-title"><i class="fas fa-lock me-2"></i>Account Security</h6>
                     </div>
@@ -336,7 +396,7 @@
                             <label for="password" class="form-label fw-bold">
                                 Password <span class="text-danger">*</span>
                             </label>
-                            <input type="password" name="password1" id="password" class="form-control" required>
+                            <input type="password" name="password1" id="password" class="form-control" required />
                             <div id="passwordStrengthBar" class="password-strength"></div>
                             <small class="text-muted">Minimum 8 characters with uppercase, lowercase, and a number</small>
                         </div>
@@ -344,29 +404,39 @@
                             <label for="confirm_password" class="form-label fw-bold">
                                 Confirm Password <span class="text-danger">*</span>
                             </label>
-                            <input type="password" name="password2" id="confirm_password" class="form-control" required>
+                            <input type="password" name="password2" id="confirm_password" class="form-control" required />
                             <div id="passwordMatchMessage" class="password-match-error"></div>
                         </div>
                     </div>
 
-                    <!-- Preferences -->
+                    <!-- Preferences + Terms (checkbox with modal link) -->
                     <div class="mt-4">
                         <div class="form-check mb-2">
-                            <input type="checkbox" name="newsletter_subscribed" id="newsletter_subscribed" class="form-check-input" {% if form.newsletter_subscribed.value %}checked{% else %}checked{% endif %}>
+                            <input type="checkbox" name="newsletter_subscribed" id="newsletter_subscribed" class="form-check-input" checked />
                             <label class="form-check-label" for="newsletter_subscribed">
-                                <i class="fas fa-envelope me-1 text-gold"></i> Subscribe to newsletter for personalized book recommendations
+                                <i class="fas fa-envelope me-1" style="color: var(--primary-gold);"></i> Subscribe to newsletter for personalized book recommendations
                             </label>
                         </div>
 
-                        <div class="form-check">
-                            <input type="checkbox" name="terms_accepted" id="terms_accepted" class="form-check-input" required>
-                            <label class="form-check-label" for="terms_accepted">
-                                I agree to the <a href="#" class="terms-link" data-bs-toggle="modal" data-bs-target="#termsModal">Terms of Service</a> and
-                                <a href="#" class="terms-link" data-bs-toggle="modal" data-bs-target="#privacyModal">Privacy Policy</a>
+                        <!-- Terms and Conditions - checkbox with full terms modal -->
+                        <div class="checkbox-terms mt-3">
+                            <input type="checkbox" name="terms_accepted" id="terms_accepted" required />
+                            <label for="terms_accepted" class="terms-text">
+                                I have read and agree to the
+                                <a href="#" class="terms-link" data-bs-toggle="modal" data-bs-target="#termsModal">
+                                    Client Agreement <i class="fas fa-external-link-alt"></i>
+                                </a>
+                                and
+                                <a href="#" class="terms-link" data-bs-toggle="modal" data-bs-target="#privacyModal">
+                                    Privacy Policy <i class="fas fa-external-link-alt"></i>
+                                </a>
+                                of the Abrehot Library platform.
                             </label>
                         </div>
+                        <div class="error-message" id="termsError"></div>
                     </div>
 
+                    <!-- Benefits -->
                     <div class="benefits">
                         <strong><i class="fas fa-gift me-2" style="color: var(--primary-gold);"></i>What you get as a Reader:</strong>
                         <ul class="mt-2">
@@ -383,46 +453,184 @@
                     </button>
                 </form>
 
-                <hr class="my-4">
+                <hr class="my-4" />
 
                 <div class="text-center">
-                    <p class="mb-0">Already have an account? <a href="{% url 'accounts:login' %}" class="terms-link">Sign In</a></p>
-                    <p class="mt-2 mb-0">Want to publish your own books? <a href="{% url 'accounts:register_author' %}" class="terms-link">Register as an Author</a></p>
+                    <p class="mb-0">Already have an account? <a href="#" class="terms-link">Sign In</a></p>
+                    <p class="mt-2 mb-0">Want to publish your own books? <a href="#" class="terms-link">Register as an Author</a></p>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Terms of Service Modal -->
-<div class="modal fade" id="termsModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-scrollable">
+<!-- ========== TERMS MODAL (CLIENT AGREEMENT - full detailed terms) ========== -->
+<div class="modal fade" id="termsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg">
         <div class="modal-content">
             <div class="modal-header" style="background: linear-gradient(135deg, var(--primary-darker), var(--primary-dark)); color: white;">
-                <h5 class="modal-title"><i class="fas fa-file-contract me-2"></i>Terms of Service</h5>
+                <h5 class="modal-title"><i class="fas fa-file-contract me-2"></i>Client Agreement</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <h6>1. Account Usage</h6>
-                <p>You are responsible for maintaining the confidentiality of your account credentials.</p>
-                <h6 class="mt-3">2. Purchases & Refunds</h6>
-                <p>Digital products are non-refundable after download.</p>
-                <h6 class="mt-3">3. Content Usage Rights</h6>
-                <p>Purchased books are for personal use only.</p>
-                <h6 class="mt-3">4. User Conduct</h6>
-                <p>You agree to use the platform lawfully and respectfully.</p>
-                <h6 class="mt-3">5. Account Termination</h6>
-                <p>We reserve the right to suspend or terminate accounts that violate our terms.</p>
+
+                <!-- 1. Introduction and Scope -->
+                <div class="terms-section">
+                    <span class="section-label">1. Introduction and Scope</span>
+                    <p>These Terms and Conditions ("Terms") govern the submission, publication, distribution, and sale of electronic books ("e-books") on the Abay Repository platform. By submitting an e-book to the platform, you ("Author," "Publisher," or "Licensor") agree to be bound by these Terms.</p>
+                    <p>These Terms are established in accordance with the laws of the Federal Democratic Republic of Ethiopia, including but not limited to:</p>
+                    <ul>
+                        <li>Copyright and Neighboring Rights Protection Proclamation No. 410/2004</li>
+                        <li>Federal Income Tax Proclamation No. 979/2016</li>
+                        <li>Personal Data Protection Proclamation No. 1324/2024</li>
+                        <li>Electronic Transaction Proclamation (as enacted)</li>
+                    </ul>
+                </div>
+
+                <!-- 2. Definitions -->
+                <div class="terms-section">
+                    <span class="section-label">2. Definitions</span>
+                    <p><strong>"E-book"</strong> means a digital literary, scientific, or artistic work as defined under Article 2(30) of Proclamation No. 410/2004.</p>
+                    <p><strong>"Author"</strong> means the person who has intellectually created the work, as defined in Article 2(2) of Proclamation No. 410/2004.</p>
+                    <p><strong>"Platform"</strong> means the Abay Repository digital publishing and distribution service.</p>
+                    <p><strong>"Personal Data"</strong> means any information relating to an identified or identifiable natural person, as defined under Article 2 of Proclamation No. 1324/2024.</p>
+                    <p><strong>"Royalty"</strong> means a payment of any kind received as consideration for the use of copyright, as defined under Schedule 'D' of the Federal Income Tax Proclamation No. 979/2016.</p>
+                    <p><strong>"User"</strong> means any person who accesses, purchases, or downloads an e-book from the Platform.</p>
+                </div>
+
+                <!-- 3. Author Eligibility -->
+                <div class="terms-section">
+                    <span class="section-label">3. Author Eligibility and Account Requirements</span>
+                    <h6>3.1 Eligibility</h6>
+                    <ul>
+                        <li>You must be at least 18 years of age to submit and publish e-books on the Platform.</li>
+                        <li>You must have the legal capacity to enter into a binding contract under Ethiopian law.</li>
+                        <li>You must provide accurate and complete registration information.</li>
+                        <li>You are solely responsible for all activities conducted through your account.</li>
+                    </ul>
+                    <h6>3.2 Author Warranties</h6>
+                    <p>By submitting an e-book, you warrant and represent that:</p>
+                    <ul>
+                        <li><strong>Originality and Ownership:</strong> You are the sole author or have obtained all necessary rights and permissions to publish the work.</li>
+                        <li><strong>Copyright Compliance:</strong> The work does not violate the Copyright and Neighboring Rights Protection Proclamation No. 410/2004.</li>
+                        <li><strong>No Plagiarism:</strong> The work does not contain plagiarized content. All sources, quotations, and third-party materials are properly attributed.</li>
+                        <li><strong>Compliance with Laws:</strong> The work complies with all applicable Ethiopian laws and regulations.</li>
+                    </ul>
+                </div>
+
+                <!-- 4. Copyright and IP -->
+                <div class="terms-section">
+                    <span class="section-label">4. Copyright and Intellectual Property Rights</span>
+                    <h6>4.1 Author Ownership and Moral Rights</h6>
+                    <p>You retain all intellectual property rights and copyright to your work. Under Ethiopian law, you hold both economic and moral rights as defined in Proclamation No. 410/2004.</p>
+                    <ul>
+                        <li><strong>Economic Rights:</strong> The economic rights in the e-book shall belong to you during your lifetime and to your heirs or legatees for fifty (50) years from the date of your death.</li>
+                        <li><strong>Moral Rights:</strong> As the author, you have the following inalienable moral rights under Article 8 of Proclamation No. 410/2004:
+                            <ul>
+                                <li><strong>Right to Paternity:</strong> The right to claim authorship of the work.</li>
+                                <li><strong>Right to Integrity:</strong> The right to object to any distortion, mutilation, or alteration of the work.</li>
+                                <li><strong>Right to Publish:</strong> The exclusive right to decide whether and when the work should be released.</li>
+                                <li><strong>Right to Withdraw:</strong> The right to withdraw or disavow the work under specific circumstances.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <h6>4.2 License Granted to Abay Repository</h6>
+                    <p>By submitting an e-book, you grant the Platform a non-exclusive, worldwide, royalty-bearing license to:</p>
+                    <ul>
+                        <li>Reproduce, format, convert, and distribute the e-book in digital formats.</li>
+                        <li>Make the e-book available for purchase, download, and reading on the Platform.</li>
+                        <li>Use up to 10% of the e-book content for promotional and preview purposes.</li>
+                        <li>Use the cover image, title, author name, and metadata for marketing and promotional purposes.</li>
+                        <li>Sub-license the e-book to third-party distributors and partners.</li>
+                    </ul>
+                    <h6>4.3 Duration of License</h6>
+                    <p>The license granted to the Platform shall remain in effect for the duration of the copyright term, as provided under Proclamation No. 410/2004.</p>
+                </div>
+
+                <!-- 6. Pricing and Royalties -->
+                <div class="terms-section">
+                    <span class="section-label">6. Pricing and Royalties</span>
+                    <h6>6.1 Pricing</h6>
+                    <p>You shall set the retail price for your e-book. The Platform reserves the right to recommend or adjust pricing to remain competitive.</p>
+                    <h6>6.2 Royalty Split</h6>
+                    <p><strong>Standard Royalty Rate:</strong> 70% of Net Revenue to the Author, 30% to the Platform.</p>
+                    <p>Net Revenue is defined as the gross sales price minus applicable taxes, transaction fees, and refunds.</p>
+                    <h6>6.3 Royalty Payments</h6>
+                    <ul>
+                        <li>Royalties shall be calculated monthly and paid within thirty (30) days following the end of each calendar month.</li>
+                        <li>The minimum payout amount shall be as specified in the Publishing Agreement.</li>
+                        <li>Payments shall be processed through designated third-party payment providers.</li>
+                    </ul>
+                    <h6>6.4 Tax Obligations</h6>
+                    <ul>
+                        <li><strong>Author Responsibility:</strong> You are solely responsible for reporting and paying all taxes on royalties received.</li>
+                        <li><strong>Withholding Tax:</strong> Under Schedule 'D' of the Income Tax Proclamation, royalties paid to non-resident authors are subject to a 5% withholding tax.</li>
+                    </ul>
+                </div>
+
+                <!-- 7. Data Protection -->
+                <div class="terms-section">
+                    <span class="section-label">7. Data Protection and Privacy</span>
+                    <p>The Platform and all users shall comply with the Personal Data Protection Proclamation No. 1324/2024 ("PDPP").</p>
+                    <ul>
+                        <li><strong>Data Controller:</strong> The Platform acts as a Data Controller with respect to personal data collected from authors and users.</li>
+                        <li><strong>Data Processing Principles:</strong> Lawfulness, Consent, Purpose Limitation, Data Minimization, Accuracy, Storage Limitation, Integrity and Confidentiality.</li>
+                        <li><strong>Data Subject Rights:</strong> Right to be Informed, Right of Access, Right to Rectification, Right to Erasure, Right to Data Portability, Right to Object, Right to Restrict Processing.</li>
+                        <li><strong>Data Security:</strong> The Platform shall implement appropriate technical and organizational measures.</li>
+                        <li><strong>Data Breach Notification:</strong> The Platform shall notify the Ethiopian Communications Authority within 72 hours of detection.</li>
+                    </ul>
+                </div>
+
+                <!-- 10. Content Restrictions -->
+                <div class="terms-section">
+                    <span class="section-label">10. Content Restrictions and Removal</span>
+                    <h6>10.1 Prohibited Content</h6>
+                    <ul>
+                        <li>Works that violate Ethiopian law or international law.</li>
+                        <li>Works that infringe on third-party intellectual property rights.</li>
+                        <li>Works that are defamatory, obscene, or offensive.</li>
+                        <li>Works that promote violence, discrimination, hatred, or illegal activities.</li>
+                        <li>Works that violate the privacy or publicity rights of others.</li>
+                        <li>Works that violate the standards of the Ethiopian Ministry of Culture and Tourism.</li>
+                    </ul>
+                    <h6>Legal Penalties for Copyright Infringement:</h6>
+                    <ul>
+                        <li><strong>Civil Remedies:</strong> Compensation for moral damage of not less than 100,000 Birr.</li>
+                        <li><strong>Criminal Sanctions:</strong> Intentional violation may result in rigorous imprisonment for 5-10 years and a fine of 25,000-50,000 Birr.</li>
+                    </ul>
+                </div>
+
+                <!-- 13. Dispute Resolution -->
+                <div class="terms-section">
+                    <span class="section-label">13. Dispute Resolution and Governing Law</span>
+                    <h6>13.1 Governing Law</h6>
+                    <p>These Terms shall be governed by and construed in accordance with the laws of the Federal Democratic Republic of Ethiopia.</p>
+                    <h6>13.2 Dispute Resolution</h6>
+                    <ul>
+                        <li><strong>Negotiation:</strong> The parties shall first attempt to resolve any dispute amicably.</li>
+                        <li><strong>Mediation:</strong> If negotiation fails, the parties shall attempt to resolve the dispute through mediation.</li>
+                        <li><strong>Arbitration:</strong> If mediation fails, the dispute shall be finally resolved through arbitration.</li>
+                        <li><strong>Courts:</strong> The courts of Addis Ababa shall have exclusive jurisdiction.</li>
+                    </ul>
+                </div>
+
+                <!-- 15. Entire Agreement -->
+                <div class="terms-section">
+                    <span class="section-label">15. Entire Agreement</span>
+                    <p>These Terms constitute the entire agreement between you and the Platform regarding the subject matter hereof and supersede all prior agreements, understandings, and representations.</p>
+                    <p class="text-muted"><i class="fas fa-clock me-1"></i> Last Updated: August 16, 2026</p>
+                </div>
+
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-gold" data-bs-dismiss="modal">I Agree</button>
+                <button type="button" class="btn btn-gold" data-bs-dismiss="modal"><i class="fas fa-check me-1"></i> I Agree</button>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Privacy Policy Modal -->
-<div class="modal fade" id="privacyModal" tabindex="-1">
+<!-- ========== PRIVACY MODAL ========== -->
+<div class="modal fade" id="privacyModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header" style="background: linear-gradient(135deg, var(--primary-darker), var(--primary-dark)); color: white;">
@@ -431,180 +639,233 @@
             </div>
             <div class="modal-body">
                 <h6>Information We Collect</h6>
-                <p>We collect your name, email, phone number, and reading preferences.</p>
-                <h6 class="mt-3">How We Use Your Data</h6>
-                <p>Your information is used for account management and personalized recommendations.</p>
-                <h6 class="mt-3">Data Security</h6>
-                <p>We implement industry-standard security measures to protect your data.</p>
-                <h6 class="mt-3">Your Rights</h6>
-                <p>You can access, correct, or delete your personal data at any time.</p>
+                <p>We collect your name, email address, phone number, and reading preferences. This information is used to manage your account and personalize your experience.</p>
+                <h6>How We Use Your Data</h6>
+                <p>Your data is used for account management, transaction processing, and to provide personalized book recommendations. We do not share your data with third parties without your explicit consent.</p>
+                <h6>Data Security</h6>
+                <p>We implement industry-standard security measures, including encryption and secure servers, to protect your personal information.</p>
+                <h6>Your Rights</h6>
+                <p>Under Ethiopian Data Protection Proclamation No. 1324/2024, you have the right to access, correct, or delete your personal data at any time. Contact our data protection officer for assistance.</p>
+                <h6>Cookies</h6>
+                <p>We use essential cookies to enhance your browsing experience and remember your preferences. You can manage cookie settings in your browser.</p>
+                <p class="mt-3 text-muted"><i class="fas fa-lock me-1"></i> Your privacy matters to us.</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-gold" data-bs-dismiss="modal">I Understand</button>
+                <button type="button" class="btn btn-gold" data-bs-dismiss="modal"><i class="fas fa-check me-1"></i> I Understand</button>
             </div>
         </div>
     </div>
 </div>
 
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
 <script>
-    // Password strength checker
-    const passwordInput = document.getElementById('password');
-    const confirmInput = document.getElementById('confirm_password');
-    const strengthBar = document.getElementById('passwordStrengthBar');
-    const matchMessage = document.getElementById('passwordMatchMessage');
+    (function() {
+        // DOM refs
+        const fullName = document.getElementById('full_name');
+        const username = document.getElementById('username');
+        const email = document.getElementById('email');
+        const phone = document.getElementById('phone');
+        const password = document.getElementById('password');
+        const confirmPw = document.getElementById('confirm_password');
+        const termsCheck = document.getElementById('terms_accepted');
+        const submitBtn = document.getElementById('submitBtn');
 
-    function checkPasswordStrength(password) {
-        let strength = 0;
-        if (password.length >= 8) strength++;
-        if (password.match(/[a-z]+/)) strength++;
-        if (password.match(/[A-Z]+/)) strength++;
-        if (password.match(/[0-9]+/)) strength++;
-        if (password.match(/[$@#&!%*?]+/)) strength++;
+        const fullNameError = document.getElementById('fullNameError');
+        const usernameError = document.getElementById('usernameError');
+        const emailError = document.getElementById('emailError');
+        const phoneError = document.getElementById('phoneError');
+        const termsError = document.getElementById('termsError');
 
-        strengthBar.className = 'password-strength';
-        if (strength <= 2) strengthBar.classList.add('strength-weak');
-        else if (strength <= 4) strengthBar.classList.add('strength-medium');
-        else strengthBar.classList.add('strength-strong');
-        if (strength === 5) strengthBar.classList.add('strength-very-strong');
-    }
+        const strengthBar = document.getElementById('passwordStrengthBar');
+        const matchMsg = document.getElementById('passwordMatchMessage');
 
-    function checkPasswordMatch() {
-        const password = passwordInput.value;
-        const confirm = confirmInput.value;
+        // Validators
+        function validateUsername(val) {
+            return /^[a-zA-Z0-9@.+-_]{3,50}$/.test(val);
+        }
 
-        if (confirm.length > 0) {
-            if (password === confirm) {
-                matchMessage.innerHTML = '<i class="fas fa-check-circle me-1"></i> Passwords match';
-                matchMessage.className = 'password-match-success';
+        function validateEmail(val) {
+            return /^[^\s@]+@([^\s@.,]+\.)+[^\s@.,]{2,}$/.test(val);
+        }
+
+        function validatePhone(val) {
+            return /^09\d{8}$/.test(val);
+        }
+
+        function checkPasswordStrength(pw) {
+            let s = 0;
+            if (pw.length >= 8) s++;
+            if (/[a-z]/.test(pw)) s++;
+            if (/[A-Z]/.test(pw)) s++;
+            if (/[0-9]/.test(pw)) s++;
+            if (/[$@#&!%*?]/.test(pw)) s++;
+
+            strengthBar.className = 'password-strength';
+            if (s <= 2) strengthBar.classList.add('strength-weak');
+            else if (s <= 4) strengthBar.classList.add('strength-medium');
+            else strengthBar.classList.add('strength-strong');
+            if (s === 5) strengthBar.classList.add('strength-very-strong');
+            return s;
+        }
+
+        function checkPasswordMatch() {
+            const pw = password.value;
+            const cnf = confirmPw.value;
+            if (cnf.length === 0) {
+                matchMsg.innerHTML = '';
+                matchMsg.className = 'password-match-error';
+                return false;
+            }
+            if (pw === cnf) {
+                matchMsg.innerHTML = '<i class="fas fa-check-circle me-1"></i> Passwords match';
+                matchMsg.className = 'password-match-success';
                 return true;
             } else {
-                matchMessage.innerHTML = '<i class="fas fa-times-circle me-1"></i> Passwords do not match';
-                matchMessage.className = 'password-match-error';
+                matchMsg.innerHTML = '<i class="fas fa-times-circle me-1"></i> Passwords do not match';
+                matchMsg.className = 'password-match-error';
                 return false;
             }
         }
-        matchMessage.innerHTML = '';
-        return false;
-    }
 
-    function validateEmail(email) {
-        return /^[^\s@]+@([^\s@.,]+\.)+[^\s@.,]{2,}$/.test(email);
-    }
-
-    function validatePhone(phone) {
-        return /^09\d{8}$/.test(phone);
-    }
-
-    function validateUsername(username) {
-        return /^[a-zA-Z0-9@.+-_]{3,50}$/.test(username);
-    }
-
-    function enableSubmitButton() {
-        const submitBtn = document.getElementById('submitBtn');
-        const fullName = document.getElementById('full_name')?.value.trim();
-        const username = document.getElementById('username')?.value.trim();
-        const email = document.getElementById('email')?.value.trim();
-        const phone = document.getElementById('phone')?.value.trim();
-        const password = passwordInput?.value;
-        const confirm = confirmInput?.value;
-        const termsChecked = document.getElementById('terms_accepted')?.checked;
-
-        const isFormValid = fullName !== '' &&
-                            validateUsername(username) &&
-                            validateEmail(email) &&
-                            validatePhone(phone) &&
-                            password === confirm &&
-                            password && password.length >= 8 &&
-                            termsChecked;
-
-        submitBtn.disabled = !isFormValid;
-    }
-
-    // Event listeners
-    passwordInput?.addEventListener('input', function() {
-        checkPasswordStrength(this.value);
-        checkPasswordMatch();
-        enableSubmitButton();
-    });
-
-    confirmInput?.addEventListener('input', function() {
-        checkPasswordMatch();
-        enableSubmitButton();
-    });
-
-    document.getElementById('full_name')?.addEventListener('input', enableSubmitButton);
-
-    document.getElementById('username')?.addEventListener('input', function() {
-        const username = this.value.trim();
-        const errorDiv = document.getElementById('usernameError');
-
-        if (username && !validateUsername(username)) {
-            errorDiv.innerHTML = 'Username must be 3-50 characters using letters, numbers, @, ., +, -, _';
-            this.classList.add('error');
-        } else {
-            errorDiv.innerHTML = '';
-            this.classList.remove('error');
+        function validateField(field, validator, errorEl, msg) {
+            const val = field.value.trim();
+            if (val && !validator(val)) {
+                errorEl.innerHTML = msg;
+                field.classList.add('error');
+                return false;
+            } else {
+                errorEl.innerHTML = '';
+                field.classList.remove('error');
+                return true;
+            }
         }
-        enableSubmitButton();
-    });
 
-    document.getElementById('email')?.addEventListener('input', function() {
-        const email = this.value.trim();
-        const errorDiv = document.getElementById('emailError');
-
-        if (email && !validateEmail(email)) {
-            errorDiv.innerHTML = 'Please enter a valid email address';
-            this.classList.add('error');
-        } else {
-            errorDiv.innerHTML = '';
-            this.classList.remove('error');
+        function validateFullName() {
+            const val = fullName.value.trim();
+            if (val.length < 2) {
+                fullNameError.innerHTML = 'Full name must be at least 2 characters';
+                fullName.classList.add('error');
+                return false;
+            } else {
+                fullNameError.innerHTML = '';
+                fullName.classList.remove('error');
+                return true;
+            }
         }
-        enableSubmitButton();
-    });
 
-    document.getElementById('phone')?.addEventListener('input', function() {
-        const phone = this.value.trim();
-        const errorDiv = document.getElementById('phoneError');
-
-        if (phone && !validatePhone(phone)) {
-            errorDiv.innerHTML = 'Phone number must be 10 digits starting with 09 (e.g., 0912345678)';
-            this.classList.add('error');
-        } else {
-            errorDiv.innerHTML = '';
-            this.classList.remove('error');
+        function validateTerms() {
+            if (!termsCheck.checked) {
+                termsError.innerHTML = 'You must agree to the Client Agreement and Privacy Policy.';
+                return false;
+            } else {
+                termsError.innerHTML = '';
+                return true;
+            }
         }
-        enableSubmitButton();
-    });
 
-    document.getElementById('terms_accepted')?.addEventListener('change', enableSubmitButton);
+        function enableSubmit() {
+            const isFullName = fullName.value.trim().length >= 2;
+            const isUsername = validateUsername(username.value.trim());
+            const isEmail = validateEmail(email.value.trim());
+            const isPhone = validatePhone(phone.value.trim());
+            const isPwStrong = password.value.length >= 8;
+            const isMatch = checkPasswordMatch();
+            const isTerms = termsCheck.checked;
 
-    document.getElementById('registerForm')?.addEventListener('submit', function(e) {
-        const username = document.getElementById('username').value.trim();
-        if (!validateUsername(username)) {
+            const valid = isFullName && isUsername && isEmail && isPhone && isPwStrong && isMatch && isTerms;
+            submitBtn.disabled = !valid;
+            return valid;
+        }
+
+        // Event listeners
+        fullName.addEventListener('input', function() {
+            validateFullName();
+            enableSubmit();
+        });
+
+        username.addEventListener('input', function() {
+            validateField(username, validateUsername, usernameError, 'Username must be 3-50 characters using letters, numbers, @, ., +, -, _');
+            enableSubmit();
+        });
+
+        email.addEventListener('input', function() {
+            validateField(email, validateEmail, emailError, 'Please enter a valid email address');
+            enableSubmit();
+        });
+
+        phone.addEventListener('input', function() {
+            validateField(phone, validatePhone, phoneError, 'Phone number must be 10 digits starting with 09 (e.g., 0912345678)');
+            enableSubmit();
+        });
+
+        password.addEventListener('input', function() {
+            checkPasswordStrength(this.value);
+            checkPasswordMatch();
+            enableSubmit();
+        });
+
+        confirmPw.addEventListener('input', function() {
+            checkPasswordMatch();
+            enableSubmit();
+        });
+
+        termsCheck.addEventListener('change', function() {
+            validateTerms();
+            enableSubmit();
+        });
+
+        // Form submit
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            alert('Please enter a valid username (3-50 characters, letters, numbers, @.+-_)');
-            return false;
-        }
 
-        const email = document.getElementById('email').value.trim();
-        if (!validateEmail(email)) {
-            e.preventDefault();
-            alert('Please enter a valid email address');
-            return false;
-        }
+            const validFull = validateFullName();
+            const validUser = validateField(username, validateUsername, usernameError, 'Invalid username');
+            const validEmail = validateField(email, validateEmail, emailError, 'Invalid email');
+            const validPhone = validateField(phone, validatePhone, phoneError, 'Invalid phone');
+            const validTerms = validateTerms();
 
-        const phone = document.getElementById('phone').value.trim();
-        if (!validatePhone(phone)) {
-            e.preventDefault();
-            alert('Please enter a valid phone number (10 digits starting with 09)');
-            return false;
-        }
+            if (!(validFull && validUser && validEmail && validPhone && validTerms)) {
+                alert('Please fix all errors before submitting.');
+                return;
+            }
 
-        const submitBtn = document.getElementById('submitBtn');
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Creating your account...';
+            if (password.value !== confirmPw.value) {
+                alert('Passwords do not match.');
+                return;
+            }
 
-        return true;
-    });
+            if (password.value.length < 8) {
+                alert('Password must be at least 8 characters.');
+                return;
+            }
+
+            // simulate success
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Creating your account...';
+            setTimeout(function() {
+                submitBtn.innerHTML = '<i class="fas fa-check-circle me-2"></i> Account Created! (Demo)';
+                submitBtn.style.background = '#28a745';
+                submitBtn.style.color = 'white';
+                setTimeout(function() {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fas fa-user-plus me-2"></i> Create Free Account';
+                    submitBtn.style.background = '';
+                    submitBtn.style.color = '';
+                }, 2500);
+            }, 1500);
+        });
+
+        // initial enable
+        enableSubmit();
+
+        // extra: trigger validation on blur
+        [fullName, username, email, phone].forEach(el => {
+            el.addEventListener('blur', function() { enableSubmit(); });
+        });
+    })();
 </script>
-{% endblock %}
+
+</body>
+</html>

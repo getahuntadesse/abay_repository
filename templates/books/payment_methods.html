@@ -1,788 +1,388 @@
-<!-- templates/books/payment_methods.html -->
 {% extends 'base.html' %}
 {% load static %}
 {% load humanize %}
 
-{% block title %}Select Payment Method - {{ book.title }}{% endblock %}
+{% block title %}Select Payment Method — {{ book.title }}{% endblock %}
 
 {% block extra_css %}
 <style>
-    :root {
-        --primary-gold: #DAA520;
-        --primary-gold-dark: #B8860B;
-        --primary-gold-light: #F5D061;
-        --primary-dark: #2C2C2C;
-        --primary-darker: #1A1A1A;
-    }
-
-    /* Mobile-First Design */
-    .payment-container {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 0 15px;
-    }
-
-    .payment-header {
-        background: linear-gradient(135deg, var(--primary-dark), var(--primary-darker));
-        padding: 1.5rem 1rem;
-        border-radius: 16px;
-        margin-bottom: 1.5rem;
-        color: white;
-        border-bottom: 3px solid var(--primary-gold);
-        text-align: center;
-    }
-
-    .payment-header h2 {
-        color: var(--primary-gold);
-        font-size: 1.5rem;
-        margin-bottom: 0.25rem;
-    }
-
-    .payment-header p {
-        font-size: 0.9rem;
-        opacity: 0.8;
-        margin-bottom: 0;
-    }
-
-    /* Book Summary - Mobile First */
-    .book-summary {
-        background: #f8f9fa;
-        border-radius: 12px;
-        padding: 1rem;
-        margin-bottom: 1.5rem;
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        flex-wrap: wrap;
-    }
-
-    .book-summary .book-cover {
-        width: 60px;
-        height: 80px;
-        object-fit: cover;
-        border-radius: 8px;
-        box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-        flex-shrink: 0;
-    }
-
-    .book-summary .book-info {
-        flex: 1;
-        min-width: 120px;
-    }
-
-    .book-summary .book-title {
-        font-weight: 600;
-        font-size: 1rem;
-        color: var(--primary-dark);
-        margin-bottom: 0.15rem;
-    }
-
-    .book-summary .book-author {
-        font-size: 0.8rem;
-        color: #6c757d;
-    }
-
-    .book-summary .book-price {
-        font-size: 1.25rem;
-        font-weight: 700;
-        color: var(--primary-gold);
-        margin-top: 0.25rem;
-    }
-
-    /* Payment Methods Grid - Mobile Responsive */
-    .payment-methods-grid {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 0.75rem;
-        margin-bottom: 1.5rem;
-    }
-
-    @media (min-width: 400px) {
-        .payment-methods-grid {
-            grid-template-columns: 1fr 1fr;
-        }
-    }
-
-    @media (min-width: 576px) {
-        .payment-methods-grid {
-            grid-template-columns: 1fr 1fr 1fr;
-        }
-    }
-
-    .payment-method-card {
-        background: white;
-        border-radius: 12px;
-        padding: 1rem 0.75rem;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.06);
-        transition: all 0.3s ease;
-        cursor: pointer;
-        border: 3px solid transparent;
-        text-align: center;
-        position: relative;
-        min-height: 120px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .payment-method-card:active {
-        transform: scale(0.97);
-    }
-
-    .payment-method-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-        border-color: var(--primary-gold-light);
-    }
-
-    .payment-method-card.selected {
-        border-color: var(--primary-gold);
-        background: rgba(218, 165, 32, 0.05);
-        box-shadow: 0 0 0 3px rgba(218, 165, 32, 0.2);
-    }
-
-    .payment-method-card .method-icon {
-        font-size: 2rem;
-        margin-bottom: 0.4rem;
-        display: block;
-    }
-
-    .payment-method-card .method-name {
-        font-size: 0.9rem;
-        font-weight: 600;
-        color: var(--primary-dark);
-        margin-bottom: 0.15rem;
-    }
-
-    .payment-method-card .method-description {
-        font-size: 0.7rem;
-        color: #6c757d;
-        line-height: 1.3;
-    }
-
-    .payment-method-card .method-badge {
-        position: absolute;
-        top: -8px;
-        right: -8px;
-        background: var(--primary-gold);
-        color: var(--primary-dark);
-        font-size: 0.6rem;
-        font-weight: 700;
-        padding: 0.2rem 0.6rem;
-        border-radius: 20px;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        display: none;
-    }
-
-    .payment-method-card .method-badge.show {
-        display: block;
-    }
-
-    .payment-method-card input[type="radio"] {
-        display: none;
-    }
-
-    .payment-method-card .radio-indicator {
-        position: absolute;
-        top: 0.5rem;
-        right: 0.5rem;
-        width: 20px;
-        height: 20px;
-        border-radius: 50%;
-        border: 2px solid #dee2e6;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.3s ease;
-        background: white;
-    }
-
-    .payment-method-card.selected .radio-indicator {
-        border-color: var(--primary-gold);
-        background: var(--primary-gold);
-    }
-
-    .payment-method-card.selected .radio-indicator::after {
-        content: '✓';
-        color: white;
-        font-size: 0.7rem;
-        font-weight: bold;
-    }
-
-    /* Telebirr Specific Styles */
-    .payment-method-card.telebirr .method-icon {
-        color: #28a745;
-    }
-
-    .payment-method-card.cbe .method-icon {
-        color: #0d6efd;
-    }
-
-    .payment-method-card.bank .method-icon {
-        color: #6c757d;
-    }
-
-    /* Phone Input - Mobile Responsive */
-    .phone-input-group {
-        display: none;
-        margin-bottom: 1.5rem;
-        animation: slideDown 0.3s ease;
-    }
-
-    .phone-input-group.show {
-        display: block;
-    }
-
-    @keyframes slideDown {
-        from {
-            opacity: 0;
-            transform: translateY(-10px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    .phone-input-group .input-wrapper {
-        background: white;
-        border-radius: 12px;
-        padding: 1rem;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.06);
-        border: 1px solid #e9ecef;
-    }
-
-    .phone-input-group label {
-        font-weight: 600;
-        font-size: 0.9rem;
-        color: var(--primary-dark);
-        display: block;
-        margin-bottom: 0.5rem;
-    }
-
-    .phone-input-group label i {
-        color: var(--primary-gold);
-        margin-right: 0.5rem;
-    }
-
-    .phone-input-group .input-with-icon {
-        position: relative;
-    }
-
-    .phone-input-group .input-with-icon i {
-        position: absolute;
-        left: 1rem;
-        top: 50%;
-        transform: translateY(-50%);
-        color: #6c757d;
-    }
-
-    .phone-input-group input {
-        width: 100%;
-        padding: 0.75rem 1rem 0.75rem 2.8rem;
-        border: 2px solid #e9ecef;
-        border-radius: 10px;
-        font-size: 1rem;
-        transition: all 0.3s ease;
-        background: #f8f9fa;
-    }
-
-    .phone-input-group input:focus {
-        border-color: var(--primary-gold);
-        outline: none;
-        background: white;
-        box-shadow: 0 0 0 3px rgba(218, 165, 32, 0.15);
-    }
-
-    .phone-input-group .input-helper {
-        font-size: 0.75rem;
-        color: #6c757d;
-        margin-top: 0.4rem;
-        display: block;
-    }
-
-    /* Action Buttons - Mobile Responsive */
-    .action-buttons {
-        display: flex;
-        flex-direction: column;
-        gap: 0.75rem;
-        margin-top: 1.5rem;
-    }
-
-    @media (min-width: 400px) {
-        .action-buttons {
-            flex-direction: row;
-        }
-        .action-buttons .btn {
-            flex: 1;
-        }
-    }
-
-    .btn-gold {
-        background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark));
-        color: var(--primary-dark);
-        border: none;
-        padding: 0.8rem 1.5rem;
-        border-radius: 12px;
-        font-weight: 700;
-        font-size: 1rem;
-        transition: all 0.3s ease;
-        width: 100%;
-        text-align: center;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .btn-gold:hover:not(:disabled) {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(218, 165, 32, 0.35);
-        color: var(--primary-dark);
-    }
-
-    .btn-gold:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-        transform: none;
-    }
-
-    .btn-gold .btn-icon {
-        margin-right: 0.5rem;
-    }
-
-    .btn-gold .btn-spinner {
-        display: none;
-        width: 1.2rem;
-        height: 1.2rem;
-        border: 2px solid rgba(0,0,0,0.1);
-        border-top-color: var(--primary-dark);
-        border-radius: 50%;
-        animation: spin 0.8s linear infinite;
-        margin-right: 0.5rem;
-        vertical-align: middle;
-    }
-
-    .btn-gold.loading .btn-spinner {
-        display: inline-block;
-    }
-
-    .btn-gold.loading .btn-text {
-        display: none;
-    }
-
-    @keyframes spin {
-        to { transform: rotate(360deg); }
-    }
-
-    .btn-outline-gold {
-        border: 2px solid var(--primary-gold);
-        color: var(--primary-gold);
-        background: transparent;
-        padding: 0.8rem 1.5rem;
-        border-radius: 12px;
-        font-weight: 600;
-        font-size: 1rem;
-        transition: all 0.3s ease;
-        width: 100%;
-        text-align: center;
-    }
-
-    .btn-outline-gold:hover {
-        background: var(--primary-gold);
-        color: var(--primary-dark);
-        transform: translateY(-2px);
-    }
-
-    /* Simulation Mode Badge */
-    .simulation-badge {
-        background: #fff3cd;
-        border: 1px solid #ffc107;
-        border-radius: 10px;
-        padding: 0.75rem 1rem;
-        margin-bottom: 1.5rem;
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        font-size: 0.85rem;
-        color: #856404;
-        flex-wrap: wrap;
-    }
-
-    .simulation-badge i {
-        font-size: 1.2rem;
-        color: #ffc107;
-    }
-
-    .simulation-badge .badge {
-        background: #ffc107;
-        color: #1a1a1a;
-        font-weight: 700;
-        font-size: 0.7rem;
-        padding: 0.2rem 0.6rem;
-        border-radius: 20px;
-        text-transform: uppercase;
-    }
-
-    /* Responsive Adjustments */
-    @media (max-width: 375px) {
-        .payment-header h2 {
-            font-size: 1.2rem;
-        }
-        .payment-header p {
-            font-size: 0.8rem;
-        }
-        .payment-method-card {
-            min-height: 100px;
-            padding: 0.75rem 0.5rem;
-        }
-        .payment-method-card .method-icon {
-            font-size: 1.5rem;
-        }
-        .payment-method-card .method-name {
-            font-size: 0.8rem;
-        }
-        .payment-method-card .method-description {
-            font-size: 0.65rem;
-        }
-        .book-summary .book-cover {
-            width: 50px;
-            height: 65px;
-        }
-        .book-summary .book-title {
-            font-size: 0.9rem;
-        }
-        .book-summary .book-price {
-            font-size: 1rem;
-        }
-        .btn-gold, .btn-outline-gold {
-            padding: 0.65rem 1rem;
-            font-size: 0.9rem;
-        }
-        .phone-input-group .input-wrapper {
-            padding: 0.75rem;
-        }
-        .phone-input-group input {
-            padding: 0.6rem 0.75rem 0.6rem 2.5rem;
-            font-size: 0.9rem;
-        }
-    }
-
-    @media (min-width: 768px) {
-        .payment-container {
-            padding: 0 20px;
-        }
-        .payment-header {
-            padding: 2rem 2rem;
-        }
-        .payment-header h2 {
-            font-size: 2rem;
-        }
-        .book-summary {
-            padding: 1.5rem;
-        }
-        .book-summary .book-cover {
-            width: 80px;
-            height: 105px;
-        }
-        .book-summary .book-title {
-            font-size: 1.2rem;
-        }
-        .book-summary .book-price {
-            font-size: 1.5rem;
-        }
-    }
-
-    @media (max-width: 399px) {
-        .payment-methods-grid {
-            grid-template-columns: 1fr 1fr;
-        }
-        .payment-method-card .method-badge {
-            font-size: 0.5rem;
-            padding: 0.1rem 0.4rem;
-            top: -6px;
-            right: -6px;
-        }
-        .payment-method-card .radio-indicator {
-            width: 16px;
-            height: 16px;
-            top: 0.35rem;
-            right: 0.35rem;
-        }
-        .payment-method-card .radio-indicator::after {
-            font-size: 0.6rem;
-        }
-    }
-
-    /* Toast/Alert Messages */
-    .alert {
-        border-radius: 12px;
-        padding: 0.75rem 1rem;
-        margin-bottom: 1rem;
-        font-size: 0.9rem;
-    }
-
-    .alert-info {
-        background: #cce5ff;
-        border: 1px solid #b8daff;
-        color: #004085;
-    }
-
-    .alert-success {
-        background: #d4edda;
-        border: 1px solid #c3e6cb;
-        color: #155724;
-    }
-
-    .alert-danger {
-        background: #f8d7da;
-        border: 1px solid #f5c6cb;
-        color: #721c24;
-    }
-
-    /* Order Summary - Mobile Friendly */
-    .order-summary-toggle {
-        display: none;
-        background: none;
-        border: none;
-        color: var(--primary-gold);
-        font-weight: 600;
-        font-size: 0.9rem;
-        padding: 0.5rem;
-        width: 100%;
-        text-align: center;
-        border-bottom: 1px dashed #dee2e6;
-        margin-bottom: 0.5rem;
-    }
-
-    @media (max-width: 576px) {
-        .order-summary-toggle {
-            display: block;
-        }
-        .book-summary {
-            display: none;
-        }
-        .book-summary.open {
-            display: flex;
-        }
-    }
+:root {
+  --pm-gold: #DAA520;
+  --pm-gold-dark: #B8860B;
+  --pm-dark: #1a1a2e;
+  --pm-card: #ffffff;
+  --pm-muted: #6c757d;
+  --pm-telebirr: #00a651;
+  --pm-chapa: #7c3aed;
+  --pm-paypal: #003087;
+  --pm-radius: 16px;
+}
+.pm-page { max-width: 920px; margin: 0 auto; padding: 1.25rem 1rem 3rem; }
+.pm-hero {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
+  color: #fff; border-radius: var(--pm-radius); padding: 1.75rem 1.5rem;
+  margin-bottom: 1.5rem; border-bottom: 3px solid var(--pm-gold);
+  box-shadow: 0 12px 40px rgba(0,0,0,.18);
+}
+.pm-hero h1 { font-size: 1.45rem; margin: 0 0 .35rem; color: var(--pm-gold); font-weight: 700; }
+.pm-hero p { margin: 0; opacity: .85; font-size: .95rem; }
+.pm-summary {
+  display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;
+  background: #f8f9fb; border-radius: var(--pm-radius); padding: 1rem 1.15rem;
+  margin-bottom: 1.5rem; border: 1px solid rgba(0,0,0,.06);
+}
+.pm-summary img {
+  width: 72px; height: 96px; object-fit: cover; border-radius: 10px;
+  box-shadow: 0 4px 14px rgba(0,0,0,.12);
+}
+.pm-summary .meta { flex: 1; min-width: 160px; }
+.pm-summary .title { font-weight: 700; color: var(--pm-dark); margin-bottom: .2rem; }
+.pm-summary .author { color: var(--pm-muted); font-size: .88rem; }
+.pm-summary .price {
+  font-size: 1.5rem; font-weight: 800; color: var(--pm-gold-dark); white-space: nowrap;
+}
+.pm-grid {
+  display: grid; grid-template-columns: 1fr; gap: 1rem; margin-bottom: 1.25rem;
+}
+@media (min-width: 640px) {
+  .pm-grid { grid-template-columns: repeat(3, 1fr); }
+}
+.pm-card {
+  position: relative; background: var(--pm-card); border: 2px solid #e9ecef;
+  border-radius: var(--pm-radius); padding: 1.25rem 1rem 1.1rem; cursor: pointer;
+  transition: all .2s ease; text-align: center; height: 100%;
+  display: flex; flex-direction: column; align-items: center;
+}
+.pm-card:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(0,0,0,.08); }
+.pm-card.selected { border-color: var(--pm-gold); box-shadow: 0 0 0 3px rgba(218,165,32,.25); }
+.pm-card .icon-wrap {
+  width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center;
+  justify-content: center; font-size: 1.45rem; margin-bottom: .75rem; color: #fff;
+}
+.pm-card.telebirr .icon-wrap { background: var(--pm-telebirr); }
+.pm-card.chapa .icon-wrap { background: var(--pm-chapa); }
+.pm-card.paypal .icon-wrap { background: var(--pm-paypal); }
+.pm-card h3 { font-size: 1.05rem; margin: 0 0 .35rem; font-weight: 700; color: var(--pm-dark); }
+.pm-card p { font-size: .82rem; color: var(--pm-muted); margin: 0; line-height: 1.35; flex: 1; }
+.pm-card .badge-pm {
+  position: absolute; top: 10px; right: 10px; font-size: .65rem; font-weight: 700;
+  padding: .2rem .45rem; border-radius: 999px; background: rgba(218,165,32,.15); color: var(--pm-gold-dark);
+}
+.pm-panel {
+  display: none; background: #fff; border: 1px solid #e9ecef; border-radius: var(--pm-radius);
+  padding: 1.35rem 1.25rem; margin-bottom: 1rem; box-shadow: 0 6px 24px rgba(0,0,0,.05);
+}
+.pm-panel.active { display: block; animation: pmFade .25s ease; }
+@keyframes pmFade { from { opacity: 0; transform: translateY(6px);} to { opacity: 1; transform: none;} }
+.pm-panel h4 { font-size: 1.05rem; margin: 0 0 .75rem; color: var(--pm-dark); font-weight: 700; }
+.pm-panel .hint { font-size: .85rem; color: var(--pm-muted); margin-bottom: 1rem; }
+.pm-phone-group label { font-weight: 600; font-size: .88rem; margin-bottom: .35rem; display: block; }
+.pm-phone-group input {
+  width: 100%; border: 1.5px solid #dee2e6; border-radius: 10px; padding: .65rem .85rem;
+  font-size: 1rem; outline: none; transition: border .15s;
+}
+.pm-phone-group input:focus { border-color: var(--pm-gold); }
+.pm-actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1rem; }
+.btn-pm-pay {
+  border: none; border-radius: 10px; padding: .75rem 1.4rem; font-weight: 700; font-size: .95rem;
+  color: #fff; cursor: pointer; transition: filter .15s, transform .1s;
+  display: inline-flex; align-items: center; gap: .5rem;
+}
+.btn-pm-pay:hover { filter: brightness(1.05); }
+.btn-pm-pay:active { transform: scale(.98); }
+.btn-pm-pay:disabled { opacity: .65; cursor: not-allowed; }
+.btn-telebirr { background: linear-gradient(135deg, #00a651, #008c44); }
+.btn-chapa { background: linear-gradient(135deg, #7c3aed, #5b21b6); }
+.btn-back {
+  background: transparent; border: 1.5px solid #ced4da; color: #495057; border-radius: 10px;
+  padding: .75rem 1.1rem; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: .4rem;
+}
+.btn-back:hover { background: #f8f9fa; color: #212529; }
+#paypal-button-container { min-height: 48px; margin-top: .5rem; }
+.pm-secure {
+  display: flex; align-items: center; justify-content: center; gap: .5rem; flex-wrap: wrap;
+  color: var(--pm-muted); font-size: .8rem; margin-top: 1.25rem;
+}
+.pm-alert {
+  display: none; border-radius: 10px; padding: .75rem 1rem; margin-bottom: 1rem; font-size: .9rem;
+}
+.pm-alert.show { display: block; }
+.pm-alert.error { background: #f8d7da; color: #842029; border: 1px solid #f5c2c7; }
+.pm-alert.info { background: #cff4fc; color: #055160; border: 1px solid #b6effb; }
+.pm-alert.success { background: #d1e7dd; color: #0f5132; border: 1px solid #badbcc; }
+.pm-spinner {
+  display: inline-block; width: 1rem; height: 1rem; border: 2px solid rgba(255,255,255,.35);
+  border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.pm-features { display: flex; flex-wrap: wrap; gap: .5rem; margin: .75rem 0 0; justify-content: center; }
+.pm-features span {
+  font-size: .7rem; background: #f1f3f5; color: #495057; padding: .2rem .45rem; border-radius: 6px;
+}
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="payment-container">
-    <!-- Header -->
-    <div class="payment-header">
-        <h2><i class="fas fa-credit-card me-2"></i>Select Payment Method</h2>
-        <p>Complete your purchase of "{{ book.title }}"</p>
-    </div>
+<div class="pm-page">
+  <div class="pm-hero">
+    <h1><i class="fas fa-lock me-2"></i>Select Payment Method</h1>
+    <p>Secure checkout · Telebirr · Chapa · PayPal Standard · Instant access to the online reader</p>
+  </div>
 
-    <!-- Simulation Mode Badge -->
-    {% if debug %}
-    <div class="simulation-badge">
-        <i class="fas fa-flask"></i>
-        <span><strong>Simulation Mode:</strong> Payments will be processed without actual charges</span>
-        <span class="badge">TEST</span>
+  <div class="pm-summary">
+    {% if book.cover %}
+    <img src="{{ book.cover.url }}" alt="{{ book.title }}">
+    {% else %}
+    <div style="width:72px;height:96px;border-radius:10px;background:#e9ecef;display:flex;align-items:center;justify-content:center;">
+      <i class="fas fa-book fa-2x text-muted"></i>
     </div>
     {% endif %}
-
-    <!-- Order Summary (Desktop) -->
-    <div class="book-summary" id="orderSummary">
-        {% if book.cover_image %}
-        <img src="{{ book.cover_image.url }}" alt="{{ book.title }}" class="book-cover">
-        {% else %}
-        <img src="{% static 'images/default-cover.jpg' %}" alt="{{ book.title }}" class="book-cover">
-        {% endif %}
-        <div class="book-info">
-            <div class="book-title">{{ book.title }}</div>
-            <div class="book-author">by {{ book.author.full_name|default:book.author.username }}</div>
-            <div class="book-price">{{ book.price|floatformat:2|intcomma }} ETB</div>
-        </div>
+    <div class="meta">
+      <div class="title">{{ book.title }}</div>
+      <div class="author">{{ book.get_author_name|default:book.author }}</div>
     </div>
+    <div class="price">{{ amount|floatformat:2|intcomma }} ETB</div>
+  </div>
 
-    <!-- Order Summary Toggle (Mobile) -->
-    <button class="order-summary-toggle" onclick="toggleSummary()">
-        <i class="fas fa-shopping-cart me-2"></i> Show Order Summary
-    </button>
+  <div id="pmAlert" class="pm-alert" role="alert"></div>
 
-    <!-- Messages -->
-    {% if messages %}
-        {% for message in messages %}
-            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                {{ message }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        {% endfor %}
+  <div class="pm-grid" id="pmMethodGrid">
+    <div class="pm-card telebirr" data-method="telebirr" tabindex="0" role="button" aria-pressed="false">
+      <span class="badge-pm">Popular</span>
+      <div class="icon-wrap"><i class="fas fa-mobile-alt"></i></div>
+      <h3>Telebirr</h3>
+      <p>Pay with Ethio telecom Telebirr mobile money. Instant confirmation.</p>
+      <div class="pm-features"><span>Mobile money</span><span>ETB</span></div>
+    </div>
+    <div class="pm-card chapa" data-method="chapa" tabindex="0" role="button" aria-pressed="false">
+      <span class="badge-pm">Cards &amp; banks</span>
+      <div class="icon-wrap"><i class="fas fa-credit-card"></i></div>
+      <h3>Chapa</h3>
+      <p>Cards, bank transfer, and local wallets via Chapa hosted checkout.</p>
+      <div class="pm-features"><span>Visa / Mastercard</span><span>ETB</span></div>
+    </div>
+    <div class="pm-card paypal" data-method="paypal" tabindex="0" role="button" aria-pressed="false">
+      <span class="badge-pm">International</span>
+      <div class="icon-wrap"><i class="fab fa-paypal"></i></div>
+      <h3>PayPal</h3>
+      <p>PayPal Standard — account balance or linked cards worldwide.</p>
+      <div class="pm-features"><span>PayPal SDK</span><span>{{ paypal_currency|default:"USD" }}</span></div>
+    </div>
+  </div>
+
+  <div class="pm-panel" id="panel-telebirr">
+    <h4><i class="fas fa-mobile-alt me-2 text-success"></i>Pay with Telebirr</h4>
+    <p class="hint">Enter the phone number registered with Telebirr. You will be redirected to the secure Telebirr checkout page.</p>
+    <div class="pm-phone-group mb-2">
+      <label for="telebirrPhone">Telebirr phone number</label>
+      <input type="tel" id="telebirrPhone" placeholder="09xxxxxxxx" value="{{ user.phone|default:'' }}" autocomplete="tel">
+    </div>
+    <div class="pm-actions">
+      <button type="button" class="btn-pm-pay btn-telebirr" id="btnTelebirrPay">
+        <i class="fas fa-bolt"></i> Continue to Telebirr
+      </button>
+    </div>
+  </div>
+
+  <div class="pm-panel" id="panel-chapa">
+    <h4><i class="fas fa-credit-card me-2" style="color:var(--pm-chapa)"></i>Pay with Chapa</h4>
+    <p class="hint">Opens Chapa hosted checkout (card, bank, mobile money). After payment you can read online — downloads are disabled.</p>
+    <div class="pm-phone-group mb-2">
+      <label for="chapaPhone">Phone (optional, for mobile money)</label>
+      <input type="tel" id="chapaPhone" placeholder="09xxxxxxxx" value="{{ user.phone|default:'' }}" autocomplete="tel">
+    </div>
+    <div class="pm-actions">
+      <button type="button" class="btn-pm-pay btn-chapa" id="btnChapaPay">
+        <i class="fas fa-lock"></i> Continue to Chapa Checkout
+      </button>
+    </div>
+  </div>
+
+  <div class="pm-panel" id="panel-paypal">
+    <h4><i class="fab fa-paypal me-2" style="color:var(--pm-paypal)"></i>Pay with PayPal Standard</h4>
+    <p class="hint">Official PayPal Buttons (JS SDK). Order is created and captured on the server (Orders API v2).</p>
+    {% if paypal_client_id %}
+    <div id="paypal-button-container"></div>
+    <p id="paypalResult" class="hint mt-2 mb-0"></p>
+    {% else %}
+    <div class="pm-alert error show">PayPal is not configured. Set <code>PAYPAL_CLIENT_ID</code> and <code>PAYPAL_CLIENT_SECRET</code> in <code>.env</code>.</div>
     {% endif %}
+  </div>
 
-    <!-- Payment Methods -->
-    <form method="POST" id="paymentForm">
-        {% csrf_token %}
-        
-        <div class="payment-methods-grid">
-            <!-- Telebirr -->
-            <label class="payment-method-card telebirr" onclick="selectMethod('telebirr')">
-                <input type="radio" name="payment_method" value="telebirr" id="method_telebirr">
-                <div class="radio-indicator"></div>
-                <span class="method-badge show">Popular</span>
-                <span class="method-icon"><i class="fas fa-mobile-alt"></i></span>
-                <span class="method-name">Telebirr</span>
-                <span class="method-description">Pay with Telebirr mobile money</span>
-            </label>
+  <div class="pm-actions" style="margin-top:1rem;">
+    <a href="{% url 'books:detail' book.id %}" class="btn-back"><i class="fas fa-arrow-left"></i> Back to book</a>
+  </div>
 
-            <!-- CBE Birr -->
-            <label class="payment-method-card cbe" onclick="selectMethod('cbe')">
-                <input type="radio" name="payment_method" value="cbe" id="method_cbe">
-                <div class="radio-indicator"></div>
-                <span class="method-badge">Secure</span>
-                <span class="method-icon"><i class="fas fa-university"></i></span>
-                <span class="method-name">CBE Birr</span>
-                <span class="method-description">Pay with CBE Birr banking</span>
-            </label>
-
-            <!-- Bank Transfer -->
-            <label class="payment-method-card bank" onclick="selectMethod('bank_transfer')">
-                <input type="radio" name="payment_method" value="bank_transfer" id="method_bank_transfer">
-                <div class="radio-indicator"></div>
-                <span class="method-icon"><i class="fas fa-building-columns"></i></span>
-                <span class="method-name">Bank Transfer</span>
-                <span class="method-description">Pay via bank transfer</span>
-            </label>
-        </div>
-
-        <!-- Phone Input (Only for Telebirr) -->
-        <div class="phone-input-group" id="phoneInput">
-            <div class="input-wrapper">
-                <label for="phone_number">
-                    <i class="fas fa-phone"></i> Phone Number
-                </label>
-                <div class="input-with-icon">
-                    <i class="fas fa-phone"></i>
-                    <input type="tel" id="phone_number" name="phone_number" 
-                           placeholder="Enter phone number (e.g., 0912345678)" 
-                           value="{{ user.phone|default:'' }}"
-                           pattern="[0-9]{10,13}" 
-                           title="Please enter a valid phone number">
-                </div>
-                <span class="input-helper">
-                    <i class="fas fa-info-circle"></i> 
-                    Enter the phone number registered with Telebirr
-                </span>
-            </div>
-        </div>
-
-        <!-- Action Buttons -->
-        <div class="action-buttons">
-            <a href="{% url 'books:detail' book.id %}" class="btn-outline-gold">
-                <i class="fas fa-arrow-left me-2"></i> Cancel
-            </a>
-            <button type="submit" class="btn-gold" id="payBtn" disabled>
-                <span class="btn-spinner"></span>
-                <span class="btn-text">
-                    <i class="fas fa-lock btn-icon"></i>
-                    Pay {{ book.price|floatformat:2|intcomma }} ETB
-                </span>
-            </button>
-        </div>
-    </form>
-
-    <!-- Security Footer -->
-    <div class="text-center mt-4 mb-3">
-        <small class="text-muted">
-            <i class="fas fa-lock me-1"></i> 
-            Your payment is secure and encrypted
-            <br>
-            <span class="d-inline-block mt-1">
-                <i class="fas fa-shield-alt me-1" style="color: var(--primary-gold);"></i>
-                <span class="text-muted">Powered by Abay Repository Secure Payment</span>
-            </span>
-        </small>
-    </div>
+  <div class="pm-secure">
+    <i class="fas fa-shield-alt"></i>
+    <span>Encrypted checkout · Access via online reader after payment (no file download)</span>
+  </div>
 </div>
+{% endblock %}
 
+{% block extra_js %}
+{% if paypal_client_id %}
+<script src="https://www.paypal.com/sdk/js?client-id={{ paypal_client_id }}&currency={{ paypal_currency|default:'USD' }}&intent=capture&components=buttons"></script>
+{% endif %}
 <script>
-    let selectedMethod = null;
+(function () {
+  const bookId = {{ book.id }};
+  const csrfToken = '{{ csrf_token }}';
+  const createOrderUrl = '{% url "payments:create_order" %}';
+  const paypalCreateUrl = '{% url "payments:paypal_create_order_js" %}';
+  const paypalCaptureUrl = '{% url "payments:paypal_capture_order_js" %}';
 
-    function toggleSummary() {
-        const summary = document.getElementById('orderSummary');
-        summary.classList.toggle('open');
-        const toggle = document.querySelector('.order-summary-toggle');
-        if (summary.classList.contains('open')) {
-            toggle.innerHTML = '<i class="fas fa-chevron-up me-2"></i> Hide Order Summary';
-        } else {
-            toggle.innerHTML = '<i class="fas fa-chevron-down me-2"></i> Show Order Summary';
-        }
+  function showAlert(msg, type) {
+    const el = document.getElementById('pmAlert');
+    el.className = 'pm-alert show ' + (type || 'info');
+    el.textContent = msg;
+  }
+
+  function setLoading(btn, loading) {
+    if (!btn) return;
+    btn.disabled = !!loading;
+    if (loading) {
+      btn.dataset.prevHtml = btn.innerHTML;
+      btn.innerHTML = '<span class="pm-spinner"></span> Please wait…';
+    } else if (btn.dataset.prevHtml) {
+      btn.innerHTML = btn.dataset.prevHtml;
     }
+  }
 
-    function selectMethod(methodId) {
-        // Deselect all
-        document.querySelectorAll('.payment-method-card').forEach(card => {
-            card.classList.remove('selected');
+  function selectMethod(method) {
+    document.querySelectorAll('.pm-card').forEach(function (c) {
+      const on = c.dataset.method === method;
+      c.classList.toggle('selected', on);
+      c.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+    document.querySelectorAll('.pm-panel').forEach(function (p) {
+      p.classList.toggle('active', p.id === 'panel-' + method);
+    });
+  }
+
+  document.querySelectorAll('.pm-card').forEach(function (card) {
+    card.addEventListener('click', function () { selectMethod(card.dataset.method); });
+    card.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectMethod(card.dataset.method); }
+    });
+  });
+
+  function startPay(checkOutUrl) {
+    if (!checkOutUrl) {
+      showAlert('No checkout URL returned from the payment provider.', 'error');
+      return;
+    }
+    window.location.href = checkOutUrl;
+  }
+
+  async function createGatewayOrder(paymentMethod, phone) {
+    const res = await fetch(createOrderUrl, {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrfToken,
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify({
+        book_id: bookId,
+        payment_method: paymentMethod,
+        phone_number: phone || '',
+      }),
+    });
+    const data = await res.json().catch(function () { return {}; });
+    if (!res.ok || !data.success) {
+      throw new Error(data.error || data.message || ('HTTP ' + res.status));
+    }
+    if (data.free && data.read_url) {
+      window.location.href = data.read_url;
+      return null;
+    }
+    return data;
+  }
+
+  document.getElementById('btnTelebirrPay').addEventListener('click', async function () {
+    const btn = this;
+    const phone = (document.getElementById('telebirrPhone').value || '').trim();
+    setLoading(btn, true);
+    try {
+      const data = await createGatewayOrder('telebirr', phone);
+      if (data && data.checkOutUrl) startPay(data.checkOutUrl);
+      else if (data) showAlert('Telebirr did not return a checkout URL.', 'error');
+    } catch (err) {
+      showAlert(err.message || 'Telebirr checkout failed.', 'error');
+    } finally {
+      setLoading(btn, false);
+    }
+  });
+
+  document.getElementById('btnChapaPay').addEventListener('click', async function () {
+    const btn = this;
+    const phone = (document.getElementById('chapaPhone').value || '').trim();
+    setLoading(btn, true);
+    try {
+      const data = await createGatewayOrder('chapa', phone);
+      if (data && data.checkOutUrl) startPay(data.checkOutUrl);
+      else if (data) showAlert('Chapa did not return a checkout URL. Check CHAPA_SECRET_KEY.', 'error');
+    } catch (err) {
+      showAlert(err.message || 'Chapa checkout failed.', 'error');
+    } finally {
+      setLoading(btn, false);
+    }
+  });
+
+  if (window.paypal && document.getElementById('paypal-button-container')) {
+    paypal.Buttons({
+      style: { layout: 'vertical', color: 'gold', shape: 'rect', label: 'paypal' },
+      createOrder: async function () {
+        const res = await fetch(paypalCreateUrl, {
+          method: 'POST',
+          credentials: 'same-origin',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken,
+            'Accept': 'application/json',
+          },
+          body: JSON.stringify({ book_id: bookId }),
         });
-        
-        // Select the clicked one
-        const card = document.querySelector(`.payment-method-card input[value="${methodId}"]`).closest('.payment-method-card');
-        card.classList.add('selected');
-        
-        // Check the radio button
-        document.getElementById(`method_${methodId}`).checked = true;
-        
-        selectedMethod = methodId;
-        
-        // Show/hide phone input for Telebirr
-        const phoneInput = document.getElementById('phoneInput');
-        if (methodId === 'telebirr') {
-            phoneInput.classList.add('show');
-            document.getElementById('phone_number').required = true;
+        const data = await res.json().catch(function () { return {}; });
+        if (!res.ok || !data.id) {
+          showAlert(data.error || 'Could not create PayPal order.', 'error');
+          throw new Error(data.error || 'PayPal createOrder failed');
+        }
+        return data.id;
+      },
+      onApprove: async function (data) {
+        const res = await fetch(paypalCaptureUrl, {
+          method: 'POST',
+          credentials: 'same-origin',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken,
+            'Accept': 'application/json',
+          },
+          body: JSON.stringify({ orderID: data.orderID, book_id: bookId }),
+        });
+        const result = await res.json().catch(function () { return {}; });
+        const msg = document.getElementById('paypalResult');
+        if (res.ok && result.success) {
+          if (msg) msg.textContent = 'Payment completed. Opening your reader…';
+          showAlert('Payment successful. Redirecting to the online reader…', 'success');
+          window.location.href = result.read_url || ('/books/' + bookId + '/read/');
         } else {
-            phoneInput.classList.remove('show');
-            document.getElementById('phone_number').required = false;
+          showAlert(result.error || 'PayPal capture failed.', 'error');
         }
-        
-        // Enable pay button
-        document.getElementById('payBtn').disabled = false;
-    }
+      },
+      onError: function () {
+        showAlert('PayPal error. Please try again or use another method.', 'error');
+      },
+      onCancel: function () {
+        showAlert('PayPal checkout was cancelled.', 'info');
+      },
+    }).render('#paypal-button-container');
+  }
 
-    // Form submission
-    document.getElementById('paymentForm').addEventListener('submit', function(e) {
-        const btn = document.getElementById('payBtn');
-        const selected = document.querySelector('input[name="payment_method"]:checked');
-        
-        if (!selected) {
-            e.preventDefault();
-            alert('Please select a payment method.');
-            return;
-        }
-        
-        // Show loading state
-        btn.disabled = true;
-        btn.classList.add('loading');
-        
-        // For Telebirr, validate phone number
-        if (selected.value === 'telebirr') {
-            const phone = document.getElementById('phone_number').value.trim();
-            if (!phone || phone.length < 10) {
-                e.preventDefault();
-                btn.disabled = false;
-                btn.classList.remove('loading');
-                alert('Please enter a valid phone number.');
-                return;
-            }
-        }
-        
-        // For simulation, show success message
-        {% if debug %}
-        // Allow form submission to handle simulation
-        {% endif %}
-    });
-
-    // Auto-select Telebirr by default if available
-    document.addEventListener('DOMContentLoaded', function() {
-        const defaultMethod = 'telebirr';
-        const radio = document.getElementById(`method_${defaultMethod}`);
-        if (radio) {
-            selectMethod(defaultMethod);
-        }
-    });
+  selectMethod('telebirr');
+})();
 </script>
 {% endblock %}

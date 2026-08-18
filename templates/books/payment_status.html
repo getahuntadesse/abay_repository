@@ -93,8 +93,8 @@
                     <i class="fas fa-hashtag me-1"></i> {{ transaction_ref }}
                 </div>
                 <div class="mt-4">
-                    <a href="{% url 'books:download' purchase.book.id %}" class="btn btn-gold">
-                        <i class="fas fa-download me-2"></i> Download Book
+                    <a href="{% url 'books:read' purchase.book.id %}" class="btn btn-gold">
+                        <i class="fas fa-read me-2"></i> Read in App Book
                     </a>
                 </div>
             {% elif status == 'failed' %}

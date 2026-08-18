@@ -26,7 +26,9 @@ urlpatterns = [
     # ============================================
     # DOWNLOAD & READING
     # ============================================
-    path('<int:book_id>/download/', views.download_book, name='download'),
+    path('<int:book_id>/download/', views.download_book, name='download'),  # blocked → reader
+    path('<int:book_id>/read/', views.read_book, name='read'),
+    path('<int:book_id>/content/', views.stream_book_content, name='content'),
     path('<int:book_id>/read-free/', views.read_free_book, name='read_free'),
     
     # ============================================
@@ -34,8 +36,8 @@ urlpatterns = [
     # ============================================
     path('telebirr/callback/', views.telebirr_callback, name='telebirr_callback'),
     path('telebirr/return/', views.telebirr_return, name='telebirr_return'),
-    path('telebirr/simulate/<str:transaction_id>/', views.telebirr_simulate, name='telebirr_simulate'),
-    path('telebirr/pay/<str:transaction_id>/', views.telebirr_pay_simulate, name='telebirr_pay_simulate'),
+    # path('telebirr/simulate/<str:transaction_id>/', views.telebirr_simulate, name='telebirr_simulate'),  # disabled
+    # path('telebirr/pay/<str:transaction_id>/', views.telebirr_pay_simulate, name='telebirr_pay_simulate'),  # disabled
     path('telebirr/process/<str:transaction_id>/', views.telebirr_pay_process, name='telebirr_pay_process'),
     
     # ============================================

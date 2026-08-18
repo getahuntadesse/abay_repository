@@ -20,6 +20,8 @@ class Purchase(models.Model):
     
     PAYMENT_METHOD_CHOICES = (
         ('telebirr', 'Telebirr'),
+        ('chapa', 'Chapa'),
+        ('paypal', 'PayPal'),
         ('cbe', 'CBE Birr'),
         ('bank_transfer', 'Bank Transfer'),
         ('cash', 'Cash'),

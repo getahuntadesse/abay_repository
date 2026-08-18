@@ -494,7 +494,7 @@
             <div class="stat-card">
                 <div class="stat-number">{{ total_downloads|default:0|intcomma }}</div>
                 <div class="stat-label">Total Downloads</div>
-                <div class="stat-icon"><i class="fas fa-download"></i></div>
+                <div class="stat-icon"><i class="fas fa-book-open"></i></div>
             </div>
         </div>
         <div class="col-6 col-md-3">
@@ -546,8 +546,8 @@
                     <img src="{% static 'images/default-cover.jpg' %}" alt="{{ book.title }}" class="book-cover" loading="lazy">
                     {% endif %}
                     <div class="book-overlay">
-                        <a href="{% url 'books:download' book.id %}" class="btn btn-white" title="Download">
-                            <i class="fas fa-download"></i> Download
+                        <a href="{% url 'books:read' book.id %}" class="btn btn-white" title="Download">
+                            <i class="fas fa-book-open"></i> Download
                         </a>
                         <a href="{% url 'books:detail' book.id %}" class="btn btn-gold" title="View Details">
                             <i class="fas fa-eye"></i> View
@@ -563,7 +563,7 @@
                     </div>
                     <div class="book-meta">
                         <span class="meta-item">
-                            <i class="fas fa-download"></i> {{ book.downloads_count|intcomma }}
+                            <i class="fas fa-book-open"></i> {{ book.downloads_count|intcomma }}
                         </span>
                         <span class="meta-item">
                             <i class="fas fa-eye"></i> {{ book.views_count|intcomma }}

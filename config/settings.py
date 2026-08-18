@@ -17,15 +17,26 @@ SECRET_KEY = config('SECRET_KEY', default='django-insecure-9!@#x$%^&*()_+=-qwert
 
 DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1,::1').split(',')
+# Always include local hosts in development; merge with .env values
+_allowed = config('ALLOWED_HOSTS', default='localhost,127.0.0.1,::1').split(',')
+_allowed = [h.strip() for h in _allowed if h.strip()]
+if DEBUG:
+    for h in ('localhost', '127.0.0.1', '::1', 'testserver'):
+        if h not in _allowed:
+            _allowed.append(h)
+ALLOWED_HOSTS = _allowed
 
-CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS', default='http://localhost:3000,http://127.0.0.1:3000,https://esignet.ida.fayda.et').split(',')
+CSRF_TRUSTED_ORIGINS = config(
+    'CSRF_TRUSTED_ORIGINS',
+    default='http://localhost:8000,http://127.0.0.1:8000,http://localhost:3000,http://127.0.0.1:3000',
+).split(',')
+CSRF_TRUSTED_ORIGINS = [o.strip() for o in CSRF_TRUSTED_ORIGINS if o.strip()]
 
 # =============================================
 # 1.5. BASE URL SETTINGS
 # =============================================
 
-BASE_URL = config('BASE_URL', default='http://localhost:3000')
+BASE_URL = config('BASE_URL', default='https://127.0.0.1:8000')
 
 # =============================================
 # 2. APPLICATION DEFINITION
@@ -38,7 +49,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.humanize', 
+    'django.contrib.humanize',
+    'django_extensions', 
     
     # Third-party apps
     'corsheaders',
@@ -60,6 +72,10 @@ INSTALLED_APPS = [
     'reviews',
 ]
 
+# Django Debug Toolbar (development only)
+if DEBUG:
+    INSTALLED_APPS += ['debug_toolbar']
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'core.middleware.SecurityHeadersMiddleware',
@@ -72,6 +88,39 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+# Debug Toolbar middleware must be early (after SecurityMiddleware ideally)
+if DEBUG:
+    MIDDLEWARE.insert(1, 'debug_toolbar.middleware.DebugToolbarMiddleware')
+
+INTERNAL_IPS = config(
+    'INTERNAL_IPS',
+    default='127.0.0.1,localhost',
+).split(',')
+INTERNAL_IPS = [ip.strip() for ip in INTERNAL_IPS if ip.strip()]
+# Docker / some proxies
+if DEBUG:
+    try:
+        import socket
+        hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
+        INTERNAL_IPS += [ip[:-1] + '1' for ip in ips if '.' in ip]
+    except Exception:
+        pass
+
+# Toolbar panels / show callback — hide on AJAX, only when DEBUG
+DEBUG_TOOLBAR_CONFIG = {
+    'SHOW_TOOLBAR_CALLBACK': lambda request: bool(
+        DEBUG and not request.headers.get('x-requested-with') == 'XMLHttpRequest'
+        and (
+            request.META.get('REMOTE_ADDR') in INTERNAL_IPS
+            or request.META.get('REMOTE_ADDR') in ('127.0.0.1', '::1')
+            or getattr(request, 'user', None) and getattr(request.user, 'is_superuser', False)
+        )
+    ),
+    'SHOW_COLLAPSED': True,
+    'IS_RUNNING_TESTS': False,
+}
+
 
 ROOT_URLCONF = 'config.urls'
 
@@ -164,26 +213,33 @@ LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/dashboard/'
 LOGOUT_REDIRECT_URL = '/'
 
-# Session Cookie Security
-SESSION_COOKIE_AGE = 86400  # 24 hours
-SESSION_COOKIE_HTTPONLY = True  # Prevent JavaScript access
-SESSION_COOKIE_SECURE = config('SESSION_COOKIE_SECURE', default=False, cast=bool)  # HTTPS only
+# Session Cookie Security (hardened)
+SESSION_COOKIE_AGE = 3600 * 8  # 8 hours
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SECURE = config('SESSION_COOKIE_SECURE', default=False, cast=bool)
 SESSION_COOKIE_SAMESITE = 'Lax'
+# __Host- prefix only works over HTTPS with Secure + Path=/
+SESSION_COOKIE_NAME = 'sessionid'
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 SESSION_SAVE_EVERY_REQUEST = True
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
 # CSRF Cookie Security
-CSRF_COOKIE_HTTPONLY = True  # Prevent JavaScript access
-CSRF_COOKIE_SECURE = config('CSRF_COOKIE_SECURE', default=False, cast=bool)  # HTTPS only
+# CSRF_USE_SESSIONS requires SessionMiddleware before CsrfViewMiddleware (already set).
+# Use cookie-based CSRF in DEBUG so error pages still work if host is rejected early.
+CSRF_COOKIE_HTTPONLY = True
+CSRF_COOKIE_SECURE = config('CSRF_COOKIE_SECURE', default=False, cast=bool)
 CSRF_COOKIE_SAMESITE = 'Lax'
-CSRF_USE_SESSIONS = True
+CSRF_USE_SESSIONS = not DEBUG  # True in production, False in local dev
+CSRF_FAILURE_VIEW = 'django.views.csrf.csrf_failure'
 
 # =============================================
 # 7. SECURE SSL/HTTPS SETTINGS - FIXED
 # =============================================
 
-# Force HTTPS redirect
-SECURE_SSL_REDIRECT = config('SECURE_SSL_REDIRECT', default=False, cast=bool)
+# Force HTTPS redirect — NEVER enable on local runserver (HTTP only)
+# In production set DEBUG=False; the block below will force this True.
+SECURE_SSL_REDIRECT = False if DEBUG else config('SECURE_SSL_REDIRECT', default=True, cast=bool)
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # HTTP Strict Transport Security (HSTS)
@@ -208,27 +264,68 @@ if not DEBUG:
     # Force secure cookies in production
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
+    CSRF_USE_SESSIONS = True
     SECURE_SSL_REDIRECT = True
-    
-    # Enable HSTS in production
+    SESSION_COOKIE_NAME = 'abay_session'
+    SESSION_COOKIE_PATH = '/'
+
     SECURE_HSTS_SECONDS = 31536000  # 1 year
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
-    
-    # Additional security
+
     SECURE_CONTENT_TYPE_NOSNIFF = True
     SECURE_BROWSER_XSS_FILTER = True
-    
-    # Production allowed hosts should be specific
-    # ALLOWED_HOSTS should be set in .env for production
 else:
-    # Development overrides - allow insecure cookies locally
+    # Development: plain HTTP runserver — never redirect to HTTPS
     SESSION_COOKIE_SECURE = False
     CSRF_COOKIE_SECURE = False
+    CSRF_USE_SESSIONS = False
     SECURE_SSL_REDIRECT = False
     SECURE_HSTS_SECONDS = 0
     SECURE_HSTS_INCLUDE_SUBDOMAINS = False
     SECURE_HSTS_PRELOAD = False
+    SESSION_COOKIE_NAME = 'sessionid'
+
+# ------------------------------------------------------------
+# Local development host + optional local HTTPS (runserver_plus)
+# Set LOCAL_HTTPS=True in .env when serving with SSL certs.
+# ------------------------------------------------------------
+LOCAL_HTTPS = config('LOCAL_HTTPS', default=True, cast=bool)  # localhost HTTPS via runserver_plus
+
+if DEBUG:
+    for h in ('localhost', '127.0.0.1', '::1', 'testserver'):
+        if h not in ALLOWED_HOSTS:
+            ALLOWED_HOSTS.append(h)
+    for o in (
+        'http://localhost:8000',
+        'http://127.0.0.1:8000',
+        'https://localhost:8000',
+        'https://127.0.0.1:8000',
+        'http://localhost:3000',
+        'http://127.0.0.1:3000',
+        'https://localhost:3000',
+        'https://127.0.0.1:3000',
+    ):
+        if o not in CSRF_TRUSTED_ORIGINS:
+            CSRF_TRUSTED_ORIGINS.append(o)
+
+    # Never send HSTS on local (breaks browser until cleared)
+    SECURE_HSTS_SECONDS = 0
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = False
+    SECURE_HSTS_PRELOAD = False
+
+    if LOCAL_HTTPS:
+        # Serving https://127.0.0.1:8000/ via runserver_plus
+        SESSION_COOKIE_SECURE = True
+        CSRF_COOKIE_SECURE = True
+        # Already on HTTPS — do not 301 again
+        SECURE_SSL_REDIRECT = False
+        if not BASE_URL.startswith('https'):
+            BASE_URL = config('BASE_URL', default='https://127.0.0.1:8000')
+    else:
+        SESSION_COOKIE_SECURE = False
+        CSRF_COOKIE_SECURE = False
+        SECURE_SSL_REDIRECT = False
 
 # =============================================
 # 9. CORS
@@ -548,20 +645,40 @@ LOGGING = {
 }
 
 # =============================================
-# 18. FAYDA OIDC SETTINGS
+# 18. FAYDA UAT OIDC SETTINGS
 # =============================================
+# Values can be overridden via .env. Redirect URI MUST match Fayda portal exactly.
 
-FAYDA_CLIENT_ID = config('FAYDA_CLIENT_ID', default='')
-FAYDA_AUTH_URL = config('FAYDA_AUTH_URL', default='')
-FAYDA_TOKEN_URL = config('FAYDA_TOKEN_URL', default='')
-FAYDA_USERINFO_URL = config('FAYDA_USERINFO_URL', default='')
-FAYDA_REDIRECT_URI = config('FAYDA_REDIRECT_URI', default='http://localhost:3000/callback/')
+FAYDA_CLIENT_ID = config(
+    'FAYDA_CLIENT_ID',
+    default='crXYIYg2cJiNTaw5t-peoPzCRo-3JATNfBd5A86U8t0',
+)
+FAYDA_AUTH_URL = config(
+    'FAYDA_AUTH_URL',
+    default='https://esignet.ida.fayda.et/authorize',
+)
+FAYDA_TOKEN_URL = config(
+    'FAYDA_TOKEN_URL',
+    default='https://esignet.ida.fayda.et/v1/esignet/oauth/v2/token',
+)
+FAYDA_USERINFO_URL = config(
+    'FAYDA_USERINFO_URL',
+    default='https://esignet.ida.fayda.et/v1/esignet/oidc/userinfo',
+)
+# CRITICAL: must match EXACTLY what is registered in the Fayda portal
+FAYDA_REDIRECT_URI = config(
+    'FAYDA_REDIRECT_URI',
+    default='http://localhost:3000/callback',
+)
 FAYDA_PRIVATE_KEY_B64 = config('FAYDA_PRIVATE_KEY_B64', default='')
 FAYDA_ALGORITHM = config('FAYDA_ALGORITHM', default='RS256')
-FAYDA_CLIENT_ASSERTION_TYPE = config('FAYDA_CLIENT_ASSERTION_TYPE', default='urn:ietf:params:oauth:client-assertion-type:jwt-bearer')
+FAYDA_CLIENT_ASSERTION_TYPE = config(
+    'FAYDA_CLIENT_ASSERTION_TYPE',
+    default='urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
+)
 FAYDA_EXPIRATION_TIME = config('FAYDA_EXPIRATION_TIME', default=15, cast=int)
-FAYDA_TEST_NATIONAL_ID = config('FAYDA_TEST_NATIONAL_ID', default='')
-FAYDA_TEST_OTP = config('FAYDA_TEST_OTP', default='')
+FAYDA_TEST_NATIONAL_ID = config('FAYDA_TEST_NATIONAL_ID', default='3126894653473958')
+FAYDA_TEST_OTP = config('FAYDA_TEST_OTP', default='111111')
 
 # =============================================
 # 19. TELEBIRR SETTINGS
@@ -575,8 +692,8 @@ TELEBIRR_MERCHANT_CODE = config('TELEBIRR_MERCHANT_CODE', default='101011')
 TELEBIRR_PRIVATE_KEY = config('TELEBIRR_PRIVATE_KEY', default='')
 TELEBIRR_PUBLIC_KEY = config('TELEBIRR_PUBLIC_KEY', default='')
 TELEBIRR_VERIFY_SSL = config('TELEBIRR_VERIFY_SSL', default=False, cast=bool)
-TELEBIRR_ENABLED = config('TELEBIRR_ENABLED', default=False, cast=bool)
-USE_SIMULATED_PAYMENT = config('USE_SIMULATED_PAYMENT', default=True, cast=bool)
+TELEBIRR_ENABLED = config('TELEBIRR_ENABLED', default=True, cast=bool)
+USE_SIMULATED_PAYMENT = False
 
 TELEBIRR_APP_ID = TELEBIRR_FABRIC_APP_ID
 TELEBIRR_APP_KEY = TELEBIRR_APP_SECRET
@@ -654,6 +771,53 @@ except ImportError:
 # 24. STARTUP MESSAGE
 # =============================================
 
+
+
+# =============================================
+# PAYMENT GATEWAYS (Telebirr / Chapa / PayPal)
+# =============================================
+
+TELEBIRR_CONFIG = {
+    "BASE_URL": config(
+        "TELEBIRR_BASE_URL",
+        default="https://developerportal.ethiotelebirr.et:38443/apiaccess/payment/gateway",
+    ),
+    "PRODUCTION_BASE_URL": config(
+        "TELEBIRR_PRODUCTION_BASE_URL",
+        default="https://superapp.ethiomobilemoney.et:38443/apiaccess/payment/gateway",
+    ),
+    "FABRIC_APP_ID": config("TELEBIRR_FABRIC_APP_ID", default=""),
+    "APP_SECRET": config("TELEBIRR_APP_SECRET", default=""),
+    "MERCHANT_APP_ID": config("TELEBIRR_MERCHANT_APP_ID", default=""),
+    "MERCHANT_CODE": config("TELEBIRR_MERCHANT_CODE", default=""),
+    "PRIVATE_KEY": config("TELEBIRR_PRIVATE_KEY", default=""),
+    "PUBLIC_KEY": config("TELEBIRR_PUBLIC_KEY", default=""),
+    "NOTIFY_URL": config("TELEBIRR_NOTIFY_URL", default=f"{BASE_URL}/payments/telebirr/notify/"),
+    "RETURN_URL": config("TELEBIRR_RETURN_URL", default=f"{BASE_URL}/payments/return/"),
+    "TOKEN_PATH": config("TELEBIRR_TOKEN_PATH", default="/payment/v1/token"),
+    "TIMEOUT": 30,
+}
+
+CHAPA_CONFIG = {
+    # Live secret key from https://dashboard.chapa.co (CHASECK_LIVE-... for production)
+    "SECRET_KEY": config("CHAPA_SECRET_KEY", default=""),
+    "PUBLIC_KEY": config("CHAPA_PUBLIC_KEY", default=""),
+    "WEBHOOK_SECRET": config("CHAPA_WEBHOOK_SECRET", default=""),  # optional; defaults to SECRET_KEY
+    "CURRENCY": config("CHAPA_CURRENCY", default="ETB"),
+    "CALLBACK_URL": config("CHAPA_CALLBACK_URL", default=f"{BASE_URL}/payments/chapa/callback/"),
+    "RETURN_URL": config("CHAPA_RETURN_URL", default=f"{BASE_URL}/payments/return/"),
+}
+
+PAYPAL_CONFIG = {
+    "CLIENT_ID": config("PAYPAL_CLIENT_ID", default=""),
+    "CLIENT_SECRET": config("PAYPAL_CLIENT_SECRET", default=""),
+    "MODE": config("PAYPAL_MODE", default="sandbox"),  # sandbox | live
+    "RETURN_URL": config("PAYPAL_RETURN_URL", default=f"{BASE_URL}/payments/paypal/return/"),
+    "CANCEL_URL": config("PAYPAL_CANCEL_URL", default=f"{BASE_URL}/payments/return/"),
+    "CURRENCY": config("PAYPAL_CURRENCY", default="USD"),
+    "TIMEOUT": 30,
+}
+
 # =============================================
 # 24. STARTUP SUMMARY (via logging, not print)
 # =============================================
@@ -684,3 +848,19 @@ if not os.path.exists(LOG_FILE_PATH):
             f.write(f"# {'='*60}\n\n")
     except Exception as e:
         print(f"Warning: Could not create log file: {e}")
+# Ensure PayPal config picks up env even if defined earlier empty
+try:
+    PAYPAL_CONFIG = dict(PAYPAL_CONFIG)
+    PAYPAL_CONFIG['CLIENT_ID'] = PAYPAL_CONFIG.get('CLIENT_ID') or config('PAYPAL_CLIENT_ID', default='')
+    PAYPAL_CONFIG['CLIENT_SECRET'] = PAYPAL_CONFIG.get('CLIENT_SECRET') or config('PAYPAL_CLIENT_SECRET', default='')
+    PAYPAL_CONFIG['MODE'] = PAYPAL_CONFIG.get('MODE') or config('PAYPAL_MODE', default='sandbox')
+    PAYPAL_CONFIG['CURRENCY'] = PAYPAL_CONFIG.get('CURRENCY') or config('PAYPAL_CURRENCY', default='USD')
+except NameError:
+    PAYPAL_CONFIG = {
+        'CLIENT_ID': config('PAYPAL_CLIENT_ID', default=''),
+        'CLIENT_SECRET': config('PAYPAL_CLIENT_SECRET', default=''),
+        'MODE': config('PAYPAL_MODE', default='sandbox'),
+        'CURRENCY': config('PAYPAL_CURRENCY', default='USD'),
+    }
+
+CHAPA_REQUIRE_WEBHOOK_SIGNATURE = config('CHAPA_REQUIRE_WEBHOOK_SIGNATURE', default=True, cast=bool)

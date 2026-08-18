@@ -336,18 +336,15 @@
                 <!-- Action Buttons - FIXED PURCHASE FORM -->
                 <div class="action-buttons mb-4">
                     {% if book.status == 'published' %}
-                        {% if book.is_free %}
-                            <a href="{% url 'books:read_free' book.id %}" class="btn btn-success-custom">
-                                <i class="fas fa-book-open me-2"></i> Read Free
-                            </a>
-                            <a href="{% url 'books:download' book.id %}" class="btn btn-gold">
-                                <i class="fas fa-download me-2"></i> Download
+                        {% if book.is_free or book.price == 0 %}
+                            <a href="{% url 'books:read' book.id %}" class="btn btn-success-custom">
+                                <i class="fas fa-book-open me-2"></i> Read in App
                             </a>
                         {% else %}
                             {% if user.is_authenticated %}
                                 {% if has_purchased %}
-                                    <a href="{% url 'books:download' book.id %}" class="btn btn-gold">
-                                        <i class="fas fa-download me-2"></i> Download
+                                    <a href="{% url 'books:read' book.id %}" class="btn btn-gold">
+                                        <i class="fas fa-book-open me-2"></i> Continue Reading
                                     </a>
                                 {% else %}
                                     <!-- Purchase Form - This works with CSRF -->

@@ -108,14 +108,10 @@ class TelebirrPayment:
                         'error': f"Telebirr API error: {response.status_code}"
                     }
             else:
-                # DEBUG mode - simulate payment
+                # Simulation disabled — require live Telebirr credentials
                 return {
-                    'success': True,
-                    'reference': transaction_id,
-                    'payment_url': f"/payments/simulate/{transaction_id}/",
-                    'transaction_id': transaction_id,
-                    'message': 'Payment initiated (simulated)',
-                    'is_debug': True
+                    'success': False,
+                    'error': 'Telebirr is not configured for live payments. Set TELEBIRR_* keys and disable DEBUG-only shortcuts.',
                 }
                 
         except Exception as e:
@@ -158,10 +154,8 @@ class TelebirrPayment:
                     }
             else:
                 return {
-                    'success': True,
-                    'status': 'completed',
-                    'reference': transaction_id,
-                    'is_debug': True
+                    'success': False,
+                    'error': 'Live payment verification required. Simulation is disabled.',
                 }
                 
         except Exception as e:
@@ -225,7 +219,7 @@ def purchase_book(request, book_id):
                 'message': 'Book downloaded successfully!',
                 'free': True,
                 'transaction_id': purchase.transaction_id,
-                'download_url': f'/books/{book.id}/download/'
+                'read_url': f'/books/{book.id}/read/'
             })
         
         # For paid books, process Telebirr payment
@@ -239,7 +233,7 @@ def purchase_book(request, book_id):
         
         if result.get('success'):
             # If payment is free or debug mode, complete immediately
-            if result.get('is_free') or result.get('is_debug'):
+            if result.get('is_free') or False:
                 purchase.status = 'completed'
                 purchase.completed_at = timezone.now()
                 purchase.transaction_reference = result.get('reference')
@@ -253,7 +247,7 @@ def purchase_book(request, book_id):
                     'success': True,
                     'message': 'Payment successful! Book downloaded.',
                     'transaction_id': purchase.transaction_id,
-                    'download_url': f'/books/{book.id}/download/'
+                    'read_url': f'/books/{book.id}/read/'
                 })
             else:
                 # Return payment URL for redirection
@@ -376,28 +370,10 @@ def process_cbe_payment(purchase):
 
 @login_required
 def download_book(request, book_id):
-    """
-    Download a purchased book
-    """
-    book = get_object_or_404(Book, id=book_id, status='published')
-    
-    # Check if user has purchased this book
-    purchase = Purchase.objects.filter(user=request.user, book=book, status='completed').first()
-    
-    if not purchase:
-        messages.error(request, 'You have not purchased this book.')
-        return redirect('books:detail', book_id=book_id)
-    
-    # Check if book has a file
-    if not book.file:
-        messages.error(request, 'Book file not available.')
-        return redirect('books:detail', book_id=book_id)
-    
-    # Increment download count
-    book.downloads_count += 1
-    book.save()
-    
-    return redirect(book.file.url)
+    """Downloads disabled — open the online reader instead."""
+    messages.info(request, "Downloads are not available. Opening the online reader.")
+    return redirect("books:read", book_id=book_id)
+
 
 
 @login_required
@@ -752,7 +728,7 @@ def payment_return(request):
         return redirect('books:browse')
     
     if status == 'success' or purchase.status == 'completed':
-        messages.success(request, f'Payment successful! You can now download "{purchase.book.title}"')
+        messages.success(request, f'Payment successful! You can now read "{purchase.book.title}"')
         return redirect('books:detail', book_id=purchase.book.id)
     else:
         messages.error(request, 'Payment failed or was cancelled. Please try again.')
@@ -761,30 +737,8 @@ def payment_return(request):
 
 @login_required
 def simulate_payment(request, transaction_id):
-    """
-    Simulate payment for debug mode
-    """
-    if not settings.DEBUG:
-        messages.error(request, 'This endpoint is only available in debug mode')
-        return redirect('books:browse')
-    
-    purchase = Purchase.objects.filter(
-        Q(transaction_reference=transaction_id) | 
-        Q(purchase_reference=transaction_id) |
-        Q(transaction_id=transaction_id)
-    ).first()
-    
-    if not purchase:
-        messages.error(request, 'Purchase not found')
-        return redirect('books:browse')
-    
-    purchase.status = 'completed'
-    purchase.completed_at = timezone.now()
-    purchase.transaction_reference = transaction_id
-    purchase.purchase_reference = transaction_id
-    purchase.save()
-    
-    create_author_payment(purchase)
-    
-    messages.success(request, f'Payment simulated successfully! You can download "{purchase.book.title}"')
-    return redirect('books:detail', book_id=purchase.book.id)
+    """Simulation permanently disabled — real Telebirr/Chapa/PayPal only."""
+    messages.error(request, "Payment simulation is disabled. Use Telebirr, Chapa, or PayPal checkout.")
+    return redirect("books:browse")
+
+

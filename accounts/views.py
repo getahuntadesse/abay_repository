@@ -1269,8 +1269,8 @@ def oidc_callback_view(request):
 @login_required
 def admin_dashboard(request):
     """Admin dashboard with comprehensive data from database"""
-    if request.user.role != 'admin':
-        logger.warning(f"Unauthorized admin dashboard access attempt by {request.user.username} (role: {request.user.role})")
+    if not (request.user.is_superuser or getattr(request.user, 'role', None) == 'admin'):
+        logger.warning(f"Unauthorized admin dashboard access attempt by {request.user.username} (role: {getattr(request.user, 'role', None)})")
         messages.error(request, 'You do not have permission to access this page.')
         return redirect(role_based_redirect(request.user))
 
