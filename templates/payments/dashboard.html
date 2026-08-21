@@ -378,7 +378,7 @@
                     {% for author in authors %}
                     <tr>
                         <td>
-                            <strong>{{ author.get_full_name|default:author.username }}</strong>
+                            <strong>{{ author.display_name }}</strong>
                         </td>
                         <td>{{ author.email }}</td>
                         <td class="text-end text-warning">{{ author.total_royalty|default:0|floatformat:2|intcomma }}</td>
@@ -392,7 +392,7 @@
                                     <i class="fas fa-eye"></i>
                                 </a>
                                 {% if author.total_pending > 0 %}
-                                <button onclick="processAuthorPayment({{ author.id }}, '{{ author.get_full_name|default:author.username|escapejs }}', {{ author.total_pending|floatformat:2 }})" 
+                                <button onclick="processAuthorPayment({{ author.id }}, '{{ author.display_name|escapejs }}', {{ author.total_pending|floatformat:2 }})" 
                                         class="btn btn-gold-small" title="Process Payment">
                                     <i class="fas fa-money-bill-wave"></i> Transfer
                                 </button>
@@ -440,7 +440,7 @@
                     {% for payment in recent_payments %}
                     <tr>
                         <td>{{ payment.book.title|truncatechars:25 }}</td>
-                        <td>{{ payment.author.get_full_name|default:payment.author.username }}</td>
+                        <td>{{ payment.author.display_name }}</td>
                         <td class="text-end">{{ payment.gross_amount|floatformat:2|intcomma }} ETB</td>
                         <td class="text-end text-warning">{{ payment.author_royalty|floatformat:2|intcomma }} ETB</td>
                         <td class="text-end text-danger">{{ payment.tax_amount|floatformat:2|intcomma }} ETB</td>

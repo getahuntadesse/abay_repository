@@ -7,34 +7,29 @@
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-5">
-            <div class="card shadow">
+            <div class="card shadow-sm">
                 <div class="card-header bg-danger text-white">
-                    <h4 class="mb-0"><i class="fas fa-exclamation-triangle me-2"></i> Disable Two-Factor Authentication</h4>
+                    <h4 class="mb-0"><i class="fas fa-exclamation-triangle me-2"></i>Disable 2FA</h4>
                 </div>
-                <div class="card-body text-center">
-                    <div class="mb-4">
-                        <i class="fas fa-shield-alt fa-4x text-danger"></i>
-                    </div>
-                    
-                    <p class="mb-3">
-                        Are you sure you want to disable Two-Factor Authentication?
-                    </p>
-                    <p class="text-muted small">
-                        This will make your account less secure.
-                    </p>
-                    
+                <div class="card-body">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                        {% endfor %}
+                    {% endif %}
+                    <p>Enter your current password to disable two-factor authentication.</p>
                     <form method="POST">
                         {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label" for="password">Password</label>
+                            <input type="password" name="password" id="password" class="form-control" required>
+                        </div>
                         <button type="submit" class="btn btn-danger w-100">
-                            <i class="fas fa-times me-2"></i> Yes, Disable 2FA
+                            <i class="fas fa-times me-2"></i>Disable 2FA
                         </button>
                     </form>
-                    
-                    <hr class="my-4">
-                    
-                    <a href="{% url 'accounts:profile' %}" class="text-decoration-none">
-                        <i class="fas fa-arrow-left me-1"></i> Back to Profile
-                    </a>
+                    <hr>
+                    <a href="{% url 'accounts:profile' %}">Cancel</a>
                 </div>
             </div>
         </div>

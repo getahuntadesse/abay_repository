@@ -1,6 +1,6 @@
 # config/views.py
 from django.shortcuts import render
-from django.http import JsonResponse, HttpResponse, HttpResponseNotFound, HttpResponseServerError, FileResponse, StreamingHttpResponse
+from django.http import JsonResponse, HttpResponseNotFound, HttpResponseServerError
 from django.template import loader
 from django.contrib.admin.views.decorators import staff_member_required
 from django.db.models import Sum, Count, Q, Avg
@@ -9,10 +9,10 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from datetime import datetime, timedelta
 import logging
-from pathlib import Path
 import os
 import re
 from django.conf import settings
+from pathlib import Path
 
 # Set up logger
 logger = logging.getLogger(__name__)
@@ -305,344 +305,189 @@ def admin_analytics(request):
         }, status=500)
 
 
-def _is_admin_user(user):
-    """True if user can access admin log tools."""
-    if not user.is_authenticated:
-        return False
-    if user.is_superuser or user.is_staff:
-        return True
-    return getattr(user, "role", None) == "admin"
+@staff_member_required
+def admin_logs(request):
+    """
+    API: system logs for admin dashboard.
 
+    Query params:
+      q / search  – case-insensitive substring filter
+      level       – INFO|WARNING|ERROR|DEBUG|CRITICAL|AUTH|PAYMENT|all
+      limit       – max entries (default 300, max 2000)
+      rotated     – if 1, also read logs.txt.1 … rotated backups
+    """
+    search = (request.GET.get('q') or request.GET.get('search') or '').strip()
+    level_filter = (request.GET.get('level') or 'all').strip().upper()
+    include_rotated = request.GET.get('rotated', '1') in ('1', 'true', 'yes')
+    try:
+        limit = int(request.GET.get('limit') or 300)
+    except (TypeError, ValueError):
+        limit = 300
+    limit = max(1, min(limit, 2000))
 
-def _resolve_log_file():
-    """Prefer settings.LOG_FILE_PATH (logs.txt), fall back to common paths."""
-    candidates = []
-    log_path = getattr(settings, "LOG_FILE_PATH", None)
-    if log_path:
-        candidates.append(Path(log_path) if not isinstance(log_path, Path) else log_path)
-    base = Path(settings.BASE_DIR)
-    candidates.extend([
-        base / "logs.txt",
-        base / "logs" / "logs.txt",
-        base / "logs" / "abay_repository.log",
-        base / "logs" / "django.log",
-    ])
-    for path in candidates:
-        try:
-            if path.exists() and path.is_file():
-                return path
-        except OSError:
-            continue
-    # Default write target even if missing
-    return Path(log_path) if log_path else (base / "logs.txt")
+    primary = Path(getattr(settings, 'LOG_FILE_PATH', Path(settings.BASE_DIR) / 'logs.txt'))
+    files = []
+    try:
+        if primary.exists() and primary.is_file():
+            files.append(primary)
+        if include_rotated:
+            # RotatingFileHandler creates logs.txt.1 … logs.txt.N
+            backup_count = int(getattr(settings, 'LOG_BACKUP_COUNT', 10) or 10)
+            for i in range(1, backup_count + 1):
+                rotated = Path(str(primary) + f'.{i}')
+                if rotated.exists() and rotated.is_file():
+                    files.append(rotated)
+        # Extra fallbacks
+        for extra in (
+            Path(settings.BASE_DIR) / 'logs' / 'django.log',
+            Path(settings.BASE_DIR) / 'logs' / 'security.log',
+        ):
+            if extra.exists() and extra.is_file() and extra not in files:
+                files.append(extra)
+    except OSError as e:
+        logger.exception('Failed to resolve log files')
+        return JsonResponse({
+            'success': False,
+            'logs': [],
+            'count': 0,
+            'file_size': 0,
+            'message': f'Cannot access log files: {e}',
+            'error': str(e),
+        }, status=500)
 
+    if not files:
+        return JsonResponse({
+            'success': True,
+            'logs': [],
+            'count': 0,
+            'file_size': 0,
+            'file_path': str(primary.name),
+            'message': 'No log file found (expected logs.txt in project root)',
+            'search': search,
+            'level': level_filter,
+        })
 
-def _parse_log_lines(lines, limit=500):
-    """Parse log lines into structured entries (newest first)."""
-    # Formats supported:
-    # [2026-08-13 14:58:39] ERROR django.server - message
-    # [2026-08-13 14:58:39] LEVEL name - message
-    # [2026-08-13 14:58:39] PAYMENT INFO - message
-    patterns = [
-        re.compile(
-            r"^\[(?P<ts>[^\]]+)\]\s+(?P<tag>PAYMENT|AUTH|SECURITY)\s+(?P<level>\w+)\s+-\s+(?P<msg>.*)$"
-        ),
-        re.compile(
-            r"^\[(?P<ts>[^\]]+)\]\s+(?P<level>\w+)\s+(?P<name>[\w.]+)\s+-\s+(?P<msg>.*)$"
-        ),
-        re.compile(
-            r"^\[(?P<ts>[^\]]+)\]\s+(?P<level>\w+)\s+-\s+(?P<msg>.*)$"
-        ),
-        re.compile(
-            r"^\[(?P<ts>[^\]]+)\]\s+(?P<level>\w+)\s+(?P<msg>.*)$"
-        ),
-    ]
-    logs = []
-    slice_lines = lines[-limit:] if len(lines) > limit else lines
-    for raw in slice_lines:
-        line = raw.rstrip("\n\r")
-        if not line.strip() or line.strip().startswith("#"):
-            continue
-        matched = False
-        for pat in patterns:
-            m = pat.match(line)
-            if not m:
-                continue
-            gd = m.groupdict()
-            ts_str = gd.get("ts", "")
-            level = (gd.get("level") or "INFO").upper()
-            tag = (gd.get("tag") or "").upper()
-            message = gd.get("msg") or line
-            # Map special tags to filter levels used in UI
-            if tag in ("PAYMENT", "AUTH", "SECURITY"):
-                display_level = tag
-            else:
-                display_level = level
-            iso_ts = timezone.now().isoformat()
-            for fmt in ("%Y-%m-%d %H:%M:%S.%f", "%Y-%m-%d %H:%M:%S"):
+    log_pattern = re.compile(
+        r'^\[(?P<ts>[^\]]+)\]\s+(?:(?P<tag>AUTH|PAYMENT|SECURITY)\s+)?'
+        r'(?P<level>DEBUG|INFO|WARNING|WARN|ERROR|CRITICAL|EXCEPTION)\s+[-:]?\s*(?P<msg>.*)$',
+        re.IGNORECASE,
+    )
+    level_map = {'WARN': 'WARNING', 'EXCEPTION': 'ERROR'}
+
+    def parse_line(raw: str, source: str):
+        raw = raw.rstrip('\n\r')
+        if not raw.strip() or raw.strip().startswith('#'):
+            return None
+        match = log_pattern.match(raw.strip())
+        if match:
+            ts_str = match.group('ts')
+            level = match.group('level').upper()
+            level = level_map.get(level, level)
+            tag = match.group('tag')
+            message = (match.group('msg') or '').strip()
+            if tag:
+                message = f'{tag} | {message}'
+            timestamp = None
+            for fmt in ('%Y-%m-%d %H:%M:%S.%f', '%Y-%m-%d %H:%M:%S'):
                 try:
-                    iso_ts = datetime.strptime(ts_str.strip(), fmt).isoformat()
+                    timestamp = datetime.strptime(ts_str, fmt)
                     break
                 except ValueError:
                     continue
-            logs.append({
-                "timestamp": iso_ts,
-                "level": display_level,
-                "message": message.strip(),
-                "raw": line,
-            })
-            matched = True
-            break
-        if not matched:
-            level = "INFO"
-            upper = line.upper()
-            if "CRITICAL" in upper:
-                level = "CRITICAL"
-            elif "ERROR" in upper or "EXCEPTION" in upper:
-                level = "ERROR"
-            elif "WARNING" in upper or "WARN" in upper:
-                level = "WARNING"
-            elif "PAYMENT" in upper:
-                level = "PAYMENT"
-            elif "AUTH" in upper:
-                level = "AUTH"
-            elif "DEBUG" in upper:
-                level = "DEBUG"
-            logs.append({
-                "timestamp": timezone.now().isoformat(),
-                "level": level,
-                "message": line,
-                "raw": line,
-            })
-    logs.reverse()
-    return logs
+            if timestamp is None:
+                timestamp = timezone.now()
+            return {
+                'timestamp': timestamp.isoformat(),
+                'level': level,
+                'message': message or raw,
+                'source': source,
+            }
+        upper = raw.upper()
+        level = 'INFO'
+        if 'CRITICAL' in upper:
+            level = 'CRITICAL'
+        elif 'ERROR' in upper or 'EXCEPTION' in upper:
+            level = 'ERROR'
+        elif 'WARNING' in upper or 'WARN' in upper:
+            level = 'WARNING'
+        elif 'DEBUG' in upper:
+            level = 'DEBUG'
+        msg = raw
+        if 'PAYMENT' in upper:
+            msg = 'PAYMENT | ' + raw
+        elif 'AUTH' in upper:
+            msg = 'AUTH | ' + raw
+        return {
+            'timestamp': timezone.now().isoformat(),
+            'level': level,
+            'message': msg,
+            'source': source,
+        }
 
+    logs = []
+    total_size = 0
+    read_errors = []
 
-@login_required
-def admin_logs(request):
-    """
-    API: fetch system logs from logs.txt for the admin dashboard.
-    GET /api/admin/logs/?limit=300&level=ERROR
-    """
-    if not _is_admin_user(request.user):
-        return JsonResponse({"success": False, "message": "Forbidden", "logs": []}, status=403)
-
-    log_file = _resolve_log_file()
-    try:
-        limit = int(request.GET.get("limit", 300))
-    except ValueError:
-        limit = 300
-    limit = max(50, min(limit, 2000))
-    level_filter = (request.GET.get("level") or "").upper().strip()
-
-    if not log_file.exists():
-        return JsonResponse({
-            "success": True,
-            "logs": [],
-            "message": f"No log file yet at {log_file.name}",
-            "count": 0,
-            "file_size": 0,
-            "file_name": log_file.name,
-        })
-
-    try:
-        with open(log_file, "r", encoding="utf-8", errors="replace") as f:
-            lines = f.readlines()
-        logs = _parse_log_lines(lines, limit=limit)
-        if level_filter and level_filter != "ALL":
-            logs = [x for x in logs if x.get("level") == level_filter]
+    # Read oldest rotated first, then primary last so chronological order is natural
+    ordered = list(reversed(files[1:])) + files[:1] if len(files) > 1 else files
+    for fpath in ordered:
         try:
-            file_size = log_file.stat().st_size
-        except OSError:
-            file_size = 0
-        return JsonResponse({
-            "success": True,
-            "logs": logs,
-            "count": len(logs),
-            "file_size": file_size,
-            "file_name": log_file.name,
-            "file_path": str(log_file.name),
-        })
-    except Exception as e:
-        logger.exception("Error reading log file")
-        return JsonResponse({
-            "success": False,
-            "message": str(e),
-            "logs": [],
-            "count": 0,
-        }, status=500)
-
-
-@login_required
-def admin_logs_export(request):
-    """
-    Download logs.txt (or filtered text export).
-    GET /api/admin/logs/export/?format=txt|csv
-    """
-    if not _is_admin_user(request.user):
-        return JsonResponse({"success": False, "message": "Forbidden"}, status=403)
-
-    log_file = _resolve_log_file()
-    fmt = (request.GET.get("format") or "txt").lower()
-    level_filter = (request.GET.get("level") or "").upper().strip()
-
-    if not log_file.exists():
-        return JsonResponse({"success": False, "message": "Log file not found"}, status=404)
-
-    try:
-        with open(log_file, "r", encoding="utf-8", errors="replace") as f:
-            content = f.read()
-        lines = content.splitlines(True)
-
-        if level_filter and level_filter != "ALL":
-            parsed = _parse_log_lines(lines, limit=50000)
-            parsed = [x for x in parsed if x.get("level") == level_filter]
-            # export in chronological order
-            parsed.reverse()
-            if fmt == "csv":
-                import csv
-                from io import StringIO
-                buf = StringIO()
-                writer = csv.writer(buf)
-                writer.writerow(["timestamp", "level", "message"])
-                for row in parsed:
-                    writer.writerow([row.get("timestamp", ""), row.get("level", ""), row.get("message", "")])
-                data = buf.getvalue()
-                resp = HttpResponse(data, content_type="text/csv; charset=utf-8")
-                resp["Content-Disposition"] = f'attachment; filename="abay_logs_{level_filter.lower()}.csv"'
-                return resp
-            data = "\n".join(x.get("raw") or x.get("message", "") for x in parsed)
-            resp = HttpResponse(data, content_type="text/plain; charset=utf-8")
-            resp["Content-Disposition"] = f'attachment; filename="abay_logs_{level_filter.lower()}.txt"'
-            return resp
-
-        # Full file download
-        if fmt == "csv":
-            parsed = _parse_log_lines(lines, limit=50000)
-            parsed.reverse()
-            import csv
-            from io import StringIO
-            buf = StringIO()
-            writer = csv.writer(buf)
-            writer.writerow(["timestamp", "level", "message"])
-            for row in parsed:
-                writer.writerow([row.get("timestamp", ""), row.get("level", ""), row.get("message", "")])
-            resp = HttpResponse(buf.getvalue(), content_type="text/csv; charset=utf-8")
-            resp["Content-Disposition"] = 'attachment; filename="abay_logs.csv"'
-            return resp
-
-        resp = HttpResponse(content, content_type="text/plain; charset=utf-8")
-        resp["Content-Disposition"] = f'attachment; filename="{log_file.name}"'
-        return resp
-    except Exception as e:
-        logger.exception("Log export failed")
-        return JsonResponse({"success": False, "message": str(e)}, status=500)
-
-
-
-@login_required
-
-def admin_logs_stream(request):
-    """
-    Real-time log streaming via Server-Sent Events (SSE).
-    GET /api/admin/logs/stream/
-    """
-    if not _is_admin_user(request.user):
-        return JsonResponse({"success": False, "message": "Forbidden"}, status=403)
-
-    import json
-    import time
-
-    log_file = _resolve_log_file()
-    try:
-        initial_limit = int(request.GET.get("limit", 150))
-    except ValueError:
-        initial_limit = 150
-    initial_limit = max(20, min(initial_limit, 500))
-    max_seconds = int(request.GET.get("max_seconds", 300))
-    max_seconds = max(60, min(max_seconds, 1800))
-    poll_interval = 0.6
-
-    def _sse(event, data_obj):
-        return "event: %s\ndata: %s\n\n" % (event, json.dumps(data_obj))
-
-    def event_stream():
-        start_t = time.time()
-        position = 0
-        try:
-            if log_file.exists():
-                with open(log_file, "r", encoding="utf-8", errors="replace") as f:
-                    lines = f.readlines()
-                    position = f.tell()
-                parsed = _parse_log_lines(lines, limit=initial_limit)
-                try:
-                    fsize = log_file.stat().st_size
-                except OSError:
-                    fsize = 0
-                yield _sse("snapshot", {"logs": parsed, "file_size": fsize})
-            else:
-                yield _sse("snapshot", {"logs": [], "file_size": 0})
+            total_size += fpath.stat().st_size
+            with open(fpath, 'r', encoding='utf-8', errors='replace') as fh:
+                for line in fh:
+                    entry = parse_line(line, fpath.name)
+                    if entry:
+                        logs.append(entry)
+        except OSError as e:
+            read_errors.append(f'{fpath.name}: {e}')
+            logger.warning('Could not read log file %s: %s', fpath, e)
         except Exception as e:
-            yield _sse("error", {"message": str(e)})
+            read_errors.append(f'{fpath.name}: {e}')
+            logger.exception('Unexpected error reading %s', fpath)
 
-        last_ping = time.time()
-        while time.time() - start_t < max_seconds:
-            try:
-                if not log_file.exists():
-                    time.sleep(poll_interval)
-                    continue
-                size = log_file.stat().st_size
-                if size < position:
-                    position = 0
-                    yield _sse("reset", {"message": "log file rotated"})
-                if size > position:
-                    with open(log_file, "r", encoding="utf-8", errors="replace") as f:
-                        f.seek(position)
-                        chunk = f.read()
-                        position = f.tell()
-                    new_lines = [ln for ln in chunk.splitlines() if ln.strip()]
-                    if new_lines:
-                        parsed = _parse_log_lines(new_lines, limit=len(new_lines) + 5)
-                        parsed.reverse()
-                        for entry in parsed:
-                            yield _sse("log", entry)
-                now = time.time()
-                if now - last_ping >= 15:
-                    yield _sse("ping", {"ts": now, "file_size": size})
-                    last_ping = now
-            except GeneratorExit:
-                break
-            except Exception as e:
-                yield _sse("error", {"message": str(e)})
-                time.sleep(2)
-            time.sleep(poll_interval)
-        yield _sse("done", {"message": "stream timeout - reconnect"})
+    # Filters
+    if level_filter and level_filter != 'ALL':
+        if level_filter in ('AUTH', 'PAYMENT', 'SECURITY'):
+            logs = [x for x in logs if level_filter in (x.get('message') or '').upper()]
+        else:
+            logs = [x for x in logs if (x.get('level') or '').upper() == level_filter]
 
-    response = StreamingHttpResponse(event_stream(), content_type="text/event-stream")
-    response["Cache-Control"] = "no-cache, no-store, must-revalidate"
-    response["X-Accel-Buffering"] = "no"
-    response["Connection"] = "keep-alive"
-    return response
+    if search:
+        q = search.lower()
+        logs = [
+            x for x in logs
+            if q in (x.get('message') or '').lower()
+            or q in (x.get('level') or '').lower()
+            or q in (x.get('source') or '').lower()
+        ]
 
+    # Newest first, then limit
+    def sort_key(item):
+        return item.get('timestamp') or ''
 
+    logs.sort(key=sort_key, reverse=True)
+    truncated = len(logs) > limit
+    logs = logs[:limit]
 
-def reader_service_worker(request):
-    """Serve reader service worker with correct scope header."""
-    from django.contrib.staticfiles.finders import find
-    from django.http import HttpResponse
-    import os
-    path = find("js/reader-sw.js")
-    if not path:
-        path = os.path.join(settings.BASE_DIR, "static", "js", "reader-sw.js")
-    try:
-        with open(path, "r", encoding="utf-8") as f:
-            body = f.read()
-    except OSError:
-        return HttpResponse("Service worker not found", status=404)
-    resp = HttpResponse(body, content_type="application/javascript; charset=utf-8")
-    resp["Service-Worker-Allowed"] = "/"
-    resp["Cache-Control"] = "no-cache, no-store, must-revalidate"
-    return resp
+    return JsonResponse({
+        'success': True,
+        'logs': logs,
+        'count': len(logs),
+        'file_size': total_size,
+        'file_path': primary.name,
+        'files_read': [f.name for f in files],
+        'rotated_count': max(0, len(files) - 1),
+        'search': search,
+        'level': level_filter,
+        'truncated': truncated,
+        'message': (
+            f'Loaded {len(logs)} log(s) from {len(files)} file(s)'
+            + (f'; search="{search}"' if search else '')
+            + (f'; warnings: {"; ".join(read_errors)}' if read_errors else '')
+        ),
+        'warnings': read_errors,
+    })
+
 
 
 @login_required

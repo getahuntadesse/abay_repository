@@ -121,7 +121,7 @@
                             <td>
                                 <strong>{{ purchase.book.title|truncatechars:50 }}</strong>
                                 <br>
-                                <small class="text-muted">by {{ purchase.book.author.full_name|default:"Unknown" }}</small>
+                                <small class="text-muted">by {{ purchase.book.author.display_name|default:"Unknown" }}</small>
                             </td>
                             <td>
                                 <strong>{{ purchase.amount|floatformat:2 }} ETB</strong>

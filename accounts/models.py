@@ -296,7 +296,28 @@ class CustomUser(AbstractUser):
         ordering = ['-date_joined']
     
     def __str__(self):
-        return self.full_name or self.username
+        return self.display_name
+
+    @property
+    def display_name(self):
+        """Name shown in navbar and UI."""
+        name = (self.full_name or '').strip()
+        if name:
+            return name
+        combined = f'{(self.first_name or "").strip()} {(self.last_name or "").strip()}'.strip()
+        if combined:
+            return combined
+        if self.username:
+            return self.username
+        if self.email:
+            return self.email.split('@')[0]
+        return 'Account'
+
+    def get_full_name(self):
+        return self.display_name
+
+    def get_short_name(self):
+        return (self.first_name or self.display_name or self.username or '')[:30]
     
     def get_role_display(self):
         role_display = dict(self.ROLE_CHOICES)

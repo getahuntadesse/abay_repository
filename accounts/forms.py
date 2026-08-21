@@ -79,9 +79,21 @@ class ClientRegistrationForm(UserCreationForm):
         initial=True,
         widget=forms.CheckboxInput(attrs={'class': 'form-check-input'})
     )
+    gender = forms.ChoiceField(
+        required=False,
+        choices=[
+            ('', 'Select Gender'),
+            ('Male', 'Male'),
+            ('Female', 'Female'),
+        ],
+        widget=forms.Select(attrs={'class': 'form-select'}),
+        label='Gender'
+    )
+
     terms_accepted = forms.BooleanField(
         required=True,
-        widget=forms.CheckboxInput(attrs={'class': 'form-check-input'})
+        widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+        label='I have read and agree to the Terms and Conditions and Privacy Policy of Abay Repository'
     )
     
     class Meta:
@@ -131,6 +143,11 @@ class ClientRegistrationForm(UserCreationForm):
         user.full_name = self.cleaned_data['full_name']
         user.phone = self.cleaned_data['phone']
         user.role = 'client'
+        gender = self.cleaned_data.get('gender') or ''
+        if gender in ('Male', 'Female', 'M', 'F'):
+            user.gender = 'Male' if gender in ('Male', 'M') else 'Female'
+        else:
+            user.gender = ''
         if commit:
             user.save()
             ClientProfile.objects.create(
@@ -311,7 +328,7 @@ class AuthorRegistrationForm(UserCreationForm):
     agreement_signed = forms.BooleanField(
         required=True,
         widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-        label='I agree to the Author Terms and Conditions'
+        label='I have read and agree to the Terms and Conditions and Privacy Policy of Abay Repository'
     )
     
     class Meta:

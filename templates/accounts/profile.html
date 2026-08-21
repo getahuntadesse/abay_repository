@@ -285,7 +285,7 @@
                 {% endif %}
             </div>
             <div class="col-md-7 text-center text-md-start mt-3 mt-md-0">
-                <h1 class="text-white mb-1">{{ user.full_name|default:user.username }}</h1>
+                <h1 class="text-white mb-1">{{ user.display_name }}</h1>
                 <p class="text-white-50 mb-2">@{{ user.username }}</p>
                 <div class="d-flex flex-wrap gap-2 justify-content-center justify-content-md-start">
                     <span class="badge bg-gold p-2">{{ user.get_role_display|default:user.role|title }}</span>
@@ -318,7 +318,7 @@
                 <div class="row">
                     <div class="col-sm-6 mb-3">
                         <div class="info-label">Full Name</div>
-                        <div class="info-value">{{ user.full_name|default:"Not provided" }}</div>
+                        <div class="info-value">{{ user.display_name }}</div>
                     </div>
                     <div class="col-sm-6 mb-3">
                         <div class="info-label">Username</div>
@@ -587,4 +587,35 @@
         </div>
     </div>
 </div>
+
+{# ---- Security / Password / 2FA ---- #}
+<div class="row mt-4">
+  <div class="col-12">
+    <div class="card shadow-sm">
+      <div class="card-header bg-white">
+        <h5 class="mb-0"><i class="fas fa-shield-alt me-2" style="color:#DAA520;"></i>Security</h5>
+      </div>
+      <div class="card-body d-flex flex-wrap gap-2">
+        <a href="{% url 'accounts:password_change' %}" class="btn btn-outline-dark">
+          <i class="fas fa-key me-1"></i> Change Password
+        </a>
+        <a href="{% url 'accounts:password_reset' %}" class="btn btn-outline-secondary">
+          <i class="fas fa-envelope me-1"></i> Reset via Email
+        </a>
+        <a href="{% url 'accounts:setup_2fa' %}" class="btn btn-outline-dark">
+          <i class="fas fa-mobile-alt me-1"></i> Two-Factor Auth
+        </a>
+        {% if user.two_factor_enabled %}
+        <a href="{% url 'accounts:backup_codes' %}" class="btn btn-outline-secondary">
+          <i class="fas fa-list me-1"></i> Backup Codes
+        </a>
+        <a href="{% url 'accounts:disable_2fa' %}" class="btn btn-outline-danger">
+          Disable 2FA
+        </a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
 {% endblock %}

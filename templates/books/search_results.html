@@ -6,7 +6,7 @@
                 <strong>{{ book.title }}</strong>
             </a>
             <br>
-            <small class="text-muted">by {{ book.author.full_name|default:"Unknown" }}</small>
+            <small class="text-muted">by {{ book.author.display_name|default:"Unknown" }}</small>
         </div>
         <div>
             {% if book.is_free %}

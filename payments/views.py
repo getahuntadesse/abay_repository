@@ -19,6 +19,9 @@ from datetime import datetime
 from .models import Purchase, Payment, PaymentBatch, PaymentTransaction
 from books.models import Book
 from accounts.models import CustomUser
+from .telebirr import TelebirrService
+from .chapa import ChapaService
+from .paypal_service import PayPalService
 
 logger = logging.getLogger(__name__)
 
@@ -108,10 +111,14 @@ class TelebirrPayment:
                         'error': f"Telebirr API error: {response.status_code}"
                     }
             else:
-                # Simulation disabled — require live Telebirr credentials
+                # DEBUG mode - simulate payment
                 return {
-                    'success': False,
-                    'error': 'Telebirr is not configured for live payments. Set TELEBIRR_* keys and disable DEBUG-only shortcuts.',
+                    'success': True,
+                    'reference': transaction_id,
+                    'payment_url': f"/payments/simulate/{transaction_id}/",
+                    'transaction_id': transaction_id,
+                    'message': 'Payment initiated (simulated)',
+                    'is_debug': True
                 }
                 
         except Exception as e:
@@ -154,8 +161,10 @@ class TelebirrPayment:
                     }
             else:
                 return {
-                    'success': False,
-                    'error': 'Live payment verification required. Simulation is disabled.',
+                    'success': True,
+                    'status': 'completed',
+                    'reference': transaction_id,
+                    'is_debug': True
                 }
                 
         except Exception as e:
@@ -222,51 +231,144 @@ def purchase_book(request, book_id):
                 'read_url': f'/books/{book.id}/read/'
             })
         
-        # For paid books, process Telebirr payment
+
+        # Multi-gateway: Telebirr / Chapa / PayPal
+        payment_method = (payment_method or 'telebirr').lower().strip()
+        result = {'success': False, 'error': 'Unsupported payment method'}
+
         if payment_method == 'telebirr':
-            telebirr = TelebirrPayment()
-            result = telebirr.initiate_payment(purchase, phone_number)
-        elif payment_method == 'cbe':
-            result = process_cbe_payment(purchase)
-        else:
-            result = {'success': False, 'error': 'Unsupported payment method'}
-        
-        if result.get('success'):
-            # If payment is free or debug mode, complete immediately
-            if result.get('is_free') or False:
-                purchase.status = 'completed'
-                purchase.completed_at = timezone.now()
-                purchase.transaction_reference = result.get('reference')
-                purchase.purchase_reference = result.get('reference')
-                purchase.save()
-                
-                # Create payment record for author
-                create_author_payment(purchase)
-                
+            tb = TelebirrService()
+            if not tb.is_configured():
+                purchase.delete()
                 return JsonResponse({
+                    'success': False,
+                    'error': 'Telebirr is not configured. Set TELEBIRR_* env keys.',
+                }, status=503)
+            tb_result = tb.create_checkout(
+                title=f"Book: {book.title}",
+                amount=float(price),
+                merch_order_id=purchase.transaction_id,
+            )
+            if tb_result.get('success'):
+                purchase.transaction_reference = tb_result.get('prepay_id') or tb_result.get('merch_order_id')
+                purchase.purchase_reference = tb_result.get('merch_order_id')
+                purchase.save(update_fields=['transaction_reference', 'purchase_reference', 'updated_at'])
+                result = {
                     'success': True,
-                    'message': 'Payment successful! Book downloaded.',
+                    'gateway': 'telebirr',
+                    'reference': tb_result.get('merch_order_id'),
+                    'payment_url': tb_result.get('checkout_url'),
+                    'redirect_url': tb_result.get('checkout_url'),
                     'transaction_id': purchase.transaction_id,
-                    'read_url': f'/books/{book.id}/read/'
-                })
+                    'message': 'Redirecting to Telebirr checkout',
+                }
             else:
-                # Return payment URL for redirection
+                result = {'success': False, 'error': tb_result.get('error', 'Telebirr failed')}
+
+        elif payment_method == 'chapa':
+            email = request.POST.get('email') or getattr(user, 'email', None) or ''
+            if not email:
+                purchase.delete()
+                return JsonResponse({'success': False, 'error': 'Email is required for Chapa'}, status=400)
+            full = (getattr(user, 'full_name', None) or user.username or 'Customer').split(' ', 1)
+            first_name = full[0]
+            last_name = full[1] if len(full) > 1 else ''
+            ch = ChapaService()
+            if not ch.is_configured():
+                purchase.delete()
                 return JsonResponse({
+                    'success': False,
+                    'error': 'Chapa is not configured. Set CHAPA_SECRET_KEY.',
+                }, status=503)
+            ch_result = ch.initialize(
+                amount=float(price),
+                email=email,
+                first_name=first_name,
+                last_name=last_name,
+                phone=phone_number or '',
+                tx_ref=purchase.transaction_id,
+                title=f"Book: {book.title}"[:16],
+                description=f"Purchase {book.title}"[:50],
+            )
+            if ch_result.get('success'):
+                purchase.transaction_reference = ch_result.get('tx_ref')
+                purchase.purchase_reference = ch_result.get('tx_ref')
+                purchase.save(update_fields=['transaction_reference', 'purchase_reference', 'updated_at'])
+                result = {
                     'success': True,
-                    'message': 'Redirecting to Telebirr payment...',
-                    'redirect_url': result.get('payment_url'),
+                    'gateway': 'chapa',
+                    'reference': ch_result.get('tx_ref'),
+                    'payment_url': ch_result.get('checkout_url'),
+                    'redirect_url': ch_result.get('checkout_url'),
                     'transaction_id': purchase.transaction_id,
-                    'reference': result.get('reference')
-                })
+                    'message': 'Redirecting to Chapa checkout',
+                }
+            else:
+                result = {'success': False, 'error': ch_result.get('error', 'Chapa failed')}
+
+        elif payment_method == 'paypal':
+            pp = PayPalService()
+            if not pp.is_configured():
+                purchase.delete()
+                return JsonResponse({
+                    'success': False,
+                    'error': 'PayPal is not configured. Set PAYPAL_CLIENT_ID / SECRET.',
+                }, status=503)
+            # Amount: convert ETB→USD only if currency is USD and a rate is set
+            amount = float(price)
+            from django.conf import settings as dj_settings
+            if getattr(dj_settings, 'PAYPAL_CURRENCY', 'USD') == 'USD':
+                rate = float(getattr(dj_settings, 'ETB_TO_USD_RATE', 0) or 0)
+                if rate > 0:
+                    amount = round(float(price) * rate, 2)
+            pp_result = pp.create_order(
+                amount=amount,
+                description=f"Abay: {book.title}"[:127],
+                custom_id=purchase.transaction_id,
+            )
+            if pp_result.get('success'):
+                purchase.transaction_reference = pp_result.get('order_id')
+                purchase.purchase_reference = pp_result.get('order_id')
+                purchase.save(update_fields=['transaction_reference', 'purchase_reference', 'updated_at'])
+                result = {
+                    'success': True,
+                    'gateway': 'paypal',
+                    'reference': pp_result.get('order_id'),
+                    'order_id': pp_result.get('order_id'),
+                    'payment_url': pp_result.get('checkout_url'),
+                    'redirect_url': pp_result.get('checkout_url'),
+                    'transaction_id': purchase.transaction_id,
+                    'message': 'Redirecting to PayPal',
+                }
+            else:
+                result = {'success': False, 'error': pp_result.get('error', 'PayPal failed')}
         else:
-            purchase.status = 'failed'
-            purchase.save()
-            
+            purchase.delete()
             return JsonResponse({
                 'success': False,
-                'error': result.get('error', 'Payment failed. Please try again.')
+                'error': f'Unsupported payment method: {payment_method}. Use telebirr, chapa, or paypal.',
             }, status=400)
-            
+
+        if result.get('success'):
+            return JsonResponse({
+                'success': True,
+                'gateway': result.get('gateway', payment_method),
+                'reference': result.get('reference'),
+                'order_id': result.get('order_id'),
+                'payment_url': result.get('payment_url') or result.get('redirect_url'),
+                'redirect_url': result.get('redirect_url') or result.get('payment_url'),
+                'transaction_id': purchase.transaction_id,
+                'message': result.get('message', 'Checkout ready'),
+            })
+
+        purchase.status = 'failed'
+        purchase.save(update_fields=['status', 'updated_at'])
+        return JsonResponse({
+            'success': False,
+            'error': result.get('error', 'Payment initiation failed. Please try again.'),
+        }, status=400)
+
+
     except Book.DoesNotExist:
         return JsonResponse({'success': False, 'error': 'Book not found'}, status=404)
     except Exception as e:
@@ -370,10 +472,9 @@ def process_cbe_payment(purchase):
 
 @login_required
 def download_book(request, book_id):
-    """Downloads disabled — open the online reader instead."""
-    messages.info(request, "Downloads are not available. Opening the online reader.")
-    return redirect("books:read", book_id=book_id)
-
+    """Downloads disabled — online reader only."""
+    messages.info(request, 'Books are available for online reading only (download disabled).')
+    return redirect('books:read', book_id=book_id)
 
 
 @login_required
@@ -728,7 +829,7 @@ def payment_return(request):
         return redirect('books:browse')
     
     if status == 'success' or purchase.status == 'completed':
-        messages.success(request, f'Payment successful! You can now read "{purchase.book.title}"')
+        messages.success(request, f'Payment successful! You can now download "{purchase.book.title}"')
         return redirect('books:detail', book_id=purchase.book.id)
     else:
         messages.error(request, 'Payment failed or was cancelled. Please try again.')
@@ -737,8 +838,270 @@ def payment_return(request):
 
 @login_required
 def simulate_payment(request, transaction_id):
-    """Simulation permanently disabled — real Telebirr/Chapa/PayPal only."""
-    messages.error(request, "Payment simulation is disabled. Use Telebirr, Chapa, or PayPal checkout.")
-    return redirect("books:browse")
+    """
+    Simulate payment for debug mode
+    """
+    if not settings.DEBUG:
+        messages.error(request, 'This endpoint is only available in debug mode')
+        return redirect('books:browse')
+    
+    purchase = Purchase.objects.filter(
+        Q(transaction_reference=transaction_id) | 
+        Q(purchase_reference=transaction_id) |
+        Q(transaction_id=transaction_id)
+    ).first()
+    
+    if not purchase:
+        messages.error(request, 'Purchase not found')
+        return redirect('books:browse')
+    
+    purchase.status = 'completed'
+    purchase.completed_at = timezone.now()
+    purchase.transaction_reference = transaction_id
+    purchase.purchase_reference = transaction_id
+    purchase.save()
+    
+    create_author_payment(purchase)
+    
+    messages.success(request, f'Payment simulated successfully! You can download "{purchase.book.title}"')
+    return redirect('books:detail', book_id=purchase.book.id)
+
+
+
+# ---------------------------------------------------------------------------
+# Production webhooks
+# ---------------------------------------------------------------------------
+
+
+def _complete_purchase(purchase, gateway_ref=None):
+    """Idempotent: mark purchase completed + author royalty."""
+    if not purchase:
+        return False
+    if purchase.status == 'completed':
+        return True
+    purchase.status = 'completed'
+    purchase.completed_at = timezone.now()
+    if gateway_ref:
+        purchase.transaction_reference = gateway_ref
+    purchase.save()
+    try:
+        create_author_payment(purchase)
+    except Exception as e:
+        logger.exception("create_author_payment failed: %s", e)
+    return True
+
+
+def _purchase_by_ref(ref):
+    if not ref:
+        return None
+    from django.db.models import Q
+    return Purchase.objects.filter(
+        Q(transaction_id=ref) | Q(transaction_reference=ref) | Q(purchase_reference=ref)
+    ).select_related('book', 'user').first()
+
+
+
+@csrf_exempt
+def telebirr_webhook(request):
+    """
+    Telebirr Fabric notify URL.
+    Register: {BASE_URL}/payments/webhook/telebirr/
+    Verifies SHA256WithRSA sign when TELEBIRR_PUBLIC_KEY is set.
+    """
+    from payments.webhook_verify import verify_telebirr_signature
+
+    if request.method != 'POST':
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
+    try:
+        try:
+            payload = json.loads(request.body.decode('utf-8') or '{}')
+        except Exception:
+            payload = {k: request.POST.get(k) for k in request.POST.keys()}
+
+        ok, reason = verify_telebirr_signature(payload if isinstance(payload, dict) else {})
+        if not ok:
+            logger.warning("Telebirr webhook rejected: %s", reason)
+            return JsonResponse({'code': '1', 'msg': 'invalid signature', 'reason': reason}, status=401)
+
+        logger.info("Telebirr webhook verified (%s) keys=%s", reason, list(payload.keys()) if isinstance(payload, dict) else type(payload))
+
+        biz = payload.get('biz_content') if isinstance(payload.get('biz_content'), dict) else {}
+        merch_order_id = (
+            payload.get('merch_order_id')
+            or biz.get('merch_order_id')
+            or payload.get('out_trade_no')
+        )
+        trade_status = str(
+            payload.get('trade_status')
+            or biz.get('trade_status')
+            or payload.get('status')
+            or ''
+        ).strip()
+        payment_order_id = payload.get('payment_order_id') or biz.get('payment_order_id')
+
+        paid_states = {
+            'Completed', 'completed', 'SUCCESS', 'success', 'Paying',
+            'TRADE_SUCCESS', 'Finish', 'finish',
+        }
+
+        if merch_order_id:
+            purchase = _purchase_by_ref(merch_order_id)
+            if purchase and purchase.status == 'pending':
+                if trade_status in paid_states or trade_status.lower() in {s.lower() for s in paid_states}:
+                    _complete_purchase(purchase, gateway_ref=payment_order_id or merch_order_id)
+                    logger.info("Telebirr paid purchase=%s", purchase.transaction_id)
+                elif trade_status.lower() in ('failure', 'failed', 'expired', 'cancelled'):
+                    purchase.status = 'failed'
+                    purchase.save(update_fields=['status', 'updated_at'])
+
+        return JsonResponse({'code': '0', 'msg': 'success', 'received': True})
+    except Exception as e:
+        logger.exception("Telebirr webhook error: %s", e)
+        # ACK to avoid endless retries on our bugs; logs retain detail
+        return JsonResponse({'code': '0', 'msg': 'success', 'received': True})
+
+
+@csrf_exempt
+def chapa_webhook(request):
+    """
+    Chapa webhook. HMAC header check + mandatory API verify(tx_ref).
+    Register: {BASE_URL}/payments/webhook/chapa/
+    """
+    from payments.webhook_verify import verify_chapa_signature
+    from payments.chapa import ChapaService
+
+    if request.method != 'POST':
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
+    try:
+        raw = request.body or b'{}'
+        ok, reason = verify_chapa_signature(raw, request.headers)
+        if not ok:
+            logger.warning("Chapa webhook signature failed: %s", reason)
+            return JsonResponse({'error': 'invalid signature', 'reason': reason}, status=401)
+
+        payload = json.loads(raw.decode('utf-8') or '{}')
+        logger.info("Chapa webhook (%s): %s", reason, payload)
+
+        tx_ref = payload.get('tx_ref') or (payload.get('data') or {}).get('tx_ref')
+        status = (payload.get('status') or (payload.get('data') or {}).get('status') or '').lower()
+        event = payload.get('event', '')
+
+        if not tx_ref:
+            return JsonResponse({'received': True, 'note': 'no tx_ref'})
+
+        ch = ChapaService()
+        verified = ch.verify(tx_ref)
+        purchase = _purchase_by_ref(tx_ref)
+
+        if purchase and purchase.status == 'pending':
+            if verified.get('success') or status in ('success', 'successful') or event == 'charge.success':
+                if verified.get('success') or not getattr(settings, 'WEBHOOK_VERIFY_STRICT', True):
+                    _complete_purchase(purchase, gateway_ref=tx_ref)
+                    logger.info("Chapa paid purchase=%s verified=%s", purchase.transaction_id, verified.get('success'))
+                else:
+                    logger.warning("Chapa webhook status success but API verify failed for %s", tx_ref)
+            elif status in ('failed', 'cancelled'):
+                purchase.status = 'failed'
+                purchase.save(update_fields=['status', 'updated_at'])
+
+        return JsonResponse({'received': True, 'verified': bool(verified.get('success'))})
+    except Exception as e:
+        logger.exception("Chapa webhook error: %s", e)
+        return JsonResponse({'received': True})
+
+
+@csrf_exempt
+def paypal_capture_view(request):
+    """Capture PayPal order after buyer approval (POST JSON {order_id})."""
+    if request.method != 'POST':
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
+    try:
+        data = json.loads(request.body.decode('utf-8') or '{}')
+        order_id = data.get('order_id') or data.get('token')
+        if not order_id:
+            return JsonResponse({'success': False, 'error': 'order_id required'}, status=400)
+        pp = PayPalService()
+        result = pp.capture(order_id)
+        if result.get('success'):
+            purchase = _purchase_by_ref(order_id)
+            if purchase and purchase.status == 'pending':
+                _complete_purchase(purchase, gateway_ref=order_id)
+            return JsonResponse({'success': True, 'status': result.get('status'), 'raw': result.get('raw')})
+        return JsonResponse({'success': False, 'error': result.get('error'), 'raw': result.get('raw')}, status=400)
+    except Exception as e:
+        logger.exception("PayPal capture error")
+        return JsonResponse({'success': False, 'error': str(e)}, status=500)
+
+
+@csrf_exempt
+def paypal_webhook(request):
+    """
+    PayPal REST webhooks (e.g. PAYMENT.CAPTURE.COMPLETED, CHECKOUT.ORDER.APPROVED).
+    Register: {BASE_URL}/payments/webhook/paypal/
+    Requires PAYPAL_WEBHOOK_ID for signature verification.
+    """
+    from payments.webhook_verify import verify_paypal_webhook, extract_paypal_order_id
+
+    if request.method != 'POST':
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
+    try:
+        raw = request.body or b'{}'
+        ok, reason = verify_paypal_webhook(raw, request.headers)
+        if not ok:
+            logger.warning("PayPal webhook rejected: %s", reason)
+            return JsonResponse({'error': 'invalid signature', 'reason': reason}, status=401)
+
+        event = json.loads(raw.decode('utf-8') or '{}')
+        event_type = event.get('event_type', '')
+        logger.info("PayPal webhook %s (%s)", event_type, reason)
+
+        order_id = extract_paypal_order_id(event)
+        if event_type in (
+            'PAYMENT.CAPTURE.COMPLETED',
+            'CHECKOUT.ORDER.APPROVED',
+            'CHECKOUT.ORDER.COMPLETED',
+        ) and order_id:
+            # Ensure capture for APPROVED events
+            if event_type == 'CHECKOUT.ORDER.APPROVED':
+                try:
+                    PayPalService().capture(order_id)
+                except Exception as e:
+                    logger.warning("PayPal auto-capture: %s", e)
+            purchase = _purchase_by_ref(order_id)
+            if not purchase:
+                # try custom_id from resource
+                custom = (event.get('resource') or {}).get('custom_id')
+                if custom:
+                    purchase = _purchase_by_ref(custom)
+            if purchase and purchase.status == 'pending':
+                _complete_purchase(purchase, gateway_ref=order_id)
+                logger.info("PayPal paid purchase=%s", purchase.transaction_id)
+
+        return JsonResponse({'received': True})
+    except Exception as e:
+        logger.exception("PayPal webhook error: %s", e)
+        return JsonResponse({'received': True})
+
+
+@login_required
+def paypal_return(request):
+    """
+    Browser return from PayPal approve. Captures order and redirects to reader/library.
+    """
+    order_id = request.GET.get('token') or request.GET.get('order_id')
+    if not order_id:
+        messages.error(request, 'Missing PayPal order.')
+        return redirect('books:browse')
+    pp = PayPalService()
+    result = pp.capture(order_id)
+    purchase = _purchase_by_ref(order_id)
+    if result.get('success') and purchase:
+        _complete_purchase(purchase, gateway_ref=order_id)
+        messages.success(request, 'Payment successful. You can read your book online.')
+        return redirect('books:read', book_id=purchase.book_id)
+    messages.error(request, 'PayPal payment could not be completed.')
+    if purchase:
+        return redirect('books:detail', book_id=purchase.book_id)
+    return redirect('books:browse')
 
 

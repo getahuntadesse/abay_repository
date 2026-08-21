@@ -187,7 +187,7 @@
 
                 <div class="mb-3">
                     <strong>Author:</strong>
-                    {{ book.author.full_name|default:book.author.username }}
+                    {{ book.author.display_name }}
                     <br>
                     <small class="text-muted">{{ book.author.email }}</small>
                 </div>

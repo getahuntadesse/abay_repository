@@ -29,6 +29,11 @@ from cryptography.hazmat.primitives.asymmetric import rsa
 
 from .forms import LoginForm, ClientRegistrationForm, AuthorRegistrationForm
 from .models import CustomUser, AuthorProfile, ClientProfile
+from .two_factor import (
+    start_2fa_challenge, verify_otp, consume_backup_code,
+    enable_2fa_for_user, disable_2fa_for_user, send_otp_email,
+    generate_otp, store_otp, SESSION_USER_KEY, SESSION_REMEMBER_KEY,
+)
 from books.models import Book, Genre, BookReview
 from reviews.models import QualityReview
 
@@ -458,15 +463,24 @@ def login_view(request):
             
             if user is not None and user.is_active:
                 reset_login_attempts(client_ip)
+
+                # Two-factor: password OK → send email OTP, do not login yet
+                if getattr(user, "two_factor_enabled", False):
+                    ok, msg = start_2fa_challenge(request, user, remember=remember)
+                    if not ok:
+                        messages.error(request, msg)
+                        return render(request, 'accounts/login.html', {'form': form})
+                    messages.info(request, msg)
+                    logger.info(f"AUTH - 2FA challenge started: User={username}, IP={client_ip}")
+                    return redirect('accounts:verify_2fa')
+
                 login(request, user)
                 if not remember:
                     request.session.set_expiry(0)
                 else:
                     request.session.set_expiry(1209600)
-                
-                # Log successful login
+
                 logger.info(f"AUTH - Login successful: User={username}, IP={client_ip}, Role={user.role}")
-                
                 messages.success(request, f'Welcome back, {user.full_name}!')
                 return redirect(role_based_redirect(user))
             else:
@@ -652,39 +666,128 @@ def dashboard_redirect(request):
 
 
 # ============================================
-# 2FA VIEWS - PLACEHOLDER FUNCTIONS
+# 2FA VIEWS (email OTP + backup codes)
 # ============================================
 
 @login_required
 def setup_2fa(request):
-    """Setup Two-Factor Authentication - Placeholder"""
-    logger.info(f"2FA setup accessed by user: {request.user.username}")
-    messages.info(request, '2FA setup feature is coming soon.')
-    return redirect('accounts:profile')
+    """Enable Two-Factor Authentication and show backup codes."""
+    user = request.user
+    if not user.email:
+        messages.error(request, "Add an email address to your profile before enabling 2FA.")
+        return redirect("accounts:profile_edit")
+
+    if request.method == "POST":
+        # Confirm enable
+        codes = enable_2fa_for_user(user)
+        request.session["fresh_backup_codes"] = codes
+        messages.success(request, "Two-factor authentication is now enabled.")
+        return redirect("accounts:backup_codes")
+
+    return render(
+        request,
+        "accounts/setup_2fa.html",
+        {
+            "email": user.email,
+            "already_enabled": bool(user.two_factor_enabled),
+        },
+    )
 
 
-@login_required
 def verify_2fa(request):
-    """Verify Two-Factor Authentication - Placeholder"""
-    logger.info(f"2FA verification accessed by user: {request.user.username}")
-    messages.info(request, '2FA verification feature is coming soon.')
-    return redirect('accounts:profile')
+    """
+    Second step of login: enter email OTP or a backup code.
+    User is not authenticated yet; pre_2fa_user_id is in session.
+    """
+    user_id = request.session.get(SESSION_USER_KEY)
+    if not user_id:
+        messages.warning(request, "Please log in first.")
+        return redirect("accounts:login")
+
+    try:
+        user = CustomUser.objects.get(pk=user_id, is_active=True)
+    except CustomUser.DoesNotExist:
+        request.session.pop(SESSION_USER_KEY, None)
+        messages.error(request, "Session expired. Please log in again.")
+        return redirect("accounts:login")
+
+    if request.method == "POST":
+        token = (request.POST.get("token") or "").strip()
+        resend = request.POST.get("resend") == "1"
+
+        if resend:
+            otp = generate_otp()
+            store_otp(user.id, otp)
+            ok, msg = send_otp_email(user, otp)
+            if ok:
+                messages.success(request, msg)
+            else:
+                messages.error(request, msg)
+            return render(request, "accounts/verify_2fa.html", {"email": user.email})
+
+        if not token:
+            messages.error(request, "Enter the verification code.")
+            return render(request, "accounts/verify_2fa.html", {"email": user.email})
+
+        ok = verify_otp(user.id, token) or consume_backup_code(user, token)
+        if not ok:
+            messages.error(request, "Invalid or expired code. Try again or use a backup code.")
+            return render(request, "accounts/verify_2fa.html", {"email": user.email})
+
+        remember = request.session.pop(SESSION_REMEMBER_KEY, False)
+        request.session.pop(SESSION_USER_KEY, None)
+        login(request, user)
+        if not remember:
+            request.session.set_expiry(0)
+        else:
+            request.session.set_expiry(1209600)
+
+        logger.info("AUTH - 2FA verified login: User=%s", user.username)
+        messages.success(request, f"Welcome back, {user.full_name or user.username}!")
+        return redirect(role_based_redirect(user))
+
+    return render(request, "accounts/verify_2fa.html", {"email": user.email})
 
 
 @login_required
 def disable_2fa(request):
-    """Disable Two-Factor Authentication - Placeholder"""
-    logger.info(f"2FA disable accessed by user: {request.user.username}")
-    messages.info(request, '2FA disable feature is coming soon.')
-    return redirect('accounts:profile')
+    """Disable 2FA (requires current password)."""
+    user = request.user
+    if not user.two_factor_enabled:
+        messages.info(request, "Two-factor authentication is already off.")
+        return redirect("accounts:profile")
+
+    if request.method == "POST":
+        password = request.POST.get("password") or ""
+        if not user.check_password(password):
+            messages.error(request, "Incorrect password.")
+            return render(request, "accounts/disable_2fa.html")
+        disable_2fa_for_user(user)
+        messages.success(request, "Two-factor authentication has been disabled.")
+        return redirect("accounts:profile")
+
+    return render(request, "accounts/disable_2fa.html")
 
 
 @login_required
 def backup_codes(request):
-    """View backup codes for 2FA - Placeholder"""
-    logger.info(f"2FA backup codes accessed by user: {request.user.username}")
-    messages.info(request, '2FA backup codes feature is coming soon.')
-    return redirect('accounts:profile')
+    """Show / regenerate backup codes."""
+    user = request.user
+    if not user.two_factor_enabled:
+        messages.warning(request, "Enable 2FA first.")
+        return redirect("accounts:setup_2fa")
+
+    codes = request.session.pop("fresh_backup_codes", None)
+    if codes is None:
+        codes = user.get_backup_codes_list()
+
+    if request.method == "POST" and request.POST.get("regenerate") == "1":
+        new_codes = enable_2fa_for_user(user)  # regenerates codes, keeps 2FA on
+        request.session["fresh_backup_codes"] = new_codes
+        messages.success(request, "New backup codes generated. Old codes no longer work.")
+        return redirect("accounts:backup_codes")
+
+    return render(request, "accounts/backup_codes.html", {"codes": codes})
 
 
 # ============================================
@@ -1269,8 +1372,8 @@ def oidc_callback_view(request):
 @login_required
 def admin_dashboard(request):
     """Admin dashboard with comprehensive data from database"""
-    if not (request.user.is_superuser or getattr(request.user, 'role', None) == 'admin'):
-        logger.warning(f"Unauthorized admin dashboard access attempt by {request.user.username} (role: {getattr(request.user, 'role', None)})")
+    if request.user.role != 'admin':
+        logger.warning(f"Unauthorized admin dashboard access attempt by {request.user.username} (role: {request.user.role})")
         messages.error(request, 'You do not have permission to access this page.')
         return redirect(role_based_redirect(request.user))
 

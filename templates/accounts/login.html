@@ -12,14 +12,14 @@
         margin: 0 auto;
         padding: 20px 0;
     }
-    
+
     .login-card {
         background: white;
         border-radius: 20px;
-        box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
         overflow: hidden;
     }
-    
+
     .login-header {
         background: linear-gradient(135deg, var(--primary-darker), var(--primary-dark));
         padding: 2rem;
@@ -27,16 +27,16 @@
         color: white;
         border-bottom: 4px solid var(--primary-gold);
     }
-    
+
     .login-header h3 {
         color: var(--primary-gold);
         font-weight: 700;
     }
-    
+
     .login-body {
         padding: 2rem;
     }
-    
+
     .btn-gold {
         background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark));
         color: var(--primary-darker);
@@ -47,24 +47,24 @@
         border-radius: 8px;
         width: 100%;
     }
-    
+
     .btn-gold:hover {
         transform: translateY(-2px);
         box-shadow: 0 5px 15px rgba(218, 165, 32, 0.4);
         color: var(--primary-darker);
     }
-    
+
     .form-control:focus {
         border-color: var(--primary-gold);
         box-shadow: 0 0 0 0.2rem rgba(218, 165, 32, 0.25);
     }
-    
+
     .login-footer {
         text-align: center;
         padding-top: 1rem;
         border-top: 1px solid #e9ecef;
     }
-    
+
     .login-footer .security-badge {
         display: inline-block;
         background: #f8f9fa;
@@ -73,15 +73,16 @@
         font-size: 0.75rem;
         color: #6c757d;
     }
-    
+
     .login-footer .security-badge i {
         color: var(--primary-gold);
     }
-    
+
     @media (max-width: 576px) {
         .login-body {
             padding: 1.5rem;
         }
+
         .login-header {
             padding: 1.5rem;
         }
@@ -96,36 +97,33 @@
             <h3><i class="fas fa-sign-in-alt me-2"></i>Welcome Back</h3>
             <p class="mb-0 opacity-75">Sign in to your Abay Repository account</p>
         </div>
-        
+
         <div class="login-body">
             {% if messages %}
-                {% for message in messages %}
-                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                        {{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
-                {% endfor %}
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            {% endfor %}
             {% endif %}
-            
+
             <form method="POST" id="loginForm">
                 {% csrf_token %}
                 {{ form|crispy }}
-                
+
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="remember_me" name="remember_me">
-                        <label class="form-check-label" for="remember_me">Remember Me</label>
-                    </div>
+
                     <a href="{% url 'accounts:password_reset' %}" class="text-gold small">Forgot Password?</a>
                 </div>
-                
+
                 <button type="submit" class="btn-gold" id="loginBtn">
                     <i class="fas fa-sign-in-alt me-2"></i>Login
                 </button>
             </form>
-            
+
             <hr>
-            
+
             <div class="text-center">
                 <p class="mb-0">Don't have an account?</p>
                 <div class="d-flex justify-content-center gap-2 mt-2 flex-wrap">
@@ -137,7 +135,7 @@
                     </a>
                 </div>
             </div>
-            
+
             <div class="login-footer mt-3">
                 <span class="security-badge">
                     <i class="fas fa-lock me-1"></i>
@@ -155,20 +153,20 @@
 
 {% block extra_js %}
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         const loginForm = document.getElementById('loginForm');
         const loginBtn = document.getElementById('loginBtn');
-        
+
         if (loginForm) {
-            loginForm.addEventListener('submit', function(e) {
+            loginForm.addEventListener('submit', function (e) {
                 // Show loading state
                 loginBtn.disabled = true;
                 loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Logging in...';
-                
+
                 // Log login attempt (client-side tracking)
                 const username = document.querySelector('input[name="username"]');
                 const rememberMe = document.querySelector('input[name="remember_me"]');
-                
+
                 if (username && username.value) {
                     // This will be logged server-side via the view
                     console.log('Login attempt for user: ' + username.value);

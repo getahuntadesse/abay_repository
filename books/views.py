@@ -6,7 +6,7 @@ from django.utils import timezone
 from django.db.models import Q, Sum, Count, Avg
 from django.core.paginator import Paginator
 from django.views.generic import TemplateView
-from django.http import StreamingHttpResponse,  HttpResponse, JsonResponse, FileResponse
+from django.http import HttpResponse, JsonResponse, FileResponse, Http404
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
@@ -27,6 +27,9 @@ import random
 import string
 
 logger = logging.getLogger(__name__)
+from payments.telebirr import TelebirrService
+from payments.chapa import ChapaService
+from payments.paypal_service import PayPalService
 User = get_user_model()
 
 # Import models
@@ -515,12 +518,12 @@ class TelebirrPayment:
         self.app_key = getattr(settings, 'TELEBIRR_APP_SECRET', 'SIM-KEY-' + ''.join(random.choices(string.ascii_uppercase + string.digits, k=32)))
         self.short_code = getattr(settings, 'TELEBIRR_MERCHANT_CODE', '101011')
         self.merchant_app_id = getattr(settings, 'TELEBIRR_MERCHANT_APP_ID', '930231098009602')
-        self.api_url = getattr(settings, 'TELEBIRR_BASE_URL', 'https://196.188.120.3:38443/apiaccess/payment/gateway')
+        self.api_url = getattr(settings, 'TELEBIRR_BASE_URL', 'https://superapp.ethiomobilemoney.et:38443/apiaccess/payment/gateway')
         self.callback_url = getattr(settings, 'TELEBIRR_CALLBACK_URL', '')
         self.return_url = getattr(settings, 'TELEBIRR_RETURN_URL', '')
         self.request = request
-        self.verify_ssl = getattr(settings, 'TELEBIRR_VERIFY_SSL', False)
-        self.use_simulated = False  # production only — simulation disabled
+        self.verify_ssl = getattr(settings, 'TELEBIRR_VERIFY_SSL', True)
+        self.use_simulated = getattr(settings, 'USE_SIMULATED_PAYMENT', False)
         self.telebirr_enabled = getattr(settings, 'TELEBIRR_ENABLED', True)
         self.simulate_success_rate = 0.95
         self.simulate_delay = 2
@@ -595,6 +598,7 @@ class TelebirrPayment:
             }
     
     def initiate_payment(self, purchase, phone_number=None):
+        """Production Telebirr checkout (simulation only if USE_SIMULATED_PAYMENT=True)."""
         try:
             amount = float(purchase.amount)
             if amount <= 0:
@@ -603,79 +607,59 @@ class TelebirrPayment:
                     'reference': f"FREE-{uuid.uuid4().hex[:8].upper()}",
                     'message': 'Free book - no payment needed',
                     'is_free': True,
-                    'payment_mode': 'free'
+                    'payment_mode': 'free',
+                    'is_simulated': False,
                 }
-            
+
+            # ---- PRODUCTION path ----
+            if not self.use_simulated:
+                tb = TelebirrService()
+                merch_order_id = getattr(purchase, 'transaction_id', None) or self.generate_transaction_id()
+                result = tb.create_checkout(
+                    title=f"Book: {purchase.book.title}",
+                    amount=amount,
+                    merch_order_id=merch_order_id,
+                )
+                if result.get('success'):
+                    return {
+                        'success': True,
+                        'reference': result.get('merch_order_id') or merch_order_id,
+                        'payment_url': result.get('checkout_url'),
+                        'transaction_id': result.get('merch_order_id') or merch_order_id,
+                        'message': 'Redirecting to Telebirr',
+                        'is_real_payment': True,
+                        'is_simulated': False,
+                    }
+                return {
+                    'success': False,
+                    'error': result.get('error', 'Telebirr checkout failed'),
+                    'is_simulated': False,
+                }
+
+            # ---- Simulation path (dev only) ----
             transaction_id = self.generate_transaction_id()
-            base_url = self.get_base_url()
-            
-            callback_url = self.callback_url or f"{base_url}/books/telebirr/callback/"
-            return_url = self.return_url or f"{base_url}/books/telebirr/return/"
-            
-            payment_data = {
-                'appId': self.app_id,
-                'shortCode': self.short_code,
-                'transactionId': transaction_id,
-                'amount': str(amount),
-                'phoneNumber': phone_number or purchase.user.phone or '0912345678',
-                'description': f"Book Purchase: {purchase.book.title}",
-                'callbackUrl': callback_url,
-                'returnUrl': return_url,
-                'timestamp': datetime.now().strftime('%Y%m%d%H%M%S'),
-                'merchantAppId': self.merchant_app_id,
-                'customerName': purchase.user.full_name or purchase.user.username,
-                'customerEmail': purchase.user.email or 'customer@example.com',
-            }
-            
-            payment_data['signature'] = self.generate_signature(payment_data)
-            
-            logger.info(f"Initiating Telebirr payment: {transaction_id} for {amount} ETB")
-            
             result = self.process_payment_simulation(
-                transaction_id, 
-                amount, 
-                payment_data['phoneNumber']
+                transaction_id, amount, phone_number or '0912345678'
             )
-            
             if result.get('status') == 'success' and result.get('code') == '00':
-                payment_url = self.generate_payment_url(transaction_id, amount)
-                
                 return {
                     'success': True,
                     'reference': transaction_id,
-                    'payment_url': payment_url,
+                    'payment_url': self.generate_payment_url(transaction_id, amount),
                     'transaction_id': transaction_id,
-                    'message': 'Payment initiated successfully',
+                    'message': 'Payment initiated (SIMULATED — set USE_SIMULATED_PAYMENT=False for live)',
                     'is_real_payment': False,
-                    'is_simulated': False,
-                    'simulation_data': {
-                        'processing_time': result.get('processing_time', '2.0s'),
-                        'reference': result.get('reference', transaction_id),
-                        'status': 'pending'
-                    }
+                    'is_simulated': True,
                 }
-            else:
-                error_msg = result.get('message', 'Payment initiation failed')
-                error_code = result.get('code', '99')
-                
-                logger.warning(f"Telebirr payment failed: {error_msg} (Code: {error_code})")
-                
-                return {
-                    'success': False,
-                    'error': error_msg,
-                    'error_code': error_code,
-                    'transaction_id': transaction_id,
-                    'is_simulated': False
-                }
-                
+            return {
+                'success': False,
+                'error': result.get('message', 'Simulated payment failed'),
+                'is_simulated': True,
+            }
         except Exception as e:
             logger.error(f"Telebirr payment error: {str(e)}")
             logger.error(traceback.format_exc())
-            return {
-                'success': False,
-                'error': str(e),
-                'is_simulated': False
-            }
+            return {'success': False, 'error': str(e), 'is_simulated': False}
     
     def verify_payment(self, transaction_id):
         try:
@@ -699,8 +683,8 @@ class TelebirrPayment:
                 'amount': '100.00',
                 'payment_method': 'telebirr',
                 'verification_time': datetime.now().isoformat(),
-                'is_debug': False,
-                'is_simulated': False,
+                'is_debug': True,
+                'is_simulated': True,
                 'message': 'Payment verified successfully (simulated)'
             }
                 
@@ -709,7 +693,7 @@ class TelebirrPayment:
             return {
                 'success': False,
                 'error': str(e),
-                'is_simulated': False
+                'is_simulated': True
             }
 
 
@@ -718,13 +702,13 @@ class TelebirrPayment:
 # =============================================
 
 def get_available_payment_methods():
-    """Get available payment methods for display (Telebirr, Chapa, PayPal)."""
+    """Methods shown on the book purchase interface."""
     return [
         {
             'id': 'telebirr',
             'name': 'Telebirr',
             'icon': 'fas fa-mobile-alt',
-            'description': 'Pay with Telebirr mobile money',
+            'description': 'Pay with Telebirr (Ethio telecom mobile money)',
             'color': 'success',
             'badge': 'Popular',
             'show_badge': True,
@@ -733,7 +717,7 @@ def get_available_payment_methods():
             'id': 'chapa',
             'name': 'Chapa',
             'icon': 'fas fa-credit-card',
-            'description': 'Card, bank & mobile money via Chapa',
+            'description': 'Pay with card, bank, or mobile money via Chapa',
             'color': 'primary',
             'badge': 'Cards',
             'show_badge': True,
@@ -742,7 +726,7 @@ def get_available_payment_methods():
             'id': 'paypal',
             'name': 'PayPal',
             'icon': 'fab fa-paypal',
-            'description': 'Pay with PayPal account or card',
+            'description': 'Pay internationally with PayPal',
             'color': 'info',
             'badge': 'International',
             'show_badge': True,
@@ -901,7 +885,7 @@ def telebirr_pay_process(request, transaction_id):
                 
                 create_payment_record(purchase)
                 
-                messages.success(request, f'Payment successful! "{purchase.book.title}" added to your library. Open it in the reader.')
+                messages.success(request, f'Payment successful! "{purchase.book.title}" added to your library.')
                 return redirect('books:my_books_user')
                 
         except Exception as e:
@@ -1008,7 +992,7 @@ def telebirr_return(request):
                 return redirect('books:browse')
             
             if purchase.status == 'completed':
-                messages.success(request, f'Payment successful! "{purchase.book.title}" added to your library. Open it in the reader.')
+                messages.success(request, f'Payment successful! "{purchase.book.title}" added to your library.')
                 return redirect('books:my_books_user')
             
             purchase.status = 'completed'
@@ -1023,7 +1007,7 @@ def telebirr_return(request):
             
             create_payment_record(purchase)
             
-            messages.success(request, f'Payment successful! "{purchase.book.title}" added to your library. Open it in the reader.')
+            messages.success(request, f'Payment successful! "{purchase.book.title}" added to your library.')
             return redirect('books:my_books_user')
                     
     except Exception as e:
@@ -1063,7 +1047,7 @@ def telebirr_simulate(request, transaction_id):
             
             create_payment_record(purchase)
             
-            messages.success(request, f'Payment simulated successfully! "{purchase.book.title}" added to your library. Open it in the reader.')
+            messages.success(request, f'Payment simulated successfully! "{purchase.book.title}" added to your library.')
             return redirect('books:my_books_user')
             
     except Exception as e:
@@ -1242,7 +1226,7 @@ def purchase_book(request, book_id):
         if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
             return JsonResponse({'success': False, 'error': 'You already own this book'}, status=400)
         messages.warning(request, 'You already own this book.')
-        return redirect('books:read', book_id=book_id)
+        return redirect('books:detail', book_id=book_id)
     
     if book.price == 0 or book.is_free:
         try:
@@ -1253,8 +1237,8 @@ def purchase_book(request, book_id):
                     amount=Decimal('0.00'),
                     status='completed',
                     payment_method='free',
-                    transaction_reference='FREE-READ',
-                    purchase_reference='FREE-READ',
+                    transaction_reference='FREE-DOWNLOAD',
+                    purchase_reference='FREE-DOWNLOAD',
                     completed_at=timezone.now(),
                 )
                 
@@ -1266,14 +1250,14 @@ def purchase_book(request, book_id):
                 if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
                     return JsonResponse({
                         'success': True,
-                        'message': 'Book unlocked for reading!',
+                        'message': 'Book downloaded successfully!',
                         'free': True,
                         'transaction_id': purchase.transaction_id,
-                        'read_url': reverse('books:read', kwargs={'book_id': book.id})
+                        'download_url': reverse('books:download', kwargs={'book_id': book.id})
                     })
                 
-                messages.success(request, f'You can now read "{book.title}" in the online reader.')
-                return redirect('books:read', book_id=book_id)
+                messages.success(request, f'You have successfully downloaded "{book.title}"!')
+                return redirect('books:detail', book_id=book_id)
         except Exception as e:
             logger.error(f"Free book purchase error: {str(e)}")
             messages.error(request, 'An error occurred. Please try again.')
@@ -1281,20 +1265,14 @@ def purchase_book(request, book_id):
     
     if request.method == 'GET':
         payment_methods = get_available_payment_methods()
-        paypal_cfg = getattr(settings, 'PAYPAL_CONFIG', {}) or {}
-        chapa_cfg = getattr(settings, 'CHAPA_CONFIG', {}) or {}
         context = {
             'book': book,
             'payment_methods': payment_methods,
             'amount': book.price,
             'user': request.user,
             'debug': settings.DEBUG,
-            'use_simulated': False,
-            'telebirr_enabled': True,
-            'paypal_client_id': paypal_cfg.get('CLIENT_ID') or getattr(settings, 'PAYPAL_CLIENT_ID', ''),
-            'paypal_currency': paypal_cfg.get('CURRENCY') or getattr(settings, 'PAYPAL_CURRENCY', 'USD'),
-            'paypal_mode': paypal_cfg.get('MODE') or getattr(settings, 'PAYPAL_MODE', 'sandbox'),
-            'chapa_public_key': chapa_cfg.get('PUBLIC_KEY') or getattr(settings, 'CHAPA_PUBLIC_KEY', ''),
+            'use_simulated': getattr(settings, 'USE_SIMULATED_PAYMENT', False),
+            'telebirr_enabled': getattr(settings, 'TELEBIRR_ENABLED', False),
         }
         return render(request, 'books/payment_methods.html', context)
     
@@ -1318,62 +1296,102 @@ def purchase_book(request, book_id):
                     purchase_reference=None,
                 )
                 
+                email = request.POST.get('email') or getattr(request.user, 'email', '') or ''
+                checkout_url = None
+                reference = None
+
                 if payment_method == 'telebirr':
-                    telebirr = TelebirrPayment(request=request)
-                    result = telebirr.initiate_payment(purchase, phone_number)
-                    
-                    if result.get('success'):
-                        payment_url = result.get('payment_url')
-                        if payment_url:
-                            purchase.transaction_reference = result.get('reference')
-                            purchase.purchase_reference = result.get('reference')
-                            purchase.save()
-                            
-                            return redirect(payment_url)
-                        else:
-                            messages.error(request, 'Payment URL not available.')
-                            return redirect('books:purchase_book', book_id=book_id)
-                    else:
+                    tb = TelebirrService()
+                    if not tb.is_configured():
                         purchase.status = 'failed'
-                        purchase.save()
-                        messages.error(request, result.get('error', 'Payment failed. Please try again.'))
+                        purchase.save(update_fields=['status'])
+                        messages.error(request, 'Telebirr is not configured. Contact support.')
                         return redirect('books:purchase_book', book_id=book_id)
-                
-                elif payment_method == 'cbe':
-                    purchase.status = 'completed'
-                    purchase.completed_at = timezone.now()
-                    purchase.transaction_reference = f"CBE-{uuid.uuid4().hex[:12].upper()}"
-                    purchase.purchase_reference = f"CBE-{uuid.uuid4().hex[:12].upper()}"
-                    purchase.save()
-                    
-                    book.purchase_count += 1
-                    book.save()
-                    
-                    create_payment_record(purchase)
-                    
-                    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-                        return JsonResponse({
-                            'success': True,
-                            'message': 'Payment successful!',
-                            'transaction_id': purchase.transaction_id,
-                            'read_url': reverse('books:read', kwargs={'book_id': book.id})
-                        })
-                    
-                    messages.success(request, f'Payment successful! You can read it in the online reader "{book.title}"')
-                    return redirect('books:my_books_user')
-                
-                elif payment_method == 'bank_transfer':
-                    purchase.status = 'pending'
-                    purchase.save()
-                    
-                    messages.info(request, f'Your payment is pending confirmation. You will receive an email with bank transfer details.')
-                    return redirect('books:payment', purchase_id=purchase.id)
-                
+                    result = tb.create_checkout(
+                        title=f"Book: {book.title}",
+                        amount=float(book.price),
+                        merch_order_id=purchase.transaction_id,
+                    )
+                    if not result.get('success'):
+                        purchase.status = 'failed'
+                        purchase.save(update_fields=['status'])
+                        messages.error(request, result.get('error', 'Telebirr checkout failed.'))
+                        return redirect('books:purchase_book', book_id=book_id)
+                    checkout_url = result.get('checkout_url')
+                    reference = result.get('merch_order_id') or result.get('prepay_id')
+
+                elif payment_method == 'chapa':
+                    if not email:
+                        purchase.delete()
+                        messages.error(request, 'Email is required for Chapa. Add it in your profile or the form.')
+                        return redirect('books:purchase_book', book_id=book_id)
+                    ch = ChapaService()
+                    if not ch.is_configured():
+                        purchase.status = 'failed'
+                        purchase.save(update_fields=['status'])
+                        messages.error(request, 'Chapa is not configured. Contact support.')
+                        return redirect('books:purchase_book', book_id=book_id)
+                    full = (getattr(request.user, 'full_name', None) or request.user.username or 'Customer').split(' ', 1)
+                    result = ch.initialize(
+                        amount=float(book.price),
+                        email=email,
+                        first_name=full[0],
+                        last_name=full[1] if len(full) > 1 else '',
+                        phone=phone_number or '',
+                        tx_ref=purchase.transaction_id,
+                        title=f"Book: {book.title}"[:16],
+                        description=f"Purchase {book.title}"[:50],
+                    )
+                    if not result.get('success'):
+                        purchase.status = 'failed'
+                        purchase.save(update_fields=['status'])
+                        messages.error(request, result.get('error', 'Chapa checkout failed.'))
+                        return redirect('books:purchase_book', book_id=book_id)
+                    checkout_url = result.get('checkout_url')
+                    reference = result.get('tx_ref')
+
+                elif payment_method == 'paypal':
+                    pp = PayPalService()
+                    if not pp.is_configured():
+                        purchase.status = 'failed'
+                        purchase.save(update_fields=['status'])
+                        messages.error(request, 'PayPal is not configured. Contact support.')
+                        return redirect('books:purchase_book', book_id=book_id)
+                    amount = float(book.price)
+                    if getattr(settings, 'PAYPAL_CURRENCY', 'USD') == 'USD':
+                        rate = float(getattr(settings, 'ETB_TO_USD_RATE', 0) or 0)
+                        if rate > 0:
+                            amount = round(amount * rate, 2)
+                    result = pp.create_order(
+                        amount=amount,
+                        description=f"Abay: {book.title}"[:127],
+                        custom_id=purchase.transaction_id,
+                    )
+                    if not result.get('success'):
+                        purchase.status = 'failed'
+                        purchase.save(update_fields=['status'])
+                        err = result.get('error', 'PayPal checkout failed.')
+                        messages.error(request, err if isinstance(err, str) else str(err))
+                        return redirect('books:purchase_book', book_id=book_id)
+                    checkout_url = result.get('checkout_url')
+                    reference = result.get('order_id')
+
                 else:
                     purchase.status = 'failed'
-                    purchase.save()
-                    messages.error(request, 'Unsupported payment method.')
+                    purchase.save(update_fields=['status'])
+                    messages.error(request, 'Unsupported payment method. Choose Telebirr, Chapa, or PayPal.')
                     return redirect('books:purchase_book', book_id=book_id)
+
+                if checkout_url:
+                    purchase.transaction_reference = reference
+                    purchase.purchase_reference = reference
+                    purchase.save(update_fields=['transaction_reference', 'purchase_reference', 'updated_at'])
+                    return redirect(checkout_url)
+
+                purchase.status = 'failed'
+                purchase.save(update_fields=['status'])
+                messages.error(request, 'Payment URL not available. Please try again.')
+                return redirect('books:purchase_book', book_id=book_id)
                     
         except IntegrityError as e:
             logger.error(f"Integrity error: {str(e)}")
@@ -1412,13 +1430,49 @@ def process_payment(request, purchase_id):
                 if payment_method == 'telebirr':
                     telebirr = TelebirrPayment(request=request)
                     result = telebirr.initiate_payment(purchase, phone_number)
-                elif payment_method == 'cbe':
-                    result = {'success': True, 'reference': f"CBE-{uuid.uuid4().hex[:12].upper()}"}
+                elif payment_method == 'chapa':
+                    ch = ChapaService()
+                    email = request.POST.get('email') or request.user.email or ''
+                    full = (getattr(request.user, 'full_name', None) or request.user.username or 'Customer').split(' ', 1)
+                    result = ch.initialize(
+                        amount=float(purchase.amount),
+                        email=email or 'customer@abay.local',
+                        first_name=full[0],
+                        last_name=full[1] if len(full) > 1 else '',
+                        phone=phone_number or '',
+                        tx_ref=purchase.transaction_id,
+                        title=f"Book: {purchase.book.title}"[:16],
+                    )
+                    if result.get('success'):
+                        result = {
+                            'success': True,
+                            'reference': result.get('tx_ref'),
+                            'payment_url': result.get('checkout_url'),
+                            'is_simulated': False,
+                        }
+                elif payment_method == 'paypal':
+                    pp = PayPalService()
+                    amount = float(purchase.amount)
+                    rate = float(getattr(settings, 'ETB_TO_USD_RATE', 0) or 0)
+                    if getattr(settings, 'PAYPAL_CURRENCY', 'USD') == 'USD' and rate > 0:
+                        amount = round(amount * rate, 2)
+                    result = pp.create_order(
+                        amount=amount,
+                        description=f"Abay: {purchase.book.title}"[:127],
+                        custom_id=purchase.transaction_id,
+                    )
+                    if result.get('success'):
+                        result = {
+                            'success': True,
+                            'reference': result.get('order_id'),
+                            'payment_url': result.get('checkout_url'),
+                            'is_simulated': False,
+                        }
                 else:
                     result = {'success': False, 'error': 'Unsupported payment method'}
                 
                 if result.get('success'):
-                    is_simulated = False  # simulation disabled
+                    is_simulated = result.get('is_debug', False) or result.get('is_simulated', False)
                     
                     if is_simulated:
                         purchase.status = 'completed'
@@ -1517,174 +1571,162 @@ def my_books_user(request):
     return render(request, 'books/my_books_user.html', context)
 
 
-
 # =============================================
-# BOOK READER (downloads disabled)
+# BOOK DOWNLOAD
 # =============================================
 
 def _user_can_read_book(user, book):
-    """Free books: readable by all. Paid: completed purchase (or staff/author)."""
-    from payments.models import Purchase
+    """Free books: anyone logged in. Paid: completed purchase required."""
     if book.is_free or book.price == 0:
         return True
     if not user.is_authenticated:
         return False
-    if getattr(user, "role", None) in ("admin", "maker") or user.is_superuser:
+    if getattr(user, 'role', None) in ('admin', 'maker', 'checker'):
         return True
-    if getattr(book, "author_id", None) == user.id:
+    if getattr(book, 'author_id', None) and book.author_id == user.id:
         return True
-    return Purchase.objects.filter(user=user, book=book, status="completed").exists()
+    try:
+        from payments.models import Purchase
+        return Purchase.objects.filter(
+            user=user, book=book, status='completed'
+        ).exists()
+    except Exception:
+        return False
 
 
+@login_required
 def download_book(request, book_id):
-    """Downloads are disabled — redirect to the in-app reader."""
-    messages.info(
-        request,
-        "Downloading is not available. You can read this book in the online reader.",
-    )
-    return redirect("books:read", book_id=book_id)
+    """Downloads disabled — redirect to in-browser reader."""
+    messages.info(request, 'Books are available for online reading only (download disabled).')
+    return redirect('books:read', book_id=book_id)
 
 
+@login_required
+def read_free_book(request, book_id):
+    """Legacy URL — same as unified reader."""
+    return redirect('books:read', book_id=book_id)
+
+
+@login_required
 def read_book(request, book_id):
-    """Professional in-app reader. No file download."""
+    """
+    In-browser reader for free or purchased books.
+    PDF is not offered as a file download; it is viewed on this page only.
+    """
     book = get_object_or_404(Book, id=book_id, status=Book.STATUS_PUBLISHED)
-    is_free = book.is_free or book.price == 0
-
-    if not is_free and not request.user.is_authenticated:
-        messages.error(request, "Please log in to read this book.")
-        from django.conf import settings as dj_settings
-        return redirect(f"{dj_settings.LOGIN_URL}?next=/books/{book_id}/read/")
 
     if not _user_can_read_book(request.user, book):
-        messages.error(request, "Purchase this book to read it in the online reader.")
-        return redirect("books:detail", book_id=book_id)
+        messages.error(
+            request,
+            'You need to purchase this book before you can read it online.',
+        )
+        return redirect('books:detail', book_id=book_id)
 
     if not book.file:
-        messages.error(request, "This book has no readable file yet.")
-        return redirect("books:detail", book_id=book_id)
+        messages.error(request, 'This book has no readable file yet.')
+        return redirect('books:detail', book_id=book_id)
 
     try:
         book.views_count = (book.views_count or 0) + 1
-        book.save(update_fields=["views_count"])
+        book.save(update_fields=['views_count'])
     except Exception:
         pass
 
-    name = (getattr(book.file, "name", "") or "").lower()
-    ext = (book.get_file_extension() or "").lower()
-    if not ext and "." in name:
-        ext = "." + name.rsplit(".", 1)[-1]
-    is_pdf = ext == ".pdf" or name.endswith(".pdf")
-    is_epub = ext == ".epub" or name.endswith(".epub")
-    is_txt = ext in (".txt", ".text") or name.endswith(".txt")
+    is_pdf = str(book.file.name).lower().endswith('.pdf')
     context = {
-        "book": book,
-        "file_ext": ext,
-        "is_pdf": is_pdf,
-        "is_epub": is_epub,
-        "is_txt": is_txt,
-        "content_url": reverse("books:content", kwargs={"book_id": book.id}),
-        "download_allowed": False,
+        'book': book,
+        'is_pdf': is_pdf,
+        'stream_url': f'/books/{book.id}/stream/',
+        'is_free': book.is_free or book.price == 0,
     }
-    return render(request, "books/reader.html", context)
+    return render(request, 'books/reader.html', context)
 
 
-def read_free_book(request, book_id):
-    """Free books use the same reader (no download)."""
-    return read_book(request, book_id)
 
-
-def stream_book_content(request, book_id):
+@login_required
+def stream_book_pdf(request, book_id):
     """
-    Stream book bytes for the online reader (inline only).
-    Supports HTTP Range for PDF.js. Sends cookies/session auth via same-origin fetch.
+    Stream book PDF for the reader (inline only — no attachment download).
     """
-    import mimetypes
-    import os
-    import re
-    from django.core.files.storage import default_storage
-    from django.http import FileResponse, HttpResponse
-
     book = get_object_or_404(Book, id=book_id, status=Book.STATUS_PUBLISHED)
+
     if not _user_can_read_book(request.user, book):
-        return HttpResponse("Forbidden — purchase or login required", status=403)
+        raise Http404('Not allowed')
+
     if not book.file:
-        return HttpResponse("Not found", status=404)
+        raise Http404('File missing')
 
     try:
         if not default_storage.exists(book.file.name):
-            return HttpResponse("File missing on storage", status=404)
+            raise Http404('File not found on storage')
     except Exception:
         pass
 
     try:
-        # Prefer local path; fall back to storage open()
+        file_path = book.file.path
+    except Exception:
         try:
-            file_path = book.file.path
-            file_size = os.path.getsize(file_path)
-            file_handle = open(file_path, "rb")
-        except Exception:
-            file_handle = default_storage.open(book.file.name, "rb")
-            try:
-                file_size = file_handle.size
-            except Exception:
-                file_handle.seek(0, os.SEEK_END)
-                file_size = file_handle.tell()
-                file_handle.seek(0)
-            file_path = book.file.name
+            f = default_storage.open(book.file.name, 'rb')
+            response = FileResponse(f, content_type='application/pdf')
+            response['Content-Disposition'] = 'inline'
+            response['X-Content-Type-Options'] = 'nosniff'
+            response['Cache-Control'] = 'private, max-age=3600'
+            response['X-Frame-Options'] = 'SAMEORIGIN'
+            return response
+        except Exception as e:
+            logger.error('stream_book_pdf open error: %s', e)
+            raise Http404('Unable to open file')
 
-        mime_type, _ = mimetypes.guess_type(str(file_path))
-        if not mime_type:
-            ext = (book.get_file_extension() or "").lower()
-            mime_type = {
-                ".pdf": "application/pdf",
-                ".epub": "application/epub+zip",
-                ".txt": "text/plain; charset=utf-8",
-            }.get(ext, "application/octet-stream")
+    if not os.path.exists(file_path):
+        raise Http404('File not found')
 
-        safe_name = os.path.basename(str(book.file.name)).replace('"', "")
-        range_header = request.META.get("HTTP_RANGE", "").strip()
+    content_type = 'application/pdf'
+    if not str(file_path).lower().endswith('.pdf'):
+        guessed, _ = mimetypes.guess_type(file_path)
+        content_type = guessed or 'application/octet-stream'
 
-        # Range support for PDF.js progressive loading
-        if range_header and file_size:
-            match = re.match(r"bytes=(\d+)-(\d*)", range_header)
-            if match:
-                start = int(match.group(1))
-                end = int(match.group(2)) if match.group(2) else file_size - 1
-                end = min(end, file_size - 1)
-                if start > end or start >= file_size:
-                    file_handle.close()
-                    resp = HttpResponse(status=416)
-                    resp["Content-Range"] = f"bytes */{file_size}"
-                    return resp
-                length = end - start + 1
-                file_handle.seek(start)
-                data = file_handle.read(length)
-                file_handle.close()
-                resp = HttpResponse(data, status=206, content_type=mime_type)
-                resp["Content-Range"] = f"bytes {start}-{end}/{file_size}"
-                resp["Accept-Ranges"] = "bytes"
-                resp["Content-Length"] = length
-                resp["Content-Disposition"] = f'inline; filename="{safe_name}"'
-                resp["X-Content-Type-Options"] = "nosniff"
-                resp["Cache-Control"] = "private, max-age=3600"
-                resp["Access-Control-Allow-Credentials"] = "true"
-                return resp
-
-        response = FileResponse(file_handle, content_type=mime_type)
-        response["Content-Disposition"] = f'inline; filename="{safe_name}"'
-        response["Content-Length"] = file_size
-        response["Accept-Ranges"] = "bytes"
-        response["X-Content-Type-Options"] = "nosniff"
-        response["Cache-Control"] = "private, max-age=3600"
-        response["Access-Control-Allow-Credentials"] = "true"
+    try:
+        f = open(file_path, 'rb')
+        response = FileResponse(f, content_type=content_type)
+        response['Content-Disposition'] = 'inline'
+        response['X-Content-Type-Options'] = 'nosniff'
+        # private + short cache helps offline SW/IDB without public CDN caching
+        response['Cache-Control'] = 'private, max-age=3600'
+        response['X-Frame-Options'] = 'SAMEORIGIN'
+        logger.info('Book streamed for reading: %s by %s', book.title, request.user.username)
         return response
     except Exception as e:
-        logger.exception("stream_book_content error: %s", e)
-        return HttpResponse("Error reading file", status=500)
+        logger.error('stream_book_pdf error: %s', e)
+        raise Http404('Unable to stream file')
 
 
-@csrf_exempt
 @login_required
+def offline_library(request):
+    """Shell page for managing offline-cached books (data lives in browser IndexedDB)."""
+    return render(request, 'books/offline_library.html')
+
+
+def reader_service_worker(request):
+    """Service worker with Service-Worker-Allowed: / for PDF stream caching."""
+    from django.http import HttpResponse
+    candidates = [
+        os.path.join(settings.BASE_DIR, 'static', 'js', 'reader-sw.js'),
+        os.path.join(settings.BASE_DIR, 'staticfiles', 'js', 'reader-sw.js'),
+    ]
+    body = None
+    for path in candidates:
+        if os.path.isfile(path):
+            with open(path, 'r', encoding='utf-8') as fh:
+                body = fh.read()
+            break
+    if body is None:
+        body = '/* reader-sw.js missing */\n'
+    resp = HttpResponse(body, content_type='application/javascript; charset=utf-8')
+    resp['Service-Worker-Allowed'] = '/'
+    resp['Cache-Control'] = 'no-cache'
+    return resp
+
+
 def add_to_wishlist(request, book_id):
     book = get_object_or_404(Book, id=book_id, status=Book.STATUS_PUBLISHED)
     wishlist_item, created = Wishlist.objects.get_or_create(

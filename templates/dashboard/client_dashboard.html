@@ -110,7 +110,7 @@
                     Client Dashboard
                 </h1>
                 <p class="mb-0 opacity-75">
-                    Welcome back, <strong>{{ user.full_name|default:user.username }}</strong>! 
+                    Welcome back, <strong>{{ user.display_name }}</strong>! 
                     Your reading journey at a glance.
                 </p>
             </div>
@@ -180,7 +180,7 @@
                             <td>
                                 <strong>{{ purchase.book.title|truncatechars:40 }}</strong>
                             </td>
-                            <td>{{ purchase.book.author.full_name|default:"Unknown" }}</td>
+                            <td>{{ purchase.book.author.display_name|default:"Unknown" }}</td>
                             <td>
                                 {% if purchase.book.is_free %}
                                     <span class="badge bg-success">FREE</span>

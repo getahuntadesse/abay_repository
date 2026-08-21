@@ -423,70 +423,6 @@
         background: rgba(0,0,0,0.2);
     }
 
-
-    .log-controls .btn-export-log {
-        background: rgba(23, 162, 184, 0.12);
-        border: 1px solid rgba(23, 162, 184, 0.35);
-        color: #17a2b8;
-        border-radius: 8px;
-        padding: 0.35rem 0.65rem;
-        font-size: 0.8rem;
-        cursor: pointer;
-        white-space: nowrap;
-    }
-    .log-controls .btn-export-log:hover {
-        background: rgba(23, 162, 184, 0.25);
-    }
-    .log-search-wrap {
-        flex: 1 1 180px;
-        min-width: 140px;
-        max-width: 100%;
-    }
-    .log-search-wrap input {
-        width: 100%;
-        border-radius: 8px;
-        border: 1px solid rgba(0,0,0,0.12);
-        padding: 0.4rem 0.75rem;
-        font-size: 0.875rem;
-        background: #fff;
-    }
-    @media (max-width: 768px) {
-        .log-controls {
-            width: 100%;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            flex-wrap: nowrap !important;
-            padding-bottom: 0.35rem;
-            gap: 0.35rem !important;
-        }
-        .log-controls .btn-filter,
-        .log-controls .btn-clear-log,
-        .log-controls .btn-export-log,
-        .log-controls .auto-refresh-toggle {
-            flex: 0 0 auto;
-            font-size: 0.72rem;
-            padding: 0.3rem 0.5rem;
-        }
-        .log-controls .btn-label { display: none; }
-        .log-entry {
-            flex-direction: column;
-            align-items: flex-start !important;
-            gap: 0.25rem;
-        }
-        .log-message {
-            width: 100%;
-            word-break: break-word;
-            white-space: pre-wrap;
-            font-size: 0.8rem;
-        }
-        .log-statistics {
-            display: grid !important;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 0.5rem;
-        }
-        .log-container { max-height: 55vh; font-size: 0.8rem; }
-    }
-
     .log-controls .btn-clear-log {
         padding: 0.25rem 0.75rem;
         border-radius: 20px;
@@ -711,7 +647,7 @@
             <div class="col-md-8">
                 <h1>
                     <i class="fas fa-tachometer-alt me-2" style="color: var(--primary-gold);"></i>
-                    Welcome back, {{ user.full_name|default:user.username }}!
+                    Welcome back, {{ user.display_name }}!
                 </h1>
                 <p>Here's a comprehensive overview of your repository's performance and activity.</p>
                 <div class="mt-3">
@@ -1002,23 +938,28 @@
                             Critical <span class="count" id="countCritical">0</span>
                         </button>
                         <button class="auto-refresh-toggle active" id="autoRefreshToggle" title="Auto-refresh logs every 10 seconds">
-                            <i class="fas fa-broadcast-tower"></i> <span class="btn-label">Live</span>
-                        </button>
-                        <button type="button" class="btn-export-log" id="exportLogsTxt" title="Download logs.txt">
-                            <i class="fas fa-download"></i> <span class="btn-label">Export TXT</span>
-                        </button>
-                        <button type="button" class="btn-export-log" id="exportLogsCsv" title="Download logs as CSV">
-                            <i class="fas fa-file-csv"></i> <span class="btn-label">Export CSV</span>
+                            <i class="fas fa-sync-alt"></i> Auto
                         </button>
                         <button class="btn-clear-log" id="clearLogs" title="Clear logs from view">
-                            <i class="fas fa-trash-alt"></i> <span class="btn-label">Clear</span>
+                            <i class="fas fa-trash-alt"></i> Clear
                         </button>
                     </div>
                 </div>
-                
-                <div class="log-search-wrap mb-2">
-                    <input type="search" id="logSearchInput" placeholder="Search logs..." autocomplete="off" aria-label="Search logs">
+
+                <div class="d-flex flex-wrap gap-2 align-items-center mb-3">
+                    <div class="input-group" style="max-width: 420px;">
+                        <span class="input-group-text bg-dark text-light border-secondary">
+                            <i class="fas fa-search"></i>
+                        </span>
+                        <input type="search" class="form-control bg-dark text-light border-secondary"
+                               id="logSearchInput" placeholder="Search logs (message, level, file)…"
+                               autocomplete="off">
+                        <button class="btn btn-outline-warning" type="button" id="logSearchBtn">Search</button>
+                        <button class="btn btn-outline-secondary" type="button" id="logSearchClear" title="Clear search">Clear</button>
+                    </div>
+                    <small class="text-muted" id="logSearchStatus"></small>
                 </div>
+                
                 <!-- Log Statistics -->
                 <div class="log-statistics" id="logStatistics">
                     <div class="log-stat-item">
@@ -1050,9 +991,7 @@
                     </div>
                     <div id="logEntries"></div>
                 </div>
-                <div class="mt-2 text-end log-footer-meta">
-                    <small class="text-success" id="logStreamStatus">Connecting…</small>
-                    <span class="text-muted mx-2">|</span>
+                <div class="mt-2 text-end">
                     <small class="text-muted" id="logUpdateTime">Last updated: {% now "F j, Y H:i:s" %}</small>
                     <span class="text-muted mx-2">|</span>
                     <small class="text-muted" id="logFileInfo">Log file: logs.txt</small>
@@ -1102,156 +1041,116 @@
         let refreshInterval = null;
         let lastLogCount = 0;
 
-        let searchQuery = '';
-        let logEventSource = null;
-        let streamReconnectTimer = null;
-        let useLiveStream = true;
-
-        function updateFileSizeDisplay(size) {
-            if (typeof size !== 'number') return;
-            const el = document.getElementById('logFileSize');
-            if (!el) return;
-            if (size < 1024) el.textContent = size + ' B';
-            else if (size < 1048576) el.textContent = (size / 1024).toFixed(1) + ' KB';
-            else el.textContent = (size / 1048576).toFixed(1) + ' MB';
-        }
-
-        function setStreamStatus(text, isLive) {
-            const el = document.getElementById('logStreamStatus');
-            if (!el) return;
-            el.textContent = text;
-            el.classList.toggle('text-success', !!isLive);
-            el.classList.toggle('text-warning', !isLive);
-        }
-
-        function applyLogBatch(logs) {
-            if (!Array.isArray(logs)) return;
-            logData = logs.slice(0, 800);
-            renderLogs(logData);
-            updateCounts(logData);
-            updateStatistics(logData);
-            const t = document.getElementById('logUpdateTime');
-            if (t) t.textContent = 'Last updated: ' + new Date().toLocaleString();
-            lastLogCount = logData.length;
-        }
-
-        function appendLiveLog(entry) {
-            if (!entry) return;
-            const key = (entry.timestamp || '') + '|' + (entry.message || '');
-            if (logData.length && ((logData[0].timestamp || '') + '|' + (logData[0].message || '')) === key) {
-                return;
-            }
-            logData.unshift(entry);
-            if (logData.length > 800) logData = logData.slice(0, 800);
-            renderLogs(logData);
-            updateCounts(logData);
-            updateStatistics(logData);
-            const t = document.getElementById('logUpdateTime');
-            if (t) t.textContent = 'Live · ' + new Date().toLocaleString();
-            lastLogCount = logData.length;
-        }
-
-        function stopLiveStream() {
-            if (logEventSource) {
-                try { logEventSource.close(); } catch (e) {}
-                logEventSource = null;
-            }
-            if (streamReconnectTimer) {
-                clearTimeout(streamReconnectTimer);
-                streamReconnectTimer = null;
-            }
-        }
-
-        function startLiveStream() {
-            if (!useLiveStream || typeof EventSource === 'undefined') {
-                setStreamStatus('Polling', false);
-                return false;
-            }
-            stopLiveStream();
-            const url = '/api/admin/logs/stream/?limit=200';
-            try {
-                logEventSource = new EventSource(url);
-            } catch (e) {
-                console.warn('EventSource failed', e);
-                setStreamStatus('Polling', false);
-                return false;
-            }
-
-            logEventSource.addEventListener('snapshot', function(ev) {
-                try {
-                    const data = JSON.parse(ev.data);
-                    applyLogBatch(data.logs || []);
-                    updateFileSizeDisplay(data.file_size);
-                    setStreamStatus('Live', true);
-                } catch (err) { console.error(err); }
-            });
-
-            logEventSource.addEventListener('log', function(ev) {
-                try {
-                    appendLiveLog(JSON.parse(ev.data));
-                } catch (err) { console.error(err); }
-            });
-
-            logEventSource.addEventListener('ping', function(ev) {
-                try {
-                    const data = JSON.parse(ev.data);
-                    updateFileSizeDisplay(data.file_size);
-                    setStreamStatus('Live', true);
-                } catch (err) {}
-            });
-
-            logEventSource.addEventListener('reset', function() { fetchLogs(); });
-
-            logEventSource.addEventListener('done', function() {
-                setStreamStatus('Reconnecting…', false);
-                stopLiveStream();
-                streamReconnectTimer = setTimeout(function() {
-                    if (autoRefresh) startLiveStream();
-                }, 1500);
-            });
-
-            logEventSource.onerror = function() {
-                setStreamStatus('Reconnecting…', false);
-                stopLiveStream();
-                fetchLogs();
-                streamReconnectTimer = setTimeout(function() {
-                    if (autoRefresh && useLiveStream) startLiveStream();
-                }, 3000);
-            };
-
-            setStreamStatus('Connecting…', false);
-            return true;
-        }
+        // Fetch logs from server
+        let currentSearch = '';
 
         function fetchLogs() {
-            const url = '/api/admin/logs/?limit=400';
-            fetch(url, { credentials: 'same-origin', headers: { 'Accept': 'application/json' } })
-                .then(response => {
-                    if (!response.ok) throw new Error('HTTP ' + response.status);
+            const container = document.getElementById('logEntries');
+            const params = new URLSearchParams();
+            params.set('limit', '500');
+            params.set('rotated', '1');
+            if (currentSearch) {
+                params.set('q', currentSearch);
+            }
+            if (currentFilter && currentFilter !== 'all' && currentFilter !== 'PAYMENT' && currentFilter !== 'AUTH') {
+                params.set('level', currentFilter);
+            }
+
+            fetch('/admin/logs/?' + params.toString(), {
+                credentials: 'same-origin',
+                headers: { 'Accept': 'application/json' }
+            })
+                .then(async (response) => {
+                    if (response.status === 403) {
+                        throw new Error('Access denied. Staff account required to view logs.');
+                    }
+                    if (response.status === 404) {
+                        throw new Error('Log API not found. Ensure /admin/logs/ is configured.');
+                    }
+                    if (!response.ok) {
+                        let detail = '';
+                        try {
+                            const errBody = await response.json();
+                            detail = errBody.message || errBody.error || '';
+                        } catch (e) { /* ignore */ }
+                        throw new Error(detail || ('HTTP ' + response.status));
+                    }
                     return response.json();
                 })
                 .then(data => {
-                    if (data.success && data.logs) {
-                        applyLogBatch(data.logs);
-                        updateFileSizeDisplay(data.file_size);
-                        if (data.file_name) {
-                            const info = document.getElementById('logFileInfo');
-                            if (info) info.textContent = 'Log file: ' + data.file_name;
-                        }
-                    } else {
-                        console.error('Failed to fetch logs:', data.message || 'Unknown error');
+                    if (!data || data.success === false) {
+                        const msg = (data && (data.message || data.error)) || 'Unknown error';
+                        container.innerHTML = `
+                            <div class="no-logs">
+                                <i class="fas fa-exclamation-triangle" style="color: #ffc107;"></i>
+                                <p class="mb-0">Could not load logs</p>
+                                <small class="text-muted">${msg}</small>
+                            </div>`;
+                        return;
                     }
+
+                    logData = data.logs || [];
+                    // Client-side tag filters (PAYMENT / AUTH) when server did not filter
+                    if (currentFilter === 'PAYMENT' || currentFilter === 'AUTH') {
+                        logData = logData.filter(l => (l.message || '').toUpperCase().includes(currentFilter));
+                    }
+
+                    renderLogs(logData);
+                    updateCounts(data.logs || logData);
+                    updateStatistics(logData);
+
+                    const info = document.getElementById('logUpdateTime');
+                    if (info) {
+                        info.textContent = 'Last updated: ' + new Date().toLocaleString();
+                    }
+                    const sizeEl = document.getElementById('logFileSize');
+                    if (sizeEl && typeof data.file_size === 'number') {
+                        const size = data.file_size;
+                        if (size < 1024) sizeEl.textContent = size + ' B';
+                        else if (size < 1048576) sizeEl.textContent = (size / 1024).toFixed(1) + ' KB';
+                        else sizeEl.textContent = (size / 1048576).toFixed(1) + ' MB';
+                    }
+                    const fileInfo = document.getElementById('logFileInfo');
+                    if (fileInfo) {
+                        const rotated = data.rotated_count || 0;
+                        fileInfo.textContent = 'Log file: ' + (data.file_path || 'logs.txt')
+                            + (rotated ? ' (+' + rotated + ' rotated)' : '');
+                    }
+                    const status = document.getElementById('logSearchStatus');
+                    if (status) {
+                        status.textContent = data.message || (logData.length + ' entries');
+                    }
+                    lastLogCount = logData.length;
                 })
                 .catch(error => {
                     console.error('Error fetching logs:', error);
-                    document.getElementById('logEntries').innerHTML = `
-                        <div class="no-logs">
-                            <i class="fas fa-exclamation-triangle" style="color: #ffc107;"></i>
-                            <p class="mb-0">Failed to load logs. Please refresh the page.</p>
-                            <small class="text-muted">Error: ${error.message}</small>
-                        </div>
-                    `;
+                    if (container) {
+                        container.innerHTML = `
+                            <div class="no-logs">
+                                <i class="fas fa-exclamation-triangle" style="color: #ffc107;"></i>
+                                <p class="mb-0">Failed to load logs</p>
+                                <small class="text-muted">${(error && error.message) ? error.message : error}</small>
+                                <div class="mt-2">
+                                    <button type="button" class="btn btn-sm btn-outline-warning" onclick="fetchLogs()">
+                                        <i class="fas fa-redo me-1"></i>Retry
+                                    </button>
+                                </div>
+                            </div>`;
+                    }
                 });
+        }
+
+        function applyLogSearch() {
+            const input = document.getElementById('logSearchInput');
+            currentSearch = (input && input.value || '').trim();
+            fetchLogs();
+        }
+
+        function clearLogSearch() {
+            const input = document.getElementById('logSearchInput');
+            if (input) input.value = '';
+            currentSearch = '';
+            fetchLogs();
         }
 
         // Render logs with optional filter
@@ -1262,13 +1161,6 @@
             let filteredLogs = logs;
             if (currentFilter !== 'all') {
                 filteredLogs = logs.filter(log => log.level === currentFilter);
-            }
-            if (searchQuery) {
-                const q = searchQuery.toLowerCase();
-                filteredLogs = filteredLogs.filter(log =>
-                    (log.message || '').toLowerCase().includes(q) ||
-                    (log.level || '').toLowerCase().includes(q)
-                );
             }
 
             if (filteredLogs.length === 0) {
@@ -1410,38 +1302,28 @@
             }
         }
 
-        // Toggle live stream / auto-refresh
+        // Toggle auto-refresh
         function toggleAutoRefresh() {
             autoRefresh = !autoRefresh;
             const toggle = document.getElementById('autoRefreshToggle');
             toggle.classList.toggle('active');
-            toggle.innerHTML = autoRefresh
-                ? '<i class="fas fa-broadcast-tower"></i> <span class="btn-label">Live</span>'
-                : '<i class="fas fa-pause"></i> <span class="btn-label">Paused</span>';
-
+            toggle.innerHTML = autoRefresh ? '<i class="fas fa-sync-alt"></i> Auto' : '<i class="fas fa-pause"></i> Paused';
+            
             if (autoRefresh) {
                 startAutoRefresh();
             } else {
                 stopAutoRefresh();
-                setStreamStatus('Paused', false);
             }
         }
 
         function startAutoRefresh() {
-            if (useLiveStream && startLiveStream()) {
-                // Live SSE active — light poll as backup every 60s
-                if (refreshInterval) clearInterval(refreshInterval);
-                refreshInterval = setInterval(fetchLogs, 60000);
-            } else {
-                stopLiveStream();
-                if (refreshInterval) clearInterval(refreshInterval);
-                refreshInterval = setInterval(fetchLogs, 8000);
-                setStreamStatus('Polling', false);
+            if (refreshInterval) {
+                clearInterval(refreshInterval);
             }
+            refreshInterval = setInterval(fetchLogs, 10000);
         }
 
         function stopAutoRefresh() {
-            stopLiveStream();
             if (refreshInterval) {
                 clearInterval(refreshInterval);
                 refreshInterval = null;
@@ -1450,7 +1332,10 @@
 
         // Initialize log viewer
         function initLogViewer() {
+            // Fetch initial logs
             fetchLogs();
+            
+            // Start auto-refresh
             if (autoRefresh) {
                 startAutoRefresh();
             }
@@ -1465,22 +1350,17 @@
             document.getElementById('autoRefreshToggle').addEventListener('click', toggleAutoRefresh);
             document.getElementById('clearLogs').addEventListener('click', clearLogs);
 
-            function exportLogs(format) {
-                const level = currentFilter && currentFilter !== 'all' ? currentFilter : 'ALL';
-                const url = '/api/admin/logs/export/?format=' + encodeURIComponent(format) +
-                    '&level=' + encodeURIComponent(level);
-                window.location.href = url;
-            }
-            const exportTxt = document.getElementById('exportLogsTxt');
-            const exportCsv = document.getElementById('exportLogsCsv');
-            if (exportTxt) exportTxt.addEventListener('click', function() { exportLogs('txt'); });
-            if (exportCsv) exportCsv.addEventListener('click', function() { exportLogs('csv'); });
-
+            const searchBtn = document.getElementById('logSearchBtn');
+            const searchClear = document.getElementById('logSearchClear');
             const searchInput = document.getElementById('logSearchInput');
+            if (searchBtn) searchBtn.addEventListener('click', applyLogSearch);
+            if (searchClear) searchClear.addEventListener('click', clearLogSearch);
             if (searchInput) {
-                searchInput.addEventListener('input', function() {
-                    searchQuery = this.value.trim();
-                    renderLogs(logData);
+                searchInput.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        applyLogSearch();
+                    }
                 });
             }
             
@@ -1498,7 +1378,6 @@
         // Cleanup on page unload
         window.addEventListener('beforeunload', function() {
             stopAutoRefresh();
-            stopLiveStream();
         });
     });
 </script>

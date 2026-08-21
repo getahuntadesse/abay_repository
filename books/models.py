@@ -233,15 +233,13 @@ class Book(models.Model):
         return user == self.author and self.status in [self.STATUS_DRAFT, self.STATUS_CANCELLED]
 
     def can_download(self, user):
-        """Downloads disabled — use can_read() for reader access."""
-        return False
-
-    def can_read(self, user):
-        """Check if a user can open this book in the online reader."""
-        if self.is_free or self.price == 0:
-            return True
+        """Check if a user can download this book"""
         if not user.is_authenticated:
             return False
+        
+        # Free books can be downloaded by anyone
+        if self.is_free or self.price == 0:
+            return True
         
         # Check if user has purchased
         try:

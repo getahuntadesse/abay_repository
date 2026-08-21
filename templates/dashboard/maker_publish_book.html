@@ -156,7 +156,7 @@
                         <div class="col-md-8">
                             <h5>{{ book.title }}</h5>
                             <p class="meta">
-                                <strong>Author:</strong> {{ book.author.get_full_name|default:book.author.username }}<br>
+                                <strong>Author:</strong> {{ book.author.display_name }}<br>
                                 <strong>Genre:</strong> {{ book.genre.name|default:"Uncategorized" }}<br>
                                 <strong>Language:</strong> {{ book.language|default:"English" }}<br>
                                 <strong>Current Status:</strong> <span class="status-badge status-{{ book.status }}">{{ book.get_status_display|default:book.status|title }}</span><br>
@@ -256,7 +256,7 @@
         // Show confirmation dialog
         if (confirm('Are you sure you want to publish this book?\n\n' +
                     'Title: {{ book.title }}\n' +
-                    'Author: {{ book.author.get_full_name|default:book.author.username }}\n\n' +
+                    'Author: {{ book.author.display_name }}\n\n' +
                     'This action cannot be undone!')) {
             // Disable button to prevent double submission
             const btn = document.getElementById('publishBtn');

@@ -509,4 +509,3 @@ access_token.txt
 *.sample
 *.template
 *.dist
-certs/

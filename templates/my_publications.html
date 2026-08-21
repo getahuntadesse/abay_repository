@@ -87,7 +87,7 @@
                                     <br>
                                     <small class="text-muted">ISBN: {{ book.isbn|default:"N/A" }}</small>
                                 </td>
-                                <td>{{ book.author.full_name|default:"Unknown" }}</td>
+                                <td>{{ book.author.display_name|default:"Unknown" }}</td>
                                 <td>
                                     {% if book.is_free %}
                                         <span class="badge bg-success">FREE</span>

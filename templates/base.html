@@ -2,26 +2,29 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <title>{% block title %}Abrehot Library - Abay Repository{% endblock %}</title>
-    
+
     <!-- Favicon -->
     <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
     <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
     <!-- Fallback favicon for browsers that don't support ico -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='15' fill='%23DAA520'/%3E%3Ctext x='50' y='70' font-size='60' text-anchor='middle' fill='%231A1A1A' font-family='Arial'%3EA%3C/text%3E%3C/svg%3E">
-    
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='15' fill='%23DAA520'/%3E%3Ctext x='50' y='70' font-size='60' text-anchor='middle' fill='%231A1A1A' font-family='Arial'%3EA%3C/text%3E%3C/svg%3E">
+
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
     <style>
         :root {
             --primary-gold: #DAA520;
@@ -32,17 +35,17 @@
             --primary-gray: #4A4A4A;
             --primary-gray-light: #6C6C6C;
             --light-bg: #F8F9FA;
-            --card-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
             --navbar-height-desktop: 80px;
             --navbar-height-mobile: 70px;
         }
-        
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: 'Inter', sans-serif;
             overflow-x: hidden;
@@ -53,13 +56,13 @@
             flex-direction: column;
             padding-top: var(--navbar-height-desktop);
         }
-        
+
         /* ============================================
            NAVBAR - Mobile First
            ============================================ */
         .navbar {
             background: linear-gradient(135deg, var(--primary-darker) 0%, var(--primary-dark) 100%);
-            box-shadow: 0 2px 20px rgba(0,0,0,0.15);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.15);
             padding: 0.5rem 0;
             position: fixed;
             top: 0;
@@ -69,7 +72,7 @@
             min-height: var(--navbar-height-desktop);
             border-bottom: 2px solid rgba(218, 165, 32, 0.2);
         }
-        
+
         .navbar-brand {
             display: flex;
             align-items: center;
@@ -78,63 +81,63 @@
             padding: 0;
             flex-shrink: 0;
         }
-        
+
         .navbar-brand img {
             height: 45px;
             width: auto;
             transition: transform 0.3s ease;
             filter: drop-shadow(0 2px 4px rgba(218, 165, 32, 0.2));
         }
-        
+
         .navbar-brand:hover img {
             transform: scale(1.05) rotate(-2deg);
         }
-        
+
         .brand-text {
             display: flex;
             flex-direction: column;
             line-height: 1.1;
         }
-        
+
         .brand-name {
             font-size: 1.25rem;
             font-weight: 800;
             color: var(--primary-gold);
             letter-spacing: -0.5px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
-        
+
         .brand-tagline {
             font-size: 0.6rem;
-            color: rgba(255,255,255,0.6);
+            color: rgba(255, 255, 255, 0.6);
             letter-spacing: 1.5px;
             text-transform: uppercase;
             font-weight: 400;
         }
-        
+
         .brand-motto {
             font-size: 0.55rem;
             color: var(--primary-gold-light);
             font-style: italic;
             font-weight: 300;
         }
-        
+
         .navbar-toggler {
             border: 2px solid rgba(218, 165, 32, 0.3);
             padding: 0.4rem 0.6rem;
             border-radius: 8px;
             transition: all 0.3s ease;
         }
-        
+
         .navbar-toggler:hover {
             border-color: var(--primary-gold);
             background: rgba(218, 165, 32, 0.1);
         }
-        
+
         .navbar-toggler-icon {
             background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255,255,255,0.9)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
         }
-        
+
         .navbar-collapse {
             background: rgba(26, 26, 26, 0.98);
             backdrop-filter: blur(10px);
@@ -142,13 +145,13 @@
             padding: 1rem;
             margin-top: 0.5rem;
             border: 1px solid rgba(218, 165, 32, 0.1);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
         }
-        
+
         .navbar-nav {
             gap: 0.25rem;
         }
-        
+
         .nav-link {
             color: #D4D4D4 !important;
             transition: all 0.3s ease;
@@ -158,32 +161,55 @@
             font-size: 0.95rem;
             position: relative;
         }
-        
+
         .nav-link:hover,
         .nav-link:focus {
             color: var(--primary-gold) !important;
             background: rgba(218, 165, 32, 0.08);
         }
-        
+
         .nav-link.active {
             color: var(--primary-gold) !important;
             background: rgba(218, 165, 32, 0.12);
         }
-        
+
+        .user-account-link {
+            display: inline-flex !important;
+            align-items: center;
+            gap: 0.35rem;
+            max-width: 220px;
+        }
+
+        .user-account-name {
+            display: inline !important;
+            color: var(--primary-gold) !important;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 140px;
+        }
+
+        @media (min-width: 576px) {
+            .user-account-name {
+                max-width: 180px;
+            }
+        }
+
         .nav-link i {
             width: 20px;
             text-align: center;
         }
-        
+
         .dropdown-menu {
             background: var(--primary-darker);
             border: 1px solid rgba(218, 165, 32, 0.15);
             border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             padding: 0.5rem;
             margin-top: 0.25rem;
         }
-        
+
         .dropdown-item {
             color: #D4D4D4;
             transition: all 0.3s ease;
@@ -191,26 +217,26 @@
             border-radius: 8px;
             font-size: 0.95rem;
         }
-        
+
         .dropdown-item:hover {
             background: var(--primary-gold);
             color: var(--primary-darker);
         }
-        
+
         .dropdown-item i {
             width: 20px;
             text-align: center;
         }
-        
+
         .dropdown-divider {
-            border-color: rgba(255,255,255,0.05);
+            border-color: rgba(255, 255, 255, 0.05);
         }
-        
+
         main {
             flex: 1;
             padding: 1rem 0;
         }
-        
+
         /* ============================================
            ALERTS - Mobile Responsive
            ============================================ */
@@ -219,9 +245,9 @@
             border: none;
             padding: 0.75rem 1rem;
             font-size: 0.95rem;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         }
-        
+
         /* ============================================
            TERMS & CONDITIONS MODAL
            ============================================ */
@@ -229,66 +255,66 @@
             max-width: 900px;
             margin: 1.75rem auto;
         }
-        
+
         .terms-modal .modal-content {
             background: #1a1a1a;
             border: 1px solid rgba(218, 165, 32, 0.2);
             border-radius: 16px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
             max-height: 90vh;
         }
-        
+
         .terms-modal .modal-header {
             border-bottom: 2px solid rgba(218, 165, 32, 0.15);
             padding: 1.25rem 1.5rem;
             background: linear-gradient(135deg, var(--primary-darker) 0%, var(--primary-dark) 100%);
             border-radius: 16px 16px 0 0;
         }
-        
+
         .terms-modal .modal-header .modal-title {
             color: var(--primary-gold);
             font-weight: 700;
             font-size: 1.25rem;
         }
-        
+
         .terms-modal .modal-header .modal-title i {
             margin-right: 0.5rem;
         }
-        
+
         .terms-modal .modal-header .btn-close {
             filter: invert(1) brightness(2);
             opacity: 0.7;
         }
-        
+
         .terms-modal .modal-header .btn-close:hover {
             opacity: 1;
         }
-        
+
         .terms-modal .modal-body {
             padding: 1.5rem;
             max-height: 60vh;
             overflow-y: auto;
             color: #d4d4d4;
         }
-        
+
         .terms-modal .modal-body::-webkit-scrollbar {
             width: 6px;
         }
-        
+
         .terms-modal .modal-body::-webkit-scrollbar-track {
             background: #2a2a2a;
             border-radius: 3px;
         }
-        
+
         .terms-modal .modal-body::-webkit-scrollbar-thumb {
             background: var(--primary-gold);
             border-radius: 3px;
         }
-        
+
         .terms-modal .modal-body .terms-section {
             margin-bottom: 1.5rem;
         }
-        
+
         .terms-modal .modal-body .terms-section h5 {
             color: var(--primary-gold);
             font-weight: 700;
@@ -297,52 +323,52 @@
             border-bottom: 1px solid rgba(218, 165, 32, 0.1);
             padding-bottom: 0.5rem;
         }
-        
+
         .terms-modal .modal-body .terms-section h5 i {
             margin-right: 0.5rem;
             font-size: 0.9rem;
         }
-        
+
         .terms-modal .modal-body .terms-section p,
         .terms-modal .modal-body .terms-section li {
             font-size: 0.85rem;
             line-height: 1.7;
-            color: rgba(255,255,255,0.8);
+            color: rgba(255, 255, 255, 0.8);
         }
-        
+
         .terms-modal .modal-body .terms-section ul {
             padding-left: 1.25rem;
         }
-        
+
         .terms-modal .modal-body .terms-section ul li {
             margin-bottom: 0.25rem;
         }
-        
+
         .terms-modal .modal-body .terms-section .highlight-gold {
             color: var(--primary-gold);
             font-weight: 600;
         }
-        
+
         .terms-modal .modal-body .terms-section .highlight-danger {
             color: #e74c3c;
             font-weight: 600;
         }
-        
+
         .terms-modal .modal-body .terms-section .highlight-success {
             color: #2ecc71;
             font-weight: 600;
         }
-        
+
         .terms-modal .modal-body .terms-section .highlight-info {
             color: #3498db;
             font-weight: 600;
         }
-        
+
         .terms-modal .modal-body .terms-section .highlight-warning {
             color: #f39c12;
             font-weight: 600;
         }
-        
+
         .terms-modal .modal-body .terms-section .legal-badge {
             display: inline-block;
             background: rgba(218, 165, 32, 0.15);
@@ -353,7 +379,7 @@
             font-weight: 600;
             margin-left: 0.5rem;
         }
-        
+
         .terms-modal .modal-body .terms-section .legal-box {
             background: rgba(218, 165, 32, 0.05);
             border-left: 3px solid var(--primary-gold);
@@ -361,24 +387,24 @@
             border-radius: 8px;
             margin: 0.5rem 0;
         }
-        
+
         .terms-modal .modal-body .terms-section .legal-box p {
             margin-bottom: 0;
             font-size: 0.8rem;
         }
-        
+
         .terms-modal .modal-body .terms-divider {
             border-color: rgba(218, 165, 32, 0.08);
             margin: 1.25rem 0;
         }
-        
+
         .terms-modal .modal-footer {
             border-top: 1px solid rgba(218, 165, 32, 0.1);
             padding: 1rem 1.5rem;
-            background: rgba(0,0,0,0.2);
+            background: rgba(0, 0, 0, 0.2);
             border-radius: 0 0 16px 16px;
         }
-        
+
         .terms-modal .modal-footer .btn-gold {
             background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark));
             color: var(--primary-darker);
@@ -388,12 +414,12 @@
             border-radius: 25px;
             transition: all 0.3s ease;
         }
-        
+
         .terms-modal .modal-footer .btn-gold:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(218, 165, 32, 0.4);
         }
-        
+
         .terms-modal .modal-footer .btn-outline-gold {
             border: 2px solid var(--primary-gold);
             color: var(--primary-gold);
@@ -403,12 +429,12 @@
             border-radius: 25px;
             transition: all 0.3s ease;
         }
-        
+
         .terms-modal .modal-footer .btn-outline-gold:hover {
             background: var(--primary-gold);
             color: var(--primary-darker);
         }
-        
+
         /* ============================================
            FOOTER - Mobile First
            ============================================ */
@@ -421,26 +447,26 @@
             position: relative;
             overflow: hidden;
         }
-        
+
         .footer-brand {
             display: flex;
             align-items: center;
             gap: 10px;
             margin-bottom: 1rem;
         }
-        
+
         .footer-brand img {
             height: 45px;
             width: auto;
             filter: drop-shadow(0 2px 8px rgba(218, 165, 32, 0.2));
         }
-        
+
         .footer-brand .brand-name {
             font-size: 1.2rem;
             font-weight: 800;
             color: var(--primary-gold);
         }
-        
+
         footer h6 {
             color: var(--primary-gold);
             font-weight: 700;
@@ -451,7 +477,7 @@
             position: relative;
             display: inline-block;
         }
-        
+
         footer h6::after {
             content: '';
             position: absolute;
@@ -461,19 +487,19 @@
             height: 2px;
             background: var(--primary-gold);
         }
-        
+
         footer a {
             color: #B4B4B4;
             text-decoration: none;
             transition: all 0.3s ease;
             font-size: 0.9rem;
         }
-        
+
         footer a:hover {
             color: var(--primary-gold);
             transform: translateX(4px);
         }
-        
+
         .footer-social a {
             display: inline-flex;
             align-items: center;
@@ -481,13 +507,13 @@
             width: 38px;
             height: 38px;
             border-radius: 50%;
-            background: rgba(255,255,255,0.05);
+            background: rgba(255, 255, 255, 0.05);
             transition: all 0.3s ease;
-            color: rgba(255,255,255,0.6);
+            color: rgba(255, 255, 255, 0.6);
             margin-right: 0.5rem;
-            border: 1px solid rgba(255,255,255,0.05);
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
-        
+
         .footer-social a:hover {
             background: var(--primary-gold);
             color: var(--primary-darker);
@@ -495,14 +521,14 @@
             border-color: var(--primary-gold);
             box-shadow: 0 5px 15px rgba(218, 165, 32, 0.3);
         }
-        
+
         .footer-contact-item {
             display: flex;
             align-items: center;
             gap: 10px;
             margin-bottom: 0.75rem;
         }
-        
+
         .footer-contact-item .icon-wrapper {
             width: 32px;
             height: 32px;
@@ -516,38 +542,38 @@
             font-size: 0.8rem;
             transition: all 0.3s ease;
         }
-        
+
         .footer-contact-item:hover .icon-wrapper {
             background: var(--primary-gold);
             color: var(--primary-darker);
             transform: scale(1.1);
         }
-        
+
         .footer-contact-item .text {
-            color: rgba(255,255,255,0.6);
+            color: rgba(255, 255, 255, 0.6);
             font-size: 0.85rem;
             transition: color 0.3s ease;
         }
-        
+
         .footer-contact-item:hover .text {
             color: white;
         }
-        
+
         .footer-terms {
-            background: rgba(255,255,255,0.02);
+            background: rgba(255, 255, 255, 0.02);
             border-radius: 12px;
             padding: 1.25rem 1.5rem;
             margin-top: 1rem;
             border: 1px solid rgba(218, 165, 32, 0.05);
         }
-        
+
         .footer-terms .term-summary {
             display: flex;
             flex-wrap: wrap;
             gap: 1rem;
             align-items: center;
         }
-        
+
         .footer-terms .term-summary .term-badge {
             display: inline-flex;
             align-items: center;
@@ -556,20 +582,20 @@
             padding: 0.3rem 0.8rem;
             border-radius: 20px;
             font-size: 0.7rem;
-            color: rgba(255,255,255,0.7);
+            color: rgba(255, 255, 255, 0.7);
             transition: all 0.3s ease;
             cursor: default;
         }
-        
+
         .footer-terms .term-summary .term-badge i {
             color: var(--primary-gold);
             font-size: 0.6rem;
         }
-        
+
         .footer-terms .term-summary .term-badge:hover {
             background: rgba(218, 165, 32, 0.15);
         }
-        
+
         .footer-terms .term-summary .view-terms-btn {
             background: transparent;
             border: 1px solid var(--primary-gold);
@@ -583,64 +609,72 @@
             margin-left: auto;
             text-decoration: none;
         }
-        
+
         .footer-terms .term-summary .view-terms-btn:hover {
             background: var(--primary-gold);
             color: var(--primary-darker);
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(218, 165, 32, 0.3);
         }
-        
+
         .footer-terms .term-summary .view-terms-btn i {
             margin-right: 0.3rem;
         }
-        
+
         .footer-bottom {
-            border-top: 1px solid rgba(255,255,255,0.05);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
             padding-top: 1.5rem;
             margin-top: 1.5rem;
         }
-        
+
         .footer-bottom .copyright {
             font-size: 0.85rem;
-            color: rgba(255,255,255,0.35);
+            color: rgba(255, 255, 255, 0.35);
         }
-        
+
         .footer-bottom .footer-links {
             display: flex;
             gap: 1.5rem;
             justify-content: flex-end;
             flex-wrap: wrap;
         }
-        
+
         .footer-bottom .footer-links a {
             font-size: 0.8rem;
-            color: rgba(255,255,255,0.35);
+            color: rgba(255, 255, 255, 0.35);
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
-        
+
         .footer-bottom .footer-links a:hover {
             color: var(--primary-gold);
             transform: translateX(0);
         }
-        
+
         .text-gold {
             color: var(--primary-gold) !important;
         }
+
         .bg-gold {
             background: var(--primary-gold);
         }
-        
+
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
-        
+
         .fade-in {
             animation: fadeIn 0.5s ease-out;
         }
-        
+
         /* ============================================
            RESPONSIVE - TABLETS & MOBILE
            ============================================ */
@@ -648,221 +682,221 @@
             body {
                 padding-top: var(--navbar-height-mobile);
             }
-            
+
             .navbar {
                 min-height: var(--navbar-height-mobile);
                 padding: 0.4rem 0;
             }
-            
+
             .navbar-brand img {
                 height: 38px;
             }
-            
+
             .brand-name {
                 font-size: 1.1rem;
             }
-            
+
             .brand-tagline {
                 font-size: 0.55rem;
             }
-            
+
             .brand-motto {
                 font-size: 0.5rem;
             }
-            
+
             footer {
                 padding: 2rem 0 1rem;
             }
-            
+
             .terms-modal .modal-dialog {
                 margin: 1rem;
             }
-            
+
             .terms-modal .modal-body {
                 max-height: 50vh;
                 padding: 1rem;
             }
-            
+
             .footer-terms {
                 padding: 1rem;
             }
-            
+
             .footer-terms .term-summary {
                 gap: 0.5rem;
             }
-            
+
             .footer-terms .term-summary .view-terms-btn {
                 margin-left: 0;
                 width: 100%;
                 text-align: center;
             }
         }
-        
+
         @media (max-width: 767px) {
             body {
                 padding-top: var(--navbar-height-mobile);
             }
-            
+
             .navbar {
                 min-height: var(--navbar-height-mobile);
                 padding: 0.3rem 0;
             }
-            
+
             .navbar-brand {
                 gap: 8px;
             }
-            
+
             .navbar-brand img {
                 height: 34px;
             }
-            
+
             .brand-name {
                 font-size: 0.95rem;
             }
-            
+
             .brand-tagline {
                 font-size: 0.5rem;
             }
-            
+
             .brand-motto {
                 font-size: 0.45rem;
                 display: none;
             }
-            
+
             .navbar-collapse {
                 padding: 0.75rem;
                 margin-top: 0.25rem;
                 max-height: 70vh;
                 overflow-y: auto;
             }
-            
+
             .nav-link {
                 padding: 0.5rem 0.7rem !important;
                 font-size: 0.9rem;
             }
-            
+
             .dropdown-menu {
                 padding: 0.25rem;
             }
-            
+
             .dropdown-item {
                 padding: 0.5rem 0.8rem;
                 font-size: 0.85rem;
             }
-            
+
             footer {
                 padding: 1.5rem 0 0.75rem;
             }
-            
-            footer .row > div {
+
+            footer .row>div {
                 margin-bottom: 1.25rem;
             }
-            
+
             .footer-brand img {
                 height: 34px;
             }
-            
+
             .footer-brand .brand-name {
                 font-size: 1rem;
             }
-            
+
             footer h6 {
                 font-size: 0.85rem;
             }
-            
+
             footer a,
             footer .text-white-50 {
                 font-size: 0.85rem;
             }
-            
+
             .footer-social a {
                 width: 34px;
                 height: 34px;
                 font-size: 0.8rem;
             }
-            
+
             .footer-contact-item .text {
                 font-size: 0.8rem;
             }
-            
+
             .footer-terms {
                 padding: 0.75rem;
             }
-            
+
             .footer-terms .term-summary .term-badge {
                 font-size: 0.6rem;
                 padding: 0.2rem 0.6rem;
             }
-            
+
             .terms-modal .modal-body {
                 max-height: 40vh;
                 padding: 0.75rem;
             }
-            
+
             .terms-modal .modal-body .terms-section h5 {
                 font-size: 0.85rem;
             }
-            
+
             .terms-modal .modal-body .terms-section p,
             .terms-modal .modal-body .terms-section li {
                 font-size: 0.75rem;
             }
-            
+
             .footer-bottom .footer-links {
                 justify-content: center;
                 margin-top: 0.5rem;
                 gap: 1rem;
             }
-            
+
             .footer-bottom .copyright {
                 text-align: center;
             }
-            
+
             .alert {
                 font-size: 0.85rem;
                 padding: 0.6rem 0.8rem;
             }
-            
+
             main {
                 padding: 0.5rem 0;
             }
         }
-        
+
         @media (max-width: 400px) {
             .navbar-brand img {
                 height: 30px;
             }
-            
+
             .brand-name {
                 font-size: 0.85rem;
             }
-            
+
             .brand-tagline {
                 font-size: 0.45rem;
             }
-            
+
             .nav-link {
                 font-size: 0.85rem;
                 padding: 0.4rem 0.6rem !important;
             }
-            
+
             .dropdown-item {
                 font-size: 0.8rem;
                 padding: 0.4rem 0.6rem;
             }
-            
+
             .footer-contact-item .icon-wrapper {
                 width: 28px;
                 height: 28px;
                 font-size: 0.7rem;
             }
-            
+
             .terms-modal .modal-body .terms-section p,
             .terms-modal .modal-body .terms-section li {
                 font-size: 0.7rem;
             }
         }
-        
+
         @media (min-width: 992px) {
             .navbar-collapse {
                 background: transparent;
@@ -872,92 +906,105 @@
                 backdrop-filter: none;
                 box-shadow: none;
             }
-            
+
             .navbar-nav {
                 gap: 0.5rem;
             }
-            
+
             .nav-link {
                 padding: 0.5rem 0.8rem !important;
             }
-            
+
             .dropdown-menu {
                 margin-top: 0.5rem;
                 min-width: 200px;
             }
         }
     </style>
-    
+
     {% block extra_css %}{% endblock %}
 </head>
+
 <body>
 
-<!-- Navigation -->
-<nav class="navbar navbar-expand-lg navbar-dark">
-    <div class="container">
-        <a class="navbar-brand" href="{% url 'home' %}">
-            <img src="{% static 'images/logo.png' %}" alt="Abrehot Library Logo" onerror="this.src='https://placehold.co/50x50/DAA520/1A1A1A?text=AL'">
-            <div class="brand-text">
-                <span class="brand-name">
-                   
-                    Abay Repository
-                </span>
-                <span class="brand-tagline">Abrehot Library</span>
-                <span class="brand-motto">Enlightenment for Ethiopia</span>
-            </div>
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <img src="{% static 'images/logo.png' %}" alt="Abrehot Library Logo"
+                    onerror="this.src='https://placehold.co/50x50/DAA520/1A1A1A?text=AL'">
+                <div class="brand-text">
+                    <span class="brand-name">
+
+                        Abay Repository
+                    </span>
+                    <span class="brand-tagline">Abrehot Library</span>
+                    <span class="brand-motto">Enlightenment for Ethiopia</span>
+                </div>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'home' %}">
-                        <i class="fas fa-home me-1"></i> Home
-                    </a>
-                </li>
-                
-                <li class="nav-item">
-                    <a class="nav-link {% if 'books' in request.path %}active{% endif %}" href="{% url 'books:browse' %}">
-                        <i class="fas fa-search me-1"></i> Browse Books
-                    </a>
-                </li>
-                
-                {% if user.is_authenticated %}
-                    {% if user.role == 'author' %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'books:my_books_author' %}">
-                                <i class="fas fa-book me-1"></i> My Books
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'books:upload' %}">
-                                <i class="fas fa-upload me-1"></i> Upload
-                            </a>
-                        </li>
-                    {% elif user.role == 'client' %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'books:my_books_user' %}">
-                                <i class="fas fa-book me-1"></i> My Library
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'books:my_wishlist' %}">
-                                <i class="fas fa-heart me-1"></i> Wishlist
-                            </a>
-                        </li>
-                    {% endif %}
-                {% endif %}
-                
-                {% if user.is_authenticated %}
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-user-circle me-1"></i> 
-                            <span class="d-none d-sm-inline">{{ user.full_name|default:user.username|truncatechars:15 }}</span>
-                            <span class="d-inline d-sm-none"><i class="fas fa-user"></i></span>
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}"
+                            href="{% url 'home' %}">
+                            <i class="fas fa-home me-1"></i> Home
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link {% if 'books' in request.path %}active{% endif %}"
+                            href="{% url 'books:browse' %}">
+                            <i class="fas fa-search me-1"></i> Browse Books
+                        </a>
+                    </li>
+
+                    {% if user.is_authenticated %}
+                    {% if user.role == 'author' %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'books:my_books_author' %}">
+                            <i class="fas fa-book me-1"></i> My Books
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'books:upload' %}">
+                            <i class="fas fa-upload me-1"></i> Upload
+                        </a>
+                    </li>
+                    {% elif user.role == 'client' %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'books:my_books_user' %}">
+                            <i class="fas fa-book me-1"></i> My Library
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'books:my_wishlist' %}">
+                            <i class="fas fa-heart me-1"></i> Wishlist
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle user-account-link" href="#" id="userAccountMenu"
+                            role="button" data-bs-toggle="dropdown" aria-expanded="false"
+                            title="{{ user.display_name }}">
+                            <i class="fas fa-user-circle me-1"></i>
+                            <span class="user-account-name">{{ user.display_name|truncatechars:20 }}</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userAccountMenu">
+                            <li class="px-3 py-2">
+                                <div class="small text-muted">Signed in as</div>
+                                <div class="fw-bold" style="color: var(--primary-gold);">{{ user.display_name }}</div>
+                                {% if user.email %}
+                                <div class="small text-muted text-break">{{ user.email }}</div>
+                                {% endif %}
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
                             <li>
                                 <a class="dropdown-item" href="{% url 'accounts:dashboard_redirect' %}">
                                     <i class="fas fa-tachometer-alt me-2"></i> Dashboard
@@ -968,7 +1015,19 @@
                                     <i class="fas fa-id-card me-2"></i> Profile
                                 </a>
                             </li>
-                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item" href="{% url 'accounts:password_change' %}">
+                                    <i class="fas fa-key me-2"></i> Change Password
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{% url 'accounts:setup_2fa' %}">
+                                    <i class="fas fa-shield-alt me-2"></i> Two-Factor Auth
+                                </a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
                             <li>
                                 <a class="dropdown-item text-danger" href="{% url 'accounts:logout' %}">
                                     <i class="fas fa-sign-out-alt me-2"></i> Logout
@@ -976,17 +1035,18 @@
                             </li>
                         </ul>
                     </li>
-                {% else %}
+                    {% else %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'accounts:login' %}">
                             <i class="fas fa-sign-in-alt me-1"></i> Login
                         </a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle" href="#" id="registerMenu" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fas fa-user-plus me-1"></i> Register
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="registerMenu">
                             <li>
                                 <a class="dropdown-item" href="{% url 'accounts:register_author' %}">
                                     <i class="fas fa-pen-fancy me-2"></i> As Author
@@ -999,377 +1059,158 @@
                             </li>
                         </ul>
                     </li>
-                {% endif %}
-            </ul>
+                    {% endif %}
+                </ul>
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
 
-<!-- Messages -->
-<div class="container mt-3">
-    {% if messages %}
+    <!-- Messages -->
+    <div class="container mt-3">
+        {% if messages %}
         {% for message in messages %}
-            <div class="alert alert-{{ message.tags }} alert-dismissible fade show fade-in" role="alert">
-                <i class="fas fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-circle{% elif message.tags == 'warning' %}exclamation-triangle{% else %}info-circle{% endif %} me-2"></i>
-                {{ message }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show fade-in" role="alert">
+            <i
+                class="fas fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-circle{% elif message.tags == 'warning' %}exclamation-triangle{% else %}info-circle{% endif %} me-2"></i>
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
         {% endfor %}
-    {% endif %}
-</div>
+        {% endif %}
+    </div>
 
-<!-- Main Content -->
-<main>
-    {% block content %}{% endblock %}
-</main>
+    <!-- Main Content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
 
-<!-- Footer -->
-<footer>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-4 mb-4 mb-lg-0">
-                <div class="footer-brand">
-                    <img src="{% static 'images/logo.png' %}" alt="Abrehot Library Logo" onerror="this.src='https://placehold.co/45x45/DAA520/1A1A1A?text=AL'">
-                    <div>
-                        <div class="brand-name">
-                           
-                            Abay Repository
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4 mb-lg-0">
+                    <div class="footer-brand">
+                        <img src="{% static 'images/logo.png' %}" alt="Abrehot Library Logo"
+                            onerror="this.src='https://placehold.co/45x45/DAA520/1A1A1A?text=AL'">
+                        <div>
+                            <div class="brand-name">
+
+                                Abay Repository
+                            </div>
+                            <div class="brand-tagline">Abrehot Library</div>
+                            <div class="brand-motto">Enlightenment for Ethiopia</div>
                         </div>
-                        <div class="brand-tagline">Abrehot Library</div>
-                        <div class="brand-motto">Enlightenment for Ethiopia</div>
+                    </div>
+                    <p class="text-white-50 small" style="line-height: 1.6;">Ethiopia's premier digital library platform
+                        connecting readers with authentic Ethiopian literature and global knowledge.</p>
+                    <div class="footer-social mt-3">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="Telegram"><i class="fab fa-telegram"></i></a>
+                        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
                     </div>
                 </div>
-                <p class="text-white-50 small" style="line-height: 1.6;">Ethiopia's premier digital library platform connecting readers with authentic Ethiopian literature and global knowledge.</p>
-                <div class="footer-social mt-3">
-                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                    <a href="#" aria-label="Telegram"><i class="fab fa-telegram"></i></a>
-                    <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+
+                <div class="col-6 col-md-3 col-lg-2 mb-4 mb-md-0">
+                    <h6>Quick Links</h6>
+                    <ul class="list-unstyled small">
+                        <li class="mb-2"><a href="{% url 'home' %}">Home</a></li>
+                        <li class="mb-2"><a href="{% url 'books:browse' %}">Browse Books</a></li>
+                        <li class="mb-2"><a href="#">About Us</a></li>
+                        <li class="mb-2"><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-6 col-md-3 col-lg-2 mb-4 mb-md-0">
+                    <h6>Support</h6>
+                    <ul class="list-unstyled small">
+                        <li class="mb-2"><a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">Terms and
+                                Conditions</a></li>
+                        <li class="mb-2"><a href="#" data-bs-toggle="modal" data-bs-target="#privacyModal">Privacy
+                                Policy</a></li>
+                        <li class="mb-2"><a href="#">Refund Policy</a></li>
+                        <li class="mb-2"><a href="#">FAQ</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <h6>Contact Us</h6>
+                    <div class="footer-contact-item">
+                        <span class="icon-wrapper"><i class="fas fa-envelope"></i></span>
+                        <span class="text">info@abrehot.org.et</span>
+                    </div>
+                    <div class="footer-contact-item">
+                        <span class="icon-wrapper"><i class="fas fa-globe-africa"></i></span>
+                        <span class="text">www.abrehot.org.et</span>
+                    </div>
+                    <div class="footer-contact-item">
+                        <span class="icon-wrapper"><i class="fas fa-phone"></i></span>
+                        <span class="text">+251-111-234-567</span>
+                    </div>
+                    <div class="footer-contact-item">
+                        <span class="icon-wrapper"><i class="fas fa-map-marker-alt"></i></span>
+                        <span class="text">Addis Ababa, Ethiopia</span>
+                    </div>
                 </div>
             </div>
-            
-            <div class="col-6 col-md-3 col-lg-2 mb-4 mb-md-0">
-                <h6>Quick Links</h6>
-                <ul class="list-unstyled small">
-                    <li class="mb-2"><a href="{% url 'home' %}">Home</a></li>
-                    <li class="mb-2"><a href="{% url 'books:browse' %}">Browse Books</a></li>
-                    <li class="mb-2"><a href="#">About Us</a></li>
-                    <li class="mb-2"><a href="#">Contact</a></li>
-                </ul>
-            </div>
-            
-            <div class="col-6 col-md-3 col-lg-2 mb-4 mb-md-0">
-                <h6>Support</h6>
-                <ul class="list-unstyled small">
-                    <li class="mb-2"><a href="#">Privacy Policy</a></li>
-                    <li class="mb-2"><a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">Terms of Service</a></li>
-                    <li class="mb-2"><a href="#">Refund Policy</a></li>
-                    <li class="mb-2"><a href="#">FAQ</a></li>
-                </ul>
-            </div>
-            
-            <div class="col-md-6 col-lg-4">
-                <h6>Contact Us</h6>
-                <div class="footer-contact-item">
-                    <span class="icon-wrapper"><i class="fas fa-envelope"></i></span>
-                    <span class="text">info@abrehot.org.et</span>
-                </div>
-                <div class="footer-contact-item">
-                    <span class="icon-wrapper"><i class="fas fa-globe-africa"></i></span>
-                    <span class="text">www.abrehot.org.et</span>
-                </div>
-                <div class="footer-contact-item">
-                    <span class="icon-wrapper"><i class="fas fa-phone"></i></span>
-                    <span class="text">+251-111-234-567</span>
-                </div>
-                <div class="footer-contact-item">
-                    <span class="icon-wrapper"><i class="fas fa-map-marker-alt"></i></span>
-                    <span class="text">Addis Ababa, Ethiopia</span>
+
+
+            <div class="footer-bottom">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <p class="copyright mb-0">
+                            &copy; {% now "Y" %} <span class="text-gold">Abrehot Library</span> — Abay Repository.
+                            <i class="fas fa-heart" style="color: #e74c3c; font-size: 0.7rem;"></i>
+                            All rights reserved.
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="footer-links">
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal"><i
+                                    class="fas fa-file-contract me-1"></i>Terms and Conditions</a>
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#privacyModal"><i
+                                    class="fas fa-shield-alt me-1"></i>Privacy Policy</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        
-        
-        <div class="footer-bottom">
-            <div class="row align-items-center">
-                <div class="col-md-6">
-                    <p class="copyright mb-0">
-                        &copy; {% now "Y" %} <span class="text-gold">Abrehot Library</span> — Abay Repository.
-                        
-                        All rights reserved.
-                    </p>
-                </div>
-                <div class="col-md-6">
-                    <div class="footer-links">
-                        <a href="#"><i class="fas fa-lock me-1"></i>Privacy</a>
-                        <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal"><i class="fas fa-file-contract me-1"></i>Terms</a>
-                        <a href="#"><i class="fas fa-shield-alt me-1"></i>Security</a>
-                        <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal"><i class="fas fa-gavel me-1"></i>Legal</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</footer>
+    </footer>
 
-<!-- ============================================
-     TERMS & CONDITIONS MODAL (POP-UP)
-     ============================================ -->
-<div class="modal fade terms-modal" id="termsModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">
-                    <i class="fas fa-file-contract"></i>
-                    Terms and Conditions
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <!-- 1. Introduction and Scope -->
-                <div class="terms-section">
-                    <h5><i class="fas fa-info-circle"></i>1. Introduction and Scope</h5>
-                    <p>
-                        These Terms and Conditions ("Terms") govern the submission, publication, distribution, and sale of electronic books ("e-books") on the <span class="highlight-gold">Abay Repository</span> platform. By submitting an e-book to the platform, you ("Author," "Publisher," or "Licensor") agree to be bound by these Terms.
-                    </p>
-                    <p>
-                        These Terms are established in accordance with the laws of the <span class="highlight-gold">Federal Democratic Republic of Ethiopia</span>, including but not limited to:
-                    </p>
-                    <ul>
-                        <li><span class="highlight-info">Copyright and Neighboring Rights Protection Proclamation No. 410/2004</span></li>
-                        <li><span class="highlight-warning">Federal Income Tax Proclamation No. 979/2016</span></li>
-                        <li><span class="highlight-success">Personal Data Protection Proclamation No. 1324/2024</span></li>
-                        <li><span class="highlight-info">Electronic Transaction Proclamation (as enacted)</span></li>
-                    </ul>
-                </div>
+    {% include 'includes/legal_modals.html' %}
 
-                <hr class="terms-divider">
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-                <!-- 2. Definitions -->
-                <div class="terms-section">
-                    <h5><i class="fas fa-book"></i>2. Definitions</h5>
-                    <ul>
-                        <li><strong>"E-book"</strong> means a digital literary, scientific, or artistic work as defined under Article 2(30) of Proclamation No. 410/2004.</li>
-                        <li><strong>"Author"</strong> means the person who has intellectually created the work, as defined in Article 2(2) of Proclamation No. 410/2004.</li>
-                        <li><strong>"Platform"</strong> means the Abay Repository digital publishing and distribution service.</li>
-                        <li><strong>"Personal Data"</strong> means any information relating to an identified or identifiable natural person, as defined under Article 2 of Proclamation No. 1324/2024.</li>
-                        <li><strong>"Royalty"</strong> means a payment of any kind received as consideration for the use of copyright, as defined under Schedule 'D' of the Federal Income Tax Proclamation No. 979/2016.</li>
-                        <li><strong>"User"</strong> means any person who accesses, purchases, or downloads an e-book from the Platform.</li>
-                    </ul>
-                </div>
-
-                <hr class="terms-divider">
-
-                <!-- 3. Author Eligibility -->
-                <div class="terms-section">
-                    <h5><i class="fas fa-user-check"></i>3. Author Eligibility and Account Requirements</h5>
-                    <h6 class="text-gold mt-2" style="font-size: 0.85rem;">3.1 Eligibility</h6>
-                    <ul>
-                        <li>You must be at least <span class="highlight-gold">18 years of age</span> to submit and publish e-books on the Platform.</li>
-                        <li>You must have the legal capacity to enter into a binding contract under Ethiopian law.</li>
-                        <li>You must provide accurate and complete registration information.</li>
-                        <li>You are solely responsible for all activities conducted through your account.</li>
-                    </ul>
-                    <h6 class="text-gold mt-2" style="font-size: 0.85rem;">3.2 Author Warranties</h6>
-                    <p>By submitting an e-book, you warrant and represent that:</p>
-                    <ul>
-                        <li><strong>Originality and Ownership:</strong> You are the sole author or have obtained all necessary rights and permissions to publish the work.</li>
-                        <li><strong>Copyright Compliance:</strong> The work does not violate the Copyright and Neighboring Rights Protection Proclamation No. 410/2004.</li>
-                        <li><strong>No Plagiarism:</strong> The work does not contain plagiarized content. All sources, quotations, and third-party materials are properly attributed.</li>
-                        <li><strong>Compliance with Laws:</strong> The work complies with all applicable Ethiopian laws and regulations.</li>
-                    </ul>
-                </div>
-
-                <hr class="terms-divider">
-
-                <!-- 4. Copyright -->
-                <div class="terms-section">
-                    <h5><i class="fas fa-copyright"></i>4. Copyright and Intellectual Property Rights</h5>
-                    <h6 class="text-gold mt-2" style="font-size: 0.85rem;">4.1 Author Ownership and Moral Rights</h6>
-                    <p>
-                        You retain all intellectual property rights and copyright to your work. Under Ethiopian law, you hold both economic and moral rights as defined in Proclamation No. 410/2004.
-                    </p>
-                    <div class="legal-box">
-                        <p>
-                            <strong>Economic Rights:</strong> The economic rights in the e-book shall belong to you during your lifetime and to your heirs or legatees for <span class="highlight-gold">fifty (50) years</span> from the date of your death.
-                        </p>
-                    </div>
-                    <div class="legal-box">
-                        <p>
-                            <strong>Moral Rights:</strong> As the author, you have the following inalienable moral rights under Article 8 of Proclamation No. 410/2004:
-                        </p>
-                        <ul>
-                            <li><strong>Right to Paternity:</strong> The right to claim authorship of the work.</li>
-                            <li><strong>Right to Integrity:</strong> The right to object to any distortion, mutilation, or alteration of the work.</li>
-                            <li><strong>Right to Publish:</strong> The exclusive right to decide whether and when the work should be released.</li>
-                            <li><strong>Right to Withdraw:</strong> The right to withdraw or disavow the work under specific circumstances.</li>
-                        </ul>
-                    </div>
-                    <h6 class="text-gold mt-2" style="font-size: 0.85rem;">4.2 License Granted to Abay Repository</h6>
-                    <p>By submitting an e-book, you grant the Platform a <span class="highlight-gold">non-exclusive, worldwide, royalty-bearing license</span> to:</p>
-                    <ul>
-                        <li>Reproduce, format, convert, and distribute the e-book in digital formats.</li>
-                        <li>Make the e-book available for purchase, download, and reading on the Platform.</li>
-                        <li>Use up to <span class="highlight-info">10%</span> of the e-book content for promotional and preview purposes.</li>
-                        <li>Use the cover image, title, author name, and metadata for marketing and promotional purposes.</li>
-                        <li>Sub-license the e-book to third-party distributors and partners.</li>
-                    </ul>
-                    <h6 class="text-gold mt-2" style="font-size: 0.85rem;">4.3 Duration of License</h6>
-                    <p>The license granted to the Platform shall remain in effect for the duration of the copyright term, as provided under Proclamation No. 410/2004.</p>
-                </div>
-
-                <hr class="terms-divider">
-
-                <!-- 6. Pricing and Royalties -->
-                <div class="terms-section">
-                    <h5><i class="fas fa-coins"></i>6. Pricing and Royalties</h5>
-                    <h6 class="text-gold mt-2" style="font-size: 0.85rem;">6.1 Pricing</h6>
-                    <p>You shall set the retail price for your e-book. The Platform reserves the right to recommend or adjust pricing to remain competitive.</p>
-                    <h6 class="text-gold mt-2" style="font-size: 0.85rem;">6.2 Royalty Split</h6>
-                    <div class="legal-box">
-                        <p>
-                            <strong>Standard Royalty Rate:</strong> 
-                            <span class="highlight-gold">70%</span> of Net Revenue to the Author, 
-                            <span class="highlight-info">30%</span> to the Platform.
-                        </p>
-                        <p class="mt-1"><strong>Net Revenue</strong> is defined as the gross sales price minus applicable taxes, transaction fees, and refunds.</p>
-                    </div>
-                    <h6 class="text-gold mt-2" style="font-size: 0.85rem;">6.3 Royalty Payments</h6>
-                    <ul>
-                        <li>Royalties shall be calculated <span class="highlight-gold">monthly</span> and paid within thirty (30) days following the end of each calendar month.</li>
-                        <li>The minimum payout amount shall be as specified in the Publishing Agreement.</li>
-                        <li>Payments shall be processed through designated third-party payment providers.</li>
-                    </ul>
-                    <h6 class="text-gold mt-2" style="font-size: 0.85rem;">6.4 Tax Obligations</h6>
-                    <div class="legal-box">
-                        <p>
-                            <strong>Author Responsibility:</strong> You are solely responsible for reporting and paying all taxes on royalties received.
-                        </p>
-                        <p class="mt-1">
-                            <strong>Withholding Tax:</strong> Under Schedule 'D' of the Income Tax Proclamation, royalties paid to non-resident authors are subject to a <span class="highlight-warning">5% withholding tax</span>.
-                        </p>
-                    </div>
-                </div>
-
-                <hr class="terms-divider">
-
-                <!-- 7. Data Protection -->
-                <div class="terms-section">
-                    <h5><i class="fas fa-shield-alt"></i>7. Data Protection and Privacy</h5>
-                    <p>
-                        The Platform and all users shall comply with the <span class="highlight-success">Personal Data Protection Proclamation No. 1324/2024</span> ("PDPP").
-                    </p>
-                    <ul>
-                        <li><strong>Data Controller:</strong> The Platform acts as a Data Controller with respect to personal data collected from authors and users.</li>
-                        <li><strong>Data Processing Principles:</strong> Lawfulness, Consent, Purpose Limitation, Data Minimization, Accuracy, Storage Limitation, Integrity and Confidentiality.</li>
-                        <li><strong>Data Subject Rights:</strong> Right to be Informed, Right of Access, Right to Rectification, Right to Erasure, Right to Data Portability, Right to Object, Right to Restrict Processing.</li>
-                        <li><strong>Data Security:</strong> The Platform shall implement appropriate technical and organizational measures.</li>
-                        <li><strong>Data Breach Notification:</strong> The Platform shall notify the Ethiopian Communications Authority within <span class="highlight-warning">72 hours</span> of detection.</li>
-                    </ul>
-                </div>
-
-                <hr class="terms-divider">
-
-                <!-- 10. Content Restrictions -->
-                <div class="terms-section">
-                    <h5><i class="fas fa-ban"></i>10. Content Restrictions and Removal</h5>
-                    <h6 class="text-gold mt-2" style="font-size: 0.85rem;">10.1 Prohibited Content</h6>
-                    <ul>
-                        <li>Works that violate Ethiopian law or international law.</li>
-                        <li>Works that infringe on third-party intellectual property rights.</li>
-                        <li>Works that are <span class="highlight-danger">defamatory, obscene, or offensive</span>.</li>
-                        <li>Works that promote violence, discrimination, hatred, or illegal activities.</li>
-                        <li>Works that violate the privacy or publicity rights of others.</li>
-                        <li>Works that violate the standards of the Ethiopian Ministry of Culture and Tourism.</li>
-                    </ul>
-                    <div class="legal-box">
-                        <p>
-                            <i class="fas fa-exclamation-triangle highlight-warning me-1"></i>
-                            <strong>Legal Penalties for Copyright Infringement:</strong>
-                        </p>
-                        <p>
-                            <strong>Civil Remedies:</strong> Compensation for moral damage of <span class="highlight-danger">not less than 100,000 Birr</span>.
-                        </p>
-                        <p>
-                            <strong>Criminal Sanctions:</strong> Intentional violation may result in rigorous imprisonment for <span class="highlight-danger">5-10 years</span> and a fine of <span class="highlight-danger">25,000-50,000 Birr</span>.
-                        </p>
-                    </div>
-                </div>
-
-                <hr class="terms-divider">
-
-                <!-- 13. Dispute Resolution -->
-                <div class="terms-section">
-                    <h5><i class="fas fa-gavel"></i>13. Dispute Resolution and Governing Law</h5>
-                    <h6 class="text-gold mt-2" style="font-size: 0.85rem;">13.1 Governing Law</h6>
-                    <p>These Terms shall be governed by and construed in accordance with the laws of the <span class="highlight-gold">Federal Democratic Republic of Ethiopia</span>.</p>
-                    <h6 class="text-gold mt-2" style="font-size: 0.85rem;">13.2 Dispute Resolution</h6>
-                    <ol>
-                        <li><strong>Negotiation:</strong> The parties shall first attempt to resolve any dispute amicably.</li>
-                        <li><strong>Mediation:</strong> If negotiation fails, the parties shall attempt to resolve the dispute through mediation.</li>
-                        <li><strong>Arbitration:</strong> If mediation fails, the dispute shall be finally resolved through arbitration.</li>
-                        <li><strong>Courts:</strong> The courts of <span class="highlight-gold">Addis Ababa</span> shall have exclusive jurisdiction.</li>
-                    </ol>
-                </div>
-
-                <hr class="terms-divider">
-
-                <!-- 15. Entire Agreement -->
-                <div class="terms-section">
-                    <h5><i class="fas fa-handshake"></i>15. Entire Agreement</h5>
-                    <div class="legal-box">
-                        <p>
-                            <i class="fas fa-check-circle highlight-success me-1"></i>
-                            These Terms constitute the entire agreement between you and the Platform regarding the subject matter hereof and supersede all prior agreements, understandings, and representations.
-                        </p>
-                        <p class="mt-1">
-                            <i class="fas fa-calendar-alt highlight-gold me-1"></i>
-                            Last Updated: <span class="highlight-gold">{% now "F j, Y" %}</span>
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-outline-gold" data-bs-dismiss="modal">
-                    <i class="fas fa-times me-1"></i> Close
-                </button>
-                
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-<script>
-    // Auto-dismiss alerts after 5 seconds
-    setTimeout(function() {
-        document.querySelectorAll('.alert').forEach(function(alert) {
-            var bsAlert = new bootstrap.Alert(alert);
-            bsAlert.close();
-        });
-    }, 5000);
-    
-    // Close mobile menu on link click
-    document.addEventListener('DOMContentLoaded', function() {
-        var navLinks = document.querySelectorAll('.navbar-nav .nav-link, .navbar-nav .dropdown-item');
-        var navbarCollapse = document.getElementById('navbarNav');
-        var bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse);
-        
-        if (bsCollapse) {
-            navLinks.forEach(function(link) {
-                link.addEventListener('click', function() {
-                    if (window.innerWidth < 992) {
-                        bsCollapse.hide();
-                    }
-                });
+    <script>
+        // Auto-dismiss alerts after 5 seconds
+        setTimeout(function () {
+            document.querySelectorAll('.alert').forEach(function (alert) {
+                var bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
             });
-        }
-    });
-</script>
+        }, 5000);
 
-{% block extra_js %}{% endblock %}
+        // Close mobile menu on link click
+        document.addEventListener('DOMContentLoaded', function () {
+            var navLinks = document.querySelectorAll('.navbar-nav .nav-link, .navbar-nav .dropdown-item');
+            var navbarCollapse = document.getElementById('navbarNav');
+            var bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse);
+
+            if (bsCollapse) {
+                navLinks.forEach(function (link) {
+                    link.addEventListener('click', function () {
+                        if (window.innerWidth < 992) {
+                            bsCollapse.hide();
+                        }
+                    });
+                });
+            }
+        });
+    </script>
+
+    {% block extra_js %}{% endblock %}
 </body>
+
 </html>

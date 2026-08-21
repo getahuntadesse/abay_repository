@@ -7,54 +7,54 @@
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-5">
-            <div class="card shadow">
-                <div class="card-header bg-primary text-white text-center">
-                    <h4 class="mb-0"><i class="fas fa-lock me-2"></i> Two-Factor Authentication</h4>
+            <div class="card shadow-sm">
+                <div class="card-header bg-white border-0 text-center py-3">
+                    <h4 class="mb-0"><i class="fas fa-lock me-2" style="color:#DAA520;"></i>Two-Factor Authentication</h4>
                 </div>
                 <div class="card-body text-center">
-                    <div class="mb-4">
-                        <i class="fas fa-envelope-open-text fa-4x text-primary"></i>
-                    </div>
-                    
-                    <p class="mb-3">
-                        A verification code has been sent to <strong>{{ email }}</strong>
-                    </p>
-                    <p class="text-muted small">
-                        The code will expire in 5 minutes.
-                    </p>
-                    
-                    <form method="POST">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show text-start">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <p class="mb-2">A verification code was sent to</p>
+                    <p class="fw-bold">{{ email }}</p>
+                    <p class="text-muted small">Code expires in a few minutes. You can also use a backup code.</p>
+
+                    <form method="POST" class="text-start">
                         {% csrf_token %}
                         <div class="mb-3">
-                            <label for="token" class="form-label">Verification Code</label>
-                            <input type="text" class="form-control form-control-lg text-center" 
-                                   id="token" name="token" placeholder="Enter 6-digit code" 
-                                   autocomplete="off" maxlength="6" required>
+                            <label for="token" class="form-label">Verification or backup code</label>
+                            <input type="text" class="form-control form-control-lg text-center"
+                                   id="token" name="token" placeholder="6-digit or backup code"
+                                   autocomplete="one-time-code" required autofocus>
                         </div>
-                        
-                        <button type="submit" class="btn btn-primary w-100">
-                            <i class="fas fa-check-circle me-2"></i> Verify
+                        <button type="submit" class="btn btn-gold w-100">
+                            <i class="fas fa-check-circle me-2"></i>Verify
                         </button>
                     </form>
-                    
-                    <hr class="my-4">
-                    
-                    <div class="small text-muted">
-                        <p class="mb-1">Didn't receive the code?</p>
-                        <a href="#" class="text-decoration-none" onclick="resendCode()">
-                            <i class="fas fa-redo me-1"></i> Resend Code
-                        </a>
-                    </div>
+
+                    <form method="POST" class="mt-3">
+                        {% csrf_token %}
+                        <input type="hidden" name="resend" value="1">
+                        <button type="submit" class="btn btn-link text-gold">
+                            <i class="fas fa-redo me-1"></i>Resend code
+                        </button>
+                    </form>
+
+                    <hr>
+                    <a href="{% url 'accounts:login' %}" class="text-muted small">Back to login</a>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-<script>
-function resendCode() {
-    alert('A new verification code has been sent to your email.');
-    location.reload();
-}
-</script>
+<style>
+.btn-gold { background: linear-gradient(135deg,#DAA520,#B8860B); color:#1A1A1A; border:none; font-weight:600; padding:10px 24px; border-radius:8px; width:100%; }
+.text-gold { color:#DAA520; text-decoration:none; }
+</style>
 {% endblock %}

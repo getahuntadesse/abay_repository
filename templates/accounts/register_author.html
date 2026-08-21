@@ -486,22 +486,20 @@
 
                 <!-- Terms and Conditions - Updated with Modal Link -->
                 <div class="mt-4">
-                    <div class="checkbox-terms">
-                        <input type="checkbox" name="agreement_signed" id="id_agreement_signed" required>
-                        <label for="id_agreement_signed" class="terms-text">
-                            I have read and agree to the 
-                            <a href="#" class="terms-link" data-bs-toggle="modal" data-bs-target="#termsModal">
-                                Terms and Conditions <i class="fas fa-external-link-alt"></i>
-                            </a>
-                            of the Abay Repository platform. I understand that my rights are protected under 
-                            <span class="text-muted">Ethiopian Copyright Proclamation No. 410/2004</span> and 
-                            <span class="text-muted">Data Protection Proclamation No. 1324/2024</span>.
+                    <div class="form-check checkbox-terms mb-3">
+                        <input type="checkbox" class="form-check-input" name="agreement_signed" id="id_agreement_signed" required>
+                        <label class="form-check-label terms-text" for="id_agreement_signed">
+                            I have read and agree to the
+                            <a href="#" class="terms-link" data-bs-toggle="modal" data-bs-target="#termsModal">Terms and Conditions</a>
+                            and
+                            <a href="#" class="terms-link" data-bs-toggle="modal" data-bs-target="#privacyModal">Privacy Policy</a>
+                            of Abay Repository.
                         </label>
                     </div>
                     {% if form.agreement_signed.errors %}
                         <div class="text-danger small mt-1">{{ form.agreement_signed.errors }}</div>
                     {% endif %}
-                </div>
+</div>
 
                 <div class="mt-4">
                     <button type="submit" class="btn btn-gold btn-lg w-100 py-3" id="submit_btn">

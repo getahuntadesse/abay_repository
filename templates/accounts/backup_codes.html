@@ -7,36 +7,40 @@
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <div class="card shadow">
+            <div class="card shadow-sm">
                 <div class="card-header bg-warning text-dark">
-                    <h4 class="mb-0"><i class="fas fa-save me-2"></i> Backup Codes</h4>
+                    <h4 class="mb-0"><i class="fas fa-save me-2"></i>Backup Codes</h4>
                 </div>
                 <div class="card-body">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                        {% endfor %}
+                    {% endif %}
                     <div class="alert alert-warning">
-                        <i class="fas fa-exclamation-triangle me-2"></i>
-                        <strong>Save these backup codes!</strong>
-                        <p class="mb-0 mt-2">Use these codes if you lose access to your email.</p>
+                        <strong>Save these codes</strong> in a safe place. Each code works once if you cannot receive email.
                     </div>
-                    
-                    <div class="bg-light p-3 rounded">
+                    <div class="bg-light p-3 rounded font-monospace">
                         {% for code in codes %}
-                            <code class="d-block py-1">{{ code }}</code>
+                            <div class="py-1">{{ code }}</div>
                         {% empty %}
-                            <p class="text-muted mb-0">No backup codes generated yet.</p>
+                            <p class="text-muted mb-0">No codes available. Regenerate below.</p>
                         {% endfor %}
                     </div>
-                    
-                    <hr>
-                    
-                    <form method="POST" action="{% url 'accounts:2fa_generate_backup' %}">
+                    <form method="POST" class="mt-3">
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-warning w-100">
-                            <i class="fas fa-sync me-2"></i> Generate New Codes
+                        <input type="hidden" name="regenerate" value="1">
+                        <button type="submit" class="btn btn-outline-dark">
+                            <i class="fas fa-sync me-1"></i>Regenerate codes
                         </button>
+                        <a href="{% url 'accounts:profile' %}" class="btn btn-gold">Done</a>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<style>
+.btn-gold { background: linear-gradient(135deg,#DAA520,#B8860B); color:#1A1A1A; border:none; font-weight:600; }
+</style>
 {% endblock %}

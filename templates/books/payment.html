@@ -162,15 +162,11 @@
             <!-- Book Info -->
             <div class="book-info">
                 <h4>{{ book.title }}</h4>
-                <p class="text-muted">by {{ book.author.get_full_name|default:book.author.username }}</p>
+                <p class="text-muted">by {{ book.author.display_name }}</p>
                 <div class="price">{{ amount|floatformat:2|intcomma }} ETB</div>
             </div>
             
-            <div class="simulated-notice">
-                <i class="fas fa-flask me-2"></i>
-                <strong>Simulated Payment Mode</strong>
-                <p class="mb-0 small">This is a test payment. Your book will be available immediately after clicking "Complete Payment".</p>
-            </div>
+            
             
             <!-- Payment Form -->
             <form method="post" action="{% url 'books:process_payment' purchase.id %}" id="paymentForm">
@@ -180,7 +176,7 @@
                     <label class="form-label fw-bold">Select Payment Method</label>
                     
                     <!-- Telebirr -->
-                    <div class="payment-method active" id="method-telebirr" onclick="selectMethod('telebirr')">
+                    <div class="payment-method active" id="method-telebirr">
                         <div class="d-flex align-items-center">
                             <input type="radio" name="payment_method" value="telebirr" id="radio-telebirr" class="me-2" checked>
                             <span class="method-icon">
@@ -189,34 +185,49 @@
                             <div>
                                 <div class="method-name">Telebirr</div>
                                 <div class="method-desc">Pay using Telebirr mobile money</div>
+                                
                             </div>
                         </div>
                     </div>
                     
-                    <!-- Chapa -->
-                    <div class="payment-method" onclick="selectMethod('chapa')" id="method-chapa">
+                    <!-- CBE -->
+                    <div class="payment-method" onclick="selectMethod('cbe')" id="method-cbe">
                         <div class="d-flex align-items-center">
-                            <input type="radio" name="payment_method" value="chapa" id="radio-chapa" class="me-2">
-                            <span class="method-icon"><i class="fas fa-credit-card" style="color: #7c3aed;"></i></span>
+                            <input type="radio" name="payment_method" value="cbe" id="radio-cbe" class="me-2">
+                            <span class="method-icon"><i class="fas fa-university" style="color: #0d6efd;"></i></span>
                             <div>
-                                <div class="method-name">Chapa</div>
-                                <div class="method-desc">Card, bank & mobile money via Chapa</div>
+                                <div class="method-name">CBE Birr</div>
+                                <div class="method-desc">Pay using CBE Birr mobile banking</div>
+                                
                             </div>
                         </div>
                     </div>
                     
-                    <!-- PayPal -->
-                    <div class="payment-method" onclick="selectMethod('paypal')" id="method-paypal">
+                    <!-- Bank Transfer -->
+                    <div class="payment-method" onclick="selectMethod('bank_transfer')" id="method-bank_transfer">
                         <div class="d-flex align-items-center">
-                            <input type="radio" name="payment_method" value="paypal" id="radio-paypal" class="me-2">
-                            <span class="method-icon"><i class="fab fa-paypal" style="color: #0070ba;"></i></span>
+                            <input type="radio" name="payment_method" value="bank_transfer" id="radio-bank_transfer" class="me-2">
+                            <span class="method-icon"><i class="fas fa-building" style="color: #6c757d;"></i></span>
                             <div>
-                                <div class="method-name">PayPal</div>
-                                <div class="method-desc">Pay with PayPal account or card</div>
+                                <div class="method-name">Bank Transfer</div>
+                                <div class="method-desc">Pay via bank transfer</div>
+                                
                             </div>
                         </div>
                     </div>
-                    <input type="hidden" id="bookId" value="{{ book.id }}">
+                    
+                    <!-- Cash -->
+                    <div class="payment-method" onclick="selectMethod('cash')" id="method-cash">
+                        <div class="d-flex align-items-center">
+                            <input type="radio" name="payment_method" value="cash" id="radio-cash" class="me-2">
+                            <span class="method-icon"><i class="fas fa-money-bill-wave" style="color: #28a745;"></i></span>
+                            <div>
+                                <div class="method-name">Cash</div>
+                                <div class="method-desc">Pay with cash</div>
+                                
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 
                 <!-- Payment Summary -->

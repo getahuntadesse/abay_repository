@@ -493,7 +493,7 @@
         <div class="col-6 col-md-3">
             <div class="stat-card">
                 <div class="stat-number">{{ total_downloads|default:0|intcomma }}</div>
-                <div class="stat-label">Total Downloads</div>
+                <div class="stat-label">Total Read Onlines</div>
                 <div class="stat-icon"><i class="fas fa-book-open"></i></div>
             </div>
         </div>
@@ -523,7 +523,7 @@
                     <option value="oldest">Oldest First</option>
                     <option value="title">Title A-Z</option>
                     <option value="author">Author A-Z</option>
-                    <option value="downloads">Most Downloaded</option>
+                    <option value="downloads">Most Read Onlineed</option>
                 </select>
             </div>
         </div>
@@ -546,8 +546,8 @@
                     <img src="{% static 'images/default-cover.jpg' %}" alt="{{ book.title }}" class="book-cover" loading="lazy">
                     {% endif %}
                     <div class="book-overlay">
-                        <a href="{% url 'books:read' book.id %}" class="btn btn-white" title="Download">
-                            <i class="fas fa-book-open"></i> Download
+                        <a href="{% url 'books:read' book.id %}" class="btn btn-white" title="Read Online">
+                            <i class="fas fa-book-open"></i> Read Online
                         </a>
                         <a href="{% url 'books:detail' book.id %}" class="btn btn-gold" title="View Details">
                             <i class="fas fa-eye"></i> View
@@ -559,7 +559,7 @@
                         <a href="{% url 'books:detail' book.id %}">{{ book.title }}</a>
                     </div>
                     <div class="book-author">
-                        by <a href="{% url 'books:author_books' book.author.id %}">{{ book.author.full_name|default:book.author.username }}</a>
+                        by <a href="{% url 'books:author_books' book.author.id %}">{{ book.author.display_name }}</a>
                     </div>
                     <div class="book-meta">
                         <span class="meta-item">

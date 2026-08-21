@@ -365,7 +365,7 @@
                 {% for book in top_books %}
                 <tr>
                     <td><strong>{{ book.title|truncatechars:50 }}</strong></td>
-                    <td>{{ book.author.full_name|default:"Unknown" }}</td>
+                    <td>{{ book.author.display_name|default:"Unknown" }}</td>
                     <td>{% if book.is_free %}FREE{% else %}{{ book.price }} ETB{% endif %}</td>
                     <td>{{ book.purchase_count|default:0|intcomma }}</td>
                     <td>{{ book.downloads_count|default:0|intcomma }}</td>
@@ -387,7 +387,7 @@
                 {% for book in top_downloaded %}
                 <tr>
                     <td><strong>{{ book.title|truncatechars:50 }}</strong></td>
-                    <td>{{ book.author.full_name|default:"Unknown" }}</td>
+                    <td>{{ book.author.display_name|default:"Unknown" }}</td>
                     <td>{{ book.downloads_count|default:0|intcomma }}</td>
                     <td>{{ book.views_count|default:0|intcomma }}</td>
                 </tr>
@@ -448,7 +448,7 @@
                     <tbody>
                         {% for user in recent_users %}
                         <tr>
-                            <td>{{ user.full_name|default:user.username|truncatechars:25 }}</td>
+                            <td>{{ user.display_name|truncatechars:25 }}</td>
                             <td><span class="badge-gold">{{ user.role|title }}</span></td>
                             <td>{{ user.date_joined|date:"M d, Y" }}</td>
                         </tr>

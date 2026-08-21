@@ -26,7 +26,7 @@
                         {% for book in books %}
                         <tr>
                             <td><strong>{{ book.title|truncatechars:50 }}</strong></td>
-                            <td>{{ book.author.full_name|default:"Unknown" }}</td>
+                            <td>{{ book.author.display_name|default:"Unknown" }}</td>
                             <td>{{ book.genre.name|default:"Uncategorized" }}</td>
                             <td>
                                 {% if book.checker_score %}

@@ -162,7 +162,7 @@
                         <div class="col-md-8">
                             <h4>{{ book.title }}</h4>
                             <p class="meta">
-                                <strong>Author:</strong> {{ book.author.get_full_name|default:book.author.username }}<br>
+                                <strong>Author:</strong> {{ book.author.display_name }}<br>
                                 <strong>Genre:</strong> {{ book.genre.name|default:"Uncategorized" }}<br>
                                 <strong>Language:</strong> {{ book.language|default:"English" }}<br>
                                 <strong>Status:</strong> <span class="status-badge status-{{ book.status }}">{{ book.get_status_display|default:book.status|title }}</span><br>

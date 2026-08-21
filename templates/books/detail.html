@@ -297,7 +297,7 @@
                 <p class="book-author">
                     <i class="fas fa-user-edit me-2"></i>
                     <a href="{% url 'books:author_books' book.author.id %}">
-                        {{ book.author.get_full_name|default:book.author.username }}
+                        {{ book.author.display_name }}
                     </a>
                 </p>
                 
@@ -338,23 +338,22 @@
                     {% if book.status == 'published' %}
                         {% if book.is_free or book.price == 0 %}
                             <a href="{% url 'books:read' book.id %}" class="btn btn-success-custom">
-                                <i class="fas fa-book-open me-2"></i> Read in App
+                                <i class="fas fa-book-open me-2"></i> Read Online
                             </a>
                         {% else %}
                             {% if user.is_authenticated %}
                                 {% if has_purchased %}
                                     <a href="{% url 'books:read' book.id %}" class="btn btn-gold">
-                                        <i class="fas fa-book-open me-2"></i> Continue Reading
+                                        <i class="fas fa-book-open me-2"></i> Read Online
                                     </a>
                                 {% else %}
-                                    <!-- Purchase Form - This works with CSRF -->
-                                    <form method="post" action="{% url 'books:purchase_book' book.id %}" id="purchaseForm">
-                                        {% csrf_token %}
-                                        <button type="submit" class="btn btn-gold" id="purchaseBtn">
-                                            <i class="fas fa-shopping-cart me-2"></i> 
-                                            Purchase ({{ book.price|floatformat:2|intcomma }} ETB)
-                                        </button>
-                                    </form>
+                                    <a href="{% url 'books:purchase_book' book.id %}" class="btn btn-gold" id="purchaseBtn">
+                                        <i class="fas fa-shopping-cart me-2"></i>
+                                        Purchase ({{ book.price|floatformat:2|intcomma }} ETB)
+                                    </a>
+                                    <p class="small text-muted mt-2 mb-0">
+                                        Telebirr · Chapa · PayPal
+                                    </p>
                                 {% endif %}
                             {% else %}
                                 <a href="{% url 'accounts:login' %}?next={{ request.path }}" class="btn btn-gold">

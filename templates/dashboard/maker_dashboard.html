@@ -295,7 +295,7 @@
                 </h1>
                 <p class="mb-0 opacity-75">
                     <i class="fas fa-check-double me-2"></i>
-                    Welcome back, <strong>{{ user.full_name|default:user.username }}</strong>. 
+                    Welcome back, <strong>{{ user.display_name }}</strong>. 
                     Manage the editorial workflow and publish approved books.
                 </p>
                 <div class="mt-2">
@@ -479,7 +479,7 @@
                                 <br>
                                 <small class="text-muted">ISBN: {{ book.isbn|default:"N/A" }}</small>
                             </td>
-                            <td>{{ book.author.get_full_name|default:book.author.username }}</td>
+                            <td>{{ book.author.display_name }}</td>
                             <td>{{ book.genre.name|default:"Uncategorized" }}</td>
                             <td>{{ book.language|default:"English" }}</td>
                             <td>
@@ -567,7 +567,7 @@
                                 <br>
                                 <small class="text-muted">v{{ book.current_version|default:1 }}</small>
                             </td>
-                            <td>{{ book.author.get_full_name|default:book.author.username }}</td>
+                            <td>{{ book.author.display_name }}</td>
                             <td>{{ book.genre.name|default:"Uncategorized" }}</td>
                             <td>
                                 <span class="status-badge status-awaiting_checker">
@@ -596,7 +596,7 @@
                                     <br>
                                     <small class="text-muted">v{{ book.current_version|default:1 }}</small>
                                 </td>
-                                <td>{{ book.author.get_full_name|default:book.author.username }}</td>
+                                <td>{{ book.author.display_name }}</td>
                                 <td>{{ book.genre.name|default:"Uncategorized" }}</td>
                                 <td>
                                     <span class="status-badge status-{{ book.status }}">
@@ -663,10 +663,10 @@
                                 <br>
                                 <small class="text-muted">v{{ book.current_version|default:1 }}</small>
                             </td>
-                            <td>{{ book.author.get_full_name|default:book.author.username }}</td>
+                            <td>{{ book.author.display_name }}</td>
                             <td>
                                 {% if book.checker_assigned %}
-                                    {{ book.checker_assigned.get_full_name|default:book.checker_assigned.username }}
+                                    {{ book.checker_assigned.display_name }}
                                 {% else %}
                                     <span class="text-muted">Not assigned</span>
                                 {% endif %}
@@ -723,7 +723,7 @@
                                 <br>
                                 <small class="text-muted">ISBN: {{ book.isbn|default:"N/A" }}</small>
                             </td>
-                            <td>{{ book.author.get_full_name|default:book.author.username }}</td>
+                            <td>{{ book.author.display_name }}</td>
                             <td>{{ book.genre.name|default:"Uncategorized" }}</td>
                             <td>
                                 {% if book.checker_score %}
@@ -803,7 +803,7 @@
                                 <br>
                                 <small class="text-muted">ISBN: {{ book.isbn|default:"N/A" }}</small>
                             </td>
-                            <td>{{ book.author.get_full_name|default:book.author.username }}</td>
+                            <td>{{ book.author.display_name }}</td>
                             <td>{{ book.checker_reviews.count }}</td>
                             <td>
                                 {% for review in book.checker_reviews.all|slice:":3" %}
@@ -865,7 +865,7 @@
                                 <br>
                                 <small class="text-muted">ISBN: {{ book.isbn|default:"N/A" }}</small>
                             </td>
-                            <td>{{ book.author.get_full_name|default:book.author.username }}</td>
+                            <td>{{ book.author.display_name }}</td>
                             <td>{% if book.is_free %}FREE{% else %}{{ book.price }} ETB{% endif %}</td>
                             <td>{{ book.published_at|date:"M d, Y" }}</td>
                             <td>{{ book.downloads_count|default:0|intcomma }}</td>

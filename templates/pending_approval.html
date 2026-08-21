@@ -104,7 +104,7 @@
                                     <br>
                                     <small class="text-muted">ISBN: {{ book.isbn|default:"N/A" }}</small>
                                 </td>
-                                <td>{{ book.author.full_name|default:"Unknown" }}</td>
+                                <td>{{ book.author.display_name|default:"Unknown" }}</td>
                                 <td>{{ book.genre.name|default:"Uncategorized" }}</td>
                                 <td>
                                     {% if book.checker_score %}
@@ -113,7 +113,7 @@
                                         <span class="text-muted">Pending</span>
                                     {% endif %}
                                 </td>
-                                <td>{{ book.checker_assigned.full_name|default:"Not assigned" }}</td>
+                                <td>{{ book.checker_assigned.display_name|default:"Not assigned" }}</td>
                                 <td>{{ book.checker_reviewed_at|date:"M d, Y"|default:"-" }}</td>
                                 <td>
                                     <div class="btn-group">
