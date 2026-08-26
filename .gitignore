@@ -182,6 +182,7 @@ collected_static/
 logs/
 logs/*.log
 logs/abay_repository.log
+logs.txt
 *.log
 
 # Backup files
