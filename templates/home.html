@@ -890,7 +890,7 @@
         {% if featured_books %}
         <div class="row g-3 g-md-4">
             {% for book in featured_books|slice:":8" %}
-            <div class="col-6 col-md-4 col-lg-3 fade-in-up delay-{{ forloop.counter|add:" 0"|slice:"-1" }}">
+            <div class="col-6 col-md-4 col-lg-3 fade-in-up delay-{{ forloop.counter|add:"0"|slice:"-1" }}">
                 <div class="book-card">
                     <div class="book-cover-wrapper">
                         <div class="book-cover"
@@ -910,8 +910,7 @@
                             <a href="{% url 'books:detail' book.id %}">{{ book.title|truncatechars:35 }}</a>
                         </h6>
                         <small class="book-author">
-                            by <a href="{% url 'books:author_books' book.author.id %}">{{
-                                book.author.full_name|default:"Unknown" }}</a>
+                            by <a href="{% url 'books:author_books' book.author.id %}">{{ book.author.full_name|default:"Unknown" }}</a>
                         </small>
                         <div class="book-meta mt-2">
                             {% if book.is_free %}
