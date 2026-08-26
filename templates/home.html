@@ -843,7 +843,7 @@
     </div>
 </section>
 
-<!-- Statistics Section - Using Database Attribute Names from author_dashboard.html -->
+<!-- Statistics Section -->
 <div class="stats-section">
     <div class="container">
         <div class="row g-3 g-md-4">
@@ -879,7 +879,7 @@
     </div>
 </div>
 
-<!-- Featured Books Section - Using Database Attribute Names from author_dashboard.html -->
+<!-- Featured Books Section -->
 <section class="featured-books-section">
     <div class="container">
         <div class="text-center mb-4">
@@ -910,7 +910,7 @@
                             <a href="{% url 'books:detail' book.id %}">{{ book.title|truncatechars:35 }}</a>
                         </h6>
                         <small class="book-author">
-                            by <a href="{% url 'books:author_books' book.author.id %}">{{ book.author.full_name|default:"Unknown" }}</a>
+                            by <a href="{% url 'books:author_books' book.author.id %}">{{ book.author.full_name|default:book.author.username }}</a>
                         </small>
                         <div class="book-meta mt-2">
                             {% if book.is_free %}

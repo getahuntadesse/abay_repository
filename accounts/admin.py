@@ -64,6 +64,15 @@ class CustomUserAdmin(UserAdmin):
     # Ordering
     ordering = ('-date_joined',)
     
+    # Fields that should be read-only (can't be edited)
+    readonly_fields = (
+        'last_login', 
+        'date_joined', 
+        'created_at', 
+        'updated_at',
+        'last_seen'
+    )
+    
     # Fieldsets for detail/edit view
     fieldsets = (
         (None, {
@@ -103,8 +112,7 @@ class CustomUserAdmin(UserAdmin):
                 'email_verified', 
                 'email_verification_token',
                 'verification_token_expires',
-                'phone_verified',
-                'is_verified'
+                'phone_verified'
             ),
             'classes': ('collapse',)
         }),
@@ -116,8 +124,7 @@ class CustomUserAdmin(UserAdmin):
                 'two_factor_verified',
                 'two_factor_secret',
                 'two_factor_backup_codes',
-                'last_login_ip',
-                'last_seen'
+                'last_login_ip'
             ),
             'classes': ('collapse',)
         }),
@@ -145,8 +152,9 @@ class CustomUserAdmin(UserAdmin):
             'description': 'Tax identification information'
         }),
         (_('Important Dates'), {
-            'fields': ('last_login', 'date_joined', 'created_at', 'updated_at'),
-            'classes': ('collapse',)
+            'fields': ('last_login', 'date_joined', 'last_seen', 'created_at', 'updated_at'),
+            'classes': ('collapse',),
+            'description': 'These dates are automatically set and cannot be edited.'
         }),
     )
     
@@ -179,6 +187,19 @@ class CustomUserAdmin(UserAdmin):
         'make_author',
         'make_client'
     ]
+    
+    # Override get_form to ensure non-editable fields are excluded
+    def get_form(self, request, obj=None, **kwargs):
+        """
+        Override get_form to exclude non-editable fields from the form.
+        """
+        form = super().get_form(request, obj, **kwargs)
+        # Remove non-editable fields from the form if they exist
+        non_editable_fields = ['created_at', 'updated_at']
+        for field in non_editable_fields:
+            if field in form.base_fields:
+                del form.base_fields[field]
+        return form
     
     def role_badge(self, obj):
         """Display role with color coded badge"""
@@ -222,18 +243,35 @@ class CustomUserAdmin(UserAdmin):
     def payment_methods_status(self, obj):
         """Display available payment methods with icons"""
         methods = []
-        if obj.has_payment_method('telebirr'):
-            methods.append(format_html(
-                '<span style="color: #28a745; margin-right: 5px;">📱 Telebirr</span>'
-            ))
-        if obj.has_payment_method('cbe'):
-            methods.append(format_html(
-                '<span style="color: #0d6efd; margin-right: 5px;">🏦 CBE</span>'
-            ))
-        if obj.has_payment_method('bank_transfer'):
-            methods.append(format_html(
-                '<span style="color: #6c757d; margin-right: 5px;">🏛️ Bank</span>'
-            ))
+        # Check if payment methods exist using the model's method
+        if hasattr(obj, 'has_payment_method'):
+            if obj.has_payment_method('telebirr'):
+                methods.append(format_html(
+                    '<span style="color: #28a745; margin-right: 5px;">📱 Telebirr</span>'
+                ))
+            if obj.has_payment_method('cbe'):
+                methods.append(format_html(
+                    '<span style="color: #0d6efd; margin-right: 5px;">🏦 CBE</span>'
+                ))
+            if obj.has_payment_method('bank_transfer'):
+                methods.append(format_html(
+                    '<span style="color: #6c757d; margin-right: 5px;">🏛️ Bank</span>'
+                ))
+        
+        # Fallback: check fields directly
+        if not methods:
+            if obj.telebirr_phone:
+                methods.append(format_html(
+                    '<span style="color: #28a745; margin-right: 5px;">📱 Telebirr</span>'
+                ))
+            if obj.cbe_account_number:
+                methods.append(format_html(
+                    '<span style="color: #0d6efd; margin-right: 5px;">🏦 CBE</span>'
+                ))
+            if obj.bank_account_number:
+                methods.append(format_html(
+                    '<span style="color: #6c757d; margin-right: 5px;">🏛️ Bank</span>'
+                ))
         
         if not methods:
             return format_html('<span style="color: #dc3545;">⚠️ No payment method</span>')
@@ -509,6 +547,3 @@ class ClientProfileAdmin(admin.ModelAdmin):
 admin.site.site_header = 'Abay Repository Admin'
 admin.site.site_title = 'Abay Repository'
 admin.site.index_title = 'Dashboard'
-
-# Register CustomUser with the custom admin
-# The @admin.register decorator already handles this

@@ -1435,3 +1435,461 @@ TypeError: combine() argument 1 must be datetime.date, not str
 [2026-08-26 09:04:12] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 89418
 [2026-08-26 09:04:22] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 89397
 [2026-08-26 09:04:32] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 89410
+[2026-08-26 09:04:42] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 89388
+[2026-08-26 09:04:52] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 89286
+[2026-08-26 09:04:58] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 89413
+[2026-08-26 09:05:02] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 89265
+[2026-08-26 09:05:12] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 89284
+[2026-08-26 09:05:20] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 89233
+[2026-08-26 09:05:22] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 89266
+[2026-08-26 09:05:25] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 89242
+[2026-08-26 09:05:29] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 89340
+[2026-08-26 09:05:32] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 89146
+[2026-08-26 09:05:42] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 89125
+[2026-08-26 09:05:52] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 89082
+[2026-08-26 09:06:02] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 89104
+[2026-08-26 09:06:12] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 89061
+[2026-08-26 09:06:22] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 89091
+[2026-08-26 09:06:32] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 89049
+[2026-08-26 09:06:42] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 89071
+[2026-08-26 09:07:06] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 89018
+[2026-08-26 09:07:41] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 89091
+[2026-08-26 09:07:41] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88983
+[2026-08-26 09:07:42] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88962
+[2026-08-26 09:07:44] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 89082
+[2026-08-26 09:07:52] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88923
+[2026-08-26 09:08:02] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88951
+[2026-08-26 09:08:12] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88922
+[2026-08-26 09:08:22] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88859
+[2026-08-26 09:08:32] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88871
+[2026-08-26 09:08:42] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88819
+[2026-08-26 09:08:52] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88831
+[2026-08-26 09:09:02] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88779
+[2026-08-26 09:09:12] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88769
+[2026-08-26 09:09:22] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88721
+[2026-08-26 09:09:32] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88753
+[2026-08-26 09:09:42] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88707
+[2026-08-26 09:09:52] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88694
+[2026-08-26 09:10:02] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88639
+[2026-08-26 09:10:12] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88665
+[2026-08-26 09:10:22] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88613
+[2026-08-26 09:10:32] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88641
+[2026-08-26 09:10:42] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88653
+[2026-08-26 09:10:43] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88624
+[2026-08-26 09:10:52] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88537
+[2026-08-26 09:11:02] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88528
+[2026-08-26 09:11:12] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88490
+[2026-08-26 09:11:22] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88473
+[2026-08-26 09:11:32] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88436
+[2026-08-26 09:11:42] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88476
+[2026-08-26 09:12:06] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88409
+[2026-08-26 09:13:06] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88437
+[2026-08-26 09:13:44] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88425
+[2026-08-26 09:13:44] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88479
+[2026-08-26 09:13:52] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88532
+[2026-08-26 09:14:02] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88418
+[2026-08-26 09:14:13] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88329
+[2026-08-26 09:14:13] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88339
+[2026-08-26 09:14:17] AUTH INFO - AUTH - User logged out: admin, IP=127.0.0.1
+[2026-08-26 09:14:17] INFO accounts.views - AUTH - User logged out: admin, IP=127.0.0.1
+[2026-08-26 09:14:17] INFO accounts.views - AUTH - User logged out: admin, IP=127.0.0.1
+[2026-08-26 09:14:17] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-08-26 09:14:17] INFO django.server - "GET / HTTP/1.1" 200 93560
+[2026-08-26 09:14:17] INFO django.server - "GET /media/books/covers/2026/08/pychology.png HTTP/1.1" 200 363640
+[2026-08-26 09:14:17] INFO django.server - "GET /media/books/covers/2026/08/cover_ai.png HTTP/1.1" 200 349464
+[2026-08-26 09:14:17] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-08-26 09:14:18] INFO django.server - "GET / HTTP/1.1" 200 93206
+[2026-08-26 09:14:18] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-08-26 09:14:19] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-08-26 09:14:20] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-08-26 09:26:30] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64903
+[2026-08-26 09:26:31] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-08-26 09:26:47] AUTH INFO - AUTH - Login successful: User=admin, IP=127.0.0.1, Role=admin
+[2026-08-26 09:26:47] INFO accounts.views - AUTH - Login successful: User=admin, IP=127.0.0.1, Role=admin
+[2026-08-26 09:26:47] INFO accounts.views - AUTH - Login successful: User=admin, IP=127.0.0.1, Role=admin
+[2026-08-26 09:26:47] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-08-26 09:26:47] AUTH INFO - Admin dashboard accessed by: admin
+[2026-08-26 09:26:47] INFO accounts.views - Admin dashboard accessed by: admin
+[2026-08-26 09:26:47] INFO accounts.views - Admin dashboard accessed by: admin
+[2026-08-26 09:26:47] INFO django.server - "GET /accounts/dashboard/admin/ HTTP/1.1" 200 107748
+[2026-08-26 09:26:47] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 87520
+[2026-08-26 09:26:49] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-08-26 09:26:49] INFO django.server - "GET /admin/ HTTP/1.1" 200 19655
+[2026-08-26 09:26:51] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-08-26 09:26:52] INFO django.server - "GET /admin/accounts/customuser/ HTTP/1.1" 200 41649
+[2026-08-26 09:26:52] INFO django.server - "GET /static/admin/css/changelists.css HTTP/1.1" 200 6566
+[2026-08-26 09:26:53] INFO django.server - "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+[2026-08-26 09:26:53] INFO django.server - "GET /static/admin/js/jquery.init.js HTTP/1.1" 200 347
+[2026-08-26 09:26:53] INFO django.server - "GET /static/admin/js/core.js HTTP/1.1" 200 5682
+[2026-08-26 09:26:53] INFO django.server - "GET /static/admin/js/admin/RelatedObjectLookups.js HTTP/1.1" 200 8943
+[2026-08-26 09:26:53] INFO django.server - "GET /static/admin/js/actions.js HTTP/1.1" 200 7872
+[2026-08-26 09:26:53] INFO django.server - "GET /static/admin/js/prepopulate.js HTTP/1.1" 200 1531
+[2026-08-26 09:26:53] INFO django.server - "GET /static/admin/js/urlify.js HTTP/1.1" 200 7887
+[2026-08-26 09:26:53] INFO django.server - "GET /static/admin/img/search.svg HTTP/1.1" 200 458
+[2026-08-26 09:26:53] INFO django.server - "GET /static/admin/img/icon-yes.svg HTTP/1.1" 200 436
+[2026-08-26 09:26:53] INFO django.server - "GET /static/admin/img/icon-no.svg HTTP/1.1" 200 560
+[2026-08-26 09:26:53] INFO django.server - "GET /static/admin/js/vendor/jquery/jquery.js HTTP/1.1" 200 292458
+[2026-08-26 09:26:53] INFO django.server - "GET /static/admin/js/filters.js HTTP/1.1" 200 978
+[2026-08-26 09:26:53] INFO django.server - "GET /static/admin/js/vendor/xregexp/xregexp.js HTTP/1.1" 200 232381
+[2026-08-26 09:26:53] INFO django.server - "GET /static/admin/img/tooltag-add.svg HTTP/1.1" 200 331
+[2026-08-26 09:26:53] INFO django.server - "GET /static/admin/img/sorting-icons.svg HTTP/1.1" 200 1097
+[2026-08-26 09:26:55] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-08-26 09:27:02] ERROR django.request - Internal Server Error: /admin/accounts/customuser/6/change/
+Traceback (most recent call last):
+  File "C:\abay_repository\venv\lib\site-packages\django\contrib\admin\options.py", line 809, in get_form
+    return modelform_factory(self.model, **defaults)
+  File "C:\abay_repository\venv\lib\site-packages\django\forms\models.py", line 642, in modelform_factory
+    return type(form)(class_name, (form,), form_class_attrs)
+  File "C:\abay_repository\venv\lib\site-packages\django\forms\models.py", line 300, in __new__
+    fields = fields_for_model(
+  File "C:\abay_repository\venv\lib\site-packages\django\forms\models.py", line 198, in fields_for_model
+    raise FieldError(
+django.core.exceptions.FieldError: 'created_at' cannot be specified for CustomUser model form as it is a non-editable field
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\abay_repository\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\abay_repository\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\C4S\AppData\Local\Programs\Python\Python39\lib\contextlib.py", line 79, in inner
+    return func(*args, **kwds)
+  File "C:\abay_repository\venv\lib\site-packages\django\contrib\admin\options.py", line 688, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+  File "C:\abay_repository\venv\lib\site-packages\django\utils\decorators.py", line 134, in _wrapper_view
+    response = view_func(request, *args, **kwargs)
+  File "C:\abay_repository\venv\lib\site-packages\django\views\decorators\cache.py", line 62, in _wrapper_view_func
+    response = view_func(request, *args, **kwargs)
+  File "C:\abay_repository\venv\lib\site-packages\django\contrib\admin\sites.py", line 242, in inner
+    return view(request, *args, **kwargs)
+  File "C:\abay_repository\venv\lib\site-packages\django\contrib\admin\options.py", line 1889, in change_view
+    return self.changeform_view(request, object_id, form_url, extra_context)
+  File "C:\abay_repository\venv\lib\site-packages\django\utils\decorators.py", line 46, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "C:\abay_repository\venv\lib\site-packages\django\utils\decorators.py", line 134, in _wrapper_view
+    response = view_func(request, *args, **kwargs)
+  File "C:\abay_repository\venv\lib\site-packages\django\contrib\admin\options.py", line 1747, in changeform_view
+    return self._changeform_view(request, object_id, form_url, extra_context)
+  File "C:\abay_repository\venv\lib\site-packages\django\contrib\admin\options.py", line 1782, in _changeform_view
+    ModelForm = self.get_form(
+  File "C:\abay_repository\venv\lib\site-packages\django\contrib\auth\admin.py", line 98, in get_form
+    return super().get_form(request, obj, **defaults)
+  File "C:\abay_repository\venv\lib\site-packages\django\contrib\admin\options.py", line 811, in get_form
+    raise FieldError(
+django.core.exceptions.FieldError: 'created_at' cannot be specified for CustomUser model form as it is a non-editable field. Check fields/fieldsets/exclude attributes of class CustomUserAdmin.
+[2026-08-26 09:27:02] ERROR django.request log.log_response:241 - Internal Server Error: /admin/accounts/customuser/6/change/
+Traceback (most recent call last):
+  File "C:\abay_repository\venv\lib\site-packages\django\contrib\admin\options.py", line 809, in get_form
+    return modelform_factory(self.model, **defaults)
+  File "C:\abay_repository\venv\lib\site-packages\django\forms\models.py", line 642, in modelform_factory
+    return type(form)(class_name, (form,), form_class_attrs)
+  File "C:\abay_repository\venv\lib\site-packages\django\forms\models.py", line 300, in __new__
+    fields = fields_for_model(
+  File "C:\abay_repository\venv\lib\site-packages\django\forms\models.py", line 198, in fields_for_model
+    raise FieldError(
+django.core.exceptions.FieldError: 'created_at' cannot be specified for CustomUser model form as it is a non-editable field
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\abay_repository\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\abay_repository\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\C4S\AppData\Local\Programs\Python\Python39\lib\contextlib.py", line 79, in inner
+    return func(*args, **kwds)
+  File "C:\abay_repository\venv\lib\site-packages\django\contrib\admin\options.py", line 688, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+  File "C:\abay_repository\venv\lib\site-packages\django\utils\decorators.py", line 134, in _wrapper_view
+    response = view_func(request, *args, **kwargs)
+  File "C:\abay_repository\venv\lib\site-packages\django\views\decorators\cache.py", line 62, in _wrapper_view_func
+    response = view_func(request, *args, **kwargs)
+  File "C:\abay_repository\venv\lib\site-packages\django\contrib\admin\sites.py", line 242, in inner
+    return view(request, *args, **kwargs)
+  File "C:\abay_repository\venv\lib\site-packages\django\contrib\admin\options.py", line 1889, in change_view
+    return self.changeform_view(request, object_id, form_url, extra_context)
+  File "C:\abay_repository\venv\lib\site-packages\django\utils\decorators.py", line 46, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "C:\abay_repository\venv\lib\site-packages\django\utils\decorators.py", line 134, in _wrapper_view
+    response = view_func(request, *args, **kwargs)
+  File "C:\abay_repository\venv\lib\site-packages\django\contrib\admin\options.py", line 1747, in changeform_view
+    return self._changeform_view(request, object_id, form_url, extra_context)
+  File "C:\abay_repository\venv\lib\site-packages\django\contrib\admin\options.py", line 1782, in _changeform_view
+    ModelForm = self.get_form(
+  File "C:\abay_repository\venv\lib\site-packages\django\contrib\auth\admin.py", line 98, in get_form
+    return super().get_form(request, obj, **defaults)
+  File "C:\abay_repository\venv\lib\site-packages\django\contrib\admin\options.py", line 811, in get_form
+    raise FieldError(
+django.core.exceptions.FieldError: 'created_at' cannot be specified for CustomUser model form as it is a non-editable field. Check fields/fieldsets/exclude attributes of class CustomUserAdmin.
+[2026-08-26 09:27:02] ERROR django.server - "GET /admin/accounts/customuser/6/change/ HTTP/1.1" 500 196435
+[2026-08-26 09:27:04] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-08-26 11:02:13] INFO django.utils.autoreload - C:\abay_repository\accounts\admin.py changed, reloading.
+[2026-08-26 11:02:13] INFO django.utils.autoreload - C:\abay_repository\accounts\admin.py changed, reloading.
+[2026-08-26 11:02:17] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-08-26 11:02:17] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-08-26 11:02:22] ERROR django.request - Internal Server Error: /admin/accounts/customuser/6/change/
+Traceback (most recent call last):
+  File "C:\abay_repository\venv\lib\site-packages\django\contrib\admin\options.py", line 809, in get_form
+    return modelform_factory(self.model, **defaults)
+  File "C:\abay_repository\venv\lib\site-packages\django\forms\models.py", line 642, in modelform_factory
+    return type(form)(class_name, (form,), form_class_attrs)
+  File "C:\abay_repository\venv\lib\site-packages\django\forms\models.py", line 321, in __new__
+    raise FieldError(message)
+django.core.exceptions.FieldError: Unknown field(s) (is_verified) specified for CustomUser
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\abay_repository\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\abay_repository\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\C4S\AppData\Local\Programs\Python\Python39\lib\contextlib.py", line 79, in inner
+    return func(*args, **kwds)
+  File "C:\abay_repository\venv\lib\site-packages\django\contrib\admin\options.py", line 688, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+  File "C:\abay_repository\venv\lib\site-packages\django\utils\decorators.py", line 134, in _wrapper_view
+    response = view_func(request, *args, **kwargs)
+  File "C:\abay_repository\venv\lib\site-packages\django\views\decorators\cache.py", line 62, in _wrapper_view_func
+    response = view_func(request, *args, **kwargs)
+  File "C:\abay_repository\venv\lib\site-packages\django\contrib\admin\sites.py", line 242, in inner
+    return view(request, *args, **kwargs)
+  File "C:\abay_repository\venv\lib\site-packages\django\contrib\admin\options.py", line 1889, in change_view
+    return self.changeform_view(request, object_id, form_url, extra_context)
+  File "C:\abay_repository\venv\lib\site-packages\django\utils\decorators.py", line 46, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "C:\abay_repository\venv\lib\site-packages\django\utils\decorators.py", line 134, in _wrapper_view
+    response = view_func(request, *args, **kwargs)
+  File "C:\abay_repository\venv\lib\site-packages\django\contrib\admin\options.py", line 1747, in changeform_view
+    return self._changeform_view(request, object_id, form_url, extra_context)
+  File "C:\abay_repository\venv\lib\site-packages\django\contrib\admin\options.py", line 1782, in _changeform_view
+    ModelForm = self.get_form(
+  File "C:\abay_repository\accounts\admin.py", line 200, in get_form
+    form = super().get_form(request, obj, **kwargs)
+  File "C:\abay_repository\venv\lib\site-packages\django\contrib\auth\admin.py", line 98, in get_form
+    return super().get_form(request, obj, **defaults)
+  File "C:\abay_repository\venv\lib\site-packages\django\contrib\admin\options.py", line 811, in get_form
+    raise FieldError(
+django.core.exceptions.FieldError: Unknown field(s) (is_verified) specified for CustomUser. Check fields/fieldsets/exclude attributes of class CustomUserAdmin.
+[2026-08-26 11:02:22] ERROR django.request log.log_response:241 - Internal Server Error: /admin/accounts/customuser/6/change/
+Traceback (most recent call last):
+  File "C:\abay_repository\venv\lib\site-packages\django\contrib\admin\options.py", line 809, in get_form
+    return modelform_factory(self.model, **defaults)
+  File "C:\abay_repository\venv\lib\site-packages\django\forms\models.py", line 642, in modelform_factory
+    return type(form)(class_name, (form,), form_class_attrs)
+  File "C:\abay_repository\venv\lib\site-packages\django\forms\models.py", line 321, in __new__
+    raise FieldError(message)
+django.core.exceptions.FieldError: Unknown field(s) (is_verified) specified for CustomUser
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\abay_repository\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\abay_repository\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\C4S\AppData\Local\Programs\Python\Python39\lib\contextlib.py", line 79, in inner
+    return func(*args, **kwds)
+  File "C:\abay_repository\venv\lib\site-packages\django\contrib\admin\options.py", line 688, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+  File "C:\abay_repository\venv\lib\site-packages\django\utils\decorators.py", line 134, in _wrapper_view
+    response = view_func(request, *args, **kwargs)
+  File "C:\abay_repository\venv\lib\site-packages\django\views\decorators\cache.py", line 62, in _wrapper_view_func
+    response = view_func(request, *args, **kwargs)
+  File "C:\abay_repository\venv\lib\site-packages\django\contrib\admin\sites.py", line 242, in inner
+    return view(request, *args, **kwargs)
+  File "C:\abay_repository\venv\lib\site-packages\django\contrib\admin\options.py", line 1889, in change_view
+    return self.changeform_view(request, object_id, form_url, extra_context)
+  File "C:\abay_repository\venv\lib\site-packages\django\utils\decorators.py", line 46, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "C:\abay_repository\venv\lib\site-packages\django\utils\decorators.py", line 134, in _wrapper_view
+    response = view_func(request, *args, **kwargs)
+  File "C:\abay_repository\venv\lib\site-packages\django\contrib\admin\options.py", line 1747, in changeform_view
+    return self._changeform_view(request, object_id, form_url, extra_context)
+  File "C:\abay_repository\venv\lib\site-packages\django\contrib\admin\options.py", line 1782, in _changeform_view
+    ModelForm = self.get_form(
+  File "C:\abay_repository\accounts\admin.py", line 200, in get_form
+    form = super().get_form(request, obj, **kwargs)
+  File "C:\abay_repository\venv\lib\site-packages\django\contrib\auth\admin.py", line 98, in get_form
+    return super().get_form(request, obj, **defaults)
+  File "C:\abay_repository\venv\lib\site-packages\django\contrib\admin\options.py", line 811, in get_form
+    raise FieldError(
+django.core.exceptions.FieldError: Unknown field(s) (is_verified) specified for CustomUser. Check fields/fieldsets/exclude attributes of class CustomUserAdmin.
+[2026-08-26 11:02:22] ERROR django.server - "GET /admin/accounts/customuser/6/change/ HTTP/1.1" 500 196962
+[2026-08-26 11:02:24] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-08-26 11:03:43] INFO django.utils.autoreload - C:\abay_repository\accounts\admin.py changed, reloading.
+[2026-08-26 11:03:43] INFO django.utils.autoreload - C:\abay_repository\accounts\admin.py changed, reloading.
+[2026-08-26 11:03:45] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-08-26 11:03:45] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-08-26 11:03:50] INFO django.server - "GET /admin/accounts/customuser/6/change/ HTTP/1.1" 200 68979
+[2026-08-26 11:03:51] INFO django.server - "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+[2026-08-26 11:03:55] INFO django.server - "GET /static/admin/css/forms.css HTTP/1.1" 200 9047
+[2026-08-26 11:03:55] INFO django.server - "GET /static/admin/js/SelectBox.js HTTP/1.1" 200 4530
+[2026-08-26 11:03:55] INFO django.server - "GET /static/admin/js/calendar.js HTTP/1.1" 200 8466
+[2026-08-26 11:03:55] INFO django.server - "GET /static/admin/js/SelectFilter2.js HTTP/1.1" 200 15292
+[2026-08-26 11:03:55] INFO django.server - "GET /static/admin/js/admin/DateTimeShortcuts.js HTTP/1.1" 200 19319
+[2026-08-26 11:03:55] INFO django.server - "GET /static/admin/css/widgets.css HTTP/1.1" 200 11900
+[2026-08-26 11:03:55] INFO django.server - "GET /static/admin/js/collapse.js HTTP/1.1" 200 1803
+[2026-08-26 11:03:55] INFO django.server - "GET /static/admin/js/prepopulate_init.js HTTP/1.1" 200 586
+[2026-08-26 11:03:55] INFO django.server - "GET /static/admin/js/change_form.js HTTP/1.1" 200 606
+[2026-08-26 11:03:55] INFO django.server - "GET /static/admin/img/icon-unknown.svg HTTP/1.1" 200 655
+[2026-08-26 11:03:55] INFO django.server - "GET /static/admin/img/selector-icons.svg HTTP/1.1" 200 3291
+[2026-08-26 11:03:55] INFO django.server - "GET /static/admin/img/icon-unknown-alt.svg HTTP/1.1" 200 655
+[2026-08-26 11:03:57] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-08-26 11:04:35] INFO django.server - "GET / HTTP/1.1" 200 94617
+[2026-08-26 11:04:35] INFO django.server - "GET /media/books/covers/2026/08/cover_ai.png HTTP/1.1" 200 349464
+[2026-08-26 11:04:35] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-08-26 11:04:35] INFO django.server - "GET /media/books/covers/2026/08/pychology.png HTTP/1.1" 200 363640
+[2026-08-26 11:04:37] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-08-26 11:04:46] ERROR django.request - Internal Server Error: /books/author/6/
+Traceback (most recent call last):
+  File "C:\abay_repository\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\abay_repository\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\C4S\AppData\Local\Programs\Python\Python39\lib\contextlib.py", line 79, in inner
+    return func(*args, **kwds)
+  File "C:\abay_repository\books\views.py", line 3060, in author_books
+    return render(request, 'books/author_books.html', context)
+  File "C:\abay_repository\venv\lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: books/author_books.html
+[2026-08-26 11:04:46] ERROR django.request log.log_response:241 - Internal Server Error: /books/author/6/
+Traceback (most recent call last):
+  File "C:\abay_repository\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\abay_repository\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\C4S\AppData\Local\Programs\Python\Python39\lib\contextlib.py", line 79, in inner
+    return func(*args, **kwds)
+  File "C:\abay_repository\books\views.py", line 3060, in author_books
+    return render(request, 'books/author_books.html', context)
+  File "C:\abay_repository\venv\lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: books/author_books.html
+[2026-08-26 11:04:46] ERROR django.server - "GET /books/author/6/ HTTP/1.1" 500 117167
+[2026-08-26 11:04:48] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-08-26 11:07:26] INFO django.server - "GET /books/author/6/ HTTP/1.1" 200 76052
+[2026-08-26 11:07:26] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-08-26 11:07:28] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-08-26 11:07:35] INFO django.server - "GET /books/browse/ HTTP/1.1" 200 97377
+[2026-08-26 11:07:35] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-08-26 11:07:37] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-08-26 11:07:38] INFO django.server - "GET / HTTP/1.1" 200 94617
+[2026-08-26 11:07:38] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-08-26 11:07:40] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-08-26 11:07:45] INFO django.server - "GET /books/author/6/ HTTP/1.1" 200 76052
+[2026-08-26 11:07:45] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-08-26 11:07:47] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-08-26 11:07:53] INFO django.server - "GET /books/browse/ HTTP/1.1" 200 97377
+[2026-08-26 11:07:53] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-08-26 11:07:56] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-08-26 11:10:22] INFO django.server - "GET / HTTP/1.1" 200 94638
+[2026-08-26 11:10:22] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-08-26 11:10:24] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-08-26 11:10:32] INFO django.server - "GET /books/author/6/ HTTP/1.1" 200 76052
+[2026-08-26 11:10:32] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-08-26 11:10:34] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-08-26 11:10:52] INFO django.server - "GET / HTTP/1.1" 200 94638
+[2026-08-26 11:10:53] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-08-26 11:11:13] INFO django.server - "GET /books/2/ HTTP/1.1" 200 74496
+[2026-08-26 11:11:13] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-08-26 11:11:15] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-08-26 11:11:23] INFO django.server - "GET /books/4/ HTTP/1.1" 200 74950
+[2026-08-26 11:11:23] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-08-26 11:11:24] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-08-26 11:11:26] INFO django.server - "GET /books/4/read/ HTTP/1.1" 200 132718
+[2026-08-26 11:11:26] INFO django.server - "GET /static/js/pdf-offline-cache.js HTTP/1.1" 304 0
+[2026-08-26 11:11:31] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-08-26 11:14:30] INFO django.server - "GET /admin/accounts/clientprofile/ HTTP/1.1" 200 18975
+[2026-08-26 11:14:30] INFO django.server - "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+[2026-08-26 11:14:32] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-08-26 11:14:33] INFO django.server - "GET /admin/accounts/authorprofile/ HTTP/1.1" 200 19146
+[2026-08-26 11:14:33] INFO django.server - "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+[2026-08-26 11:14:35] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-08-26 11:14:37] INFO django.server - "GET /admin/accounts/authorprofile/add/ HTTP/1.1" 200 48147
+[2026-08-26 11:14:37] INFO django.server - "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+[2026-08-26 11:14:37] INFO django.server - "GET /static/admin/img/icon-viewlink.svg HTTP/1.1" 200 581
+[2026-08-26 11:14:37] INFO django.server - "GET /static/admin/img/icon-deletelink.svg HTTP/1.1" 200 392
+[2026-08-26 11:14:37] INFO django.server - "GET /static/admin/img/icon-calendar.svg HTTP/1.1" 200 1086
+[2026-08-26 11:14:37] INFO django.server - "GET /static/admin/img/icon-clock.svg HTTP/1.1" 200 677
+[2026-08-26 11:14:39] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-08-26 11:15:29] INFO django.server - "POST /admin/accounts/authorprofile/add/ HTTP/1.1" 302 0
+[2026-08-26 11:15:29] INFO django.server - "GET /admin/accounts/authorprofile/ HTTP/1.1" 200 22206
+[2026-08-26 11:15:29] INFO django.server - "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+[2026-08-26 11:15:31] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-08-26 11:15:40] INFO django.server - "GET /admin/accounts/customuser/ HTTP/1.1" 200 41649
+[2026-08-26 11:15:41] INFO django.server - "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+[2026-08-26 11:15:43] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-08-26 11:15:50] INFO django.server - "GET /admin/accounts/customuser/2/change/ HTTP/1.1" 200 68983
+[2026-08-26 11:15:50] INFO django.server - "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+[2026-08-26 11:15:52] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-08-26 11:16:26] INFO django.server - "POST /admin/accounts/customuser/2/change/ HTTP/1.1" 302 0
+[2026-08-26 11:16:27] INFO django.server - "GET /admin/accounts/customuser/ HTTP/1.1" 200 41913
+[2026-08-26 11:16:27] INFO django.server - "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+[2026-08-26 11:16:29] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-08-26 11:16:36] INFO django.server - "GET /admin/accounts/customuser/3/change/ HTTP/1.1" 200 68991
+[2026-08-26 11:16:36] INFO django.server - "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+[2026-08-26 11:16:38] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-08-26 11:17:38] INFO django.server - "POST /admin/accounts/customuser/3/change/ HTTP/1.1" 302 0
+[2026-08-26 11:17:38] INFO django.server - "GET /admin/accounts/customuser/ HTTP/1.1" 200 41937
+[2026-08-26 11:17:38] INFO django.server - "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+[2026-08-26 11:17:40] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-08-26 11:17:44] INFO django.server - "GET /books/4/ HTTP/1.1" 200 74950
+[2026-08-26 11:17:45] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-08-26 11:17:46] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-08-26 11:17:46] INFO django.server - "GET /books/4/read/ HTTP/1.1" 200 132718
+[2026-08-26 11:17:50] INFO django.server - "GET /books/4/ HTTP/1.1" 200 74951
+[2026-08-26 11:17:50] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-08-26 11:17:51] INFO django.server - "GET / HTTP/1.1" 200 94638
+[2026-08-26 11:17:51] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-08-26 11:17:52] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-08-26 11:17:53] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-08-26 11:17:53] INFO django.server - "GET / HTTP/1.1" 200 94638
+[2026-08-26 11:17:53] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-08-26 11:17:55] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-08-26 11:18:02] INFO django.server - "GET / HTTP/1.1" 200 94638
+[2026-08-26 11:18:02] INFO django.server - "GET /static/images/Abrehot.jpg HTTP/1.1" 200 72716
+[2026-08-26 11:18:02] INFO django.server - "GET /static/images/logo.png HTTP/1.1" 200 157968
+[2026-08-26 11:18:02] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-08-26 11:18:02] INFO django.server - "GET /media/books/covers/2026/08/pychology.png HTTP/1.1" 200 363640
+[2026-08-26 11:18:02] INFO django.server - "GET /media/books/covers/2026/08/cover_ai.png HTTP/1.1" 200 349464
+[2026-08-26 11:18:02] INFO django.server - "GET / HTTP/1.1" 200 94638
+[2026-08-26 11:18:02] INFO django.server - "GET /static/images/Abrehot.jpg HTTP/1.1" 200 72716
+[2026-08-26 11:18:02] INFO django.server - "GET /static/images/logo.png HTTP/1.1" 200 157968
+[2026-08-26 11:18:02] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-08-26 11:18:02] INFO django.server - "GET /media/books/covers/2026/08/cover_ai.png HTTP/1.1" 200 349464
+[2026-08-26 11:18:02] INFO django.server - "GET /media/books/covers/2026/08/pychology.png HTTP/1.1" 200 363640
+[2026-08-26 11:18:03] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-08-26 11:18:38] INFO django.server - "GET /books/author/6/ HTTP/1.1" 200 76052
+[2026-08-26 11:18:38] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-08-26 11:18:40] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-08-26 11:21:22] INFO django.server - "GET /books/author/6/ HTTP/1.1" 200 76052
+[2026-08-26 11:21:22] INFO django.server - "GET /static/images/logo.png HTTP/1.1" 200 157968
+[2026-08-26 11:21:22] INFO django.server - "GET /media/books/covers/2026/08/cover_ai.png HTTP/1.1" 200 349464
+[2026-08-26 11:21:22] INFO django.server - "GET /media/books/covers/2026/08/pychology.png HTTP/1.1" 200 363640
+[2026-08-26 11:21:22] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-08-26 11:21:23] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-08-26 11:21:24] INFO django.server - "GET /books/author/6/ HTTP/1.1" 200 76052
+[2026-08-26 11:21:24] INFO django.server - "GET /static/images/logo.png HTTP/1.1" 200 157968
+[2026-08-26 11:21:24] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-08-26 11:21:24] INFO django.server - "GET /media/books/covers/2026/08/cover_ai.png HTTP/1.1" 200 349464
+[2026-08-26 11:21:24] INFO django.server - "GET /media/books/covers/2026/08/pychology.png HTTP/1.1" 200 363640
+[2026-08-26 11:21:24] INFO django.server - "GET /books/author/6/ HTTP/1.1" 200 76052
+[2026-08-26 11:21:24] INFO django.server - "GET /static/images/logo.png HTTP/1.1" 200 157968
+[2026-08-26 11:21:24] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-08-26 11:21:24] INFO django.server - "GET /media/books/covers/2026/08/cover_ai.png HTTP/1.1" 200 349464
+[2026-08-26 11:21:24] INFO django.server - "GET /media/books/covers/2026/08/pychology.png HTTP/1.1" 200 363640
+[2026-08-26 11:21:25] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-08-26 11:21:27] INFO django.server - "GET / HTTP/1.1" 200 94494
+[2026-08-26 11:21:27] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-08-26 11:21:29] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
