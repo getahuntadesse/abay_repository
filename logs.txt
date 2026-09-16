@@ -1893,3 +1893,1578 @@ django.template.exceptions.TemplateDoesNotExist: books/author_books.html
 [2026-08-26 11:21:27] INFO django.server - "GET / HTTP/1.1" 200 94494
 [2026-08-26 11:21:27] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
 [2026-08-26 11:21:29] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-08-26 11:34:10] INFO django.server - "GET / HTTP/1.1" 200 94494
+[2026-08-26 11:34:10] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-08-26 11:34:12] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-08-26 11:34:17] INFO django.server - "GET /books/author/6/ HTTP/1.1" 200 76052
+[2026-08-26 11:34:17] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-08-26 11:34:19] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-08-26 11:34:24] INFO django.server - "GET / HTTP/1.1" 200 94494
+[2026-08-26 11:34:24] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-08-26 11:34:26] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 08:31:00] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-05 08:31:00] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-05 08:31:13] INFO django.server - code 400, message Bad request version ('ºº\x13\x01\x13\x02\x13\x03À+À/À,À0Ì©Ì¨À\x13À\x14\x00\x9c\x00\x9d\x00/\x005\x01\x00\x06\xadzz\x00\x00\x00\x12\x00\x00\x00')
+[2026-09-05 08:31:13] ERROR django.server - You're accessing the development server over HTTPS, but it only supports HTTP.
+[2026-09-05 08:31:14] INFO django.server - code 400, message Bad request version ('WZµ\x7f')
+[2026-09-05 08:31:14] ERROR django.server - You're accessing the development server over HTTPS, but it only supports HTTP.
+[2026-09-05 08:31:14] INFO django.server - code 400, message Bad request version ('×¥vÚèªï0rö')
+[2026-09-05 08:31:14] ERROR django.server - You're accessing the development server over HTTPS, but it only supports HTTP.
+[2026-09-05 08:31:14] INFO django.server - code 400, message Bad request version ('ÄT\x11X\x1b¿\x1a\x11µ')
+[2026-09-05 08:31:14] ERROR django.server - You're accessing the development server over HTTPS, but it only supports HTTP.
+[2026-09-05 08:31:34] INFO django.server - "GET / HTTP/1.1" 200 93087
+[2026-09-05 08:31:34] INFO django.server - "GET /static/images/Abrehot.jpg HTTP/1.1" 200 72716
+[2026-09-05 08:31:34] INFO django.server - "GET /static/images/logo.png HTTP/1.1" 200 157968
+[2026-09-05 08:31:35] INFO django.server - "GET /media/books/covers/2026/08/cover_ai.png HTTP/1.1" 200 349464
+[2026-09-05 08:31:35] INFO django.server - "GET /media/books/covers/2026/08/pychology.png HTTP/1.1" 200 363640
+[2026-09-05 08:31:35] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-09-05 08:31:35] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-05 08:31:37] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 08:31:57] INFO django.server - "GET /books/browse/ HTTP/1.1" 200 96414
+[2026-09-05 08:31:57] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-09-05 08:31:58] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 08:32:15] INFO django.server - "GET /books/browse/?q=django HTTP/1.1" 200 90894
+[2026-09-05 08:32:15] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-09-05 08:32:17] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 08:32:25] INFO django.server - "GET / HTTP/1.1" 200 93087
+[2026-09-05 08:32:25] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-09-05 08:32:27] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 08:32:56] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 10:39:33] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-05 10:39:33] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-05 10:39:42] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64907
+[2026-09-05 10:39:43] INFO django.server - "GET /static/images/logo.png HTTP/1.1" 200 157968
+[2026-09-05 10:39:45] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 10:39:46] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64907
+[2026-09-05 10:39:48] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 10:40:04] AUTH INFO - AUTH - Login successful: User=admin, IP=127.0.0.1, Role=admin
+[2026-09-05 10:40:04] INFO accounts.views - AUTH - Login successful: User=admin, IP=127.0.0.1, Role=admin
+[2026-09-05 10:40:04] INFO accounts.views - AUTH - Login successful: User=admin, IP=127.0.0.1, Role=admin
+[2026-09-05 10:40:04] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-09-05 10:40:04] AUTH INFO - Admin dashboard accessed by: admin
+[2026-09-05 10:40:04] INFO accounts.views - Admin dashboard accessed by: admin
+[2026-09-05 10:40:04] INFO accounts.views - Admin dashboard accessed by: admin
+[2026-09-05 10:40:05] INFO django.server - "GET /accounts/dashboard/admin/ HTTP/1.1" 200 107758
+[2026-09-05 10:40:05] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 92236
+[2026-09-05 10:40:07] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 10:40:11] INFO django.server - "GET /books/browse/ HTTP/1.1" 200 97382
+[2026-09-05 10:40:11] INFO django.server - "GET /media/books/covers/2026/08/pychology.png HTTP/1.1" 200 363640
+[2026-09-05 10:40:11] INFO django.server - "GET /media/books/covers/2026/08/cover_ai.png HTTP/1.1" 200 349464
+[2026-09-05 10:40:11] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-09-05 10:40:13] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 10:40:14] INFO django.server - "GET /books/3/read-free/ HTTP/1.1" 302 0
+[2026-09-05 10:40:14] INFO django.server - "GET /books/3/read/ HTTP/1.1" 200 132734
+[2026-09-05 10:40:14] INFO django.server - "GET /static/js/pdf-offline-cache.js HTTP/1.1" 304 0
+[2026-09-05 10:40:19] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 10:40:49] INFO django.server - "GET /books/3/ HTTP/1.1" 200 74440
+[2026-09-05 10:40:49] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-09-05 10:40:50] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 10:40:58] INFO django.server - "GET /books/3/read/ HTTP/1.1" 200 132734
+[2026-09-05 10:41:03] INFO django.server - "GET /books/3/ HTTP/1.1" 200 74440
+[2026-09-05 10:41:03] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-09-05 10:41:04] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 10:41:05] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 10:41:08] AUTH INFO - AUTH - User logged out: admin, IP=127.0.0.1
+[2026-09-05 10:41:08] INFO accounts.views - AUTH - User logged out: admin, IP=127.0.0.1
+[2026-09-05 10:41:08] INFO accounts.views - AUTH - User logged out: admin, IP=127.0.0.1
+[2026-09-05 10:41:08] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-09-05 10:41:08] INFO django.server - "GET / HTTP/1.1" 200 93441
+[2026-09-05 10:41:08] INFO django.server - "GET /static/images/Abrehot.jpg HTTP/1.1" 200 72716
+[2026-09-05 10:41:08] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-09-05 10:41:10] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 10:41:13] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64907
+[2026-09-05 10:41:15] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 10:42:23] AUTH INFO - AUTH - Login successful: User=author, IP=127.0.0.1, Role=author
+[2026-09-05 10:42:23] INFO accounts.views - AUTH - Login successful: User=author, IP=127.0.0.1, Role=author
+[2026-09-05 10:42:23] INFO accounts.views - AUTH - Login successful: User=author, IP=127.0.0.1, Role=author
+[2026-09-05 10:42:23] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-09-05 10:42:23] AUTH INFO - Author dashboard accessed by: author
+[2026-09-05 10:42:23] INFO accounts.views - Author dashboard accessed by: author
+[2026-09-05 10:42:23] INFO accounts.views - Author dashboard accessed by: author
+[2026-09-05 10:42:23] INFO django.server - "GET /accounts/dashboard/author/ HTTP/1.1" 200 81236
+[2026-09-05 10:42:24] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 10:42:25] INFO django.server - "GET /books/upload/ HTTP/1.1" 200 82061
+[2026-09-05 10:42:27] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 10:44:02] INFO books.views - Notifications sent to 5 makers about new submission 5
+[2026-09-05 10:44:02] INFO books.views - Notifications sent to 5 makers about new submission 5
+[2026-09-05 10:44:02] INFO django.server - "POST /books/upload/ HTTP/1.1" 302 0
+[2026-09-05 10:44:03] INFO django.server - "GET /books/my-books/author/ HTTP/1.1" 200 86966
+[2026-09-05 10:44:03] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-09-05 10:44:03] INFO django.server - "GET /media/books/covers/2026/09/pychology.png HTTP/1.1" 200 363640
+[2026-09-05 10:44:04] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 10:44:08] AUTH INFO - AUTH - User logged out: author, IP=127.0.0.1
+[2026-09-05 10:44:08] INFO accounts.views - AUTH - User logged out: author, IP=127.0.0.1
+[2026-09-05 10:44:08] INFO accounts.views - AUTH - User logged out: author, IP=127.0.0.1
+[2026-09-05 10:44:08] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-09-05 10:44:08] INFO django.server - "GET / HTTP/1.1" 200 93441
+[2026-09-05 10:44:08] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-09-05 10:44:09] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 10:44:10] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64907
+[2026-09-05 10:44:11] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 10:44:23] AUTH INFO - AUTH - Login successful: User=maker, IP=127.0.0.1, Role=maker
+[2026-09-05 10:44:23] INFO accounts.views - AUTH - Login successful: User=maker, IP=127.0.0.1, Role=maker
+[2026-09-05 10:44:23] INFO accounts.views - AUTH - Login successful: User=maker, IP=127.0.0.1, Role=maker
+[2026-09-05 10:44:23] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-09-05 10:44:23] INFO books.views - Maker dashboard: 1 new submissions found
+[2026-09-05 10:44:23] INFO books.views - Maker dashboard: 1 new submissions found
+[2026-09-05 10:44:23] INFO books.views -   - 5: xx - submitted - submitted_at: 2026-09-05 07:44:02.769926+00:00
+[2026-09-05 10:44:23] INFO books.views -   - 5: xx - submitted - submitted_at: 2026-09-05 07:44:02.769926+00:00
+[2026-09-05 10:44:23] INFO django.server - "GET /books/maker/dashboard/ HTTP/1.1" 200 88547
+[2026-09-05 10:44:24] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 10:44:45] INFO django.server - "GET /books/maker/assign-checker/1/ HTTP/1.1" 200 73603
+[2026-09-05 10:44:47] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 10:45:22] INFO django.server - "GET / HTTP/1.1" 200 94533
+[2026-09-05 10:45:22] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-09-05 10:45:24] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 10:45:26] INFO django.server - "GET /accounts/dashboard/ HTTP/1.1" 302 0
+[2026-09-05 10:45:26] INFO books.views - Maker dashboard: 1 new submissions found
+[2026-09-05 10:45:26] INFO books.views - Maker dashboard: 1 new submissions found
+[2026-09-05 10:45:26] INFO books.views -   - 5: xx - submitted - submitted_at: 2026-09-05 07:44:02.769926+00:00
+[2026-09-05 10:45:26] INFO books.views -   - 5: xx - submitted - submitted_at: 2026-09-05 07:44:02.769926+00:00
+[2026-09-05 10:45:26] INFO django.server - "GET /books/maker/dashboard/ HTTP/1.1" 200 88195
+[2026-09-05 10:45:28] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 10:45:48] INFO django.server - "GET /books/maker/initial-review/5/ HTTP/1.1" 200 74117
+[2026-09-05 10:45:50] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 10:46:10] INFO django.server - "GET / HTTP/1.1" 200 94533
+[2026-09-05 10:46:10] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-09-05 10:46:12] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 10:47:18] INFO django.server - "GET /books/browse/ HTTP/1.1" 200 97417
+[2026-09-05 10:47:18] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-09-05 10:47:20] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 10:47:21] INFO django.server - "GET /books/3/read-free/ HTTP/1.1" 302 0
+[2026-09-05 10:47:21] INFO django.server - "GET /books/3/read/ HTTP/1.1" 200 132769
+[2026-09-05 10:47:27] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 10:56:17] INFO django.server - "GET /books/3/ HTTP/1.1" 200 74475
+[2026-09-05 10:56:17] INFO django.server - "GET /media/books/covers/2026/08/cover_ai.png HTTP/1.1" 200 349464
+[2026-09-05 10:56:18] INFO django.server - "GET /media/books/covers/2026/08/pychology.png HTTP/1.1" 200 363640
+[2026-09-05 10:56:18] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-09-05 10:56:19] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 10:56:25] INFO django.server - "GET / HTTP/1.1" 200 94533
+[2026-09-05 10:56:25] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-09-05 10:56:27] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 10:56:33] INFO django.server - "GET /accounts/dashboard/ HTTP/1.1" 302 0
+[2026-09-05 10:56:33] INFO books.views - Maker dashboard: 1 new submissions found
+[2026-09-05 10:56:33] INFO books.views - Maker dashboard: 1 new submissions found
+[2026-09-05 10:56:33] INFO books.views -   - 5: xx - submitted - submitted_at: 2026-09-05 07:44:02.769926+00:00
+[2026-09-05 10:56:33] INFO books.views -   - 5: xx - submitted - submitted_at: 2026-09-05 07:44:02.769926+00:00
+[2026-09-05 10:56:33] INFO django.server - "GET /books/maker/dashboard/ HTTP/1.1" 200 88197
+[2026-09-05 10:56:35] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 10:56:42] INFO django.server - "GET /books/maker/initial-review/5/ HTTP/1.1" 200 74117
+[2026-09-05 10:56:44] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 10:56:55] INFO books.views - Initial review for book 5 completed. Decision: complete
+[2026-09-05 10:56:55] INFO books.views - Initial review for book 5 completed. Decision: complete
+[2026-09-05 10:56:55] INFO django.server - "POST /books/maker/initial-review/5/ HTTP/1.1" 302 0
+[2026-09-05 10:56:55] INFO books.views - Maker dashboard: 0 new submissions found
+[2026-09-05 10:56:55] INFO books.views - Maker dashboard: 0 new submissions found
+[2026-09-05 10:56:55] INFO django.server - "GET /books/maker/dashboard/ HTTP/1.1" 200 88427
+[2026-09-05 10:56:57] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 10:57:03] AUTH INFO - AUTH - User logged out: maker, IP=127.0.0.1
+[2026-09-05 10:57:03] INFO accounts.views - AUTH - User logged out: maker, IP=127.0.0.1
+[2026-09-05 10:57:03] INFO accounts.views - AUTH - User logged out: maker, IP=127.0.0.1
+[2026-09-05 10:57:03] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-09-05 10:57:03] INFO django.server - "GET / HTTP/1.1" 200 93441
+[2026-09-05 10:57:04] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-09-05 10:57:05] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 10:57:06] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64907
+[2026-09-05 10:57:08] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 10:57:20] AUTH INFO - AUTH - Login successful: User=checker, IP=127.0.0.1, Role=checker
+[2026-09-05 10:57:20] INFO accounts.views - AUTH - Login successful: User=checker, IP=127.0.0.1, Role=checker
+[2026-09-05 10:57:20] INFO accounts.views - AUTH - Login successful: User=checker, IP=127.0.0.1, Role=checker
+[2026-09-05 10:57:20] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-09-05 10:57:21] INFO django.server - "GET /books/checker/dashboard/ HTTP/1.1" 200 80229
+[2026-09-05 10:57:22] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 10:58:00] AUTH INFO - AUTH - User logged out: checker, IP=127.0.0.1
+[2026-09-05 10:58:00] INFO accounts.views - AUTH - User logged out: checker, IP=127.0.0.1
+[2026-09-05 10:58:00] INFO accounts.views - AUTH - User logged out: checker, IP=127.0.0.1
+[2026-09-05 10:58:00] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-09-05 10:58:00] INFO django.server - "GET / HTTP/1.1" 200 93441
+[2026-09-05 10:58:01] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-09-05 10:58:02] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 10:58:02] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64907
+[2026-09-05 10:58:04] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 10:58:08] AUTH INFO - AUTH - Login successful: User=maker, IP=127.0.0.1, Role=maker
+[2026-09-05 10:58:08] INFO accounts.views - AUTH - Login successful: User=maker, IP=127.0.0.1, Role=maker
+[2026-09-05 10:58:08] INFO accounts.views - AUTH - Login successful: User=maker, IP=127.0.0.1, Role=maker
+[2026-09-05 10:58:08] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-09-05 10:58:08] INFO books.views - Maker dashboard: 0 new submissions found
+[2026-09-05 10:58:08] INFO books.views - Maker dashboard: 0 new submissions found
+[2026-09-05 10:58:08] INFO django.server - "GET /books/maker/dashboard/ HTTP/1.1" 200 88414
+[2026-09-05 10:58:10] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 10:58:15] INFO django.server - "GET /books/maker/assign-checker/5/ HTTP/1.1" 200 73579
+[2026-09-05 10:58:17] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 10:58:24] INFO books.views - Notification sent to checker checker
+[2026-09-05 10:58:24] INFO books.views - Notification sent to checker checker
+[2026-09-05 10:58:24] INFO django.server - "POST /books/maker/assign-checker/5/ HTTP/1.1" 302 0
+[2026-09-05 10:58:24] INFO books.views - Maker dashboard: 0 new submissions found
+[2026-09-05 10:58:24] INFO books.views - Maker dashboard: 0 new submissions found
+[2026-09-05 10:58:24] INFO django.server - "GET /books/maker/dashboard/ HTTP/1.1" 200 89293
+[2026-09-05 10:58:26] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 10:58:29] AUTH INFO - AUTH - User logged out: maker, IP=127.0.0.1
+[2026-09-05 10:58:29] INFO accounts.views - AUTH - User logged out: maker, IP=127.0.0.1
+[2026-09-05 10:58:29] INFO accounts.views - AUTH - User logged out: maker, IP=127.0.0.1
+[2026-09-05 10:58:29] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-09-05 10:58:29] INFO django.server - "GET / HTTP/1.1" 200 93441
+[2026-09-05 10:58:29] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-09-05 10:58:31] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 10:58:33] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64907
+[2026-09-05 10:58:35] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 10:58:37] AUTH INFO - AUTH - Login successful: User=checker, IP=127.0.0.1, Role=checker
+[2026-09-05 10:58:37] INFO accounts.views - AUTH - Login successful: User=checker, IP=127.0.0.1, Role=checker
+[2026-09-05 10:58:37] INFO accounts.views - AUTH - Login successful: User=checker, IP=127.0.0.1, Role=checker
+[2026-09-05 10:58:37] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-09-05 10:58:37] INFO django.server - "GET /books/checker/dashboard/ HTTP/1.1" 200 83444
+[2026-09-05 10:58:38] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 10:58:48] INFO books.views - Checker checker accepted assignment 4
+[2026-09-05 10:58:48] INFO books.views - Checker checker accepted assignment 4
+[2026-09-05 10:58:48] INFO django.server - "GET /books/checker/accept/4/ HTTP/1.1" 302 0
+[2026-09-05 10:58:48] INFO django.server - "GET /books/checker/dashboard/ HTTP/1.1" 200 81800
+[2026-09-05 10:58:50] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 10:59:07] INFO django.server - "GET /books/checker/submit-review/4/ HTTP/1.1" 200 91994
+[2026-09-05 10:59:09] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 10:59:51] INFO books.views - Review submitted for book 5 by checker checker
+[2026-09-05 10:59:51] INFO books.views - Review submitted for book 5 by checker checker
+[2026-09-05 10:59:51] INFO django.server - "POST /books/checker/submit-review/4/ HTTP/1.1" 302 0
+[2026-09-05 10:59:52] INFO django.server - "GET /books/checker/dashboard/ HTTP/1.1" 200 81659
+[2026-09-05 10:59:54] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 10:59:57] AUTH INFO - AUTH - User logged out: checker, IP=127.0.0.1
+[2026-09-05 10:59:57] INFO accounts.views - AUTH - User logged out: checker, IP=127.0.0.1
+[2026-09-05 10:59:57] INFO accounts.views - AUTH - User logged out: checker, IP=127.0.0.1
+[2026-09-05 10:59:57] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-09-05 10:59:57] INFO django.server - "GET / HTTP/1.1" 200 93441
+[2026-09-05 10:59:57] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-09-05 10:59:59] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 11:00:00] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64907
+[2026-09-05 11:00:01] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 11:00:06] AUTH INFO - AUTH - Login successful: User=maker, IP=127.0.0.1, Role=maker
+[2026-09-05 11:00:06] INFO accounts.views - AUTH - Login successful: User=maker, IP=127.0.0.1, Role=maker
+[2026-09-05 11:00:06] INFO accounts.views - AUTH - Login successful: User=maker, IP=127.0.0.1, Role=maker
+[2026-09-05 11:00:06] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-09-05 11:00:06] INFO books.views - Maker dashboard: 0 new submissions found
+[2026-09-05 11:00:06] INFO books.views - Maker dashboard: 0 new submissions found
+[2026-09-05 11:00:07] INFO django.server - "GET /books/maker/dashboard/ HTTP/1.1" 200 88488
+[2026-09-05 11:00:08] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 11:00:21] INFO django.server - "GET /books/maker/publish/5/ HTTP/1.1" 200 69654
+[2026-09-05 11:00:23] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 11:00:39] INFO books.views - Book 5 published by maker
+[2026-09-05 11:00:39] INFO books.views - Book 5 published by maker
+[2026-09-05 11:00:39] INFO django.server - "POST /books/maker/publish/5/ HTTP/1.1" 302 0
+[2026-09-05 11:00:39] INFO books.views - Maker dashboard: 0 new submissions found
+[2026-09-05 11:00:39] INFO books.views - Maker dashboard: 0 new submissions found
+[2026-09-05 11:00:39] INFO django.server - "GET /books/maker/dashboard/ HTTP/1.1" 200 87965
+[2026-09-05 11:00:41] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 11:00:42] INFO django.server - "GET / HTTP/1.1" 200 96128
+[2026-09-05 11:00:42] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-09-05 11:00:42] INFO django.server - "GET /media/books/covers/2026/09/pychology.png HTTP/1.1" 200 363640
+[2026-09-05 11:00:43] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 11:02:03] AUTH INFO - AUTH - User logged out: maker, IP=127.0.0.1
+[2026-09-05 11:02:03] INFO accounts.views - AUTH - User logged out: maker, IP=127.0.0.1
+[2026-09-05 11:02:03] INFO accounts.views - AUTH - User logged out: maker, IP=127.0.0.1
+[2026-09-05 11:02:03] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-09-05 11:02:03] INFO django.server - "GET / HTTP/1.1" 200 95036
+[2026-09-05 11:02:03] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-09-05 11:02:05] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 11:02:13] INFO django.server - "GET / HTTP/1.1" 200 94682
+[2026-09-05 11:02:14] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-09-05 11:02:15] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 18:48:19] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64907
+[2026-09-05 18:48:21] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 18:49:06] AUTH INFO - AUTH - Login successful: User=admin, IP=127.0.0.1, Role=admin
+[2026-09-05 18:49:06] INFO accounts.views - AUTH - Login successful: User=admin, IP=127.0.0.1, Role=admin
+[2026-09-05 18:49:06] INFO accounts.views - AUTH - Login successful: User=admin, IP=127.0.0.1, Role=admin
+[2026-09-05 18:49:06] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-09-05 18:49:06] AUTH INFO - Admin dashboard accessed by: admin
+[2026-09-05 18:49:06] INFO accounts.views - Admin dashboard accessed by: admin
+[2026-09-05 18:49:06] INFO accounts.views - Admin dashboard accessed by: admin
+[2026-09-05 18:49:06] INFO django.server - "GET /accounts/dashboard/admin/ HTTP/1.1" 200 107758
+[2026-09-05 18:49:06] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 92860
+[2026-09-05 18:49:08] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 18:49:12] INFO django.server - "GET /books/browse/ HTTP/1.1" 200 100320
+[2026-09-05 18:49:12] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-09-05 18:49:12] INFO django.server - "GET /media/books/covers/2026/09/pychology.png HTTP/1.1" 200 363640
+[2026-09-05 18:49:13] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 18:49:25] AUTH INFO - AUTH - User logged out: admin, IP=127.0.0.1
+[2026-09-05 18:49:25] INFO accounts.views - AUTH - User logged out: admin, IP=127.0.0.1
+[2026-09-05 18:49:25] INFO accounts.views - AUTH - User logged out: admin, IP=127.0.0.1
+[2026-09-05 18:49:25] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-09-05 18:49:25] INFO django.server - "GET / HTTP/1.1" 200 95036
+[2026-09-05 18:49:26] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-09-05 18:49:27] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 18:49:30] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64907
+[2026-09-05 18:49:32] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 18:49:39] AUTH INFO - AUTH - Login successful: User=maker, IP=127.0.0.1, Role=maker
+[2026-09-05 18:49:39] INFO accounts.views - AUTH - Login successful: User=maker, IP=127.0.0.1, Role=maker
+[2026-09-05 18:49:39] INFO accounts.views - AUTH - Login successful: User=maker, IP=127.0.0.1, Role=maker
+[2026-09-05 18:49:39] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-09-05 18:49:39] INFO books.views - Maker dashboard: 0 new submissions found
+[2026-09-05 18:49:39] INFO books.views - Maker dashboard: 0 new submissions found
+[2026-09-05 18:49:39] INFO django.server - "GET /books/maker/dashboard/ HTTP/1.1" 200 87953
+[2026-09-05 18:49:41] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 18:53:18] INFO django.server - "GET /books/maker/assign-checker/1/ HTTP/1.1" 200 73603
+[2026-09-05 18:53:20] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 18:53:46] INFO django.server - "POST /books/maker/assign-checker/1/ HTTP/1.1" 302 0
+[2026-09-05 18:53:46] INFO django.server - "GET /books/maker/assign-checker/1/ HTTP/1.1" 200 73966
+[2026-09-05 18:53:47] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 18:55:59] INFO django.server - "GET / HTTP/1.1" 200 96128
+[2026-09-05 18:55:59] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-09-05 18:56:01] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 18:56:04] INFO django.server - "GET /accounts/dashboard/ HTTP/1.1" 302 0
+[2026-09-05 18:56:04] INFO books.views - Maker dashboard: 0 new submissions found
+[2026-09-05 18:56:04] INFO books.views - Maker dashboard: 0 new submissions found
+[2026-09-05 18:56:04] INFO django.server - "GET /books/maker/dashboard/ HTTP/1.1" 200 86776
+[2026-09-05 18:56:06] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 18:56:53] INFO django.server - "GET /books/browse/ HTTP/1.1" 200 100355
+[2026-09-05 18:56:53] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-09-05 18:56:55] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 18:56:56] INFO django.server - "GET /books/4/read-free/ HTTP/1.1" 302 0
+[2026-09-05 18:56:56] INFO django.server - "GET /books/4/read/ HTTP/1.1" 200 132757
+[2026-09-05 18:57:02] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 19:02:44] INFO django.server - "GET /books/4/read/ HTTP/1.1" 200 132757
+[2026-09-05 19:02:49] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 19:04:47] INFO django.server - "GET /books/4/ HTTP/1.1" 200 75838
+[2026-09-05 19:04:47] INFO django.server - "GET /media/books/covers/2026/08/pychology.png HTTP/1.1" 200 363640
+[2026-09-05 19:04:47] INFO django.server - "GET /media/books/covers/2026/08/cover_ai.png HTTP/1.1" 200 349464
+[2026-09-05 19:04:47] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-09-05 19:04:47] INFO django.server - "GET /media/books/covers/2026/09/pychology.png HTTP/1.1" 200 363640
+[2026-09-05 19:04:49] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 19:04:50] INFO django.server - "GET / HTTP/1.1" 200 96128
+[2026-09-05 19:04:50] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-09-05 19:04:52] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 19:07:41] INFO django.server - "GET /books/browse/ HTTP/1.1" 200 100355
+[2026-09-05 19:07:41] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-09-05 19:07:43] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 19:08:11] INFO django.server - "GET /accounts/dashboard/ HTTP/1.1" 302 0
+[2026-09-05 19:08:11] INFO books.views - Maker dashboard: 0 new submissions found
+[2026-09-05 19:08:11] INFO books.views - Maker dashboard: 0 new submissions found
+[2026-09-05 19:08:11] INFO django.server - "GET /books/maker/dashboard/ HTTP/1.1" 200 86776
+[2026-09-05 19:08:13] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 19:08:42] INFO django.server - "GET /books/5/ HTTP/1.1" 200 75005
+[2026-09-05 19:08:42] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-09-05 19:08:44] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 19:08:57] AUTH INFO - AUTH - User logged out: maker, IP=127.0.0.1
+[2026-09-05 19:08:57] INFO accounts.views - AUTH - User logged out: maker, IP=127.0.0.1
+[2026-09-05 19:08:57] INFO accounts.views - AUTH - User logged out: maker, IP=127.0.0.1
+[2026-09-05 19:08:57] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-09-05 19:08:57] INFO django.server - "GET / HTTP/1.1" 200 95036
+[2026-09-05 19:08:57] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-09-05 19:08:59] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 19:15:45] AUTH INFO - Register author - verified: False
+[2026-09-05 19:15:45] INFO accounts.views - Register author - verified: False
+[2026-09-05 19:15:45] INFO accounts.views - Register author - verified: False
+[2026-09-05 19:15:45] INFO django.server - "GET /accounts/register/author/ HTTP/1.1" 200 93969
+[2026-09-05 19:15:47] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 19:15:49] INFO django.server - "GET /accounts/register/client/ HTTP/1.1" 200 79753
+[2026-09-05 19:15:51] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-05 19:16:27] INFO django.server - "GET / HTTP/1.1" 200 94682
+[2026-09-05 19:16:27] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-09-05 19:16:29] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-08 13:05:14] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-08 13:35:06] AUTH INFO - Register author - verified: False
+[2026-09-08 13:35:06] INFO accounts.views - Register author - verified: False
+[2026-09-08 13:35:06] INFO accounts.views - Register author - verified: False
+[2026-09-08 13:35:06] INFO django.server - "GET /accounts/register/author/ HTTP/1.1" 200 93969
+[2026-09-08 13:35:06] INFO django.server - "GET /static/images/logo.png HTTP/1.1" 304 0
+[2026-09-08 13:35:08] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-08 13:35:11] AUTH INFO - OIDC Initiate - National ID: 1234****
+[2026-09-08 13:35:11] INFO accounts.views - OIDC Initiate - National ID: 1234****
+[2026-09-08 13:35:11] INFO accounts.views - OIDC Initiate - National ID: 1234****
+[2026-09-08 13:35:11] AUTH ERROR - Fayda configuration missing
+[2026-09-08 13:35:11] ERROR accounts.views - Fayda configuration missing
+[2026-09-08 13:35:11] ERROR accounts.views - Fayda configuration missing
+[2026-09-08 13:35:11] ERROR django.request - Internal Server Error: /accounts/api/fayda/oidc/initiate/
+[2026-09-08 13:35:11] ERROR django.request log.log_response:241 - Internal Server Error: /accounts/api/fayda/oidc/initiate/
+[2026-09-08 13:35:11] ERROR django.server - "POST /accounts/api/fayda/oidc/initiate/ HTTP/1.1" 500 90
+[2026-09-08 13:35:14] AUTH INFO - OIDC Initiate - National ID: 1234****
+[2026-09-08 13:35:14] INFO accounts.views - OIDC Initiate - National ID: 1234****
+[2026-09-08 13:35:14] INFO accounts.views - OIDC Initiate - National ID: 1234****
+[2026-09-08 13:35:14] AUTH ERROR - Fayda configuration missing
+[2026-09-08 13:35:14] ERROR accounts.views - Fayda configuration missing
+[2026-09-08 13:35:14] ERROR accounts.views - Fayda configuration missing
+[2026-09-08 13:35:14] ERROR django.request - Internal Server Error: /accounts/api/fayda/oidc/initiate/
+[2026-09-08 13:35:14] ERROR django.request log.log_response:241 - Internal Server Error: /accounts/api/fayda/oidc/initiate/
+[2026-09-08 13:35:14] ERROR django.server - "POST /accounts/api/fayda/oidc/initiate/ HTTP/1.1" 500 90
+[2026-09-08 13:35:17] AUTH INFO - OIDC Initiate - National ID: 1234****
+[2026-09-08 13:35:17] INFO accounts.views - OIDC Initiate - National ID: 1234****
+[2026-09-08 13:35:17] INFO accounts.views - OIDC Initiate - National ID: 1234****
+[2026-09-08 13:35:17] AUTH ERROR - Fayda configuration missing
+[2026-09-08 13:35:17] ERROR accounts.views - Fayda configuration missing
+[2026-09-08 13:35:17] ERROR accounts.views - Fayda configuration missing
+[2026-09-08 13:35:17] ERROR django.request - Internal Server Error: /accounts/api/fayda/oidc/initiate/
+[2026-09-08 13:35:17] ERROR django.request log.log_response:241 - Internal Server Error: /accounts/api/fayda/oidc/initiate/
+[2026-09-08 13:35:17] ERROR django.server - "POST /accounts/api/fayda/oidc/initiate/ HTTP/1.1" 500 90
+[2026-09-08 14:49:08] AUTH INFO - OIDC Initiate - National ID: 1234****
+[2026-09-08 14:49:08] INFO accounts.views - OIDC Initiate - National ID: 1234****
+[2026-09-08 14:49:08] INFO accounts.views - OIDC Initiate - National ID: 1234****
+[2026-09-08 14:49:08] AUTH ERROR - Fayda configuration missing
+[2026-09-08 14:49:08] ERROR accounts.views - Fayda configuration missing
+[2026-09-08 14:49:08] ERROR accounts.views - Fayda configuration missing
+[2026-09-08 14:49:08] ERROR django.request - Internal Server Error: /accounts/api/fayda/oidc/initiate/
+[2026-09-08 14:49:08] ERROR django.request log.log_response:241 - Internal Server Error: /accounts/api/fayda/oidc/initiate/
+[2026-09-08 14:49:08] ERROR django.server - "POST /accounts/api/fayda/oidc/initiate/ HTTP/1.1" 500 90
+[2026-09-08 14:49:09] AUTH INFO - OIDC Initiate - National ID: 1234****
+[2026-09-08 14:49:09] INFO accounts.views - OIDC Initiate - National ID: 1234****
+[2026-09-08 14:49:09] INFO accounts.views - OIDC Initiate - National ID: 1234****
+[2026-09-08 14:49:09] AUTH ERROR - Fayda configuration missing
+[2026-09-08 14:49:09] ERROR accounts.views - Fayda configuration missing
+[2026-09-08 14:49:09] ERROR accounts.views - Fayda configuration missing
+[2026-09-08 14:49:09] ERROR django.request - Internal Server Error: /accounts/api/fayda/oidc/initiate/
+[2026-09-08 14:49:09] ERROR django.request log.log_response:241 - Internal Server Error: /accounts/api/fayda/oidc/initiate/
+[2026-09-08 14:49:09] ERROR django.server - "POST /accounts/api/fayda/oidc/initiate/ HTTP/1.1" 500 90
+[2026-09-08 15:16:46] INFO django.utils.autoreload - C:\abay_repository\accounts\views.py changed, reloading.
+[2026-09-08 15:16:46] INFO django.utils.autoreload - C:\abay_repository\accounts\views.py changed, reloading.
+[2026-09-08 15:16:48] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-08 15:16:48] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-08 15:17:59] INFO django.utils.autoreload - C:\abay_repository\config\settings.py changed, reloading.
+[2026-09-08 15:17:59] INFO django.utils.autoreload - C:\abay_repository\config\settings.py changed, reloading.
+[2026-09-08 15:18:00] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-08 15:18:00] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-08 15:18:10] INFO django.utils.autoreload - C:\abay_repository\config\settings.py changed, reloading.
+[2026-09-08 15:18:10] INFO django.utils.autoreload - C:\abay_repository\config\settings.py changed, reloading.
+[2026-09-08 15:18:11] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-08 15:18:11] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-08 15:18:46] INFO django.server - "GET / HTTP/1.1" 200 94682
+[2026-09-08 15:18:46] INFO django.server - "GET /static/images/Abrehot.jpg HTTP/1.1" 304 0
+[2026-09-08 15:18:46] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-09-08 15:18:46] INFO django.server - "GET /media/books/covers/2026/08/pychology.png HTTP/1.1" 200 363640
+[2026-09-08 15:18:46] INFO django.server - "GET /media/books/covers/2026/09/pychology.png HTTP/1.1" 200 363640
+[2026-09-08 15:18:46] INFO django.server - "GET /media/books/covers/2026/08/cover_ai.png HTTP/1.1" 200 349464
+[2026-09-08 15:18:48] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-08 15:18:50] AUTH INFO - Register author - verified: False
+[2026-09-08 15:18:50] INFO accounts.views - Register author - verified: False
+[2026-09-08 15:18:50] INFO accounts.views - Register author - verified: False
+[2026-09-08 15:18:50] INFO django.server - "GET /accounts/register/author/ HTTP/1.1" 200 93969
+[2026-09-08 15:18:52] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-08 15:18:55] AUTH INFO - OIDC Initiate - National ID: 1234****
+[2026-09-08 15:18:55] INFO accounts.views - OIDC Initiate - National ID: 1234****
+[2026-09-08 15:18:55] INFO accounts.views - OIDC Initiate - National ID: 1234****
+[2026-09-08 15:18:55] AUTH ERROR - Fayda configuration missing
+[2026-09-08 15:18:55] ERROR accounts.views - Fayda configuration missing
+[2026-09-08 15:18:55] ERROR accounts.views - Fayda configuration missing
+[2026-09-08 15:18:55] ERROR django.request - Internal Server Error: /accounts/api/fayda/oidc/initiate/
+[2026-09-08 15:18:55] ERROR django.request log.log_response:241 - Internal Server Error: /accounts/api/fayda/oidc/initiate/
+[2026-09-08 15:18:55] ERROR django.server - "POST /accounts/api/fayda/oidc/initiate/ HTTP/1.1" 500 90
+[2026-09-08 15:19:00] AUTH INFO - OIDC Initiate - National ID: 1234****
+[2026-09-08 15:19:00] INFO accounts.views - OIDC Initiate - National ID: 1234****
+[2026-09-08 15:19:00] INFO accounts.views - OIDC Initiate - National ID: 1234****
+[2026-09-08 15:19:00] AUTH ERROR - Fayda configuration missing
+[2026-09-08 15:19:00] ERROR accounts.views - Fayda configuration missing
+[2026-09-08 15:19:00] ERROR accounts.views - Fayda configuration missing
+[2026-09-08 15:19:00] ERROR django.request - Internal Server Error: /accounts/api/fayda/oidc/initiate/
+[2026-09-08 15:19:00] ERROR django.request log.log_response:241 - Internal Server Error: /accounts/api/fayda/oidc/initiate/
+[2026-09-08 15:19:00] ERROR django.server - "POST /accounts/api/fayda/oidc/initiate/ HTTP/1.1" 500 90
+[2026-09-08 15:19:02] AUTH INFO - OIDC Initiate - National ID: 1234****
+[2026-09-08 15:19:02] INFO accounts.views - OIDC Initiate - National ID: 1234****
+[2026-09-08 15:19:02] INFO accounts.views - OIDC Initiate - National ID: 1234****
+[2026-09-08 15:19:02] AUTH ERROR - Fayda configuration missing
+[2026-09-08 15:19:02] ERROR accounts.views - Fayda configuration missing
+[2026-09-08 15:19:02] ERROR accounts.views - Fayda configuration missing
+[2026-09-08 15:19:02] ERROR django.request - Internal Server Error: /accounts/api/fayda/oidc/initiate/
+[2026-09-08 15:19:02] ERROR django.request log.log_response:241 - Internal Server Error: /accounts/api/fayda/oidc/initiate/
+[2026-09-08 15:19:02] ERROR django.server - "POST /accounts/api/fayda/oidc/initiate/ HTTP/1.1" 500 90
+[2026-09-08 19:26:24] INFO django.server - "GET / HTTP/1.1" 200 94682
+[2026-09-08 19:26:24] INFO django.server - "GET /static/images/Abrehot.jpg HTTP/1.1" 200 72716
+[2026-09-08 19:26:24] INFO django.server - "GET /static/images/logo.png HTTP/1.1" 200 157968
+[2026-09-08 19:26:25] INFO django.server - "GET /media/books/covers/2026/08/cover_ai.png HTTP/1.1" 200 349464
+[2026-09-08 19:26:25] INFO django.server - "GET /media/books/covers/2026/09/pychology.png HTTP/1.1" 200 363640
+[2026-09-08 19:26:25] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-09-08 19:26:25] INFO django.server - "GET /media/books/covers/2026/08/pychology.png HTTP/1.1" 200 363640
+[2026-09-08 19:26:25] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 19:26:47] INFO django.server - "GET / HTTP/1.1" 200 94682
+[2026-09-08 19:26:47] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-09-08 19:27:24] AUTH INFO - Register author - verified: False
+[2026-09-08 19:27:24] INFO accounts.views - Register author - verified: False
+[2026-09-08 19:27:24] INFO accounts.views - Register author - verified: False
+[2026-09-08 19:27:24] INFO django.server - "GET /accounts/register/author/ HTTP/1.1" 200 93969
+[2026-09-08 19:27:30] INFO django.server - "GET / HTTP/1.1" 200 94682
+[2026-09-08 19:27:30] INFO django.server - "GET /media/books/covers/2026/08/cover_ai.png HTTP/1.1" 200 349464
+[2026-09-08 19:27:30] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-09-08 19:27:30] INFO django.server - "GET /media/books/covers/2026/09/pychology.png HTTP/1.1" 200 363640
+[2026-09-08 19:27:30] INFO django.server - "GET /media/books/covers/2026/08/pychology.png HTTP/1.1" 200 363640
+[2026-09-08 19:28:23] AUTH INFO - Register author - verified: False
+[2026-09-08 19:28:23] INFO accounts.views - Register author - verified: False
+[2026-09-08 19:28:23] INFO accounts.views - Register author - verified: False
+[2026-09-08 19:28:23] INFO django.server - "GET /accounts/register/author/ HTTP/1.1" 200 93969
+[2026-09-08 19:28:29] INFO django.server - "GET / HTTP/1.1" 200 94682
+[2026-09-08 19:28:29] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-09-08 19:28:30] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-08 19:28:43] INFO django.server - "GET / HTTP/1.1" 200 94682
+[2026-09-08 19:28:43] WARNING django.server - "GET /media/books/covers/2026/08/django_cover_jXulW7R.png HTTP/1.1" 404 3604
+[2026-09-08 19:30:41] INFO django.server - "GET / HTTP/1.1" 200 88163
+[2026-09-08 19:30:42] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-08 19:30:58] INFO django.server - "GET / HTTP/1.1" 200 88163
+[2026-09-08 19:31:00] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-08 19:33:12] INFO django.server - code 400, message Bad request syntax ('\x16\x03\x01\x07º\x01\x00\x07¶\x03\x03\x14ÃS7´µTqø2öC×\x17')
+[2026-09-08 19:33:12] ERROR django.server - You're accessing the development server over HTTPS, but it only supports HTTP.
+[2026-09-08 19:33:12] INFO django.server - code 400, message Bad request version ('Vö\x10\x16Y¨ÙWÍMYW¿=$\x98ø#@P«\x80\x86')
+[2026-09-08 19:33:12] INFO django.server - code 400, message Bad request version ('JJ\x13\x01\x13\x02\x13\x03À+À/À,À0Ì©Ì¨À\x13À\x14\x00\x9c\x00\x9d\x00/\x005\x01\x00\x07Mªª\x00\x00\x00')
+[2026-09-08 19:33:12] ERROR django.server - You're accessing the development server over HTTPS, but it only supports HTTP.
+[2026-09-08 19:33:12] ERROR django.server - You're accessing the development server over HTTPS, but it only supports HTTP.
+[2026-09-08 19:33:12] INFO django.server - code 400, message Bad request version ('{V»Âú\x08<TJñ\x08\x07ó\x16E\x14ÉwVÚ6û\x00=ÉÕ¸dË·ÁË')
+[2026-09-08 19:33:12] ERROR django.server - You're accessing the development server over HTTPS, but it only supports HTTP.
+[2026-09-08 19:33:22] INFO django.server - "GET / HTTP/1.1" 200 88163
+[2026-09-08 19:39:08] INFO django.server - "GET / HTTP/1.1" 200 88163
+[2026-09-08 20:45:42] INFO django.server - "GET / HTTP/1.1" 200 88163
+[2026-09-08 20:45:42] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:45:42] INFO django.server - "GET /static/images/logo.png HTTP/1.1" 200 157968
+[2026-09-08 20:45:42] INFO django.server - "GET /static/images/Abrehot.jpg HTTP/1.1" 200 72716
+[2026-09-08 20:45:43] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:45:43] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:45:43] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:45:43] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:45:43] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:45:43] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:45:43] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:45:56] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64907
+[2026-09-08 20:45:56] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:45:56] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:45:57] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:45:57] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:45:57] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:45:57] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:45:57] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:45:57] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:45:57] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:46:09] AUTH INFO - AUTH - Login successful: User=admin, IP=127.0.0.1, Role=admin
+[2026-09-08 20:46:09] INFO accounts.views - AUTH - Login successful: User=admin, IP=127.0.0.1, Role=admin
+[2026-09-08 20:46:09] INFO accounts.views - AUTH - Login successful: User=admin, IP=127.0.0.1, Role=admin
+[2026-09-08 20:46:09] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-09-08 20:46:09] AUTH INFO - Admin dashboard accessed by: admin
+[2026-09-08 20:46:09] INFO accounts.views - Admin dashboard accessed by: admin
+[2026-09-08 20:46:09] INFO accounts.views - Admin dashboard accessed by: admin
+[2026-09-08 20:46:09] INFO django.server - "GET /accounts/dashboard/admin/ HTTP/1.1" 200 107758
+[2026-09-08 20:46:09] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:46:09] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:46:09] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:46:09] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:46:09] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:46:09] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:46:09] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:46:09] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:46:09] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:46:10] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 91209
+[2026-09-08 20:46:16] AUTH INFO - AUTH - User logged out: admin, IP=127.0.0.1
+[2026-09-08 20:46:16] INFO accounts.views - AUTH - User logged out: admin, IP=127.0.0.1
+[2026-09-08 20:46:16] INFO accounts.views - AUTH - User logged out: admin, IP=127.0.0.1
+[2026-09-08 20:46:16] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-09-08 20:46:16] INFO django.server - "GET / HTTP/1.1" 200 88517
+[2026-09-08 20:46:16] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:46:16] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:46:16] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:46:16] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:46:16] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:46:16] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:46:17] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:46:19] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64907
+[2026-09-08 20:46:19] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:46:19] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:46:19] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:46:19] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:46:19] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:46:19] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:46:19] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:46:41] AUTH INFO - AUTH - Login successful: User=author, IP=127.0.0.1, Role=author
+[2026-09-08 20:46:41] INFO accounts.views - AUTH - Login successful: User=author, IP=127.0.0.1, Role=author
+[2026-09-08 20:46:41] INFO accounts.views - AUTH - Login successful: User=author, IP=127.0.0.1, Role=author
+[2026-09-08 20:46:41] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-09-08 20:46:41] AUTH INFO - Author dashboard accessed by: author
+[2026-09-08 20:46:41] INFO accounts.views - Author dashboard accessed by: author
+[2026-09-08 20:46:41] INFO accounts.views - Author dashboard accessed by: author
+[2026-09-08 20:46:41] INFO django.server - "GET /accounts/dashboard/author/ HTTP/1.1" 200 74832
+[2026-09-08 20:46:41] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:46:41] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:46:41] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:46:41] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:46:41] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:46:41] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:46:41] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:46:41] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:46:41] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:46:48] AUTH INFO - AUTH - User logged out: author, IP=127.0.0.1
+[2026-09-08 20:46:48] INFO accounts.views - AUTH - User logged out: author, IP=127.0.0.1
+[2026-09-08 20:46:48] INFO accounts.views - AUTH - User logged out: author, IP=127.0.0.1
+[2026-09-08 20:46:48] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-09-08 20:46:48] INFO django.server - "GET / HTTP/1.1" 200 88517
+[2026-09-08 20:46:48] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:46:48] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:46:48] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:46:48] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:46:48] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:46:48] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:46:48] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:46:50] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64907
+[2026-09-08 20:46:50] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:46:50] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:46:50] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:46:50] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:46:50] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:46:50] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:46:50] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:47:12] AUTH INFO - AUTH - Login successful: User=maker, IP=127.0.0.1, Role=maker
+[2026-09-08 20:47:12] INFO accounts.views - AUTH - Login successful: User=maker, IP=127.0.0.1, Role=maker
+[2026-09-08 20:47:12] INFO accounts.views - AUTH - Login successful: User=maker, IP=127.0.0.1, Role=maker
+[2026-09-08 20:47:12] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-09-08 20:47:12] INFO books.views - Maker dashboard: 0 new submissions found
+[2026-09-08 20:47:12] INFO books.views - Maker dashboard: 0 new submissions found
+[2026-09-08 20:47:12] INFO django.server - "GET /books/maker/dashboard/ HTTP/1.1" 200 82986
+[2026-09-08 20:47:12] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:47:12] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:47:12] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:47:12] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:47:12] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:47:12] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:47:12] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:47:12] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:47:12] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:47:18] AUTH INFO - AUTH - User logged out: maker, IP=127.0.0.1
+[2026-09-08 20:47:18] INFO accounts.views - AUTH - User logged out: maker, IP=127.0.0.1
+[2026-09-08 20:47:18] INFO accounts.views - AUTH - User logged out: maker, IP=127.0.0.1
+[2026-09-08 20:47:18] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-09-08 20:47:18] INFO django.server - "GET / HTTP/1.1" 200 88517
+[2026-09-08 20:47:18] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:47:18] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:47:18] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:47:18] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:47:18] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:47:18] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:47:18] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:47:20] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64907
+[2026-09-08 20:47:20] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:47:20] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:47:20] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:47:20] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:47:20] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:47:20] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:47:20] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:47:32] AUTH INFO - AUTH - Login successful: User=checker, IP=127.0.0.1, Role=checker
+[2026-09-08 20:47:32] INFO accounts.views - AUTH - Login successful: User=checker, IP=127.0.0.1, Role=checker
+[2026-09-08 20:47:32] INFO accounts.views - AUTH - Login successful: User=checker, IP=127.0.0.1, Role=checker
+[2026-09-08 20:47:32] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-09-08 20:47:32] INFO django.server - "GET /books/checker/dashboard/ HTTP/1.1" 200 74079
+[2026-09-08 20:47:32] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:47:32] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:47:32] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:47:33] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:47:33] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:47:33] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:47:33] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:47:33] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:47:33] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:47:39] AUTH INFO - AUTH - User logged out: checker, IP=127.0.0.1
+[2026-09-08 20:47:39] INFO accounts.views - AUTH - User logged out: checker, IP=127.0.0.1
+[2026-09-08 20:47:39] INFO accounts.views - AUTH - User logged out: checker, IP=127.0.0.1
+[2026-09-08 20:47:39] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-09-08 20:47:39] INFO django.server - "GET / HTTP/1.1" 200 88517
+[2026-09-08 20:47:39] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:47:39] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:47:39] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:47:39] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:47:39] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:47:39] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:47:39] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:47:42] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64907
+[2026-09-08 20:47:42] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:47:42] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:47:42] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:47:42] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:47:42] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:47:42] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:47:42] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:47:56] AUTH INFO - AUTH - Login successful: User=finance_officer, IP=127.0.0.1, Role=finance
+[2026-09-08 20:47:56] INFO accounts.views - AUTH - Login successful: User=finance_officer, IP=127.0.0.1, Role=finance
+[2026-09-08 20:47:56] INFO accounts.views - AUTH - Login successful: User=finance_officer, IP=127.0.0.1, Role=finance
+[2026-09-08 20:47:56] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-09-08 20:47:56] AUTH INFO - Finance dashboard accessed by: finance_officer
+[2026-09-08 20:47:56] INFO accounts.views - Finance dashboard accessed by: finance_officer
+[2026-09-08 20:47:56] INFO accounts.views - Finance dashboard accessed by: finance_officer
+[2026-09-08 20:47:57] INFO django.server - "GET /accounts/dashboard/finance/ HTTP/1.1" 200 110945
+[2026-09-08 20:47:57] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:47:57] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:47:57] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:47:57] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:47:57] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:47:57] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:47:57] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:47:57] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:47:57] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:48:18] AUTH INFO - AUTH - User logged out: finance_officer, IP=127.0.0.1
+[2026-09-08 20:48:18] INFO accounts.views - AUTH - User logged out: finance_officer, IP=127.0.0.1
+[2026-09-08 20:48:18] INFO accounts.views - AUTH - User logged out: finance_officer, IP=127.0.0.1
+[2026-09-08 20:48:18] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-09-08 20:48:18] INFO django.server - "GET / HTTP/1.1" 200 88517
+[2026-09-08 20:48:18] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:48:18] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:48:18] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:48:18] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:48:18] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:48:18] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:48:18] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:48:20] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64907
+[2026-09-08 20:48:20] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:48:20] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:48:20] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:48:20] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:48:20] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:48:20] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:48:20] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:48:32] AUTH INFO - AUTH - Login successful: User=client, IP=127.0.0.1, Role=client
+[2026-09-08 20:48:32] INFO accounts.views - AUTH - Login successful: User=client, IP=127.0.0.1, Role=client
+[2026-09-08 20:48:32] INFO accounts.views - AUTH - Login successful: User=client, IP=127.0.0.1, Role=client
+[2026-09-08 20:48:32] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-09-08 20:48:32] AUTH INFO - Client dashboard accessed by: client
+[2026-09-08 20:48:32] INFO accounts.views - Client dashboard accessed by: client
+[2026-09-08 20:48:32] INFO accounts.views - Client dashboard accessed by: client
+[2026-09-08 20:48:32] INFO django.server - "GET /accounts/dashboard/client/ HTTP/1.1" 200 66706
+[2026-09-08 20:48:32] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:48:32] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:48:32] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:48:32] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:48:32] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:48:32] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:48:32] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:48:32] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:48:32] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:48:38] AUTH INFO - AUTH - User logged out: client, IP=127.0.0.1
+[2026-09-08 20:48:38] INFO accounts.views - AUTH - User logged out: client, IP=127.0.0.1
+[2026-09-08 20:48:38] INFO accounts.views - AUTH - User logged out: client, IP=127.0.0.1
+[2026-09-08 20:48:38] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-09-08 20:48:38] INFO django.server - "GET / HTTP/1.1" 200 88517
+[2026-09-08 20:48:38] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:48:38] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:48:38] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:48:38] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:48:38] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:48:38] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:48:38] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:48:40] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64907
+[2026-09-08 20:48:40] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:48:40] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:48:40] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:48:40] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:48:40] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:48:40] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:48:40] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:49:00] AUTH INFO - AUTH - Login successful: User=maker, IP=127.0.0.1, Role=maker
+[2026-09-08 20:49:00] INFO accounts.views - AUTH - Login successful: User=maker, IP=127.0.0.1, Role=maker
+[2026-09-08 20:49:00] INFO accounts.views - AUTH - Login successful: User=maker, IP=127.0.0.1, Role=maker
+[2026-09-08 20:49:00] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-09-08 20:49:00] INFO books.views - Maker dashboard: 0 new submissions found
+[2026-09-08 20:49:00] INFO books.views - Maker dashboard: 0 new submissions found
+[2026-09-08 20:49:00] INFO django.server - "GET /books/maker/dashboard/ HTTP/1.1" 200 82986
+[2026-09-08 20:49:00] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:49:00] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:49:00] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:49:00] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:49:00] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:49:00] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:49:00] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:49:24] AUTH INFO - AUTH - User logged out: maker, IP=127.0.0.1
+[2026-09-08 20:49:24] INFO accounts.views - AUTH - User logged out: maker, IP=127.0.0.1
+[2026-09-08 20:49:24] INFO accounts.views - AUTH - User logged out: maker, IP=127.0.0.1
+[2026-09-08 20:49:24] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-09-08 20:49:24] INFO django.server - "GET / HTTP/1.1" 200 88517
+[2026-09-08 20:49:24] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:49:24] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:49:24] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:49:24] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:49:24] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:49:24] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:49:24] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:49:56] INFO django.server - "GET /books/browse/ HTTP/1.1" 200 88163
+[2026-09-08 20:49:56] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:49:56] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:49:56] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:49:56] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:49:56] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:49:56] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:49:56] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:49:56] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:49:56] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:50:12] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:50:12] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:50:12] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:50:12] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:50:12] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-08 20:50:12] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-08 20:50:12] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 07:57:00] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64907
+[2026-09-09 07:57:00] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 07:57:00] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 07:57:00] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 07:57:01] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 07:57:01] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 07:57:01] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 07:57:01] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 07:57:12] AUTH INFO - AUTH - Login successful: User=author, IP=127.0.0.1, Role=author
+[2026-09-09 07:57:12] INFO accounts.views - AUTH - Login successful: User=author, IP=127.0.0.1, Role=author
+[2026-09-09 07:57:12] INFO accounts.views - AUTH - Login successful: User=author, IP=127.0.0.1, Role=author
+[2026-09-09 07:57:12] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-09-09 07:57:12] AUTH INFO - Author dashboard accessed by: author
+[2026-09-09 07:57:12] INFO accounts.views - Author dashboard accessed by: author
+[2026-09-09 07:57:12] INFO accounts.views - Author dashboard accessed by: author
+[2026-09-09 07:57:12] INFO django.server - "GET /accounts/dashboard/author/ HTTP/1.1" 200 74832
+[2026-09-09 07:57:12] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 07:57:12] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 07:57:12] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 07:57:12] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 07:57:12] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 07:57:13] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 07:57:13] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 07:57:15] INFO django.server - "GET /books/upload/ HTTP/1.1" 200 85656
+[2026-09-09 07:57:15] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 07:57:15] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 07:57:15] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 07:57:15] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 07:57:15] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 07:57:15] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 07:57:15] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 07:57:15] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 07:57:15] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:52:59] INFO django.server - "GET / HTTP/1.1" 200 89945
+[2026-09-09 09:52:59] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:53:00] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 09:53:00] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:53:00] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 09:53:00] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:53:00] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 09:53:00] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:53:02] AUTH INFO - AUTH - User logged out: author, IP=127.0.0.1
+[2026-09-09 09:53:02] INFO accounts.views - AUTH - User logged out: author, IP=127.0.0.1
+[2026-09-09 09:53:02] INFO accounts.views - AUTH - User logged out: author, IP=127.0.0.1
+[2026-09-09 09:53:02] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-09-09 09:53:02] INFO django.server - "GET / HTTP/1.1" 200 88517
+[2026-09-09 09:53:02] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:53:03] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 09:53:03] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:53:03] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 09:53:03] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 09:53:03] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:53:03] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:53:03] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 09:53:03] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:54:14] AUTH INFO - Register author - verified: False
+[2026-09-09 09:54:14] INFO accounts.views - Register author - verified: False
+[2026-09-09 09:54:14] INFO accounts.views - Register author - verified: False
+[2026-09-09 09:54:14] INFO django.server - "GET /accounts/register/author/ HTTP/1.1" 200 93969
+[2026-09-09 09:54:15] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:54:15] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 09:54:15] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:54:15] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 09:54:15] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:54:15] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 09:54:15] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 09:54:15] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:54:15] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:54:54] INFO django.server - "GET /accounts/register/client/ HTTP/1.1" 200 79753
+[2026-09-09 09:54:54] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:54:54] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 09:54:54] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:54:54] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 09:54:54] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:54:55] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 09:54:55] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 09:54:55] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:54:55] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:55:14] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64907
+[2026-09-09 09:55:14] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:55:14] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 09:55:14] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:55:14] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 09:55:15] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:55:15] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 09:55:15] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:55:15] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 09:55:15] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:55:43] AUTH INFO - AUTH - Login successful: User=author, IP=127.0.0.1, Role=author
+[2026-09-09 09:55:43] INFO accounts.views - AUTH - Login successful: User=author, IP=127.0.0.1, Role=author
+[2026-09-09 09:55:43] INFO accounts.views - AUTH - Login successful: User=author, IP=127.0.0.1, Role=author
+[2026-09-09 09:55:43] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-09-09 09:55:43] AUTH INFO - Author dashboard accessed by: author
+[2026-09-09 09:55:43] INFO accounts.views - Author dashboard accessed by: author
+[2026-09-09 09:55:43] INFO accounts.views - Author dashboard accessed by: author
+[2026-09-09 09:55:43] INFO django.server - "GET /accounts/dashboard/author/ HTTP/1.1" 200 74832
+[2026-09-09 09:55:44] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:55:44] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 09:55:44] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:55:44] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 09:55:44] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:55:44] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 09:55:44] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:55:44] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 09:55:44] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:55:58] INFO django.server - "GET /books/upload/ HTTP/1.1" 200 85656
+[2026-09-09 09:55:58] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:55:58] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 09:55:58] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:55:58] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 09:55:58] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:55:58] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 09:55:58] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:58:50] INFO books.views - Notifications sent to 5 makers about new submission 6
+[2026-09-09 09:58:50] INFO books.views - Notifications sent to 5 makers about new submission 6
+[2026-09-09 09:58:50] INFO django.server - "POST /books/upload/ HTTP/1.1" 302 0
+[2026-09-09 09:58:50] INFO django.server - "GET /books/my-books/author/ HTTP/1.1" 200 76578
+[2026-09-09 09:58:50] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:58:50] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 09:58:50] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:58:50] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 09:58:50] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:58:50] INFO django.server - "GET /media/books/covers/2026/09/pychology_b5LmZgq.png HTTP/1.1" 200 363640
+[2026-09-09 09:58:50] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 09:58:50] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 09:58:50] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:58:50] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:58:56] AUTH INFO - AUTH - User logged out: author, IP=127.0.0.1
+[2026-09-09 09:58:56] INFO accounts.views - AUTH - User logged out: author, IP=127.0.0.1
+[2026-09-09 09:58:56] INFO accounts.views - AUTH - User logged out: author, IP=127.0.0.1
+[2026-09-09 09:58:56] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-09-09 09:58:56] INFO django.server - "GET / HTTP/1.1" 200 88517
+[2026-09-09 09:58:57] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:58:57] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 09:58:57] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:58:57] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 09:58:57] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:58:57] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 09:58:57] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:58:58] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64907
+[2026-09-09 09:58:58] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:58:58] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 09:58:58] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:58:58] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 09:58:58] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:58:58] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 09:58:58] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:58:58] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 09:58:58] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:59:05] AUTH INFO - AUTH - Login successful: User=maker, IP=127.0.0.1, Role=maker
+[2026-09-09 09:59:05] INFO accounts.views - AUTH - Login successful: User=maker, IP=127.0.0.1, Role=maker
+[2026-09-09 09:59:05] INFO accounts.views - AUTH - Login successful: User=maker, IP=127.0.0.1, Role=maker
+[2026-09-09 09:59:05] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-09-09 09:59:05] INFO books.views - Maker dashboard: 1 new submissions found
+[2026-09-09 09:59:05] INFO books.views - Maker dashboard: 1 new submissions found
+[2026-09-09 09:59:05] INFO books.views -   - 6: pyschology - submitted - submitted_at: 2026-09-09 06:58:50.116675+00:00
+[2026-09-09 09:59:05] INFO books.views -   - 6: pyschology - submitted - submitted_at: 2026-09-09 06:58:50.116675+00:00
+[2026-09-09 09:59:05] INFO django.server - "GET /books/maker/dashboard/ HTTP/1.1" 200 84306
+[2026-09-09 09:59:06] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:59:06] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 09:59:06] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:59:06] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 09:59:06] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:59:06] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 09:59:06] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:59:06] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 09:59:06] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:59:24] INFO django.server - "GET /books/maker/initial-review/6/ HTTP/1.1" 200 75002
+[2026-09-09 09:59:24] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:59:24] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 09:59:24] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:59:24] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 09:59:24] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:59:24] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 09:59:24] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 09:59:24] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:59:24] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:59:31] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:59:32] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:59:32] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:59:32] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:59:32] WARNING django.server - "GET /static/favicon.ico HTTP/1.1" 404 1893
+[2026-09-09 09:59:32] WARNING django.server - "GET /static/favicon.ico HTTP/1.1" 404 1893
+[2026-09-09 09:59:33] INFO django.server - "GET /media/books/files/2026/09/Psychology_PDF_j7yU8Xo.pdf HTTP/1.1" 200 2623192
+[2026-09-09 09:59:57] INFO books.views - Initial review for book 6 completed. Decision: complete
+[2026-09-09 09:59:57] INFO books.views - Initial review for book 6 completed. Decision: complete
+[2026-09-09 09:59:57] INFO django.server - "POST /books/maker/initial-review/6/ HTTP/1.1" 302 0
+[2026-09-09 09:59:57] INFO books.views - Maker dashboard: 0 new submissions found
+[2026-09-09 09:59:57] INFO books.views - Maker dashboard: 0 new submissions found
+[2026-09-09 09:59:57] INFO django.server - "GET /books/maker/dashboard/ HTTP/1.1" 200 83816
+[2026-09-09 09:59:57] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:59:57] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 09:59:57] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:59:58] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 09:59:58] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:59:58] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 09:59:58] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 09:59:58] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 09:59:58] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:00:02] AUTH INFO - AUTH - User logged out: maker, IP=127.0.0.1
+[2026-09-09 10:00:02] INFO accounts.views - AUTH - User logged out: maker, IP=127.0.0.1
+[2026-09-09 10:00:02] INFO accounts.views - AUTH - User logged out: maker, IP=127.0.0.1
+[2026-09-09 10:00:02] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-09-09 10:00:02] INFO django.server - "GET / HTTP/1.1" 200 88517
+[2026-09-09 10:00:02] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:00:02] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:00:02] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:00:02] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:00:02] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:00:02] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:00:02] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:00:05] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64907
+[2026-09-09 10:00:05] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:00:05] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:00:05] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:00:05] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:00:05] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:00:06] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:00:06] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:00:06] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:00:06] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:00:14] AUTH INFO - AUTH - Login successful: User=maker, IP=127.0.0.1, Role=maker
+[2026-09-09 10:00:14] INFO accounts.views - AUTH - Login successful: User=maker, IP=127.0.0.1, Role=maker
+[2026-09-09 10:00:14] INFO accounts.views - AUTH - Login successful: User=maker, IP=127.0.0.1, Role=maker
+[2026-09-09 10:00:14] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-09-09 10:00:14] INFO books.views - Maker dashboard: 0 new submissions found
+[2026-09-09 10:00:14] INFO books.views - Maker dashboard: 0 new submissions found
+[2026-09-09 10:00:15] INFO django.server - "GET /books/maker/dashboard/ HTTP/1.1" 200 83803
+[2026-09-09 10:00:15] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:00:15] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:00:15] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:00:15] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:00:15] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:00:15] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:00:15] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:00:15] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:00:15] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:00:20] INFO django.server - "GET /books/maker/assign-checker/6/ HTTP/1.1" 200 73593
+[2026-09-09 10:00:20] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:00:20] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:00:20] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:00:21] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:00:21] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:00:21] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:00:21] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:00:21] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:00:21] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:00:41] INFO books.views - Notification sent to checker checker
+[2026-09-09 10:00:41] INFO books.views - Notification sent to checker checker
+[2026-09-09 10:00:41] INFO django.server - "POST /books/maker/assign-checker/6/ HTTP/1.1" 302 0
+[2026-09-09 10:00:41] INFO books.views - Maker dashboard: 0 new submissions found
+[2026-09-09 10:00:41] INFO books.views - Maker dashboard: 0 new submissions found
+[2026-09-09 10:00:41] INFO django.server - "GET /books/maker/dashboard/ HTTP/1.1" 200 85086
+[2026-09-09 10:00:42] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:00:42] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:00:42] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:00:42] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:00:42] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:00:42] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:00:42] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:00:42] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:00:42] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:00:46] AUTH INFO - AUTH - User logged out: maker, IP=127.0.0.1
+[2026-09-09 10:00:46] INFO accounts.views - AUTH - User logged out: maker, IP=127.0.0.1
+[2026-09-09 10:00:46] INFO accounts.views - AUTH - User logged out: maker, IP=127.0.0.1
+[2026-09-09 10:00:46] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-09-09 10:00:46] INFO django.server - "GET / HTTP/1.1" 200 88517
+[2026-09-09 10:00:46] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:00:46] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:00:46] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:00:46] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:00:46] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:00:47] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:00:47] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:00:47] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:00:47] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:00:51] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64907
+[2026-09-09 10:00:51] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:00:51] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:00:51] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:00:52] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:00:52] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:00:52] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:00:52] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:00:52] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:00:52] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:01:01] AUTH INFO - AUTH - Login successful: User=checker, IP=127.0.0.1, Role=checker
+[2026-09-09 10:01:01] INFO accounts.views - AUTH - Login successful: User=checker, IP=127.0.0.1, Role=checker
+[2026-09-09 10:01:01] INFO accounts.views - AUTH - Login successful: User=checker, IP=127.0.0.1, Role=checker
+[2026-09-09 10:01:01] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-09-09 10:01:01] INFO django.server - "GET /books/checker/dashboard/ HTTP/1.1" 200 76870
+[2026-09-09 10:01:01] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:01:02] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:01:02] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:01:02] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:01:02] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:01:02] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:01:02] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:01:02] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:01:02] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:01:24] INFO books.views - Checker checker accepted assignment 5
+[2026-09-09 10:01:24] INFO books.views - Checker checker accepted assignment 5
+[2026-09-09 10:01:24] INFO django.server - "GET /books/checker/accept/5/ HTTP/1.1" 302 0
+[2026-09-09 10:01:24] INFO django.server - "GET /books/checker/dashboard/ HTTP/1.1" 200 75222
+[2026-09-09 10:01:24] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:01:24] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:01:25] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:01:25] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:01:25] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:01:25] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:01:25] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:01:25] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:01:25] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:01:35] INFO django.server - "GET /books/checker/submit-review/5/ HTTP/1.1" 200 92016
+[2026-09-09 10:01:35] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:01:35] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:01:35] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:01:35] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:01:35] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:01:35] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:01:35] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:01:35] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:01:35] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:03:14] INFO books.views - Review submitted for book 6 by checker checker
+[2026-09-09 10:03:14] INFO books.views - Review submitted for book 6 by checker checker
+[2026-09-09 10:03:14] INFO django.server - "POST /books/checker/submit-review/5/ HTTP/1.1" 302 0
+[2026-09-09 10:03:14] INFO django.server - "GET /books/checker/dashboard/ HTTP/1.1" 200 77356
+[2026-09-09 10:03:15] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:03:15] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:03:15] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:03:15] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:03:15] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:03:15] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:03:15] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:03:21] AUTH INFO - AUTH - User logged out: checker, IP=127.0.0.1
+[2026-09-09 10:03:21] INFO accounts.views - AUTH - User logged out: checker, IP=127.0.0.1
+[2026-09-09 10:03:21] INFO accounts.views - AUTH - User logged out: checker, IP=127.0.0.1
+[2026-09-09 10:03:21] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-09-09 10:03:21] INFO django.server - "GET / HTTP/1.1" 200 88517
+[2026-09-09 10:03:21] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:03:21] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:03:21] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:03:21] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:03:21] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:03:21] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:03:21] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:03:22] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:03:22] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:03:23] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64907
+[2026-09-09 10:03:23] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:03:23] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:03:23] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:03:23] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:03:23] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:03:23] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:03:23] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:03:23] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:03:23] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:03:34] AUTH INFO - AUTH - Login successful: User=maker, IP=127.0.0.1, Role=maker
+[2026-09-09 10:03:34] INFO accounts.views - AUTH - Login successful: User=maker, IP=127.0.0.1, Role=maker
+[2026-09-09 10:03:34] INFO accounts.views - AUTH - Login successful: User=maker, IP=127.0.0.1, Role=maker
+[2026-09-09 10:03:34] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-09-09 10:03:34] INFO books.views - Maker dashboard: 0 new submissions found
+[2026-09-09 10:03:34] INFO books.views - Maker dashboard: 0 new submissions found
+[2026-09-09 10:03:34] INFO django.server - "GET /books/maker/dashboard/ HTTP/1.1" 200 84279
+[2026-09-09 10:03:34] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:03:34] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:03:34] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:03:34] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:03:34] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:03:34] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:03:34] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:03:34] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:03:34] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:03:51] INFO django.server - "GET /books/maker/publish/6/ HTTP/1.1" 200 69828
+[2026-09-09 10:03:51] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:03:51] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:03:51] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:03:51] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:03:51] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:03:51] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:03:51] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:03:51] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:03:51] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:03:57] INFO books.views - Book 6 published by maker
+[2026-09-09 10:03:57] INFO books.views - Book 6 published by maker
+[2026-09-09 10:03:57] INFO django.server - "POST /books/maker/publish/6/ HTTP/1.1" 302 0
+[2026-09-09 10:03:57] INFO books.views - Maker dashboard: 0 new submissions found
+[2026-09-09 10:03:57] INFO books.views - Maker dashboard: 0 new submissions found
+[2026-09-09 10:03:57] INFO django.server - "GET /books/maker/dashboard/ HTTP/1.1" 200 84877
+[2026-09-09 10:03:57] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:03:57] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:03:57] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:03:57] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:03:57] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:03:57] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:03:57] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:03:57] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:03:57] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:04:00] INFO django.server - "GET / HTTP/1.1" 200 91327
+[2026-09-09 10:04:00] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:04:00] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:04:00] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:04:00] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:04:00] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:04:00] INFO django.server - "GET /media/books/covers/2026/09/pychology_b5LmZgq.png HTTP/1.1" 200 363640
+[2026-09-09 10:04:00] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:04:00] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:04:00] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:04:00] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:04:24] AUTH INFO - AUTH - User logged out: maker, IP=127.0.0.1
+[2026-09-09 10:04:24] INFO accounts.views - AUTH - User logged out: maker, IP=127.0.0.1
+[2026-09-09 10:04:24] INFO accounts.views - AUTH - User logged out: maker, IP=127.0.0.1
+[2026-09-09 10:04:24] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-09-09 10:04:24] INFO django.server - "GET / HTTP/1.1" 200 90235
+[2026-09-09 10:04:24] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:04:24] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:04:24] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:04:24] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:04:24] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:04:24] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:04:24] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:04:24] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:04:24] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:04:26] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64907
+[2026-09-09 10:04:26] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:04:26] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:04:26] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:04:26] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:04:26] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:04:26] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:04:27] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:04:35] AUTH INFO - AUTH - Login successful: User=client, IP=127.0.0.1, Role=client
+[2026-09-09 10:04:35] INFO accounts.views - AUTH - Login successful: User=client, IP=127.0.0.1, Role=client
+[2026-09-09 10:04:35] INFO accounts.views - AUTH - Login successful: User=client, IP=127.0.0.1, Role=client
+[2026-09-09 10:04:35] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-09-09 10:04:35] AUTH INFO - Client dashboard accessed by: client
+[2026-09-09 10:04:35] INFO accounts.views - Client dashboard accessed by: client
+[2026-09-09 10:04:35] INFO accounts.views - Client dashboard accessed by: client
+[2026-09-09 10:04:35] INFO django.server - "GET /accounts/dashboard/client/ HTTP/1.1" 200 66706
+[2026-09-09 10:04:35] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:04:35] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:04:35] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:04:36] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:04:36] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:04:36] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:04:36] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:04:36] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:04:36] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:04:39] INFO django.server - "GET /books/my-books/user/ HTTP/1.1" 200 76450
+[2026-09-09 10:04:39] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:04:39] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:04:39] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:04:39] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:04:39] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:04:40] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:04:40] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:04:40] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:04:40] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:04:40] INFO django.server - "GET /books/browse/ HTTP/1.1" 200 102529
+[2026-09-09 10:04:40] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:04:40] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:04:40] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:04:41] INFO django.server - "GET /media/books/covers/2026/09/pychology_b5LmZgq.png HTTP/1.1" 304 0
+[2026-09-09 10:04:41] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:04:41] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:04:42] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:04:42] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:04:44] INFO django.server - "GET /books/6/ HTTP/1.1" 200 73710
+[2026-09-09 10:04:44] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:04:44] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:04:44] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:04:45] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:04:45] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:04:45] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:04:45] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:04:45] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:04:45] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:04:47] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 83614
+[2026-09-09 10:04:47] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:04:47] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:04:47] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:04:47] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:04:47] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:04:47] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:04:47] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:04:47] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:04:47] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:05:53] AUTH INFO - AUTH - User logged out: client, IP=127.0.0.1
+[2026-09-09 10:05:53] INFO accounts.views - AUTH - User logged out: client, IP=127.0.0.1
+[2026-09-09 10:05:53] INFO accounts.views - AUTH - User logged out: client, IP=127.0.0.1
+[2026-09-09 10:05:53] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-09-09 10:05:53] INFO django.server - "GET / HTTP/1.1" 200 90235
+[2026-09-09 10:05:53] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:05:53] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:05:53] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:05:53] INFO django.server - "GET /media/books/covers/2026/09/pychology_b5LmZgq.png HTTP/1.1" 304 0
+[2026-09-09 10:05:53] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:05:53] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:05:53] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:05:53] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:05:53] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:05:53] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:05:55] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64907
+[2026-09-09 10:05:55] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:05:55] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:05:55] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:05:55] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:05:55] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:05:55] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:05:55] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:05:55] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:05:55] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:06:04] AUTH INFO - AUTH - Login successful: User=finance_officer, IP=127.0.0.1, Role=finance
+[2026-09-09 10:06:04] INFO accounts.views - AUTH - Login successful: User=finance_officer, IP=127.0.0.1, Role=finance
+[2026-09-09 10:06:04] INFO accounts.views - AUTH - Login successful: User=finance_officer, IP=127.0.0.1, Role=finance
+[2026-09-09 10:06:04] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-09-09 10:06:04] AUTH INFO - Finance dashboard accessed by: finance_officer
+[2026-09-09 10:06:04] INFO accounts.views - Finance dashboard accessed by: finance_officer
+[2026-09-09 10:06:04] INFO accounts.views - Finance dashboard accessed by: finance_officer
+[2026-09-09 10:06:04] INFO django.server - "GET /accounts/dashboard/finance/ HTTP/1.1" 200 110945
+[2026-09-09 10:06:04] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:06:04] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:06:04] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:06:04] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:06:04] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:06:05] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:06:05] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:06:05] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:06:05] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:06:21] AUTH INFO - AUTH - User logged out: finance_officer, IP=127.0.0.1
+[2026-09-09 10:06:21] INFO accounts.views - AUTH - User logged out: finance_officer, IP=127.0.0.1
+[2026-09-09 10:06:21] INFO accounts.views - AUTH - User logged out: finance_officer, IP=127.0.0.1
+[2026-09-09 10:06:21] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-09-09 10:06:21] INFO django.server - "GET / HTTP/1.1" 200 90235
+[2026-09-09 10:06:21] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:06:21] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:06:21] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:06:21] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:06:21] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:06:22] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:06:22] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:06:22] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:06:22] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:06:23] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64907
+[2026-09-09 10:06:23] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:06:23] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:06:23] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:06:23] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:06:23] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:06:23] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:06:23] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:06:23] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:06:23] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:06:33] AUTH INFO - AUTH - Login successful: User=admin, IP=127.0.0.1, Role=admin
+[2026-09-09 10:06:33] INFO accounts.views - AUTH - Login successful: User=admin, IP=127.0.0.1, Role=admin
+[2026-09-09 10:06:33] INFO accounts.views - AUTH - Login successful: User=admin, IP=127.0.0.1, Role=admin
+[2026-09-09 10:06:33] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-09-09 10:06:33] AUTH INFO - Admin dashboard accessed by: admin
+[2026-09-09 10:06:33] INFO accounts.views - Admin dashboard accessed by: admin
+[2026-09-09 10:06:33] INFO accounts.views - Admin dashboard accessed by: admin
+[2026-09-09 10:06:33] INFO django.server - "GET /accounts/dashboard/admin/ HTTP/1.1" 200 107758
+[2026-09-09 10:06:33] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:06:33] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:06:33] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:06:33] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:06:33] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:06:33] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:06:33] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:06:33] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 10:06:33] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 76582
+[2026-09-09 10:06:33] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 10:06:43] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 76586
+[2026-09-09 10:06:53] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 76610
+[2026-09-09 14:36:04] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 93278
+[2026-09-09 14:36:04] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 93338
+[2026-09-09 14:36:10] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 93220
+[2026-09-09 14:38:35] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 93168
+[2026-09-09 14:39:30] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 93314
+[2026-09-09 14:40:30] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 93100
+[2026-09-09 14:41:30] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 93132
+[2026-09-09 14:42:30] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 93247
+[2026-09-09 14:43:30] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 93102
+[2026-09-09 14:44:30] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 93007
+[2026-09-09 14:45:30] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 93038
+[2026-09-09 14:46:30] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 92986
+[2026-09-09 14:47:30] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 93014
+[2026-09-09 14:48:30] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 92918
+[2026-09-09 14:49:30] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 92897
+[2026-09-09 14:50:30] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 92854
+[2026-09-09 14:51:30] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 92960
+[2026-09-09 14:52:30] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 93009
+[2026-09-09 14:53:30] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 92869
+[2026-09-09 14:54:30] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 92809
+[2026-09-09 14:55:30] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 92834
+[2026-09-09 14:56:30] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 92782
+[2026-09-09 14:57:30] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 92776
+[2026-09-09 14:58:24] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 92810
+[2026-09-09 14:58:24] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 92800
+[2026-09-09 14:58:30] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 92867
+[2026-09-09 14:58:40] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 92794
+[2026-09-09 14:58:41] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 92695
+[2026-09-09 14:58:50] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 92646
+[2026-09-09 14:59:00] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 92617
+[2026-09-09 14:59:10] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 92644
+[2026-09-09 14:59:20] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 92715
+[2026-09-09 14:59:30] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 92669
+[2026-09-09 14:59:40] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 92591
+[2026-09-09 14:59:50] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 92541
+[2026-09-09 15:00:00] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 92552
+[2026-09-09 15:00:10] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 92558
+[2026-09-09 15:00:20] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 92532
+[2026-09-09 15:00:30] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 92490
+[2026-09-09 15:00:40] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 92492
+[2026-09-09 15:00:50] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 92439
+[2026-09-09 15:01:00] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 92433
+[2026-09-09 15:01:10] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 92399
+[2026-09-09 15:01:20] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 92347
+[2026-09-09 15:01:30] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 92368
+[2026-09-09 15:01:40] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 92366
+[2026-09-09 15:01:50] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 92321
+[2026-09-09 15:02:00] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 92377
+[2026-09-09 15:02:10] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 92298
+[2026-09-09 15:02:20] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 92261
+[2026-09-09 15:02:30] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 92238
+[2026-09-09 15:02:40] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 92261
+[2026-09-09 15:02:50] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 92209
+[2026-09-09 15:03:00] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 92166
+[2026-09-09 15:03:10] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 92141
+[2026-09-09 15:03:20] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 92194
+[2026-09-09 15:03:30] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 92117
+[2026-09-09 15:03:40] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 92112
+[2026-09-09 15:03:50] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 92029
+[2026-09-09 15:04:00] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 92203
+[2026-09-09 15:04:10] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 92023
+[2026-09-09 15:04:20] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 91959
+[2026-09-09 15:04:30] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 92046
+[2026-09-09 15:04:40] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 91891
+[2026-09-09 15:04:50] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 91984
+[2026-09-09 15:05:00] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 92015
+[2026-09-09 15:05:01] AUTH INFO - AUTH - User logged out: admin, IP=127.0.0.1
+[2026-09-09 15:05:01] INFO accounts.views - AUTH - User logged out: admin, IP=127.0.0.1
+[2026-09-09 15:05:01] INFO accounts.views - AUTH - User logged out: admin, IP=127.0.0.1
+[2026-09-09 15:05:01] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-09-09 15:05:02] INFO django.server - "GET / HTTP/1.1" 200 90235
+[2026-09-09 15:05:02] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 15:05:02] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 15:05:02] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 15:05:02] INFO django.server - "GET /media/books/covers/2026/09/pychology_b5LmZgq.png HTTP/1.1" 304 0
+[2026-09-09 15:05:02] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 15:05:02] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 15:05:02] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 15:05:02] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 15:05:02] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 15:05:02] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 15:05:12] INFO django.server - "GET /books/6/ HTTP/1.1" 200 71049
+[2026-09-09 15:05:12] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 15:05:12] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 15:05:12] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 15:05:12] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 15:05:12] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 15:05:12] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 15:05:12] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 15:05:12] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 15:05:12] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 15:05:14] INFO django.server - "GET /accounts/login/?next=/books/6/ HTTP/1.1" 200 64907
+[2026-09-09 15:05:14] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 15:05:14] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 15:05:14] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 15:05:14] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 15:05:14] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 15:05:15] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 15:05:15] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 15:05:15] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 15:05:15] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 15:05:17] INFO django.server - "GET / HTTP/1.1" 200 89881
+[2026-09-09 15:05:17] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 15:05:17] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 15:05:17] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 15:05:17] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 15:05:17] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 15:05:17] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 15:05:17] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 15:05:17] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 15:05:17] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 15:05:35] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64907
+[2026-09-09 15:05:35] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 15:05:35] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 15:05:35] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 15:05:35] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 15:05:35] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 15:05:35] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 15:05:35] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-09 15:05:35] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-09 15:05:35] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 10:55:53] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-16 10:55:53] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-16 10:56:25] INFO django.server - "GET / HTTP/1.1" 200 89883
+[2026-09-16 10:56:25] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 10:56:26] INFO django.server - "GET /static/images/Abrehot.jpg HTTP/1.1" 200 72716
+[2026-09-16 10:56:26] INFO django.server - "GET /static/images/logo.png HTTP/1.1" 200 157968
+[2026-09-16 10:56:26] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 10:56:26] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 10:56:26] INFO django.server - "GET /media/books/covers/2026/09/pychology_b5LmZgq.png HTTP/1.1" 200 363640
+[2026-09-16 10:56:27] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 10:56:27] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 10:56:27] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 10:56:27] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 10:56:27] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:00:05] INFO django.server - "GET / HTTP/1.1" 200 89883
+[2026-09-16 11:00:06] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:00:06] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:00:06] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:00:06] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:00:06] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:00:06] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:00:06] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:00:07] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64909
+[2026-09-16 11:00:07] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:00:07] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:00:07] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:00:08] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:00:08] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:00:08] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:00:08] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:00:08] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:00:08] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:00:16] AUTH INFO - AUTH - Login successful: User=client, IP=127.0.0.1, Role=client
+[2026-09-16 11:00:16] INFO accounts.views - AUTH - Login successful: User=client, IP=127.0.0.1, Role=client
+[2026-09-16 11:00:16] INFO accounts.views - AUTH - Login successful: User=client, IP=127.0.0.1, Role=client
+[2026-09-16 11:00:16] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-09-16 11:00:16] AUTH INFO - Client dashboard accessed by: client
+[2026-09-16 11:00:16] INFO accounts.views - Client dashboard accessed by: client
+[2026-09-16 11:00:16] INFO accounts.views - Client dashboard accessed by: client
+[2026-09-16 11:00:16] INFO django.server - "GET /accounts/dashboard/client/ HTTP/1.1" 200 66708
+[2026-09-16 11:00:16] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:00:16] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:00:16] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:00:16] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:00:16] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:00:16] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:00:16] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:00:16] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:00:16] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:00:18] INFO django.server - "GET /books/browse/ HTTP/1.1" 200 102531
+[2026-09-16 11:00:18] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:00:18] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:00:18] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:00:18] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:00:18] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:00:18] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:00:18] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:00:18] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:00:18] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:00:20] INFO django.server - "GET /books/6/ HTTP/1.1" 200 73712
+[2026-09-16 11:00:20] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:00:20] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:00:20] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:00:21] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:00:21] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:00:21] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:00:21] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:00:21] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:00:21] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:00:24] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 83616
+[2026-09-16 11:00:24] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:00:24] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:00:24] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:00:24] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:00:24] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:00:24] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:00:24] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:00:24] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:00:24] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:00:55] INFO django.server - "POST /books/6/purchase/ HTTP/1.1" 302 0
+[2026-09-16 11:00:55] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 84262
+[2026-09-16 11:00:55] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:00:55] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:00:55] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:00:55] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:00:55] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:00:55] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:00:55] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
