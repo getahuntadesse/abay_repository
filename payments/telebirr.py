@@ -5,6 +5,7 @@ SHA256WithRSA signing per official SuperApp / Fabric docs.
 from __future__ import annotations
 
 import base64
+import re
 import json
 import logging
 import time
@@ -33,18 +34,35 @@ class TelebirrService:
         self.base_url = getattr(
             settings,
             "TELEBIRR_BASE_URL",
-            "https://superapp.ethiomobilemoney.et:38443/apiaccess/payment/gateway",
+            "https://developerportal.ethiotelebirr.et:38443/apiaccess/payment/gateway",
         ).rstrip("/")
-        self.fabric_app_id = getattr(settings, "TELEBIRR_FABRIC_APP_ID", "") or ""
-        self.app_secret = getattr(settings, "TELEBIRR_APP_SECRET", "") or ""
-        self.merchant_app_id = getattr(settings, "TELEBIRR_MERCHANT_APP_ID", "") or ""
-        self.merchant_code = getattr(settings, "TELEBIRR_MERCHANT_CODE", "") or ""
-        self.private_key_raw = getattr(settings, "TELEBIRR_PRIVATE_KEY", "") or ""
+        self.fabric_app_id = (getattr(settings, "TELEBIRR_FABRIC_APP_ID", "") or "").strip()
+        self.app_secret = (getattr(settings, "TELEBIRR_APP_SECRET", "") or "").strip()
+        self.merchant_app_id = (getattr(settings, "TELEBIRR_MERCHANT_APP_ID", "") or "").strip()
+        self.merchant_code = (getattr(settings, "TELEBIRR_MERCHANT_CODE", "") or "").strip()
+        self.private_key_raw = (getattr(settings, "TELEBIRR_PRIVATE_KEY", "") or "").strip()
         self.web_base_url = getattr(
             settings,
             "TELEBIRR_WEB_BASE_URL",
-            "https://superapp.ethiomobilemoney.et:38443/payment/web/pay?",
+            "https://developerportal.ethiotelebirr.et:38443/payment/web/paygate?",
         )
+        # Known sandbox Fabric credentials are REJECTED by production SuperApp.
+        # Auto-correct base URL if still pointing at superapp with these keys.
+        _SANDBOX_FABRIC_IDS = {
+            "c4182ef8-9249-458a-985e-06d191f4d505",
+            "8d0c438b-783b-47f5-a546-fe5700dbdeb2",
+        }
+        if (
+            self.fabric_app_id in _SANDBOX_FABRIC_IDS
+            and "superapp.ethiomobilemoney.et" in self.base_url
+        ):
+            logger.warning(
+                "TELEBIRR_BASE_URL points to production SuperApp but Fabric App ID is sandbox. "
+                "Switching to developerportal.ethiotelebirr.et"
+            )
+            self.base_url = "https://developerportal.ethiotelebirr.et:38443/apiaccess/payment/gateway"
+            if "superapp" in (self.web_base_url or ""):
+                self.web_base_url = "https://developerportal.ethiotelebirr.et:38443/payment/web/paygate?"
         base = getattr(settings, "BASE_URL", "http://localhost:8000").rstrip("/")
         self.notify_url = getattr(settings, "TELEBIRR_NOTIFY_URL", "") or (
             base + "/payments/webhook/telebirr/"
@@ -53,7 +71,7 @@ class TelebirrService:
             base + "/payments/return/"
         )
         self.timeout_express = getattr(settings, "TELEBIRR_TIMEOUT_EXPRESS", "120m")
-        self.verify_ssl = bool(getattr(settings, "TELEBIRR_VERIFY_SSL", True))
+        self.verify_ssl = bool(getattr(settings, "TELEBIRR_VERIFY_SSL", False))
         self._rsa_key = self._load_private_key()
         self._token: Optional[str] = None
         self._token_exp: float = 0.0
@@ -68,15 +86,29 @@ class TelebirrService:
         )
 
     def _load_private_key(self):
+        """Load RSA private key from PEM or base64 (PKCS#8 DER) string."""
         if not self.private_key_raw:
+            logger.warning("TELEBIRR_PRIVATE_KEY is empty")
             return None
-        raw = self.private_key_raw.strip().replace("\\n", "\n")
+        raw = self.private_key_raw.strip().replace("\\n", "\n").replace(" ", "")
+        # Restore newlines if user pasted PEM with spaces stripped incorrectly
+        if "BEGIN" in self.private_key_raw:
+            raw = self.private_key_raw.strip().replace("\\n", "\n")
         try:
             if "BEGIN" in raw:
                 return serialization.load_pem_private_key(raw.encode("utf-8"), password=None)
-            # DER from base64 body
+            # Try base64-decoded DER (PKCS#8 or PKCS#1)
             key_bytes = base64.b64decode(raw)
-            return serialization.load_der_private_key(key_bytes, password=None)
+            try:
+                return serialization.load_der_private_key(key_bytes, password=None)
+            except Exception:
+                # Wrap as PEM PKCS#8 and retry
+                pem = (
+                    "-----BEGIN PRIVATE KEY-----\n"
+                    + "\n".join(raw[i:i+64] for i in range(0, len(raw), 64))
+                    + "\n-----END PRIVATE KEY-----"
+                )
+                return serialization.load_pem_private_key(pem.encode("utf-8"), password=None)
         except Exception as e:
             logger.error("Telebirr private key load failed: %s", e)
             return None
@@ -119,9 +151,13 @@ class TelebirrService:
             leaf = k.split(".")[-1] if "." in k else k
             leaf_map[leaf] = flat[k]
         sign_str = "&".join(f"{k}={leaf_map[k]}" for k in sorted(leaf_map.keys()))
+        # Official Telebirr Fabric demo uses SHA256withRSAandMGF1 (RSA-PSS)
         signature = self._rsa_key.sign(
             sign_str.encode("utf-8"),
-            padding.PKCS1v15(),
+            padding.PSS(
+                mgf=padding.MGF1(hashes.SHA256()),
+                salt_length=padding.PSS.DIGEST_LENGTH,
+            ),
             hashes.SHA256(),
         )
         return base64.b64encode(signature).decode("utf-8")
@@ -137,9 +173,9 @@ class TelebirrService:
             "X-APP-Key": self.fabric_app_id,
         }
         body = {"appSecret": self.app_secret}
+        # Official endpoint only (auth/authToken returns 49401024988)
         endpoints = [
             f"{self.base_url}/payment/v1/token",
-            f"{self.base_url}/payment/v1/auth/authToken",
         ]
         last_err = None
         for url in endpoints:
@@ -161,7 +197,15 @@ class TelebirrService:
             except Exception as e:
                 last_err = str(e)
                 logger.warning("Telebirr token %s failed: %s", url, e)
-        raise RuntimeError(f"Telebirr fabric token failed: {last_err}")
+        msg = f"Telebirr fabric token failed: {last_err}"
+        if isinstance(last_err, dict) and str(last_err.get("errorCode", "")).startswith("4940"):
+            msg += (
+                " | HINT: Your Fabric App ID/Secret belong to the DEVELOPER PORTAL (sandbox). "
+                "Set TELEBIRR_BASE_URL=https://developerportal.ethiotelebirr.et:38443/apiaccess/payment/gateway "
+                "and TELEBIRR_WEB_BASE_URL=https://developerportal.ethiotelebirr.et:38443/payment/web/paygate? "
+                "in .env then restart. Production SuperApp rejects these keys."
+            )
+        raise RuntimeError(msg)
 
     def create_checkout(
         self,
@@ -171,90 +215,94 @@ class TelebirrService:
         notify_url: Optional[str] = None,
         redirect_url: Optional[str] = None,
     ) -> Dict[str, Any]:
+        """Create H5 pre-order matching official C2B_WebCheckoutDemo."""
         if not self.is_configured():
             return {
                 "success": False,
                 "error": "Telebirr is not fully configured (keys / RSA private key).",
             }
-        merch_order_id = merch_order_id or f"ORD{uuid.uuid4().hex[:16].upper()}"
+        # Telebirr requires merch_order_id matching ^[A-Za-z0-9]+$ (no hyphens/underscores)
+        raw_id = merch_order_id or f"ORD{uuid.uuid4().hex[:16].upper()}"
+        merch_order_id = re.sub(r"[^A-Za-z0-9]", "", str(raw_id)) or f"ORD{uuid.uuid4().hex[:16].upper()}"
+        if len(merch_order_id) > 64:
+            merch_order_id = merch_order_id[:64]
         try:
             token = self.apply_fabric_token()
         except Exception as e:
             logger.exception("Telebirr token error")
             return {"success": False, "error": str(e)}
 
-        # Amount as string with 2 decimals
         total = f"{Decimal(str(amount)).quantize(Decimal('0.01'))}"
 
+        # Official demo biz_content fields only (extra fields can break sandbox)
         biz = {
-            "notify_url": notify_url or self.notify_url,
-            "trade_type": "Checkout",
+            "notify_url": notify_url or self.notify_url or "https://www.google.com",
             "appid": self.merchant_app_id,
             "merch_code": self.merchant_code,
             "merch_order_id": merch_order_id,
+            "trade_type": "Checkout",
             "title": (title or "Abay Repository")[:128],
             "total_amount": total,
             "trans_currency": "ETB",
-            "timeout_express": self.timeout_express,
-            "payee_identifier": self.merchant_code,
-            "payee_identifier_type": "04",
-            "payee_type": "5000",
-            "redirect_url": redirect_url or self.redirect_url,
+            "timeout_express": self.timeout_express or "120m",
         }
         req = {
             "timestamp": self._ts(),
-            "method": "payment.preorder",
             "nonce_str": self._nonce(),
+            "method": "payment.preorder",
             "version": "1.0",
             "biz_content": biz,
-            "sign_type": "SHA256WithRSA",
         }
         try:
+            # Sign BEFORE attaching sign_type (matches official demo)
             req["sign"] = self._sign(req)
         except Exception as e:
             return {"success": False, "error": f"Sign failed: {e}"}
+        req["sign_type"] = "SHA256WithRSA"
 
         headers = {
             "Content-Type": "application/json",
             "X-APP-Key": self.fabric_app_id,
             "Authorization": token,
         }
-        endpoints = [
-            f"{self.base_url}/payment/v1/merchant/preOrder",
-            f"{self.base_url}/payment/v1/merchant/createOrder",
-        ]
-        last = None
-        for url in endpoints:
-            try:
-                r = requests.post(
-                    url, headers=headers, json=req, timeout=30, verify=self.verify_ssl
+        # Only valid published API path (preorder / createOrder return 49401026001)
+        url = f"{self.base_url}/payment/v1/merchant/preOrder"
+        try:
+            r = requests.post(
+                url, headers=headers, json=req, timeout=30, verify=self.verify_ssl
+            )
+            data = r.json() if r.content else {}
+            logger.info("Telebirr preOrder response: %s", data)
+            code = str(data.get("code", ""))
+            ok = code in ("0", "200") or data.get("result") in ("SUCCESS", "success")
+            if ok:
+                prepay_id = (data.get("biz_content") or {}).get("prepay_id")
+                if not prepay_id:
+                    return {"success": False, "error": f"No prepay_id in response: {data}"}
+                checkout_url = self._build_checkout_url(prepay_id)
+                logger.info(
+                    "Telebirr preorder OK merch_order_id=%s prepay_id=%s",
+                    merch_order_id,
+                    prepay_id,
                 )
-                data = r.json() if r.content else {}
-                code = str(data.get("code", ""))
-                ok = code in ("0", "200") or data.get("result") in ("SUCCESS", "success")
-                if ok:
-                    prepay_id = (data.get("biz_content") or {}).get("prepay_id")
-                    if not prepay_id:
-                        last = data
-                        continue
-                    checkout_url = self._build_checkout_url(prepay_id)
-                    logger.info(
-                        "Telebirr preorder OK merch_order_id=%s prepay_id=%s",
-                        merch_order_id,
-                        prepay_id,
-                    )
-                    return {
-                        "success": True,
-                        "merch_order_id": merch_order_id,
-                        "prepay_id": prepay_id,
-                        "checkout_url": checkout_url,
-                        "raw": data,
-                    }
-                last = data
-            except Exception as e:
-                last = str(e)
-                logger.warning("Telebirr preorder %s failed: %s", url, e)
-        return {"success": False, "error": f"Create order failed: {last}"}
+                return {
+                    "success": True,
+                    "merch_order_id": merch_order_id,
+                    "prepay_id": prepay_id,
+                    "checkout_url": checkout_url,
+                    "raw": data,
+                }
+            return {
+                "success": False,
+                "error": data.get("msg")
+                or data.get("errorMsg")
+                or data.get("exceptionInfo")
+                or f"Create order failed: {data}",
+                "raw": data,
+            }
+        except Exception as e:
+            logger.exception("Telebirr preOrder error")
+            return {"success": False, "error": str(e)}
 
     def _build_checkout_url(self, prepay_id: str) -> str:
         maps = {

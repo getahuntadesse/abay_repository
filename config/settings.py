@@ -533,30 +533,30 @@ LOGGING = {
 # 18. FAYDA OIDC SETTINGS
 # =============================================
 
-FAYDA_CLIENT_ID = config('FAYDA_CLIENT_ID', default='')
-FAYDA_AUTH_URL = config('FAYDA_AUTH_URL', default='')
-FAYDA_TOKEN_URL = config('FAYDA_TOKEN_URL', default='')
-FAYDA_USERINFO_URL = config('FAYDA_USERINFO_URL', default='')
-FAYDA_REDIRECT_URI = config('FAYDA_REDIRECT_URI', default='http://localhost:3000/callback/')
+FAYDA_CLIENT_ID = config('FAYDA_CLIENT_ID', default='crXYIYg2cJiNTaw5t-peoPzCRo-3JATNfBd5A86U8t0')
+FAYDA_AUTH_URL = config('FAYDA_AUTH_URL', default='https://esignet.ida.fayda.et/authorize')
+FAYDA_TOKEN_URL = config('FAYDA_TOKEN_URL', default='https://esignet.ida.fayda.et/v1/esignet/oauth/v2/token')
+FAYDA_USERINFO_URL = config('FAYDA_USERINFO_URL', default='https://esignet.ida.fayda.et/v1/esignet/oidc/userinfo')
+FAYDA_REDIRECT_URI = config('FAYDA_REDIRECT_URI', default='http://localhost:3000/callback')
 FAYDA_PRIVATE_KEY_B64 = config('FAYDA_PRIVATE_KEY_B64', default='')
 FAYDA_ALGORITHM = config('FAYDA_ALGORITHM', default='RS256')
 FAYDA_CLIENT_ASSERTION_TYPE = config('FAYDA_CLIENT_ASSERTION_TYPE', default='urn:ietf:params:oauth:client-assertion-type:jwt-bearer')
 FAYDA_EXPIRATION_TIME = config('FAYDA_EXPIRATION_TIME', default=15, cast=int)
-FAYDA_TEST_NATIONAL_ID = config('FAYDA_TEST_NATIONAL_ID', default='')
-FAYDA_TEST_OTP = config('FAYDA_TEST_OTP', default='')
+FAYDA_TEST_NATIONAL_ID = config('FAYDA_TEST_NATIONAL_ID', default='3126894653473958')
+FAYDA_TEST_OTP = config('FAYDA_TEST_OTP', default='111111')
 
 # =============================================
 # 19. TELEBIRR SETTINGS
 # =============================================
 
-TELEBIRR_BASE_URL = config('TELEBIRR_BASE_URL', default='https://superapp.ethiomobilemoney.et:38443/apiaccess/payment/gateway')
+TELEBIRR_BASE_URL = config('TELEBIRR_BASE_URL', default='https://developerportal.ethiotelebirr.et:38443/apiaccess/payment/gateway')
 TELEBIRR_FABRIC_APP_ID = config('TELEBIRR_FABRIC_APP_ID', default='c4182ef8-9249-458a-985e-06d191f4d505')
 TELEBIRR_APP_SECRET = config('TELEBIRR_APP_SECRET', default='fad0f06383c6297f545876694b974599')
-TELEBIRR_MERCHANT_APP_ID = config('TELEBIRR_MERCHANT_APP_ID', default='930231098009602')
-TELEBIRR_MERCHANT_CODE = config('TELEBIRR_MERCHANT_CODE', default='101011')
+TELEBIRR_MERCHANT_APP_ID = config('TELEBIRR_MERCHANT_APP_ID', default='1697890795596801')
+TELEBIRR_MERCHANT_CODE = config('TELEBIRR_MERCHANT_CODE', default='406488')
 TELEBIRR_PRIVATE_KEY = config('TELEBIRR_PRIVATE_KEY', default='')
 TELEBIRR_PUBLIC_KEY = config('TELEBIRR_PUBLIC_KEY', default='')
-TELEBIRR_VERIFY_SSL = config('TELEBIRR_VERIFY_SSL', default=True, cast=bool)
+TELEBIRR_VERIFY_SSL = config('TELEBIRR_VERIFY_SSL', default=False, cast=bool)
 TELEBIRR_ENABLED = config('TELEBIRR_ENABLED', default=True, cast=bool)
 USE_SIMULATED_PAYMENT = config('USE_SIMULATED_PAYMENT', default=False, cast=bool)  # production: real charges
 
@@ -565,8 +565,8 @@ TELEBIRR_APP_KEY = TELEBIRR_APP_SECRET
 TELEBIRR_SHORT_CODE = TELEBIRR_MERCHANT_CODE
 TELEBIRR_API_URL = TELEBIRR_BASE_URL
 
-TELEBIRR_CALLBACK_URL = config('TELEBIRR_CALLBACK_URL', default=f"{BASE_URL}/books/telebirr/callback/")
-TELEBIRR_RETURN_URL = config('TELEBIRR_RETURN_URL', default=f"{BASE_URL}/books/telebirr/return/")
+TELEBIRR_CALLBACK_URL = config('TELEBIRR_CALLBACK_URL', default=f"{BASE_URL}/payments/webhook/telebirr/")
+TELEBIRR_RETURN_URL = config('TELEBIRR_RETURN_URL', default=f"{BASE_URL}/payments/return/")
 
 # =============================================
 # 20. CBE BIRR SETTINGS
@@ -689,9 +689,9 @@ USD_TO_ETB_RATE = config('USD_TO_ETB_RATE', default=56.5, cast=float)
 # Telebirr H5 web checkout base + notify (production defaults)
 TELEBIRR_WEB_BASE_URL = config(
     'TELEBIRR_WEB_BASE_URL',
-    default='https://superapp.ethiomobilemoney.et:38443/payment/web/pay?',
+    default='https://developerportal.ethiotelebirr.et:38443/payment/web/paygate?',
 )
-TELEBIRR_NOTIFY_URL = config('TELEBIRR_NOTIFY_URL', default='')
+TELEBIRR_NOTIFY_URL = config('TELEBIRR_NOTIFY_URL', default=f"{BASE_URL}/payments/webhook/telebirr/")
 TELEBIRR_TIMEOUT_EXPRESS = config('TELEBIRR_TIMEOUT_EXPRESS', default='120m')
 SITE_NAME = config('SITE_NAME', default='Abay Repository')
 

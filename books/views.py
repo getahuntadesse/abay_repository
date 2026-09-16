@@ -702,7 +702,7 @@ class TelebirrPayment:
 # =============================================
 
 def get_available_payment_methods():
-    """Methods shown on the book purchase interface."""
+    """Methods shown on the book purchase interface. Telebirr only."""
     return [
         {
             'id': 'telebirr',
@@ -710,25 +710,7 @@ def get_available_payment_methods():
             'icon': 'fas fa-mobile-alt',
             'description': 'Pay with Telebirr (Ethio telecom mobile money)',
             'color': 'success',
-            'badge': 'Popular',
-            'show_badge': True,
-        },
-        {
-            'id': 'chapa',
-            'name': 'Chapa',
-            'icon': 'fas fa-credit-card',
-            'description': 'Pay with card, bank, or mobile money via Chapa',
-            'color': 'primary',
-            'badge': 'Cards',
-            'show_badge': True,
-        },
-        {
-            'id': 'paypal',
-            'name': 'PayPal',
-            'icon': 'fab fa-paypal',
-            'description': 'Pay internationally with PayPal',
-            'color': 'info',
-            'badge': 'International',
+            'badge': 'Available',
             'show_badge': True,
         },
     ]
@@ -1305,102 +1287,94 @@ def purchase_book(request, book_id):
                     if not tb.is_configured():
                         purchase.status = 'failed'
                         purchase.save(update_fields=['status'])
-                        messages.error(request, 'Telebirr is not configured. Contact support.')
+                        # Log which keys are missing so support can fix .env quickly
+                        missing = []
+                        if not getattr(settings, 'TELEBIRR_FABRIC_APP_ID', ''):
+                            missing.append('TELEBIRR_FABRIC_APP_ID')
+                        if not getattr(settings, 'TELEBIRR_APP_SECRET', ''):
+                            missing.append('TELEBIRR_APP_SECRET')
+                        if not getattr(settings, 'TELEBIRR_MERCHANT_APP_ID', ''):
+                            missing.append('TELEBIRR_MERCHANT_APP_ID')
+                        if not getattr(settings, 'TELEBIRR_MERCHANT_CODE', ''):
+                            missing.append('TELEBIRR_MERCHANT_CODE')
+                        if not getattr(settings, 'TELEBIRR_PRIVATE_KEY', ''):
+                            missing.append('TELEBIRR_PRIVATE_KEY')
+                        logger.error("Telebirr not configured. Missing: %s", missing or "private key failed to load")
+                        err = 'Telebirr is not configured. Set TELEBIRR_* keys in .env.'
+                        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                            return JsonResponse({'success': False, 'error': err}, status=503)
+                        messages.error(request, err)
+                        return redirect('books:purchase_book', book_id=book_id)
+                    phone = (phone_number or '').strip()
+                    if not phone or len(phone) < 9:
+                        purchase.status = 'failed'
+                        purchase.save(update_fields=['status'])
+                        err = 'A valid Telebirr phone number is required.'
+                        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                            return JsonResponse({'success': False, 'error': err}, status=400)
+                        messages.error(request, err)
                         return redirect('books:purchase_book', book_id=book_id)
                     result = tb.create_checkout(
-                        title=f"Book: {book.title}",
+                        title=book.title[:128],
                         amount=float(book.price),
-                        merch_order_id=purchase.transaction_id,
+                        merch_order_id=(purchase.transaction_id or f"PUR{purchase.id}").replace("-", "").replace("_", ""),
                     )
                     if not result.get('success'):
                         purchase.status = 'failed'
                         purchase.save(update_fields=['status'])
-                        messages.error(request, result.get('error', 'Telebirr checkout failed.'))
+                        err = result.get('error', 'Telebirr checkout failed.')
+                        logger.error("Telebirr create_checkout failed: %s", err)
+                        err_s = err if isinstance(err, str) else str(err)
+                        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                            return JsonResponse({'success': False, 'error': err_s}, status=502)
+                        messages.error(request, err_s)
                         return redirect('books:purchase_book', book_id=book_id)
-                    checkout_url = result.get('checkout_url')
+                    checkout_url = result.get('checkout_url') or result.get('checkOutUrl')
                     reference = result.get('merch_order_id') or result.get('prepay_id')
-
-                elif payment_method == 'chapa':
-                    if not email:
-                        purchase.delete()
-                        messages.error(request, 'Email is required for Chapa. Add it in your profile or the form.')
-                        return redirect('books:purchase_book', book_id=book_id)
-                    ch = ChapaService()
-                    if not ch.is_configured():
-                        purchase.status = 'failed'
-                        purchase.save(update_fields=['status'])
-                        messages.error(request, 'Chapa is not configured. Contact support.')
-                        return redirect('books:purchase_book', book_id=book_id)
-                    full = (getattr(request.user, 'full_name', None) or request.user.username or 'Customer').split(' ', 1)
-                    result = ch.initialize(
-                        amount=float(book.price),
-                        email=email,
-                        first_name=full[0],
-                        last_name=full[1] if len(full) > 1 else '',
-                        phone=phone_number or '',
-                        tx_ref=purchase.transaction_id,
-                        title=f"Book: {book.title}"[:16],
-                        description=f"Purchase {book.title}"[:50],
-                    )
-                    if not result.get('success'):
-                        purchase.status = 'failed'
-                        purchase.save(update_fields=['status'])
-                        messages.error(request, result.get('error', 'Chapa checkout failed.'))
-                        return redirect('books:purchase_book', book_id=book_id)
-                    checkout_url = result.get('checkout_url')
-                    reference = result.get('tx_ref')
-
-                elif payment_method == 'paypal':
-                    pp = PayPalService()
-                    if not pp.is_configured():
-                        purchase.status = 'failed'
-                        purchase.save(update_fields=['status'])
-                        messages.error(request, 'PayPal is not configured. Contact support.')
-                        return redirect('books:purchase_book', book_id=book_id)
-                    amount = float(book.price)
-                    if getattr(settings, 'PAYPAL_CURRENCY', 'USD') == 'USD':
-                        rate = float(getattr(settings, 'ETB_TO_USD_RATE', 0) or 0)
-                        if rate > 0:
-                            amount = round(amount * rate, 2)
-                    result = pp.create_order(
-                        amount=amount,
-                        description=f"Abay: {book.title}"[:127],
-                        custom_id=purchase.transaction_id,
-                    )
-                    if not result.get('success'):
-                        purchase.status = 'failed'
-                        purchase.save(update_fields=['status'])
-                        err = result.get('error', 'PayPal checkout failed.')
-                        messages.error(request, err if isinstance(err, str) else str(err))
-                        return redirect('books:purchase_book', book_id=book_id)
-                    checkout_url = result.get('checkout_url')
-                    reference = result.get('order_id')
 
                 else:
                     purchase.status = 'failed'
                     purchase.save(update_fields=['status'])
-                    messages.error(request, 'Unsupported payment method. Choose Telebirr, Chapa, or PayPal.')
+                    messages.error(request, 'Only Telebirr is supported. Please select Telebirr.')
                     return redirect('books:purchase_book', book_id=book_id)
 
                 if checkout_url:
                     purchase.transaction_reference = reference
                     purchase.purchase_reference = reference
                     purchase.save(update_fields=['transaction_reference', 'purchase_reference', 'updated_at'])
+                    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                        return JsonResponse({
+                            'success': True,
+                            'redirect_url': checkout_url,
+                            'payment_url': checkout_url,
+                            'checkout_url': checkout_url,
+                            'transaction_id': purchase.transaction_id,
+                            'reference': reference,
+                        })
                     return redirect(checkout_url)
 
                 purchase.status = 'failed'
                 purchase.save(update_fields=['status'])
-                messages.error(request, 'Payment URL not available. Please try again.')
+                err_msg = 'Payment URL not available. Please try again.'
+                if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                    return JsonResponse({'success': False, 'error': err_msg}, status=502)
+                messages.error(request, err_msg)
                 return redirect('books:purchase_book', book_id=book_id)
                     
         except IntegrityError as e:
             logger.error(f"Integrity error: {str(e)}")
-            messages.error(request, 'Database error. Please try again.')
+            err = 'Database error. Please try again.'
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({'success': False, 'error': err}, status=500)
+            messages.error(request, err)
             return redirect('books:detail', book_id=book_id)
         except Exception as e:
             logger.error(f"Purchase error: {str(e)}")
             logger.error(traceback.format_exc())
-            messages.error(request, f'Failed to process purchase: {str(e)[:100]}')
+            err = f'Failed to process purchase: {str(e)[:200]}'
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({'success': False, 'error': err}, status=500)
+            messages.error(request, err)
             return redirect('books:detail', book_id=book_id)
     
     return redirect('books:detail', book_id=book_id)

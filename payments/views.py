@@ -232,122 +232,51 @@ def purchase_book(request, book_id):
             })
         
 
-        # Multi-gateway: Telebirr / Chapa / PayPal
+        # Telebirr only (Chapa and PayPal removed from purchase interface)
         payment_method = (payment_method or 'telebirr').lower().strip()
-        result = {'success': False, 'error': 'Unsupported payment method'}
-
-        if payment_method == 'telebirr':
-            tb = TelebirrService()
-            if not tb.is_configured():
-                purchase.delete()
-                return JsonResponse({
-                    'success': False,
-                    'error': 'Telebirr is not configured. Set TELEBIRR_* env keys.',
-                }, status=503)
-            tb_result = tb.create_checkout(
-                title=f"Book: {book.title}",
-                amount=float(price),
-                merch_order_id=purchase.transaction_id,
-            )
-            if tb_result.get('success'):
-                purchase.transaction_reference = tb_result.get('prepay_id') or tb_result.get('merch_order_id')
-                purchase.purchase_reference = tb_result.get('merch_order_id')
-                purchase.save(update_fields=['transaction_reference', 'purchase_reference', 'updated_at'])
-                result = {
-                    'success': True,
-                    'gateway': 'telebirr',
-                    'reference': tb_result.get('merch_order_id'),
-                    'payment_url': tb_result.get('checkout_url'),
-                    'redirect_url': tb_result.get('checkout_url'),
-                    'transaction_id': purchase.transaction_id,
-                    'message': 'Redirecting to Telebirr checkout',
-                }
-            else:
-                result = {'success': False, 'error': tb_result.get('error', 'Telebirr failed')}
-
-        elif payment_method == 'chapa':
-            email = request.POST.get('email') or getattr(user, 'email', None) or ''
-            if not email:
-                purchase.delete()
-                return JsonResponse({'success': False, 'error': 'Email is required for Chapa'}, status=400)
-            full = (getattr(user, 'full_name', None) or user.username or 'Customer').split(' ', 1)
-            first_name = full[0]
-            last_name = full[1] if len(full) > 1 else ''
-            ch = ChapaService()
-            if not ch.is_configured():
-                purchase.delete()
-                return JsonResponse({
-                    'success': False,
-                    'error': 'Chapa is not configured. Set CHAPA_SECRET_KEY.',
-                }, status=503)
-            ch_result = ch.initialize(
-                amount=float(price),
-                email=email,
-                first_name=first_name,
-                last_name=last_name,
-                phone=phone_number or '',
-                tx_ref=purchase.transaction_id,
-                title=f"Book: {book.title}"[:16],
-                description=f"Purchase {book.title}"[:50],
-            )
-            if ch_result.get('success'):
-                purchase.transaction_reference = ch_result.get('tx_ref')
-                purchase.purchase_reference = ch_result.get('tx_ref')
-                purchase.save(update_fields=['transaction_reference', 'purchase_reference', 'updated_at'])
-                result = {
-                    'success': True,
-                    'gateway': 'chapa',
-                    'reference': ch_result.get('tx_ref'),
-                    'payment_url': ch_result.get('checkout_url'),
-                    'redirect_url': ch_result.get('checkout_url'),
-                    'transaction_id': purchase.transaction_id,
-                    'message': 'Redirecting to Chapa checkout',
-                }
-            else:
-                result = {'success': False, 'error': ch_result.get('error', 'Chapa failed')}
-
-        elif payment_method == 'paypal':
-            pp = PayPalService()
-            if not pp.is_configured():
-                purchase.delete()
-                return JsonResponse({
-                    'success': False,
-                    'error': 'PayPal is not configured. Set PAYPAL_CLIENT_ID / SECRET.',
-                }, status=503)
-            # Amount: convert ETB→USD only if currency is USD and a rate is set
-            amount = float(price)
-            from django.conf import settings as dj_settings
-            if getattr(dj_settings, 'PAYPAL_CURRENCY', 'USD') == 'USD':
-                rate = float(getattr(dj_settings, 'ETB_TO_USD_RATE', 0) or 0)
-                if rate > 0:
-                    amount = round(float(price) * rate, 2)
-            pp_result = pp.create_order(
-                amount=amount,
-                description=f"Abay: {book.title}"[:127],
-                custom_id=purchase.transaction_id,
-            )
-            if pp_result.get('success'):
-                purchase.transaction_reference = pp_result.get('order_id')
-                purchase.purchase_reference = pp_result.get('order_id')
-                purchase.save(update_fields=['transaction_reference', 'purchase_reference', 'updated_at'])
-                result = {
-                    'success': True,
-                    'gateway': 'paypal',
-                    'reference': pp_result.get('order_id'),
-                    'order_id': pp_result.get('order_id'),
-                    'payment_url': pp_result.get('checkout_url'),
-                    'redirect_url': pp_result.get('checkout_url'),
-                    'transaction_id': purchase.transaction_id,
-                    'message': 'Redirecting to PayPal',
-                }
-            else:
-                result = {'success': False, 'error': pp_result.get('error', 'PayPal failed')}
-        else:
+        if payment_method != 'telebirr':
             purchase.delete()
             return JsonResponse({
                 'success': False,
-                'error': f'Unsupported payment method: {payment_method}. Use telebirr, chapa, or paypal.',
+                'error': 'Only Telebirr is supported. Please select Telebirr.',
             }, status=400)
+
+        result = {'success': False, 'error': 'Telebirr failed'}
+        tb = TelebirrService()
+        if not tb.is_configured():
+            purchase.delete()
+            return JsonResponse({
+                'success': False,
+                'error': 'Telebirr is not configured. Set TELEBIRR_* env keys.',
+            }, status=503)
+        phone = (phone_number or '').strip()
+        if not phone or len(phone) < 10:
+            purchase.delete()
+            return JsonResponse({
+                'success': False,
+                'error': 'A valid phone number is required for Telebirr.',
+            }, status=400)
+        tb_result = tb.create_checkout(
+            title=book.title[:128],
+            amount=float(price),
+            merch_order_id=(purchase.transaction_id or f"PUR{purchase.id}").replace("-", "").replace("_", ""),
+        )
+        if tb_result.get('success'):
+            purchase.transaction_reference = tb_result.get('merch_order_id') or tb_result.get('prepay_id')
+            purchase.purchase_reference = tb_result.get('prepay_id') or tb_result.get('merch_order_id')
+            purchase.save(update_fields=['transaction_reference', 'purchase_reference', 'updated_at'])
+            result = {
+                'success': True,
+                'gateway': 'telebirr',
+                'reference': tb_result.get('merch_order_id'),
+                'order_id': tb_result.get('prepay_id'),
+                'payment_url': tb_result.get('checkout_url') or tb_result.get('checkOutUrl'),
+                'redirect_url': tb_result.get('checkout_url') or tb_result.get('checkOutUrl'),
+                'transaction_id': purchase.transaction_id,
+                'message': 'Redirecting to Telebirr checkout',
+            }
+        else:
+            result = {'success': False, 'error': tb_result.get('error', 'Telebirr failed')}
 
         if result.get('success'):
             return JsonResponse({

@@ -3468,3 +3468,908 @@ django.template.exceptions.TemplateDoesNotExist: books/author_books.html
 [2026-09-16 11:00:55] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
 [2026-09-16 11:00:55] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
 [2026-09-16 11:00:55] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:52:33] INFO django.utils.autoreload - C:\abay_repository\payments\telebirr.py changed, reloading.
+[2026-09-16 11:52:33] INFO django.utils.autoreload - C:\abay_repository\payments\telebirr.py changed, reloading.
+[2026-09-16 11:52:34] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-16 11:52:34] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-16 11:53:49] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 80350
+[2026-09-16 11:53:50] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:53:50] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:53:50] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:53:50] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:53:50] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:53:50] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:53:50] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:53:50] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:53:50] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:53:50] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:53:50] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:54:19] INFO django.server - "POST /books/6/purchase/ HTTP/1.1" 302 0
+[2026-09-16 11:54:19] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 80996
+[2026-09-16 11:54:20] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:54:20] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:54:20] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:54:20] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:54:20] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:54:20] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:54:20] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:54:20] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:54:20] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:54:40] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 80350
+[2026-09-16 11:54:40] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:54:40] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:54:40] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:54:40] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:54:40] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:54:40] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:54:40] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:54:40] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:54:40] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:54:40] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:54:40] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:54:45] AUTH INFO - AUTH - User logged out: client, IP=127.0.0.1
+[2026-09-16 11:54:45] INFO accounts.views - AUTH - User logged out: client, IP=127.0.0.1
+[2026-09-16 11:54:45] INFO accounts.views - AUTH - User logged out: client, IP=127.0.0.1
+[2026-09-16 11:54:45] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-09-16 11:54:45] INFO django.server - "GET / HTTP/1.1" 200 90237
+[2026-09-16 11:54:45] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:54:45] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:54:45] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:54:45] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:54:45] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:54:45] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:54:45] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:54:45] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:54:45] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:54:47] AUTH INFO - Register author - verified: False
+[2026-09-16 11:54:47] INFO accounts.views - Register author - verified: False
+[2026-09-16 11:54:47] INFO accounts.views - Register author - verified: False
+[2026-09-16 11:54:48] INFO django.server - "GET /accounts/register/author/ HTTP/1.1" 200 93971
+[2026-09-16 11:54:48] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:54:48] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:54:48] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:54:48] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:54:48] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:54:48] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:54:48] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:54:48] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:54:48] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:54:52] AUTH INFO - OIDC Initiate - National ID: 1234****
+[2026-09-16 11:54:52] INFO accounts.views - OIDC Initiate - National ID: 1234****
+[2026-09-16 11:54:52] INFO accounts.views - OIDC Initiate - National ID: 1234****
+[2026-09-16 11:54:52] AUTH INFO - Authorization URL generated successfully
+[2026-09-16 11:54:52] INFO accounts.views - Authorization URL generated successfully
+[2026-09-16 11:54:52] INFO accounts.views - Authorization URL generated successfully
+[2026-09-16 11:54:52] INFO django.server - "POST /accounts/api/fayda/oidc/initiate/ HTTP/1.1" 200 1057
+[2026-09-16 11:55:00] AUTH INFO - Register author - verified: False
+[2026-09-16 11:55:00] INFO accounts.views - Register author - verified: False
+[2026-09-16 11:55:00] INFO accounts.views - Register author - verified: False
+[2026-09-16 11:55:00] INFO django.server - "GET /accounts/register/author/ HTTP/1.1" 200 93987
+[2026-09-16 11:55:00] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:55:00] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:55:00] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:55:00] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:55:00] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:55:00] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:55:00] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:55:07] AUTH INFO - OIDC Initiate - National ID: 1234****
+[2026-09-16 11:55:07] INFO accounts.views - OIDC Initiate - National ID: 1234****
+[2026-09-16 11:55:07] INFO accounts.views - OIDC Initiate - National ID: 1234****
+[2026-09-16 11:55:07] AUTH INFO - Authorization URL generated successfully
+[2026-09-16 11:55:07] INFO accounts.views - Authorization URL generated successfully
+[2026-09-16 11:55:07] INFO accounts.views - Authorization URL generated successfully
+[2026-09-16 11:55:07] INFO django.server - "POST /accounts/api/fayda/oidc/initiate/ HTTP/1.1" 200 1057
+[2026-09-16 11:56:06] AUTH INFO - Register author - verified: False
+[2026-09-16 11:56:06] INFO accounts.views - Register author - verified: False
+[2026-09-16 11:56:06] INFO accounts.views - Register author - verified: False
+[2026-09-16 11:56:06] INFO django.server - "GET /accounts/register/author/ HTTP/1.1" 200 93987
+[2026-09-16 11:56:06] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:56:06] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:56:06] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:56:06] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:56:06] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:56:06] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:56:06] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:56:08] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:56:08] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:56:08] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:56:08] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:56:08] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:56:08] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:56:08] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:56:11] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64909
+[2026-09-16 11:56:11] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:56:11] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:56:11] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:56:11] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:56:11] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:56:12] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:56:12] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:56:15] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:56:15] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:56:15] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:56:15] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:56:15] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:56:15] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:56:15] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:56:18] INFO django.server - "GET /books/browse/ HTTP/1.1" 200 100941
+[2026-09-16 11:56:18] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:56:18] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:56:18] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:56:18] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:56:18] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:56:18] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:56:18] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:56:18] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:56:18] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:56:20] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64909
+[2026-09-16 11:56:20] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:56:20] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:56:20] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:56:20] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:56:20] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:56:20] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:56:20] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:56:20] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:56:20] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:56:27] AUTH INFO - AUTH - Login successful: User=client, IP=127.0.0.1, Role=client
+[2026-09-16 11:56:27] INFO accounts.views - AUTH - Login successful: User=client, IP=127.0.0.1, Role=client
+[2026-09-16 11:56:27] INFO accounts.views - AUTH - Login successful: User=client, IP=127.0.0.1, Role=client
+[2026-09-16 11:56:27] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-09-16 11:56:27] AUTH INFO - Client dashboard accessed by: client
+[2026-09-16 11:56:27] INFO accounts.views - Client dashboard accessed by: client
+[2026-09-16 11:56:27] INFO accounts.views - Client dashboard accessed by: client
+[2026-09-16 11:56:27] INFO django.server - "GET /accounts/dashboard/client/ HTTP/1.1" 200 66708
+[2026-09-16 11:56:27] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:56:27] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:56:27] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:56:27] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:56:27] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:56:27] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:56:27] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:56:27] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:56:27] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:56:29] INFO django.server - "GET /books/browse/ HTTP/1.1" 200 102531
+[2026-09-16 11:56:29] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:56:29] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:56:29] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:56:29] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:56:29] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:56:29] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:56:29] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:56:29] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:56:29] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:56:31] INFO django.server - "GET /books/6/ HTTP/1.1" 200 73712
+[2026-09-16 11:56:31] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:56:31] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:56:31] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:56:31] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:56:31] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:56:31] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:56:31] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:56:32] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:56:32] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:56:33] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 80350
+[2026-09-16 11:56:33] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:56:33] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:56:33] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:56:33] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:56:33] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:56:33] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:56:33] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:56:33] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:56:33] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:57:05] INFO django.server - "POST /books/6/purchase/ HTTP/1.1" 302 0
+[2026-09-16 11:57:05] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 80996
+[2026-09-16 11:57:05] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:57:05] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:57:05] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:57:06] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:57:06] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 11:57:06] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 11:57:06] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:07:26] INFO django.utils.autoreload - C:\abay_repository\config\settings.py changed, reloading.
+[2026-09-16 12:07:26] INFO django.utils.autoreload - C:\abay_repository\config\settings.py changed, reloading.
+[2026-09-16 12:07:28] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-16 12:07:28] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-16 12:07:57] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 80350
+[2026-09-16 12:07:57] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:07:57] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:07:57] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:07:57] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:07:57] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:07:57] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:07:57] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:07:57] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:07:57] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:07:57] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:07:57] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:08:21] PAYMENT WARNING - TELEBIRR_PRIVATE_KEY is empty
+[2026-09-16 12:08:21] WARNING payments.telebirr - TELEBIRR_PRIVATE_KEY is empty
+[2026-09-16 12:08:21] WARNING payments.telebirr - TELEBIRR_PRIVATE_KEY is empty
+[2026-09-16 12:08:21] ERROR books.views - Telebirr not configured. Missing: ['TELEBIRR_FABRIC_APP_ID', 'TELEBIRR_APP_SECRET', 'TELEBIRR_MERCHANT_APP_ID', 'TELEBIRR_MERCHANT_CODE', 'TELEBIRR_PRIVATE_KEY']
+[2026-09-16 12:08:21] ERROR books.views - Telebirr not configured. Missing: ['TELEBIRR_FABRIC_APP_ID', 'TELEBIRR_APP_SECRET', 'TELEBIRR_MERCHANT_APP_ID', 'TELEBIRR_MERCHANT_CODE', 'TELEBIRR_PRIVATE_KEY']
+[2026-09-16 12:08:21] INFO django.server - "POST /books/6/purchase/ HTTP/1.1" 302 0
+[2026-09-16 12:08:21] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 81154
+[2026-09-16 12:08:21] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:08:21] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:08:21] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:08:21] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:08:21] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:08:21] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:08:21] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:08:22] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:08:22] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:08:37] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-16 12:08:37] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-16 12:10:37] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-16 12:10:37] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-16 12:10:44] WARNING django.security.SuspiciousSession - Session data corrupted
+[2026-09-16 12:10:44] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 302 0
+[2026-09-16 12:10:44] INFO django.server - "GET /accounts/login/?next=/books/6/purchase/ HTTP/1.1" 200 64909
+[2026-09-16 12:10:44] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:10:44] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:10:44] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:10:44] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:10:44] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:10:44] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:10:44] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:10:44] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:10:44] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:10:44] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:10:44] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:10:49] AUTH INFO - AUTH - Login successful: User=client, IP=127.0.0.1, Role=client
+[2026-09-16 12:10:49] INFO accounts.views - AUTH - Login successful: User=client, IP=127.0.0.1, Role=client
+[2026-09-16 12:10:49] INFO accounts.views - AUTH - Login successful: User=client, IP=127.0.0.1, Role=client
+[2026-09-16 12:10:49] INFO django.server - "POST /accounts/login/?next=/books/6/purchase/ HTTP/1.1" 302 0
+[2026-09-16 12:10:49] AUTH INFO - Client dashboard accessed by: client
+[2026-09-16 12:10:49] INFO accounts.views - Client dashboard accessed by: client
+[2026-09-16 12:10:49] INFO accounts.views - Client dashboard accessed by: client
+[2026-09-16 12:10:49] INFO django.server - "GET /accounts/dashboard/client/ HTTP/1.1" 200 66708
+[2026-09-16 12:10:49] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:10:49] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:10:49] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:10:49] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:10:49] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:10:49] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:10:49] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:10:49] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:10:49] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:10:52] INFO django.server - "GET /books/browse/ HTTP/1.1" 200 102531
+[2026-09-16 12:10:52] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:10:52] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:10:52] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:10:52] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:10:52] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:10:52] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:10:52] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:10:52] INFO django.server - "GET /media/books/covers/2026/09/pychology_b5LmZgq.png HTTP/1.1" 200 363640
+[2026-09-16 12:10:52] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:10:52] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:10:54] INFO django.server - "GET /books/6/ HTTP/1.1" 200 73712
+[2026-09-16 12:10:54] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:10:54] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:10:54] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:10:54] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:10:54] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:10:54] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:10:54] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:10:54] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:10:54] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:10:56] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 80350
+[2026-09-16 12:10:56] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:10:56] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:10:56] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:10:56] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:10:56] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:10:56] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:10:56] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:10:56] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:10:56] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:11:21] PAYMENT ERROR - Telebirr token error
+Traceback (most recent call last):
+  File "C:\abay_repository\payments\telebirr.py", line 199, in create_checkout
+    token = self.apply_fabric_token()
+  File "C:\abay_repository\payments\telebirr.py", line 182, in apply_fabric_token
+    raise RuntimeError(f"Telebirr fabric token failed: {last_err}")
+RuntimeError: Telebirr fabric token failed: {'errorCode': '49401024988', 'errorMsg': 'The API request authentication failed.', 'errorSolution': 'The requested authentication info is incorrect. Check if the authentication info are correct in the request parameters.'}
+[2026-09-16 12:11:21] ERROR payments.telebirr - Telebirr token error
+Traceback (most recent call last):
+  File "C:\abay_repository\payments\telebirr.py", line 199, in create_checkout
+    token = self.apply_fabric_token()
+  File "C:\abay_repository\payments\telebirr.py", line 182, in apply_fabric_token
+    raise RuntimeError(f"Telebirr fabric token failed: {last_err}")
+RuntimeError: Telebirr fabric token failed: {'errorCode': '49401024988', 'errorMsg': 'The API request authentication failed.', 'errorSolution': 'The requested authentication info is incorrect. Check if the authentication info are correct in the request parameters.'}
+[2026-09-16 12:11:21] ERROR payments.telebirr - Telebirr token error
+Traceback (most recent call last):
+  File "C:\abay_repository\payments\telebirr.py", line 199, in create_checkout
+    token = self.apply_fabric_token()
+  File "C:\abay_repository\payments\telebirr.py", line 182, in apply_fabric_token
+    raise RuntimeError(f"Telebirr fabric token failed: {last_err}")
+RuntimeError: Telebirr fabric token failed: {'errorCode': '49401024988', 'errorMsg': 'The API request authentication failed.', 'errorSolution': 'The requested authentication info is incorrect. Check if the authentication info are correct in the request parameters.'}
+[2026-09-16 12:11:21] ERROR books.views - Telebirr create_checkout failed: Telebirr fabric token failed: {'errorCode': '49401024988', 'errorMsg': 'The API request authentication failed.', 'errorSolution': 'The requested authentication info is incorrect. Check if the authentication info are correct in the request parameters.'}
+[2026-09-16 12:11:21] ERROR books.views - Telebirr create_checkout failed: Telebirr fabric token failed: {'errorCode': '49401024988', 'errorMsg': 'The API request authentication failed.', 'errorSolution': 'The requested authentication info is incorrect. Check if the authentication info are correct in the request parameters.'}
+[2026-09-16 12:11:21] INFO django.server - "POST /books/6/purchase/ HTTP/1.1" 302 0
+[2026-09-16 12:11:21] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 81532
+[2026-09-16 12:11:21] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:11:21] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:11:21] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:11:21] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:11:21] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:11:21] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:11:21] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:11:21] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:11:21] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:11:53] PAYMENT ERROR - Telebirr token error
+Traceback (most recent call last):
+  File "C:\abay_repository\payments\telebirr.py", line 199, in create_checkout
+    token = self.apply_fabric_token()
+  File "C:\abay_repository\payments\telebirr.py", line 182, in apply_fabric_token
+    raise RuntimeError(f"Telebirr fabric token failed: {last_err}")
+RuntimeError: Telebirr fabric token failed: {'errorCode': '49401024988', 'errorMsg': 'The API request authentication failed.', 'errorSolution': 'The requested authentication info is incorrect. Check if the authentication info are correct in the request parameters.'}
+[2026-09-16 12:11:53] ERROR payments.telebirr - Telebirr token error
+Traceback (most recent call last):
+  File "C:\abay_repository\payments\telebirr.py", line 199, in create_checkout
+    token = self.apply_fabric_token()
+  File "C:\abay_repository\payments\telebirr.py", line 182, in apply_fabric_token
+    raise RuntimeError(f"Telebirr fabric token failed: {last_err}")
+RuntimeError: Telebirr fabric token failed: {'errorCode': '49401024988', 'errorMsg': 'The API request authentication failed.', 'errorSolution': 'The requested authentication info is incorrect. Check if the authentication info are correct in the request parameters.'}
+[2026-09-16 12:11:53] ERROR payments.telebirr - Telebirr token error
+Traceback (most recent call last):
+  File "C:\abay_repository\payments\telebirr.py", line 199, in create_checkout
+    token = self.apply_fabric_token()
+  File "C:\abay_repository\payments\telebirr.py", line 182, in apply_fabric_token
+    raise RuntimeError(f"Telebirr fabric token failed: {last_err}")
+RuntimeError: Telebirr fabric token failed: {'errorCode': '49401024988', 'errorMsg': 'The API request authentication failed.', 'errorSolution': 'The requested authentication info is incorrect. Check if the authentication info are correct in the request parameters.'}
+[2026-09-16 12:11:53] ERROR books.views - Telebirr create_checkout failed: Telebirr fabric token failed: {'errorCode': '49401024988', 'errorMsg': 'The API request authentication failed.', 'errorSolution': 'The requested authentication info is incorrect. Check if the authentication info are correct in the request parameters.'}
+[2026-09-16 12:11:53] ERROR books.views - Telebirr create_checkout failed: Telebirr fabric token failed: {'errorCode': '49401024988', 'errorMsg': 'The API request authentication failed.', 'errorSolution': 'The requested authentication info is incorrect. Check if the authentication info are correct in the request parameters.'}
+[2026-09-16 12:11:53] INFO django.server - "POST /books/6/purchase/ HTTP/1.1" 302 0
+[2026-09-16 12:11:53] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 81532
+[2026-09-16 12:11:53] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:11:53] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:11:53] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:11:53] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:11:53] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:11:53] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:11:54] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:11:54] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:11:54] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:16:09] PAYMENT ERROR - Telebirr token error
+Traceback (most recent call last):
+  File "C:\abay_repository\payments\telebirr.py", line 199, in create_checkout
+    token = self.apply_fabric_token()
+  File "C:\abay_repository\payments\telebirr.py", line 182, in apply_fabric_token
+    raise RuntimeError(f"Telebirr fabric token failed: {last_err}")
+RuntimeError: Telebirr fabric token failed: {'errorCode': '49401024988', 'errorMsg': 'The API request authentication failed.', 'errorSolution': 'The requested authentication info is incorrect. Check if the authentication info are correct in the request parameters.'}
+[2026-09-16 12:16:09] ERROR payments.telebirr - Telebirr token error
+Traceback (most recent call last):
+  File "C:\abay_repository\payments\telebirr.py", line 199, in create_checkout
+    token = self.apply_fabric_token()
+  File "C:\abay_repository\payments\telebirr.py", line 182, in apply_fabric_token
+    raise RuntimeError(f"Telebirr fabric token failed: {last_err}")
+RuntimeError: Telebirr fabric token failed: {'errorCode': '49401024988', 'errorMsg': 'The API request authentication failed.', 'errorSolution': 'The requested authentication info is incorrect. Check if the authentication info are correct in the request parameters.'}
+[2026-09-16 12:16:09] ERROR payments.telebirr - Telebirr token error
+Traceback (most recent call last):
+  File "C:\abay_repository\payments\telebirr.py", line 199, in create_checkout
+    token = self.apply_fabric_token()
+  File "C:\abay_repository\payments\telebirr.py", line 182, in apply_fabric_token
+    raise RuntimeError(f"Telebirr fabric token failed: {last_err}")
+RuntimeError: Telebirr fabric token failed: {'errorCode': '49401024988', 'errorMsg': 'The API request authentication failed.', 'errorSolution': 'The requested authentication info is incorrect. Check if the authentication info are correct in the request parameters.'}
+[2026-09-16 12:16:09] ERROR books.views - Telebirr create_checkout failed: Telebirr fabric token failed: {'errorCode': '49401024988', 'errorMsg': 'The API request authentication failed.', 'errorSolution': 'The requested authentication info is incorrect. Check if the authentication info are correct in the request parameters.'}
+[2026-09-16 12:16:09] ERROR books.views - Telebirr create_checkout failed: Telebirr fabric token failed: {'errorCode': '49401024988', 'errorMsg': 'The API request authentication failed.', 'errorSolution': 'The requested authentication info is incorrect. Check if the authentication info are correct in the request parameters.'}
+[2026-09-16 12:16:09] INFO django.server - "POST /books/6/purchase/ HTTP/1.1" 302 0
+[2026-09-16 12:16:09] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 81532
+[2026-09-16 12:16:09] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:16:09] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:16:09] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:16:09] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:16:09] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:16:09] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:16:09] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:16:10] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:16:10] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:17:43] INFO django.utils.autoreload - C:\abay_repository\payments\views.py changed, reloading.
+[2026-09-16 12:17:43] INFO django.utils.autoreload - C:\abay_repository\payments\views.py changed, reloading.
+[2026-09-16 12:17:44] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-16 12:17:44] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-16 12:18:47] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 80350
+[2026-09-16 12:18:47] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:18:47] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:18:47] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:18:47] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:18:47] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:18:47] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:18:47] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:18:47] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:18:47] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:18:47] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:18:47] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:18:48] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 80350
+[2026-09-16 12:18:48] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:18:48] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:18:48] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:18:48] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:18:48] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:18:48] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:18:48] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:18:48] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:18:48] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:18:48] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:18:48] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:19:22] PAYMENT ERROR - Telebirr token error
+Traceback (most recent call last):
+  File "C:\abay_repository\payments\telebirr.py", line 199, in create_checkout
+    token = self.apply_fabric_token()
+  File "C:\abay_repository\payments\telebirr.py", line 182, in apply_fabric_token
+    raise RuntimeError(f"Telebirr fabric token failed: {last_err}")
+RuntimeError: Telebirr fabric token failed: {'errorCode': '49401031101', 'errorMsg': 'The operation is restricted and the access function is not authorized.Detail:Forbidden !  err:App key or app secret is invalid!  ', 'errorSolution': '1. Check whether the authentication token or Basic authentication information is correctly set in the interface.  2. If the authentication information is set correctly, contact the management to confirm that it is not authorized to perform such operations.'}
+[2026-09-16 12:19:22] ERROR payments.telebirr - Telebirr token error
+Traceback (most recent call last):
+  File "C:\abay_repository\payments\telebirr.py", line 199, in create_checkout
+    token = self.apply_fabric_token()
+  File "C:\abay_repository\payments\telebirr.py", line 182, in apply_fabric_token
+    raise RuntimeError(f"Telebirr fabric token failed: {last_err}")
+RuntimeError: Telebirr fabric token failed: {'errorCode': '49401031101', 'errorMsg': 'The operation is restricted and the access function is not authorized.Detail:Forbidden !  err:App key or app secret is invalid!  ', 'errorSolution': '1. Check whether the authentication token or Basic authentication information is correctly set in the interface.  2. If the authentication information is set correctly, contact the management to confirm that it is not authorized to perform such operations.'}
+[2026-09-16 12:19:22] ERROR payments.telebirr - Telebirr token error
+Traceback (most recent call last):
+  File "C:\abay_repository\payments\telebirr.py", line 199, in create_checkout
+    token = self.apply_fabric_token()
+  File "C:\abay_repository\payments\telebirr.py", line 182, in apply_fabric_token
+    raise RuntimeError(f"Telebirr fabric token failed: {last_err}")
+RuntimeError: Telebirr fabric token failed: {'errorCode': '49401031101', 'errorMsg': 'The operation is restricted and the access function is not authorized.Detail:Forbidden !  err:App key or app secret is invalid!  ', 'errorSolution': '1. Check whether the authentication token or Basic authentication information is correctly set in the interface.  2. If the authentication information is set correctly, contact the management to confirm that it is not authorized to perform such operations.'}
+[2026-09-16 12:19:22] ERROR books.views - Telebirr create_checkout failed: Telebirr fabric token failed: {'errorCode': '49401031101', 'errorMsg': 'The operation is restricted and the access function is not authorized.Detail:Forbidden !  err:App key or app secret is invalid!  ', 'errorSolution': '1. Check whether the authentication token or Basic authentication information is correctly set in the interface.  2. If the authentication information is set correctly, contact the management to confirm that it is not authorized to perform such operations.'}
+[2026-09-16 12:19:22] ERROR books.views - Telebirr create_checkout failed: Telebirr fabric token failed: {'errorCode': '49401031101', 'errorMsg': 'The operation is restricted and the access function is not authorized.Detail:Forbidden !  err:App key or app secret is invalid!  ', 'errorSolution': '1. Check whether the authentication token or Basic authentication information is correctly set in the interface.  2. If the authentication information is set correctly, contact the management to confirm that it is not authorized to perform such operations.'}
+[2026-09-16 12:19:22] INFO django.server - "POST /books/6/purchase/ HTTP/1.1" 302 0
+[2026-09-16 12:19:22] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 81988
+[2026-09-16 12:19:22] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:19:22] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:19:22] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:19:22] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:19:22] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:19:22] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:19:22] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:19:22] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:19:22] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:19:52] PAYMENT ERROR - Telebirr token error
+Traceback (most recent call last):
+  File "C:\abay_repository\payments\telebirr.py", line 199, in create_checkout
+    token = self.apply_fabric_token()
+  File "C:\abay_repository\payments\telebirr.py", line 182, in apply_fabric_token
+    raise RuntimeError(f"Telebirr fabric token failed: {last_err}")
+RuntimeError: Telebirr fabric token failed: {'errorCode': '49401031101', 'errorMsg': 'The operation is restricted and the access function is not authorized.Detail:Forbidden !  err:App key or app secret is invalid!  ', 'errorSolution': '1. Check whether the authentication token or Basic authentication information is correctly set in the interface.  2. If the authentication information is set correctly, contact the management to confirm that it is not authorized to perform such operations.'}
+[2026-09-16 12:19:52] ERROR payments.telebirr - Telebirr token error
+Traceback (most recent call last):
+  File "C:\abay_repository\payments\telebirr.py", line 199, in create_checkout
+    token = self.apply_fabric_token()
+  File "C:\abay_repository\payments\telebirr.py", line 182, in apply_fabric_token
+    raise RuntimeError(f"Telebirr fabric token failed: {last_err}")
+RuntimeError: Telebirr fabric token failed: {'errorCode': '49401031101', 'errorMsg': 'The operation is restricted and the access function is not authorized.Detail:Forbidden !  err:App key or app secret is invalid!  ', 'errorSolution': '1. Check whether the authentication token or Basic authentication information is correctly set in the interface.  2. If the authentication information is set correctly, contact the management to confirm that it is not authorized to perform such operations.'}
+[2026-09-16 12:19:52] ERROR payments.telebirr - Telebirr token error
+Traceback (most recent call last):
+  File "C:\abay_repository\payments\telebirr.py", line 199, in create_checkout
+    token = self.apply_fabric_token()
+  File "C:\abay_repository\payments\telebirr.py", line 182, in apply_fabric_token
+    raise RuntimeError(f"Telebirr fabric token failed: {last_err}")
+RuntimeError: Telebirr fabric token failed: {'errorCode': '49401031101', 'errorMsg': 'The operation is restricted and the access function is not authorized.Detail:Forbidden !  err:App key or app secret is invalid!  ', 'errorSolution': '1. Check whether the authentication token or Basic authentication information is correctly set in the interface.  2. If the authentication information is set correctly, contact the management to confirm that it is not authorized to perform such operations.'}
+[2026-09-16 12:19:52] ERROR books.views - Telebirr create_checkout failed: Telebirr fabric token failed: {'errorCode': '49401031101', 'errorMsg': 'The operation is restricted and the access function is not authorized.Detail:Forbidden !  err:App key or app secret is invalid!  ', 'errorSolution': '1. Check whether the authentication token or Basic authentication information is correctly set in the interface.  2. If the authentication information is set correctly, contact the management to confirm that it is not authorized to perform such operations.'}
+[2026-09-16 12:19:52] ERROR books.views - Telebirr create_checkout failed: Telebirr fabric token failed: {'errorCode': '49401031101', 'errorMsg': 'The operation is restricted and the access function is not authorized.Detail:Forbidden !  err:App key or app secret is invalid!  ', 'errorSolution': '1. Check whether the authentication token or Basic authentication information is correctly set in the interface.  2. If the authentication information is set correctly, contact the management to confirm that it is not authorized to perform such operations.'}
+[2026-09-16 12:19:52] INFO django.server - "POST /books/6/purchase/ HTTP/1.1" 302 0
+[2026-09-16 12:19:53] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 81988
+[2026-09-16 12:19:53] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:19:53] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:19:53] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:19:53] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:19:53] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:19:53] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:19:53] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:19:53] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:19:53] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:24:36] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-16 12:24:36] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-16 12:24:43] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 80350
+[2026-09-16 12:24:43] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:24:43] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:24:43] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:24:43] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:24:43] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:24:43] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:24:43] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:24:43] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:24:43] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:24:43] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:24:43] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:24:44] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 80350
+[2026-09-16 12:24:44] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:24:44] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:24:44] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:24:44] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:24:44] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:24:44] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:24:44] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:24:44] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:24:44] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:24:44] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:24:44] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:24:45] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 80350
+[2026-09-16 12:24:45] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:24:45] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:24:45] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:24:45] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:24:45] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:24:45] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:24:45] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:24:45] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:24:45] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:24:45] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:24:45] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:25:10] ERROR books.views - Telebirr create_checkout failed: Create order failed: {'errorCode': '49401026001', 'exceptionInfo': 'can not find api, please check if the request url is valid or the api has published!'}
+[2026-09-16 12:25:10] ERROR books.views - Telebirr create_checkout failed: Create order failed: {'errorCode': '49401026001', 'exceptionInfo': 'can not find api, please check if the request url is valid or the api has published!'}
+[2026-09-16 12:25:10] INFO django.server - "POST /books/6/purchase/ HTTP/1.1" 302 0
+[2026-09-16 12:25:10] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 81296
+[2026-09-16 12:25:10] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:25:10] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:25:10] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:25:10] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:25:10] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:25:10] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:25:10] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:25:10] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:25:10] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:25:33] ERROR books.views - Telebirr create_checkout failed: Create order failed: {'errorCode': '49401026001', 'exceptionInfo': 'can not find api, please check if the request url is valid or the api has published!'}
+[2026-09-16 12:25:33] ERROR books.views - Telebirr create_checkout failed: Create order failed: {'errorCode': '49401026001', 'exceptionInfo': 'can not find api, please check if the request url is valid or the api has published!'}
+[2026-09-16 12:25:33] INFO django.server - "POST /books/6/purchase/ HTTP/1.1" 302 0
+[2026-09-16 12:25:33] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 81296
+[2026-09-16 12:25:33] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:25:33] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:25:33] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:25:33] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:25:33] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:25:33] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:25:33] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:25:33] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:25:33] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:28:31] INFO django.utils.autoreload - C:\abay_repository\payments\views.py changed, reloading.
+[2026-09-16 12:28:31] INFO django.utils.autoreload - C:\abay_repository\payments\views.py changed, reloading.
+[2026-09-16 12:28:32] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-16 12:28:32] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-16 12:28:46] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-16 12:28:46] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-16 12:28:55] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 80350
+[2026-09-16 12:28:55] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:28:55] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:28:55] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:28:55] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:28:55] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:28:55] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:28:55] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:28:55] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:28:55] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:28:55] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:28:55] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:28:56] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 80350
+[2026-09-16 12:28:56] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:28:56] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:28:56] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:28:56] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:28:56] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:28:56] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:28:56] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:28:56] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:28:56] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:28:56] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:28:56] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:29:10] PAYMENT INFO - Telebirr preOrder response: {'errorCode': '49401024995', 'errorMsg': '49401024995:Parameter:.biz_content.merch_order_id type mismatch. [Required string pattern ^[A-Za-z0-9]+$].', 'errorSolution': 'Incoming parameters are missing mandatory parameters.Check whether all required parameters in the interface have been assigned.'}
+[2026-09-16 12:29:10] INFO payments.telebirr - Telebirr preOrder response: {'errorCode': '49401024995', 'errorMsg': '49401024995:Parameter:.biz_content.merch_order_id type mismatch. [Required string pattern ^[A-Za-z0-9]+$].', 'errorSolution': 'Incoming parameters are missing mandatory parameters.Check whether all required parameters in the interface have been assigned.'}
+[2026-09-16 12:29:10] INFO payments.telebirr - Telebirr preOrder response: {'errorCode': '49401024995', 'errorMsg': '49401024995:Parameter:.biz_content.merch_order_id type mismatch. [Required string pattern ^[A-Za-z0-9]+$].', 'errorSolution': 'Incoming parameters are missing mandatory parameters.Check whether all required parameters in the interface have been assigned.'}
+[2026-09-16 12:29:10] ERROR books.views - Telebirr create_checkout failed: 49401024995:Parameter:.biz_content.merch_order_id type mismatch. [Required string pattern ^[A-Za-z0-9]+$].
+[2026-09-16 12:29:10] ERROR books.views - Telebirr create_checkout failed: 49401024995:Parameter:.biz_content.merch_order_id type mismatch. [Required string pattern ^[A-Za-z0-9]+$].
+[2026-09-16 12:29:10] INFO django.server - "POST /books/6/purchase/ HTTP/1.1" 302 0
+[2026-09-16 12:29:10] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 81120
+[2026-09-16 12:29:10] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:29:10] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:29:10] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:29:10] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:29:10] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:29:10] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:29:10] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:29:10] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:29:10] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:29:45] PAYMENT INFO - Telebirr preOrder response: {'errorCode': '49401024995', 'errorMsg': '49401024995:Parameter:.biz_content.merch_order_id type mismatch. [Required string pattern ^[A-Za-z0-9]+$].', 'errorSolution': 'Incoming parameters are missing mandatory parameters.Check whether all required parameters in the interface have been assigned.'}
+[2026-09-16 12:29:45] INFO payments.telebirr - Telebirr preOrder response: {'errorCode': '49401024995', 'errorMsg': '49401024995:Parameter:.biz_content.merch_order_id type mismatch. [Required string pattern ^[A-Za-z0-9]+$].', 'errorSolution': 'Incoming parameters are missing mandatory parameters.Check whether all required parameters in the interface have been assigned.'}
+[2026-09-16 12:29:45] INFO payments.telebirr - Telebirr preOrder response: {'errorCode': '49401024995', 'errorMsg': '49401024995:Parameter:.biz_content.merch_order_id type mismatch. [Required string pattern ^[A-Za-z0-9]+$].', 'errorSolution': 'Incoming parameters are missing mandatory parameters.Check whether all required parameters in the interface have been assigned.'}
+[2026-09-16 12:29:45] ERROR books.views - Telebirr create_checkout failed: 49401024995:Parameter:.biz_content.merch_order_id type mismatch. [Required string pattern ^[A-Za-z0-9]+$].
+[2026-09-16 12:29:45] ERROR books.views - Telebirr create_checkout failed: 49401024995:Parameter:.biz_content.merch_order_id type mismatch. [Required string pattern ^[A-Za-z0-9]+$].
+[2026-09-16 12:29:45] INFO django.server - "POST /books/6/purchase/ HTTP/1.1" 302 0
+[2026-09-16 12:29:45] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 81120
+[2026-09-16 12:29:45] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:29:45] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:29:45] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:29:45] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:29:45] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:29:45] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:29:45] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:29:45] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:29:45] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:29:55] PAYMENT INFO - Telebirr preOrder response: {'errorCode': '49401024995', 'errorMsg': '49401024995:Parameter:.biz_content.merch_order_id type mismatch. [Required string pattern ^[A-Za-z0-9]+$].', 'errorSolution': 'Incoming parameters are missing mandatory parameters.Check whether all required parameters in the interface have been assigned.'}
+[2026-09-16 12:29:55] INFO payments.telebirr - Telebirr preOrder response: {'errorCode': '49401024995', 'errorMsg': '49401024995:Parameter:.biz_content.merch_order_id type mismatch. [Required string pattern ^[A-Za-z0-9]+$].', 'errorSolution': 'Incoming parameters are missing mandatory parameters.Check whether all required parameters in the interface have been assigned.'}
+[2026-09-16 12:29:55] INFO payments.telebirr - Telebirr preOrder response: {'errorCode': '49401024995', 'errorMsg': '49401024995:Parameter:.biz_content.merch_order_id type mismatch. [Required string pattern ^[A-Za-z0-9]+$].', 'errorSolution': 'Incoming parameters are missing mandatory parameters.Check whether all required parameters in the interface have been assigned.'}
+[2026-09-16 12:29:55] ERROR books.views - Telebirr create_checkout failed: 49401024995:Parameter:.biz_content.merch_order_id type mismatch. [Required string pattern ^[A-Za-z0-9]+$].
+[2026-09-16 12:29:55] ERROR books.views - Telebirr create_checkout failed: 49401024995:Parameter:.biz_content.merch_order_id type mismatch. [Required string pattern ^[A-Za-z0-9]+$].
+[2026-09-16 12:29:55] INFO django.server - "POST /books/6/purchase/ HTTP/1.1" 302 0
+[2026-09-16 12:29:55] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 81120
+[2026-09-16 12:29:55] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:29:55] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:29:55] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:29:55] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:29:55] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:29:55] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:29:55] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:29:55] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:29:55] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:30:04] PAYMENT INFO - Telebirr preOrder response: {'errorCode': '49401024995', 'errorMsg': '49401024995:Parameter:.biz_content.merch_order_id type mismatch. [Required string pattern ^[A-Za-z0-9]+$].', 'errorSolution': 'Incoming parameters are missing mandatory parameters.Check whether all required parameters in the interface have been assigned.'}
+[2026-09-16 12:30:04] INFO payments.telebirr - Telebirr preOrder response: {'errorCode': '49401024995', 'errorMsg': '49401024995:Parameter:.biz_content.merch_order_id type mismatch. [Required string pattern ^[A-Za-z0-9]+$].', 'errorSolution': 'Incoming parameters are missing mandatory parameters.Check whether all required parameters in the interface have been assigned.'}
+[2026-09-16 12:30:04] INFO payments.telebirr - Telebirr preOrder response: {'errorCode': '49401024995', 'errorMsg': '49401024995:Parameter:.biz_content.merch_order_id type mismatch. [Required string pattern ^[A-Za-z0-9]+$].', 'errorSolution': 'Incoming parameters are missing mandatory parameters.Check whether all required parameters in the interface have been assigned.'}
+[2026-09-16 12:30:04] ERROR books.views - Telebirr create_checkout failed: 49401024995:Parameter:.biz_content.merch_order_id type mismatch. [Required string pattern ^[A-Za-z0-9]+$].
+[2026-09-16 12:30:04] ERROR books.views - Telebirr create_checkout failed: 49401024995:Parameter:.biz_content.merch_order_id type mismatch. [Required string pattern ^[A-Za-z0-9]+$].
+[2026-09-16 12:30:04] INFO django.server - "POST /books/6/purchase/ HTTP/1.1" 302 0
+[2026-09-16 12:30:04] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 81120
+[2026-09-16 12:30:04] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:30:04] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:30:04] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:30:04] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:30:04] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:30:04] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:30:04] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:30:04] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:30:04] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:31:22] INFO django.utils.autoreload - C:\abay_repository\config\settings.py changed, reloading.
+[2026-09-16 12:31:22] INFO django.utils.autoreload - C:\abay_repository\config\settings.py changed, reloading.
+[2026-09-16 12:31:24] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-16 12:31:24] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-16 12:31:30] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-16 12:31:30] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-16 12:31:34] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 80350
+[2026-09-16 12:31:34] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:31:34] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:31:34] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:31:34] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:31:34] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:31:34] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:31:34] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:31:34] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:31:34] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:31:34] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:31:34] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:31:36] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 80350
+[2026-09-16 12:31:36] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:31:36] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:31:36] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:31:36] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:31:36] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:31:36] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:31:36] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:31:36] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:31:36] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:31:36] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:31:36] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:31:36] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 80350
+[2026-09-16 12:31:36] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:31:36] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:31:36] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:31:36] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:31:36] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:31:36] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:31:36] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:31:36] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:31:36] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:31:36] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:31:36] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:31:57] PAYMENT INFO - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': '5d6361b5655f45d880a6fcc5264a3948', 'sign': 'CLAcvX9WrPEs/s1RCQCw9KIB8ir7GEeF/5Mrgwb88jXupyMF/7T24KUiVQgUvcZFTDqL+967tFkFXYba7kW70L6v5srpcZM0yuD1e9g4x1xz1vZwkDCD7+mrCmSr20yLqtALoxgNMBYgPesYkBZOrjrMSNQpmWScUpkL5tYjoA5bxw1dQyMC8XfYhj44pZSHjgC+mZcExRrSmR95L9Tpu/pbIT5RGV8owyeLs6dUNj8s06BTzqaE2ZdVxxtelGKZu5WrzQijcm60k23Hs46n3ZACxbnsJv0KX52N2xuqZzyw5C8JIa8CGwJtDq57UuXmBHUm+JcN7YceM69ZJUaFSQeIBLrVjYtRT/LXUrUC/8MQ/wnDo9eC7jq5T8T1rbFHqqdP88/Y/PYKslVT86qGTTbQqZXLk9CBdk9Ig53qMPZN5/YjkJRg8Z88XX4JdGX2NTB86Jgy46U6gRqXKRGg8vuBJwP/FDHk4GjdsesEe4ge4YoUD/srZX1kSayC/2TzSTtf1/BHn+f3xgHSt/enRNgaBghlC2bQ2oVJw+ADtJLvfk0lItG/f0zh8JTbIsAtMObEiRfKC1m9kdpwhdbbtyIvaTPe8dJNGW4bvK+HnQs6lxAn2LeWLiP9WlV08k2INPfAOS1XF0OPy2faPRVRnyF/iLf20K21IVcodjrQNyM=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'PUR8543D4433E3C', 'prepay_id': '011313a9639de13b07bf4fba8570bfe2d4a0702'}}
+[2026-09-16 12:31:57] INFO payments.telebirr - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': '5d6361b5655f45d880a6fcc5264a3948', 'sign': 'CLAcvX9WrPEs/s1RCQCw9KIB8ir7GEeF/5Mrgwb88jXupyMF/7T24KUiVQgUvcZFTDqL+967tFkFXYba7kW70L6v5srpcZM0yuD1e9g4x1xz1vZwkDCD7+mrCmSr20yLqtALoxgNMBYgPesYkBZOrjrMSNQpmWScUpkL5tYjoA5bxw1dQyMC8XfYhj44pZSHjgC+mZcExRrSmR95L9Tpu/pbIT5RGV8owyeLs6dUNj8s06BTzqaE2ZdVxxtelGKZu5WrzQijcm60k23Hs46n3ZACxbnsJv0KX52N2xuqZzyw5C8JIa8CGwJtDq57UuXmBHUm+JcN7YceM69ZJUaFSQeIBLrVjYtRT/LXUrUC/8MQ/wnDo9eC7jq5T8T1rbFHqqdP88/Y/PYKslVT86qGTTbQqZXLk9CBdk9Ig53qMPZN5/YjkJRg8Z88XX4JdGX2NTB86Jgy46U6gRqXKRGg8vuBJwP/FDHk4GjdsesEe4ge4YoUD/srZX1kSayC/2TzSTtf1/BHn+f3xgHSt/enRNgaBghlC2bQ2oVJw+ADtJLvfk0lItG/f0zh8JTbIsAtMObEiRfKC1m9kdpwhdbbtyIvaTPe8dJNGW4bvK+HnQs6lxAn2LeWLiP9WlV08k2INPfAOS1XF0OPy2faPRVRnyF/iLf20K21IVcodjrQNyM=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'PUR8543D4433E3C', 'prepay_id': '011313a9639de13b07bf4fba8570bfe2d4a0702'}}
+[2026-09-16 12:31:57] INFO payments.telebirr - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': '5d6361b5655f45d880a6fcc5264a3948', 'sign': 'CLAcvX9WrPEs/s1RCQCw9KIB8ir7GEeF/5Mrgwb88jXupyMF/7T24KUiVQgUvcZFTDqL+967tFkFXYba7kW70L6v5srpcZM0yuD1e9g4x1xz1vZwkDCD7+mrCmSr20yLqtALoxgNMBYgPesYkBZOrjrMSNQpmWScUpkL5tYjoA5bxw1dQyMC8XfYhj44pZSHjgC+mZcExRrSmR95L9Tpu/pbIT5RGV8owyeLs6dUNj8s06BTzqaE2ZdVxxtelGKZu5WrzQijcm60k23Hs46n3ZACxbnsJv0KX52N2xuqZzyw5C8JIa8CGwJtDq57UuXmBHUm+JcN7YceM69ZJUaFSQeIBLrVjYtRT/LXUrUC/8MQ/wnDo9eC7jq5T8T1rbFHqqdP88/Y/PYKslVT86qGTTbQqZXLk9CBdk9Ig53qMPZN5/YjkJRg8Z88XX4JdGX2NTB86Jgy46U6gRqXKRGg8vuBJwP/FDHk4GjdsesEe4ge4YoUD/srZX1kSayC/2TzSTtf1/BHn+f3xgHSt/enRNgaBghlC2bQ2oVJw+ADtJLvfk0lItG/f0zh8JTbIsAtMObEiRfKC1m9kdpwhdbbtyIvaTPe8dJNGW4bvK+HnQs6lxAn2LeWLiP9WlV08k2INPfAOS1XF0OPy2faPRVRnyF/iLf20K21IVcodjrQNyM=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'PUR8543D4433E3C', 'prepay_id': '011313a9639de13b07bf4fba8570bfe2d4a0702'}}
+[2026-09-16 12:31:57] PAYMENT INFO - Telebirr preorder OK merch_order_id=PUR8543D4433E3C prepay_id=011313a9639de13b07bf4fba8570bfe2d4a0702
+[2026-09-16 12:31:57] INFO payments.telebirr - Telebirr preorder OK merch_order_id=PUR8543D4433E3C prepay_id=011313a9639de13b07bf4fba8570bfe2d4a0702
+[2026-09-16 12:31:57] INFO payments.telebirr - Telebirr preorder OK merch_order_id=PUR8543D4433E3C prepay_id=011313a9639de13b07bf4fba8570bfe2d4a0702
+[2026-09-16 12:31:57] INFO django.server - "POST /books/6/purchase/ HTTP/1.1" 302 0
+[2026-09-16 12:31:57] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:31:57] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:38:58] INFO django.utils.autoreload - C:\abay_repository\payments\views.py changed, reloading.
+[2026-09-16 12:38:58] INFO django.utils.autoreload - C:\abay_repository\payments\views.py changed, reloading.
+[2026-09-16 12:38:59] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-16 12:38:59] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-16 12:39:46] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-16 12:39:46] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-16 12:39:55] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 80350
+[2026-09-16 12:39:55] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:39:55] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:39:55] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:39:55] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:39:55] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:39:55] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:39:55] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:39:55] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:39:55] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:39:55] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:39:55] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:39:56] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 80350
+[2026-09-16 12:39:56] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:39:56] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:39:56] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:39:56] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:39:56] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:39:57] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:39:57] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:39:57] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:39:57] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:39:57] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:39:57] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:39:57] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 80350
+[2026-09-16 12:39:57] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:39:57] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:39:57] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:39:57] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:39:57] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:39:57] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:39:57] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:39:57] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:39:57] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:39:57] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:39:57] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:40:18] PAYMENT INFO - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': '1d5b079a025c4907a02909f2932028d9', 'sign': 'dk3RqY9hqQHhSBy2S/Dg9NgNjJLLvFeJPasJJe0089tuW6y1rbMosRB+svyfS+oVIuq3WrPXP1ovF7MqRCvHxuSvvsl5yZDCcaniII+QF7yz3c4M0kbcm+xqCQi94QBEPFzgzVlToF6dju5pv1Qt30et/P39+NmF+Gmw35TAh4MlbKv2lUo38419BJx30CClPjdanye3qgy+vHBXe7J8VTvCtRJr0eAkO1sI4Voco+mqDhCXCqmcNZ8dW4J+8g1eIVJcwnb3aJbOybCVWxYru2KpSXkvuaXJTPPFpWpNUJtCfYFHfB/m4F+89ymON1gWERm9fpSfncN7q6yAdd+jKMnsZjNL6rQ2sIiija6ogrdIg3++qMi54J6WBVB6qwTZpEDT4EhFpuIDM3hSnhtP2WRfIJiSGlKprqNEqXhhn9LKjfQt780hfbRc02LDHGd2XL+sc1Ifkrj/DedQ7GZBBxjDQZbx2e8bAdwHf53vGAU0UQAR9JkjEXyv6ZJ4Wohhb6pYv9ZvP76ajXYszW3FpYzqpI1LuHnhviTIO++u0axfnvyJC/QXGDp5IiQ2BgcZMg8rfDs3uoxvcmU2iLsBwZq6IcUtIrt6fJMHDVgYPirEr7VFyxEMe9N6lRVl8kQoC4/OOkI5/7RenMxQQ+Jb52GlcVbl7qXz06ImdPLj29k=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'PUR0C967AEBC1CD', 'prepay_id': '0115b2cd7f172fcf56de96cb3c645bb07230501'}}
+[2026-09-16 12:40:18] INFO payments.telebirr - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': '1d5b079a025c4907a02909f2932028d9', 'sign': 'dk3RqY9hqQHhSBy2S/Dg9NgNjJLLvFeJPasJJe0089tuW6y1rbMosRB+svyfS+oVIuq3WrPXP1ovF7MqRCvHxuSvvsl5yZDCcaniII+QF7yz3c4M0kbcm+xqCQi94QBEPFzgzVlToF6dju5pv1Qt30et/P39+NmF+Gmw35TAh4MlbKv2lUo38419BJx30CClPjdanye3qgy+vHBXe7J8VTvCtRJr0eAkO1sI4Voco+mqDhCXCqmcNZ8dW4J+8g1eIVJcwnb3aJbOybCVWxYru2KpSXkvuaXJTPPFpWpNUJtCfYFHfB/m4F+89ymON1gWERm9fpSfncN7q6yAdd+jKMnsZjNL6rQ2sIiija6ogrdIg3++qMi54J6WBVB6qwTZpEDT4EhFpuIDM3hSnhtP2WRfIJiSGlKprqNEqXhhn9LKjfQt780hfbRc02LDHGd2XL+sc1Ifkrj/DedQ7GZBBxjDQZbx2e8bAdwHf53vGAU0UQAR9JkjEXyv6ZJ4Wohhb6pYv9ZvP76ajXYszW3FpYzqpI1LuHnhviTIO++u0axfnvyJC/QXGDp5IiQ2BgcZMg8rfDs3uoxvcmU2iLsBwZq6IcUtIrt6fJMHDVgYPirEr7VFyxEMe9N6lRVl8kQoC4/OOkI5/7RenMxQQ+Jb52GlcVbl7qXz06ImdPLj29k=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'PUR0C967AEBC1CD', 'prepay_id': '0115b2cd7f172fcf56de96cb3c645bb07230501'}}
+[2026-09-16 12:40:18] INFO payments.telebirr - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': '1d5b079a025c4907a02909f2932028d9', 'sign': 'dk3RqY9hqQHhSBy2S/Dg9NgNjJLLvFeJPasJJe0089tuW6y1rbMosRB+svyfS+oVIuq3WrPXP1ovF7MqRCvHxuSvvsl5yZDCcaniII+QF7yz3c4M0kbcm+xqCQi94QBEPFzgzVlToF6dju5pv1Qt30et/P39+NmF+Gmw35TAh4MlbKv2lUo38419BJx30CClPjdanye3qgy+vHBXe7J8VTvCtRJr0eAkO1sI4Voco+mqDhCXCqmcNZ8dW4J+8g1eIVJcwnb3aJbOybCVWxYru2KpSXkvuaXJTPPFpWpNUJtCfYFHfB/m4F+89ymON1gWERm9fpSfncN7q6yAdd+jKMnsZjNL6rQ2sIiija6ogrdIg3++qMi54J6WBVB6qwTZpEDT4EhFpuIDM3hSnhtP2WRfIJiSGlKprqNEqXhhn9LKjfQt780hfbRc02LDHGd2XL+sc1Ifkrj/DedQ7GZBBxjDQZbx2e8bAdwHf53vGAU0UQAR9JkjEXyv6ZJ4Wohhb6pYv9ZvP76ajXYszW3FpYzqpI1LuHnhviTIO++u0axfnvyJC/QXGDp5IiQ2BgcZMg8rfDs3uoxvcmU2iLsBwZq6IcUtIrt6fJMHDVgYPirEr7VFyxEMe9N6lRVl8kQoC4/OOkI5/7RenMxQQ+Jb52GlcVbl7qXz06ImdPLj29k=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'PUR0C967AEBC1CD', 'prepay_id': '0115b2cd7f172fcf56de96cb3c645bb07230501'}}
+[2026-09-16 12:40:18] PAYMENT INFO - Telebirr preorder OK merch_order_id=PUR0C967AEBC1CD prepay_id=0115b2cd7f172fcf56de96cb3c645bb07230501
+[2026-09-16 12:40:18] INFO payments.telebirr - Telebirr preorder OK merch_order_id=PUR0C967AEBC1CD prepay_id=0115b2cd7f172fcf56de96cb3c645bb07230501
+[2026-09-16 12:40:18] INFO payments.telebirr - Telebirr preorder OK merch_order_id=PUR0C967AEBC1CD prepay_id=0115b2cd7f172fcf56de96cb3c645bb07230501
+[2026-09-16 12:40:18] INFO django.server - "POST /books/6/purchase/ HTTP/1.1" 302 0
+[2026-09-16 12:40:18] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:40:18] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:40:51] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 302 0
+[2026-09-16 12:40:51] INFO django.server - "GET /accounts/login/?next=/books/6/purchase/ HTTP/1.1" 200 64909
+[2026-09-16 12:40:51] INFO django.server - "GET /static/images/logo.png HTTP/1.1" 304 0
+[2026-09-16 12:40:52] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:41:22] AUTH INFO - AUTH - Login successful: User=client, IP=127.0.0.1, Role=client
+[2026-09-16 12:41:22] INFO accounts.views - AUTH - Login successful: User=client, IP=127.0.0.1, Role=client
+[2026-09-16 12:41:22] INFO accounts.views - AUTH - Login successful: User=client, IP=127.0.0.1, Role=client
+[2026-09-16 12:41:22] INFO django.server - "POST /accounts/login/?next=/books/6/purchase/ HTTP/1.1" 302 0
+[2026-09-16 12:41:22] AUTH INFO - Client dashboard accessed by: client
+[2026-09-16 12:41:22] INFO accounts.views - Client dashboard accessed by: client
+[2026-09-16 12:41:22] INFO accounts.views - Client dashboard accessed by: client
+[2026-09-16 12:41:22] INFO django.server - "GET /accounts/dashboard/client/ HTTP/1.1" 200 66708
+[2026-09-16 12:41:29] INFO django.server - "GET /books/browse/ HTTP/1.1" 200 102531
+[2026-09-16 12:41:30] INFO django.server - "GET /media/books/covers/2026/09/pychology_b5LmZgq.png HTTP/1.1" 200 363640
+[2026-09-16 12:41:32] INFO django.server - "GET /books/6/ HTTP/1.1" 200 73712
+[2026-09-16 12:41:33] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 80350
+[2026-09-16 12:41:55] PAYMENT INFO - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': '2a0e87a855954389a58678da2bfa41fd', 'sign': 'Y8ASuS1fP1LH2UED062sLbb75/YV2TyO0BazZgGnHVP7airHMxkKoe05NhALBRBqfjIf2FS2eJ+HAHY6EoAqf5qNEPAuzxPeO2e0rUiLfIKHPQ6S8sFOtZfTvtVUUk1eNtcXciBwxmL3KsQdWnC3hUrnQwgRoMEMgtbpdY9ocgIV2yR9FcWJ8xw+56HyN8wfvVkgymTx6OBryA6hfVXDj0gmGJKaQWOAJJrKnEtBjukESdY5KHem7tRFY30Cab98JqQsEF9U8MDnRG8MEBcujECM3blOSSOp+Il835ILN4depwaSicyoIayphSwnNs/1y6zMWGKG0/l5N1a9zICzQOaWYz31pkGu1xCNtXtP0f3QbcdNHSqcExQszqcqq1Bh78is6+zu0jE7YqXr5/6IFdnH132WQKGiAhI/qgtiUppbdUPLHrw7zXBP4urbNiPUMMz0nWbbY5N7mJQoCRBeGBvwSDpB0o/2BtUuNuZBcoyUuSUUwfFFr/uER7r7fkoQNhDJpNexNdEJXDVY5DPEvWxC/c2yTT/20tNBbnxxAgGiK/8joSKbnEwnleLyd+CugpFLoS6VhUDrujiOeybG/cZmt5bcaqI8nDLKUUTf2yZEGnqjQ3Ox6wSdAvYFXSi1JodlVSebX/46xy8tShlb/bL9VS/QKKkhif9ynwYaNSI=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'PUR656550D6DDE0', 'prepay_id': '011a0185d3d2148b45c2bdeb9e76769b34c0501'}}
+[2026-09-16 12:41:55] INFO payments.telebirr - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': '2a0e87a855954389a58678da2bfa41fd', 'sign': 'Y8ASuS1fP1LH2UED062sLbb75/YV2TyO0BazZgGnHVP7airHMxkKoe05NhALBRBqfjIf2FS2eJ+HAHY6EoAqf5qNEPAuzxPeO2e0rUiLfIKHPQ6S8sFOtZfTvtVUUk1eNtcXciBwxmL3KsQdWnC3hUrnQwgRoMEMgtbpdY9ocgIV2yR9FcWJ8xw+56HyN8wfvVkgymTx6OBryA6hfVXDj0gmGJKaQWOAJJrKnEtBjukESdY5KHem7tRFY30Cab98JqQsEF9U8MDnRG8MEBcujECM3blOSSOp+Il835ILN4depwaSicyoIayphSwnNs/1y6zMWGKG0/l5N1a9zICzQOaWYz31pkGu1xCNtXtP0f3QbcdNHSqcExQszqcqq1Bh78is6+zu0jE7YqXr5/6IFdnH132WQKGiAhI/qgtiUppbdUPLHrw7zXBP4urbNiPUMMz0nWbbY5N7mJQoCRBeGBvwSDpB0o/2BtUuNuZBcoyUuSUUwfFFr/uER7r7fkoQNhDJpNexNdEJXDVY5DPEvWxC/c2yTT/20tNBbnxxAgGiK/8joSKbnEwnleLyd+CugpFLoS6VhUDrujiOeybG/cZmt5bcaqI8nDLKUUTf2yZEGnqjQ3Ox6wSdAvYFXSi1JodlVSebX/46xy8tShlb/bL9VS/QKKkhif9ynwYaNSI=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'PUR656550D6DDE0', 'prepay_id': '011a0185d3d2148b45c2bdeb9e76769b34c0501'}}
+[2026-09-16 12:41:55] INFO payments.telebirr - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': '2a0e87a855954389a58678da2bfa41fd', 'sign': 'Y8ASuS1fP1LH2UED062sLbb75/YV2TyO0BazZgGnHVP7airHMxkKoe05NhALBRBqfjIf2FS2eJ+HAHY6EoAqf5qNEPAuzxPeO2e0rUiLfIKHPQ6S8sFOtZfTvtVUUk1eNtcXciBwxmL3KsQdWnC3hUrnQwgRoMEMgtbpdY9ocgIV2yR9FcWJ8xw+56HyN8wfvVkgymTx6OBryA6hfVXDj0gmGJKaQWOAJJrKnEtBjukESdY5KHem7tRFY30Cab98JqQsEF9U8MDnRG8MEBcujECM3blOSSOp+Il835ILN4depwaSicyoIayphSwnNs/1y6zMWGKG0/l5N1a9zICzQOaWYz31pkGu1xCNtXtP0f3QbcdNHSqcExQszqcqq1Bh78is6+zu0jE7YqXr5/6IFdnH132WQKGiAhI/qgtiUppbdUPLHrw7zXBP4urbNiPUMMz0nWbbY5N7mJQoCRBeGBvwSDpB0o/2BtUuNuZBcoyUuSUUwfFFr/uER7r7fkoQNhDJpNexNdEJXDVY5DPEvWxC/c2yTT/20tNBbnxxAgGiK/8joSKbnEwnleLyd+CugpFLoS6VhUDrujiOeybG/cZmt5bcaqI8nDLKUUTf2yZEGnqjQ3Ox6wSdAvYFXSi1JodlVSebX/46xy8tShlb/bL9VS/QKKkhif9ynwYaNSI=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'PUR656550D6DDE0', 'prepay_id': '011a0185d3d2148b45c2bdeb9e76769b34c0501'}}
+[2026-09-16 12:41:55] PAYMENT INFO - Telebirr preorder OK merch_order_id=PUR656550D6DDE0 prepay_id=011a0185d3d2148b45c2bdeb9e76769b34c0501
+[2026-09-16 12:41:55] INFO payments.telebirr - Telebirr preorder OK merch_order_id=PUR656550D6DDE0 prepay_id=011a0185d3d2148b45c2bdeb9e76769b34c0501
+[2026-09-16 12:41:55] INFO payments.telebirr - Telebirr preorder OK merch_order_id=PUR656550D6DDE0 prepay_id=011a0185d3d2148b45c2bdeb9e76769b34c0501
+[2026-09-16 12:41:56] INFO django.server - "POST /books/6/purchase/ HTTP/1.1" 302 0
+[2026-09-16 12:43:21] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 80350
+[2026-09-16 12:43:21] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:43:21] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:43:21] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:43:21] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:43:21] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:43:21] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:43:21] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:43:21] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:43:21] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:43:21] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:43:21] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:48:46] INFO django.utils.autoreload - C:\abay_repository\payments\views.py changed, reloading.
+[2026-09-16 12:48:46] INFO django.utils.autoreload - C:\abay_repository\payments\views.py changed, reloading.
+[2026-09-16 12:48:46] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-16 12:48:46] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-16 12:49:17] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-16 12:49:17] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-16 12:49:38] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 84513
+[2026-09-16 12:49:38] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:49:38] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:49:38] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:49:38] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:49:38] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:49:38] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:49:38] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:49:38] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:49:38] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:49:38] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:49:38] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:49:39] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 84513
+[2026-09-16 12:49:39] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:49:39] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:49:40] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:49:40] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:49:40] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:49:40] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:49:40] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:49:40] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:49:40] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:49:40] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:49:40] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:49:40] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 84513
+[2026-09-16 12:49:40] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:49:40] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:49:40] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:49:40] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:49:40] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:49:40] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:49:40] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:49:40] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:49:40] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:49:40] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:49:40] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:49:55] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 84513
+[2026-09-16 12:50:04] PAYMENT INFO - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': '44a96ac0bf3240938eab347a7deefbef', 'sign': 'TmxiNo1CPBNa8pXkiHjfZXdSNpsY67EP1kkturCYSAIZorLDa2CUDTn5YiAjPxbJe45fv13RCnM4mrWG2LA9mgP7OwGNxoZ7SjQM+Lewv1QzIoBh0JSSvyehUVF8DYWXb6o0PMXcMqZfV4980iZg22MPsNValje/CUrmDB4UgDeEP5YvU7vftFH+1FcPHypGTB7yDI2bf0rjbxk958O5eoaCunPWvJzAi3YC/ocKqsY6HkKaYX88QRUgnVnQTf8/jDtpY4Sg6loeXqzFlmaFqgftBLXCCnwSXq4xw9SUNcUSlClj0mjvwBB4TaPgR738LJ8QdLZYfmXD4e2X9gvKUGep1ZlCRyAkor3GbwuUS56n+uUkAWSECWcKzB7X1EDODIJT/4CZWNjkd2rSzzj7vVO4UuXo9LDboVaC31lDolDFgHYJ+XA3V8yhYhryRXauyNfGrR91kysSWo1IRr8SD5Oj77HXUzumyUiE6y8JGrhHVd+shJWIc/sgmX8E99H68/P+TXWrveNVctFtA8oqfhybHXqT+718YpeMr56bSJ1rMO+4lx6E6cUIco6U5T2SmgM/e/ojrkpES13lYWIAdWYlnuD00n53srBvmyBBpQbUdrb5yK+48I0WCMwZ1SByXo2MgFS+spGLvggJ8Bq/E71Pmb+6qhXEqe9kBqtzWCo=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'PUR847A5D3D48C2', 'prepay_id': '0115b32c714566dd3b58d1f580a6a3838880000'}}
+[2026-09-16 12:50:04] INFO payments.telebirr - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': '44a96ac0bf3240938eab347a7deefbef', 'sign': 'TmxiNo1CPBNa8pXkiHjfZXdSNpsY67EP1kkturCYSAIZorLDa2CUDTn5YiAjPxbJe45fv13RCnM4mrWG2LA9mgP7OwGNxoZ7SjQM+Lewv1QzIoBh0JSSvyehUVF8DYWXb6o0PMXcMqZfV4980iZg22MPsNValje/CUrmDB4UgDeEP5YvU7vftFH+1FcPHypGTB7yDI2bf0rjbxk958O5eoaCunPWvJzAi3YC/ocKqsY6HkKaYX88QRUgnVnQTf8/jDtpY4Sg6loeXqzFlmaFqgftBLXCCnwSXq4xw9SUNcUSlClj0mjvwBB4TaPgR738LJ8QdLZYfmXD4e2X9gvKUGep1ZlCRyAkor3GbwuUS56n+uUkAWSECWcKzB7X1EDODIJT/4CZWNjkd2rSzzj7vVO4UuXo9LDboVaC31lDolDFgHYJ+XA3V8yhYhryRXauyNfGrR91kysSWo1IRr8SD5Oj77HXUzumyUiE6y8JGrhHVd+shJWIc/sgmX8E99H68/P+TXWrveNVctFtA8oqfhybHXqT+718YpeMr56bSJ1rMO+4lx6E6cUIco6U5T2SmgM/e/ojrkpES13lYWIAdWYlnuD00n53srBvmyBBpQbUdrb5yK+48I0WCMwZ1SByXo2MgFS+spGLvggJ8Bq/E71Pmb+6qhXEqe9kBqtzWCo=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'PUR847A5D3D48C2', 'prepay_id': '0115b32c714566dd3b58d1f580a6a3838880000'}}
+[2026-09-16 12:50:04] INFO payments.telebirr - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': '44a96ac0bf3240938eab347a7deefbef', 'sign': 'TmxiNo1CPBNa8pXkiHjfZXdSNpsY67EP1kkturCYSAIZorLDa2CUDTn5YiAjPxbJe45fv13RCnM4mrWG2LA9mgP7OwGNxoZ7SjQM+Lewv1QzIoBh0JSSvyehUVF8DYWXb6o0PMXcMqZfV4980iZg22MPsNValje/CUrmDB4UgDeEP5YvU7vftFH+1FcPHypGTB7yDI2bf0rjbxk958O5eoaCunPWvJzAi3YC/ocKqsY6HkKaYX88QRUgnVnQTf8/jDtpY4Sg6loeXqzFlmaFqgftBLXCCnwSXq4xw9SUNcUSlClj0mjvwBB4TaPgR738LJ8QdLZYfmXD4e2X9gvKUGep1ZlCRyAkor3GbwuUS56n+uUkAWSECWcKzB7X1EDODIJT/4CZWNjkd2rSzzj7vVO4UuXo9LDboVaC31lDolDFgHYJ+XA3V8yhYhryRXauyNfGrR91kysSWo1IRr8SD5Oj77HXUzumyUiE6y8JGrhHVd+shJWIc/sgmX8E99H68/P+TXWrveNVctFtA8oqfhybHXqT+718YpeMr56bSJ1rMO+4lx6E6cUIco6U5T2SmgM/e/ojrkpES13lYWIAdWYlnuD00n53srBvmyBBpQbUdrb5yK+48I0WCMwZ1SByXo2MgFS+spGLvggJ8Bq/E71Pmb+6qhXEqe9kBqtzWCo=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'PUR847A5D3D48C2', 'prepay_id': '0115b32c714566dd3b58d1f580a6a3838880000'}}
+[2026-09-16 12:50:04] PAYMENT INFO - Telebirr preorder OK merch_order_id=PUR847A5D3D48C2 prepay_id=0115b32c714566dd3b58d1f580a6a3838880000
+[2026-09-16 12:50:04] INFO payments.telebirr - Telebirr preorder OK merch_order_id=PUR847A5D3D48C2 prepay_id=0115b32c714566dd3b58d1f580a6a3838880000
+[2026-09-16 12:50:04] INFO payments.telebirr - Telebirr preorder OK merch_order_id=PUR847A5D3D48C2 prepay_id=0115b32c714566dd3b58d1f580a6a3838880000
+[2026-09-16 12:50:04] INFO django.server - "POST /books/6/purchase/ HTTP/1.1" 200 2027
+[2026-09-16 12:53:03] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 84513
+[2026-09-16 12:53:03] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:53:03] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:53:03] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:53:03] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:53:03] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:53:03] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:53:03] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:53:03] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:53:03] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 12:53:03] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:53:03] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 12:53:32] PAYMENT INFO - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': '6b0291b6ec144d1b88de43c8de4bb113', 'sign': 'dZjV+LoMN7GpaM8cw4jDEqThe7qMUock77hXohp4+4gcY9I1R4w4K66eIPj0OL3Rk4RuKR5SLhM/6CBz8ZJoIyT4fxr3FR+zXLJhUdGSHGyH6R2BVl70HqT53cTiTc9UVEfuX9rlIu13D0aOfIEju7/YR87P7DVWc2l0Uv9qLNlZLpQWrzz5FqzQgteyzE98b9St8B4N/qEKy3e2QwuIp36mR3/C4YmBEkv+GjPgMe11t4cM9KOsjOfSnxix3OyYH4Y9yfxqVi2DA1ERutBst1Y0RsgQnTPlHe7liVCf6WroVJjKBN6i90wymdM+B4dBjslNpGukm0lBd5h/bIp1FnP23INWsoeHSiI7DevC9P4fNMdTeEeWqcVS5v3mapKsgJFlTzXXRLWIClYrueY58mbwlgnzZ5YK5rS2NgpYBvm8x8fDA0TYpLdjIt9xBIvT1D6PixBtswEUwD5y9nk38Ges1o+2/6Eizq0981KMEWEDupcKUuGv6oOpqZmj123MmUar27K2G2r8QeLDMiSwbS/2T3xcgYvZInxp2DmoJ1GiA5sQsP8ij5UBNZeFcptX/XRZjdCYDOhyu5JPO8xqhhCcFIMX5ljt4cjcKWp4tyvkMXPbZMTZ6iYNkEcFxNoN019AUiP1X22iyRk4RyNlXs8uScsZKPG6qVzExKDYlBs=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'PURD9DB24D148BF', 'prepay_id': '011e699d3c601ef8923156f9eca212bbe410000'}}
+[2026-09-16 12:53:32] INFO payments.telebirr - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': '6b0291b6ec144d1b88de43c8de4bb113', 'sign': 'dZjV+LoMN7GpaM8cw4jDEqThe7qMUock77hXohp4+4gcY9I1R4w4K66eIPj0OL3Rk4RuKR5SLhM/6CBz8ZJoIyT4fxr3FR+zXLJhUdGSHGyH6R2BVl70HqT53cTiTc9UVEfuX9rlIu13D0aOfIEju7/YR87P7DVWc2l0Uv9qLNlZLpQWrzz5FqzQgteyzE98b9St8B4N/qEKy3e2QwuIp36mR3/C4YmBEkv+GjPgMe11t4cM9KOsjOfSnxix3OyYH4Y9yfxqVi2DA1ERutBst1Y0RsgQnTPlHe7liVCf6WroVJjKBN6i90wymdM+B4dBjslNpGukm0lBd5h/bIp1FnP23INWsoeHSiI7DevC9P4fNMdTeEeWqcVS5v3mapKsgJFlTzXXRLWIClYrueY58mbwlgnzZ5YK5rS2NgpYBvm8x8fDA0TYpLdjIt9xBIvT1D6PixBtswEUwD5y9nk38Ges1o+2/6Eizq0981KMEWEDupcKUuGv6oOpqZmj123MmUar27K2G2r8QeLDMiSwbS/2T3xcgYvZInxp2DmoJ1GiA5sQsP8ij5UBNZeFcptX/XRZjdCYDOhyu5JPO8xqhhCcFIMX5ljt4cjcKWp4tyvkMXPbZMTZ6iYNkEcFxNoN019AUiP1X22iyRk4RyNlXs8uScsZKPG6qVzExKDYlBs=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'PURD9DB24D148BF', 'prepay_id': '011e699d3c601ef8923156f9eca212bbe410000'}}
+[2026-09-16 12:53:32] INFO payments.telebirr - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': '6b0291b6ec144d1b88de43c8de4bb113', 'sign': 'dZjV+LoMN7GpaM8cw4jDEqThe7qMUock77hXohp4+4gcY9I1R4w4K66eIPj0OL3Rk4RuKR5SLhM/6CBz8ZJoIyT4fxr3FR+zXLJhUdGSHGyH6R2BVl70HqT53cTiTc9UVEfuX9rlIu13D0aOfIEju7/YR87P7DVWc2l0Uv9qLNlZLpQWrzz5FqzQgteyzE98b9St8B4N/qEKy3e2QwuIp36mR3/C4YmBEkv+GjPgMe11t4cM9KOsjOfSnxix3OyYH4Y9yfxqVi2DA1ERutBst1Y0RsgQnTPlHe7liVCf6WroVJjKBN6i90wymdM+B4dBjslNpGukm0lBd5h/bIp1FnP23INWsoeHSiI7DevC9P4fNMdTeEeWqcVS5v3mapKsgJFlTzXXRLWIClYrueY58mbwlgnzZ5YK5rS2NgpYBvm8x8fDA0TYpLdjIt9xBIvT1D6PixBtswEUwD5y9nk38Ges1o+2/6Eizq0981KMEWEDupcKUuGv6oOpqZmj123MmUar27K2G2r8QeLDMiSwbS/2T3xcgYvZInxp2DmoJ1GiA5sQsP8ij5UBNZeFcptX/XRZjdCYDOhyu5JPO8xqhhCcFIMX5ljt4cjcKWp4tyvkMXPbZMTZ6iYNkEcFxNoN019AUiP1X22iyRk4RyNlXs8uScsZKPG6qVzExKDYlBs=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'PURD9DB24D148BF', 'prepay_id': '011e699d3c601ef8923156f9eca212bbe410000'}}
+[2026-09-16 12:53:32] PAYMENT INFO - Telebirr preorder OK merch_order_id=PURD9DB24D148BF prepay_id=011e699d3c601ef8923156f9eca212bbe410000
+[2026-09-16 12:53:32] INFO payments.telebirr - Telebirr preorder OK merch_order_id=PURD9DB24D148BF prepay_id=011e699d3c601ef8923156f9eca212bbe410000
+[2026-09-16 12:53:32] INFO payments.telebirr - Telebirr preorder OK merch_order_id=PURD9DB24D148BF prepay_id=011e699d3c601ef8923156f9eca212bbe410000
+[2026-09-16 12:53:33] INFO django.server - "POST /books/6/purchase/ HTTP/1.1" 200 2027
+[2026-09-16 13:16:02] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-16 13:16:02] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-16 13:22:03] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 84513
+[2026-09-16 13:22:07] PAYMENT INFO - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': 'a8b11b17238749ddae7c0255b4ad0239', 'sign': 'GG+98nQcPoslvvT9p/L1EmveCGtsklPQwPbJFEQiASb7lhvfHHvz9t/O7peJxH0+QEuSdFeb3VRQ3F8WQeKa9ak/5CqCAqDHZBXo9LBe29lNbTH4cWKuHdJrn35qc9UYxC5E4WRUjej7hit+W3/Xtht17mizzEoQS10Mc4Fb8BMm9Q1zqOrzyd8WipBDnamAjDQZgs1j3eE0jY1BE6w5SwX2LxRLQiJu3OtJcUnF/LfGA/eQph1zPjYJhPZcMwhSdTzxMyMXkC9uq9kGOUti2vlGffyq+5a42qgYoyezfqBPFKCoQieQOuJU3esIe8dRiXE79t4AxM2s/wfkYFjREEv/liOXz0cYmx9uhokShmgUu+yn6IJTB2fsSHrQe6VAOiR6LN4o00QOi0V26dysBgPRDIzDmykVx2+YI5Ij/jN7/P8B2Qh+YsaJZjJF21wUv87O4IF24VoMbbMEvhvy/PMMsA4E39ILRlocr9Y09ZuA0UWHh2qfuczNOsW55q7Aq3HNkH9tRlCCnyTAEz6frNEMkELDs8HUK0+jIMo8H11onXD9leSjTGikpGa6mnseCEGOJzufvoTQZbo7zIFwxxwHeJD37J7XFSMGc5mkXcV1tDzKLi50hnvfvtldOMlIeAgF2DhOy6obMT+ZTa031VxPAFOuKOXKtZK1m9Kt8r4=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'PUR645AAC0B2638', 'prepay_id': '0113fc47284d7ec30ba6c3c79b1448493860202'}}
+[2026-09-16 13:22:07] INFO payments.telebirr - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': 'a8b11b17238749ddae7c0255b4ad0239', 'sign': 'GG+98nQcPoslvvT9p/L1EmveCGtsklPQwPbJFEQiASb7lhvfHHvz9t/O7peJxH0+QEuSdFeb3VRQ3F8WQeKa9ak/5CqCAqDHZBXo9LBe29lNbTH4cWKuHdJrn35qc9UYxC5E4WRUjej7hit+W3/Xtht17mizzEoQS10Mc4Fb8BMm9Q1zqOrzyd8WipBDnamAjDQZgs1j3eE0jY1BE6w5SwX2LxRLQiJu3OtJcUnF/LfGA/eQph1zPjYJhPZcMwhSdTzxMyMXkC9uq9kGOUti2vlGffyq+5a42qgYoyezfqBPFKCoQieQOuJU3esIe8dRiXE79t4AxM2s/wfkYFjREEv/liOXz0cYmx9uhokShmgUu+yn6IJTB2fsSHrQe6VAOiR6LN4o00QOi0V26dysBgPRDIzDmykVx2+YI5Ij/jN7/P8B2Qh+YsaJZjJF21wUv87O4IF24VoMbbMEvhvy/PMMsA4E39ILRlocr9Y09ZuA0UWHh2qfuczNOsW55q7Aq3HNkH9tRlCCnyTAEz6frNEMkELDs8HUK0+jIMo8H11onXD9leSjTGikpGa6mnseCEGOJzufvoTQZbo7zIFwxxwHeJD37J7XFSMGc5mkXcV1tDzKLi50hnvfvtldOMlIeAgF2DhOy6obMT+ZTa031VxPAFOuKOXKtZK1m9Kt8r4=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'PUR645AAC0B2638', 'prepay_id': '0113fc47284d7ec30ba6c3c79b1448493860202'}}
+[2026-09-16 13:22:07] INFO payments.telebirr - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': 'a8b11b17238749ddae7c0255b4ad0239', 'sign': 'GG+98nQcPoslvvT9p/L1EmveCGtsklPQwPbJFEQiASb7lhvfHHvz9t/O7peJxH0+QEuSdFeb3VRQ3F8WQeKa9ak/5CqCAqDHZBXo9LBe29lNbTH4cWKuHdJrn35qc9UYxC5E4WRUjej7hit+W3/Xtht17mizzEoQS10Mc4Fb8BMm9Q1zqOrzyd8WipBDnamAjDQZgs1j3eE0jY1BE6w5SwX2LxRLQiJu3OtJcUnF/LfGA/eQph1zPjYJhPZcMwhSdTzxMyMXkC9uq9kGOUti2vlGffyq+5a42qgYoyezfqBPFKCoQieQOuJU3esIe8dRiXE79t4AxM2s/wfkYFjREEv/liOXz0cYmx9uhokShmgUu+yn6IJTB2fsSHrQe6VAOiR6LN4o00QOi0V26dysBgPRDIzDmykVx2+YI5Ij/jN7/P8B2Qh+YsaJZjJF21wUv87O4IF24VoMbbMEvhvy/PMMsA4E39ILRlocr9Y09ZuA0UWHh2qfuczNOsW55q7Aq3HNkH9tRlCCnyTAEz6frNEMkELDs8HUK0+jIMo8H11onXD9leSjTGikpGa6mnseCEGOJzufvoTQZbo7zIFwxxwHeJD37J7XFSMGc5mkXcV1tDzKLi50hnvfvtldOMlIeAgF2DhOy6obMT+ZTa031VxPAFOuKOXKtZK1m9Kt8r4=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'PUR645AAC0B2638', 'prepay_id': '0113fc47284d7ec30ba6c3c79b1448493860202'}}
+[2026-09-16 13:22:07] PAYMENT INFO - Telebirr preorder OK merch_order_id=PUR645AAC0B2638 prepay_id=0113fc47284d7ec30ba6c3c79b1448493860202
+[2026-09-16 13:22:07] INFO payments.telebirr - Telebirr preorder OK merch_order_id=PUR645AAC0B2638 prepay_id=0113fc47284d7ec30ba6c3c79b1448493860202
+[2026-09-16 13:22:07] INFO payments.telebirr - Telebirr preorder OK merch_order_id=PUR645AAC0B2638 prepay_id=0113fc47284d7ec30ba6c3c79b1448493860202
+[2026-09-16 13:22:07] INFO django.server - "POST /books/6/purchase/ HTTP/1.1" 200 2027
+[2026-09-16 13:32:10] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 84513
+[2026-09-16 13:32:14] PAYMENT INFO - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': '6d2bf0263fd74357ac23e9e2008569c9', 'sign': 'bNb/M0cONRvzSe06pA5mlkMMv2nlWu/BGmV+jTBmAADIW2Nb1QtDZcLOwYCp7r61ZwcEXLm0NQFwuAs0ajW7XODYQxB3N2GX1eTWkhn9jnglmeuXf8eICZNevg56TSANdeQ7Hq0Tb1wfb+Vn24tlhsRveWRKCmWpBiQ89xnaui/rQnoVDbzsL4hONilBHlM3uqlkae2w4+qxqx8W8ZrOLSqVs9zq5Rp+kMOw7wM4e1RMKJkvGU0K9IxO3DpVnHIZrIhimBHQCHdpZ/8KrvwjItR5AZRwSGCWPBxeJMQ42d6ueEBJlAxUdx/dR6aRTKwBRm3fizyrGx9vHlMacTq/TkT1V2ScW6cvBqRY+txd3TKaJKaKkLlDKHGSBqfV4uY4ful1rVQ5sgXH8+h8B3BmfTVNW6X4auzzpN2ZuI8Z81tcPFQaFyQbDl/zWevxqnJXaMzQyXjdjYz/mVFIRsG+L+BE2dmRqljdzXiVpt4DfpiaK/VmxBXmsdv3EexUe6G2dnomnP6d460ufeXFTDBwnH5KgTha0EU0DLQXBGXIpxf4lD7pdFk9gJ22NfXtM5sOhz4m5BC7F+POK52E5bQiBEYi8A3hS5poqQqTWYiX3FHgHBBXoTE/ZF7SrRBbVdjrd9n+sNbmGM3XkMEiH0nirEMtnAdQzN1Obn5EHks7D3g=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'PURB434C6512CC4', 'prepay_id': '01150b053fe33e9eb984971bf6b7c24e63a0000'}}
+[2026-09-16 13:32:14] INFO payments.telebirr - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': '6d2bf0263fd74357ac23e9e2008569c9', 'sign': 'bNb/M0cONRvzSe06pA5mlkMMv2nlWu/BGmV+jTBmAADIW2Nb1QtDZcLOwYCp7r61ZwcEXLm0NQFwuAs0ajW7XODYQxB3N2GX1eTWkhn9jnglmeuXf8eICZNevg56TSANdeQ7Hq0Tb1wfb+Vn24tlhsRveWRKCmWpBiQ89xnaui/rQnoVDbzsL4hONilBHlM3uqlkae2w4+qxqx8W8ZrOLSqVs9zq5Rp+kMOw7wM4e1RMKJkvGU0K9IxO3DpVnHIZrIhimBHQCHdpZ/8KrvwjItR5AZRwSGCWPBxeJMQ42d6ueEBJlAxUdx/dR6aRTKwBRm3fizyrGx9vHlMacTq/TkT1V2ScW6cvBqRY+txd3TKaJKaKkLlDKHGSBqfV4uY4ful1rVQ5sgXH8+h8B3BmfTVNW6X4auzzpN2ZuI8Z81tcPFQaFyQbDl/zWevxqnJXaMzQyXjdjYz/mVFIRsG+L+BE2dmRqljdzXiVpt4DfpiaK/VmxBXmsdv3EexUe6G2dnomnP6d460ufeXFTDBwnH5KgTha0EU0DLQXBGXIpxf4lD7pdFk9gJ22NfXtM5sOhz4m5BC7F+POK52E5bQiBEYi8A3hS5poqQqTWYiX3FHgHBBXoTE/ZF7SrRBbVdjrd9n+sNbmGM3XkMEiH0nirEMtnAdQzN1Obn5EHks7D3g=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'PURB434C6512CC4', 'prepay_id': '01150b053fe33e9eb984971bf6b7c24e63a0000'}}
+[2026-09-16 13:32:14] INFO payments.telebirr - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': '6d2bf0263fd74357ac23e9e2008569c9', 'sign': 'bNb/M0cONRvzSe06pA5mlkMMv2nlWu/BGmV+jTBmAADIW2Nb1QtDZcLOwYCp7r61ZwcEXLm0NQFwuAs0ajW7XODYQxB3N2GX1eTWkhn9jnglmeuXf8eICZNevg56TSANdeQ7Hq0Tb1wfb+Vn24tlhsRveWRKCmWpBiQ89xnaui/rQnoVDbzsL4hONilBHlM3uqlkae2w4+qxqx8W8ZrOLSqVs9zq5Rp+kMOw7wM4e1RMKJkvGU0K9IxO3DpVnHIZrIhimBHQCHdpZ/8KrvwjItR5AZRwSGCWPBxeJMQ42d6ueEBJlAxUdx/dR6aRTKwBRm3fizyrGx9vHlMacTq/TkT1V2ScW6cvBqRY+txd3TKaJKaKkLlDKHGSBqfV4uY4ful1rVQ5sgXH8+h8B3BmfTVNW6X4auzzpN2ZuI8Z81tcPFQaFyQbDl/zWevxqnJXaMzQyXjdjYz/mVFIRsG+L+BE2dmRqljdzXiVpt4DfpiaK/VmxBXmsdv3EexUe6G2dnomnP6d460ufeXFTDBwnH5KgTha0EU0DLQXBGXIpxf4lD7pdFk9gJ22NfXtM5sOhz4m5BC7F+POK52E5bQiBEYi8A3hS5poqQqTWYiX3FHgHBBXoTE/ZF7SrRBbVdjrd9n+sNbmGM3XkMEiH0nirEMtnAdQzN1Obn5EHks7D3g=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'PURB434C6512CC4', 'prepay_id': '01150b053fe33e9eb984971bf6b7c24e63a0000'}}
+[2026-09-16 13:32:14] PAYMENT INFO - Telebirr preorder OK merch_order_id=PURB434C6512CC4 prepay_id=01150b053fe33e9eb984971bf6b7c24e63a0000
+[2026-09-16 13:32:14] INFO payments.telebirr - Telebirr preorder OK merch_order_id=PURB434C6512CC4 prepay_id=01150b053fe33e9eb984971bf6b7c24e63a0000
+[2026-09-16 13:32:14] INFO payments.telebirr - Telebirr preorder OK merch_order_id=PURB434C6512CC4 prepay_id=01150b053fe33e9eb984971bf6b7c24e63a0000
+[2026-09-16 13:32:14] INFO django.server - "POST /books/6/purchase/ HTTP/1.1" 200 2027
+[2026-09-16 13:34:00] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 84513
+[2026-09-16 13:34:07] INFO django.server - "GET /books/browse/ HTTP/1.1" 200 102531
+[2026-09-16 13:34:09] INFO django.server - "GET /books/6/ HTTP/1.1" 200 73712
+[2026-09-16 13:34:10] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 84513
+[2026-09-16 13:34:20] PAYMENT INFO - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': 'b78d42a1d8954c9d8427c74ce74f6462', 'sign': 'O1tQXJo52iRxsiZwFsCAzGVagoxV4KiBJVn2A4zz7zJe4WMMHHEAUKzKa6S0tnegjFBUQ5JohJi3yKHGCTsitpJ9VMIdZjXykrTQvxsKft5bmJNJvpUe8wRfsYn+biI9zPo4zSrh1IlBAYhQEBdrcsVqUkInIY3S/vEHXJ7bPv4dYdcn6iKWygRUIoGNwdQqMKN/pBmjuuHaA39GqoX7vdn5cu8wCfn7XNHeiCHnA7OdyH5WBA3aYlyOhmv2Aju7/6cnP9txYgBszoRrzjXXksyInVhP9rxgalBBHTNSchtdq9FzXynGoMTUsIg4RIwCxxtN4Pvk6A2aOYbYFN9G5VsXYhLmzVllLiD//ZJSEbyXWhwkkVzjMwQSfmOMYkWeJ9+hgBW5sa7bGbs2I2NYAzWa0b07FigbLzAGrGXmIGJ98ppiE0lbXCLtvVjtxv1M4yjcLp7n0tjEiGcyU/B6Ue6Ogg6lxRjAXedNd7whzZS1W3ZRXmRUNcWkx6pw9OW8y1AsaHjxg8pyDPbg87MA4c1ToeJxpRtjDYAZ/5J7JVMJUSSjsynXUsj742VVRpHHomKmNcyX3ryKo+CIBdLjYusK6mj5eeI7JpMzh5TJyxLgbP8ImQAkzsSjXZ3/J4woBL+DewBIjkpc7tcYIX7nyHdCy0kZ3Zx8yXnVgVnEBa8=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'PUR478D88DA8D7B', 'prepay_id': '011989d8fc4cb0cd2f87a1d0a0b2eff1a220500'}}
+[2026-09-16 13:34:20] INFO payments.telebirr - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': 'b78d42a1d8954c9d8427c74ce74f6462', 'sign': 'O1tQXJo52iRxsiZwFsCAzGVagoxV4KiBJVn2A4zz7zJe4WMMHHEAUKzKa6S0tnegjFBUQ5JohJi3yKHGCTsitpJ9VMIdZjXykrTQvxsKft5bmJNJvpUe8wRfsYn+biI9zPo4zSrh1IlBAYhQEBdrcsVqUkInIY3S/vEHXJ7bPv4dYdcn6iKWygRUIoGNwdQqMKN/pBmjuuHaA39GqoX7vdn5cu8wCfn7XNHeiCHnA7OdyH5WBA3aYlyOhmv2Aju7/6cnP9txYgBszoRrzjXXksyInVhP9rxgalBBHTNSchtdq9FzXynGoMTUsIg4RIwCxxtN4Pvk6A2aOYbYFN9G5VsXYhLmzVllLiD//ZJSEbyXWhwkkVzjMwQSfmOMYkWeJ9+hgBW5sa7bGbs2I2NYAzWa0b07FigbLzAGrGXmIGJ98ppiE0lbXCLtvVjtxv1M4yjcLp7n0tjEiGcyU/B6Ue6Ogg6lxRjAXedNd7whzZS1W3ZRXmRUNcWkx6pw9OW8y1AsaHjxg8pyDPbg87MA4c1ToeJxpRtjDYAZ/5J7JVMJUSSjsynXUsj742VVRpHHomKmNcyX3ryKo+CIBdLjYusK6mj5eeI7JpMzh5TJyxLgbP8ImQAkzsSjXZ3/J4woBL+DewBIjkpc7tcYIX7nyHdCy0kZ3Zx8yXnVgVnEBa8=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'PUR478D88DA8D7B', 'prepay_id': '011989d8fc4cb0cd2f87a1d0a0b2eff1a220500'}}
+[2026-09-16 13:34:20] INFO payments.telebirr - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': 'b78d42a1d8954c9d8427c74ce74f6462', 'sign': 'O1tQXJo52iRxsiZwFsCAzGVagoxV4KiBJVn2A4zz7zJe4WMMHHEAUKzKa6S0tnegjFBUQ5JohJi3yKHGCTsitpJ9VMIdZjXykrTQvxsKft5bmJNJvpUe8wRfsYn+biI9zPo4zSrh1IlBAYhQEBdrcsVqUkInIY3S/vEHXJ7bPv4dYdcn6iKWygRUIoGNwdQqMKN/pBmjuuHaA39GqoX7vdn5cu8wCfn7XNHeiCHnA7OdyH5WBA3aYlyOhmv2Aju7/6cnP9txYgBszoRrzjXXksyInVhP9rxgalBBHTNSchtdq9FzXynGoMTUsIg4RIwCxxtN4Pvk6A2aOYbYFN9G5VsXYhLmzVllLiD//ZJSEbyXWhwkkVzjMwQSfmOMYkWeJ9+hgBW5sa7bGbs2I2NYAzWa0b07FigbLzAGrGXmIGJ98ppiE0lbXCLtvVjtxv1M4yjcLp7n0tjEiGcyU/B6Ue6Ogg6lxRjAXedNd7whzZS1W3ZRXmRUNcWkx6pw9OW8y1AsaHjxg8pyDPbg87MA4c1ToeJxpRtjDYAZ/5J7JVMJUSSjsynXUsj742VVRpHHomKmNcyX3ryKo+CIBdLjYusK6mj5eeI7JpMzh5TJyxLgbP8ImQAkzsSjXZ3/J4woBL+DewBIjkpc7tcYIX7nyHdCy0kZ3Zx8yXnVgVnEBa8=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'PUR478D88DA8D7B', 'prepay_id': '011989d8fc4cb0cd2f87a1d0a0b2eff1a220500'}}
+[2026-09-16 13:34:20] PAYMENT INFO - Telebirr preorder OK merch_order_id=PUR478D88DA8D7B prepay_id=011989d8fc4cb0cd2f87a1d0a0b2eff1a220500
+[2026-09-16 13:34:20] INFO payments.telebirr - Telebirr preorder OK merch_order_id=PUR478D88DA8D7B prepay_id=011989d8fc4cb0cd2f87a1d0a0b2eff1a220500
+[2026-09-16 13:34:20] INFO payments.telebirr - Telebirr preorder OK merch_order_id=PUR478D88DA8D7B prepay_id=011989d8fc4cb0cd2f87a1d0a0b2eff1a220500
+[2026-09-16 13:34:20] INFO django.server - "POST /books/6/purchase/ HTTP/1.1" 200 2027
+[2026-09-16 13:37:49] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 84513
+[2026-09-16 13:37:52] PAYMENT INFO - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': '075130a34a5e45168891352f419d8e48', 'sign': 'H8aTuX9GynqwuFLytr82ElpCA2pRC+C9JtBxgHZqzk+h6eEEXlTkiGI/aHQoo4uHB3KIiKrPrcnX/+GE95bV/MhgpEvENdTAuh/85recmdkbmOVLa+g35p61LLEW1tF+8F5pBcFTXN008fcabVgabLo+W5B1SMnXYOLzMcK9CQhuXMjd5K3rsTLvHuQg/nCw45sYRGUyqmgJCCuD7D2BnbWaqdbvUH+9F4dXetUxZO/LykdLnhaIg7+YKoy7Nm8Y5y2f10uhtl9+z092OmL5KykH01gs6BYYqdRk8ovEqGPrv2XoWvRRxJ87DXhfNRUUS92TNjr5rN29uLGplH0JSZRgeRHP7zxHbYLKSY1JOpy8+DlF/qrPH4ZA6Qa5hKy8EacD0qzZuAsIP6dxlXtmmfhc8vp/VnKz3asImGwdEh0O58DII5YJBfyH+83OlZoWjaYNrcuMhyQMKDMcEqMPCnequoX2bUDpI+FFdjmXZL/c3vJhtewdQsoqepOnC6IYDJOngWtZmmsDGImAMuhsp+CDw9hNxNTJiBQcrfgQSSsAHgslSAme8r3qZFtb3gSC48v/2DDItQZhSmDfZc8jiGgpMZB0byKCOD0ZTkC6kmU9Av9h7gwj9pWpkFmBaccKyNbrBI7vOIo9IPKw5hM+Sr8zx88r2++krnqDH3KGw68=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'PURE7CB55B0F81B', 'prepay_id': '011c669db1af3231b05ebd617e674c704140301'}}
+[2026-09-16 13:37:52] INFO payments.telebirr - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': '075130a34a5e45168891352f419d8e48', 'sign': 'H8aTuX9GynqwuFLytr82ElpCA2pRC+C9JtBxgHZqzk+h6eEEXlTkiGI/aHQoo4uHB3KIiKrPrcnX/+GE95bV/MhgpEvENdTAuh/85recmdkbmOVLa+g35p61LLEW1tF+8F5pBcFTXN008fcabVgabLo+W5B1SMnXYOLzMcK9CQhuXMjd5K3rsTLvHuQg/nCw45sYRGUyqmgJCCuD7D2BnbWaqdbvUH+9F4dXetUxZO/LykdLnhaIg7+YKoy7Nm8Y5y2f10uhtl9+z092OmL5KykH01gs6BYYqdRk8ovEqGPrv2XoWvRRxJ87DXhfNRUUS92TNjr5rN29uLGplH0JSZRgeRHP7zxHbYLKSY1JOpy8+DlF/qrPH4ZA6Qa5hKy8EacD0qzZuAsIP6dxlXtmmfhc8vp/VnKz3asImGwdEh0O58DII5YJBfyH+83OlZoWjaYNrcuMhyQMKDMcEqMPCnequoX2bUDpI+FFdjmXZL/c3vJhtewdQsoqepOnC6IYDJOngWtZmmsDGImAMuhsp+CDw9hNxNTJiBQcrfgQSSsAHgslSAme8r3qZFtb3gSC48v/2DDItQZhSmDfZc8jiGgpMZB0byKCOD0ZTkC6kmU9Av9h7gwj9pWpkFmBaccKyNbrBI7vOIo9IPKw5hM+Sr8zx88r2++krnqDH3KGw68=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'PURE7CB55B0F81B', 'prepay_id': '011c669db1af3231b05ebd617e674c704140301'}}
+[2026-09-16 13:37:52] INFO payments.telebirr - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': '075130a34a5e45168891352f419d8e48', 'sign': 'H8aTuX9GynqwuFLytr82ElpCA2pRC+C9JtBxgHZqzk+h6eEEXlTkiGI/aHQoo4uHB3KIiKrPrcnX/+GE95bV/MhgpEvENdTAuh/85recmdkbmOVLa+g35p61LLEW1tF+8F5pBcFTXN008fcabVgabLo+W5B1SMnXYOLzMcK9CQhuXMjd5K3rsTLvHuQg/nCw45sYRGUyqmgJCCuD7D2BnbWaqdbvUH+9F4dXetUxZO/LykdLnhaIg7+YKoy7Nm8Y5y2f10uhtl9+z092OmL5KykH01gs6BYYqdRk8ovEqGPrv2XoWvRRxJ87DXhfNRUUS92TNjr5rN29uLGplH0JSZRgeRHP7zxHbYLKSY1JOpy8+DlF/qrPH4ZA6Qa5hKy8EacD0qzZuAsIP6dxlXtmmfhc8vp/VnKz3asImGwdEh0O58DII5YJBfyH+83OlZoWjaYNrcuMhyQMKDMcEqMPCnequoX2bUDpI+FFdjmXZL/c3vJhtewdQsoqepOnC6IYDJOngWtZmmsDGImAMuhsp+CDw9hNxNTJiBQcrfgQSSsAHgslSAme8r3qZFtb3gSC48v/2DDItQZhSmDfZc8jiGgpMZB0byKCOD0ZTkC6kmU9Av9h7gwj9pWpkFmBaccKyNbrBI7vOIo9IPKw5hM+Sr8zx88r2++krnqDH3KGw68=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'PURE7CB55B0F81B', 'prepay_id': '011c669db1af3231b05ebd617e674c704140301'}}
+[2026-09-16 13:37:52] PAYMENT INFO - Telebirr preorder OK merch_order_id=PURE7CB55B0F81B prepay_id=011c669db1af3231b05ebd617e674c704140301
+[2026-09-16 13:37:52] INFO payments.telebirr - Telebirr preorder OK merch_order_id=PURE7CB55B0F81B prepay_id=011c669db1af3231b05ebd617e674c704140301
+[2026-09-16 13:37:52] INFO payments.telebirr - Telebirr preorder OK merch_order_id=PURE7CB55B0F81B prepay_id=011c669db1af3231b05ebd617e674c704140301
+[2026-09-16 13:37:52] INFO django.server - "POST /books/6/purchase/ HTTP/1.1" 200 2027
+[2026-09-16 13:38:10] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 84513
+[2026-09-16 13:38:15] PAYMENT INFO - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': '02347cb8ed92442d84156b97e0772bac', 'sign': 'X7UA3WKFV4HFRsjkvWCNlaGqe2DPYAVBGb5H/aWfR1DvbokVfOEAFEJnZxPVu2MXVu7oCH2Q3Wt5vkyVga0vq5bY9rsnV2AhEOUJdI6V7I08+QHd9+cPYzR0T0RxKAPuHE3Uz1Q9gupsuoPDBGFNsk+f1UFfEHAKWFJOI3HI/bVEFLJJ/Scbv2Bt5NQy325mMlHz/NZUOw3EDdbDbbuMrbN6p1jk/e5pPlB7xJ5lrzhfEB9CIiHCMp/kP+Em02NGkLFyZ5N1fsR3Hfmq26LbjxwqaKxjhKDB6/VeTUOVAOA2KVa0qjWm0is2JdakkNsvJ6lbWT7RnEsOGBLQoGsirPLwCkpJwrnGvuVsIkJj6ZIDDxS+H4kz9wZP7xdQFP4Pk+wcRqOZkU6DeB6NDCEh5DwT1qg9ljtOUfKp4BRe92+F24oPTA1xYqwUiR6eTELQ1dWyQSH4ybAqR5IKcYvaK9vSZ+/XP0woYUD8efqPtQQbMqQ5K75wM4SL27otepYQBgHRq3wF6MvyhCni8RSJI4xdChkPp/8AyaHmquhkV2nhItnA+mP2Bpuyqvzpd3ihSARW0eFT0TJM1B6XkYS0k3YV7HT/0uQHPKRDSq/3ix/yp/GAAsdz7w/GsWExh1AEAO3Si08sPKDTN5CG2IpY60L6jjTigh0j6lVzM4XMg8I=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'PUR1AB7E3419310', 'prepay_id': '0116828bdd29ef1b21106394cae6d7efa9a0300'}}
+[2026-09-16 13:38:15] INFO payments.telebirr - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': '02347cb8ed92442d84156b97e0772bac', 'sign': 'X7UA3WKFV4HFRsjkvWCNlaGqe2DPYAVBGb5H/aWfR1DvbokVfOEAFEJnZxPVu2MXVu7oCH2Q3Wt5vkyVga0vq5bY9rsnV2AhEOUJdI6V7I08+QHd9+cPYzR0T0RxKAPuHE3Uz1Q9gupsuoPDBGFNsk+f1UFfEHAKWFJOI3HI/bVEFLJJ/Scbv2Bt5NQy325mMlHz/NZUOw3EDdbDbbuMrbN6p1jk/e5pPlB7xJ5lrzhfEB9CIiHCMp/kP+Em02NGkLFyZ5N1fsR3Hfmq26LbjxwqaKxjhKDB6/VeTUOVAOA2KVa0qjWm0is2JdakkNsvJ6lbWT7RnEsOGBLQoGsirPLwCkpJwrnGvuVsIkJj6ZIDDxS+H4kz9wZP7xdQFP4Pk+wcRqOZkU6DeB6NDCEh5DwT1qg9ljtOUfKp4BRe92+F24oPTA1xYqwUiR6eTELQ1dWyQSH4ybAqR5IKcYvaK9vSZ+/XP0woYUD8efqPtQQbMqQ5K75wM4SL27otepYQBgHRq3wF6MvyhCni8RSJI4xdChkPp/8AyaHmquhkV2nhItnA+mP2Bpuyqvzpd3ihSARW0eFT0TJM1B6XkYS0k3YV7HT/0uQHPKRDSq/3ix/yp/GAAsdz7w/GsWExh1AEAO3Si08sPKDTN5CG2IpY60L6jjTigh0j6lVzM4XMg8I=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'PUR1AB7E3419310', 'prepay_id': '0116828bdd29ef1b21106394cae6d7efa9a0300'}}
+[2026-09-16 13:38:15] INFO payments.telebirr - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': '02347cb8ed92442d84156b97e0772bac', 'sign': 'X7UA3WKFV4HFRsjkvWCNlaGqe2DPYAVBGb5H/aWfR1DvbokVfOEAFEJnZxPVu2MXVu7oCH2Q3Wt5vkyVga0vq5bY9rsnV2AhEOUJdI6V7I08+QHd9+cPYzR0T0RxKAPuHE3Uz1Q9gupsuoPDBGFNsk+f1UFfEHAKWFJOI3HI/bVEFLJJ/Scbv2Bt5NQy325mMlHz/NZUOw3EDdbDbbuMrbN6p1jk/e5pPlB7xJ5lrzhfEB9CIiHCMp/kP+Em02NGkLFyZ5N1fsR3Hfmq26LbjxwqaKxjhKDB6/VeTUOVAOA2KVa0qjWm0is2JdakkNsvJ6lbWT7RnEsOGBLQoGsirPLwCkpJwrnGvuVsIkJj6ZIDDxS+H4kz9wZP7xdQFP4Pk+wcRqOZkU6DeB6NDCEh5DwT1qg9ljtOUfKp4BRe92+F24oPTA1xYqwUiR6eTELQ1dWyQSH4ybAqR5IKcYvaK9vSZ+/XP0woYUD8efqPtQQbMqQ5K75wM4SL27otepYQBgHRq3wF6MvyhCni8RSJI4xdChkPp/8AyaHmquhkV2nhItnA+mP2Bpuyqvzpd3ihSARW0eFT0TJM1B6XkYS0k3YV7HT/0uQHPKRDSq/3ix/yp/GAAsdz7w/GsWExh1AEAO3Si08sPKDTN5CG2IpY60L6jjTigh0j6lVzM4XMg8I=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'PUR1AB7E3419310', 'prepay_id': '0116828bdd29ef1b21106394cae6d7efa9a0300'}}
+[2026-09-16 13:38:15] PAYMENT INFO - Telebirr preorder OK merch_order_id=PUR1AB7E3419310 prepay_id=0116828bdd29ef1b21106394cae6d7efa9a0300
+[2026-09-16 13:38:15] INFO payments.telebirr - Telebirr preorder OK merch_order_id=PUR1AB7E3419310 prepay_id=0116828bdd29ef1b21106394cae6d7efa9a0300
+[2026-09-16 13:38:15] INFO payments.telebirr - Telebirr preorder OK merch_order_id=PUR1AB7E3419310 prepay_id=0116828bdd29ef1b21106394cae6d7efa9a0300
+[2026-09-16 13:38:15] INFO django.server - "POST /books/6/purchase/ HTTP/1.1" 200 2027

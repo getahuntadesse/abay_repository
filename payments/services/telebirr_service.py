@@ -85,7 +85,10 @@ class TelebirrService:
             raise RuntimeError("Telebirr private key not configured")
         signature = self._private_key.sign(
             content.encode("utf-8"),
-            padding.PKCS1v15(),
+            padding.PSS(
+                mgf=padding.MGF1(hashes.SHA256()),
+                salt_length=padding.PSS.DIGEST_LENGTH,
+            ),
             hashes.SHA256(),
         )
         return base64.b64encode(signature).decode("utf-8")

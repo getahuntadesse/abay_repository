@@ -616,44 +616,23 @@
     {% endif %}
 
     <!-- Payment Methods -->
-    <form method="POST" id="paymentForm">
+    <form method="POST" id="paymentForm" action="{% url 'books:purchase_book' book.id %}">
         {% csrf_token %}
         
         <div class="payment-methods-grid">
-            <!-- Telebirr -->
-            <!-- Telebirr -->
-            <label class="payment-method-card telebirr" onclick="selectMethod('telebirr')">
-                <input type="radio" name="payment_method" value="telebirr" id="method_telebirr">
+            <!-- Telebirr only -->
+            <label class="payment-method-card telebirr selected" onclick="selectMethod('telebirr')">
+                <input type="radio" name="payment_method" value="telebirr" id="method_telebirr" checked>
                 <div class="radio-indicator"></div>
-                <span class="method-badge show">Popular</span>
+                <span class="method-badge show">Available</span>
                 <span class="method-icon"><i class="fas fa-mobile-alt"></i></span>
                 <span class="method-name">Telebirr</span>
                 <span class="method-description">Pay with Telebirr (Ethio telecom)</span>
             </label>
-
-            <!-- Chapa -->
-            <label class="payment-method-card chapa" onclick="selectMethod('chapa')">
-                <input type="radio" name="payment_method" value="chapa" id="method_chapa">
-                <div class="radio-indicator"></div>
-                <span class="method-badge show">Cards</span>
-                <span class="method-icon"><i class="fas fa-credit-card"></i></span>
-                <span class="method-name">Chapa</span>
-                <span class="method-description">Card, bank & mobile money via Chapa</span>
-            </label>
-
-            <!-- PayPal -->
-            <label class="payment-method-card paypal" onclick="selectMethod('paypal')">
-                <input type="radio" name="payment_method" value="paypal" id="method_paypal">
-                <div class="radio-indicator"></div>
-                <span class="method-badge show">International</span>
-                <span class="method-icon"><i class="fab fa-paypal"></i></span>
-                <span class="method-name">PayPal</span>
-                <span class="method-description">Pay internationally with PayPal</span>
-            </label>
         </div>
 
-        <!-- Phone (Telebirr / Chapa) -->
-        <div class="phone-input-group" id="phoneInput">
+        <!-- Phone (Telebirr) -->
+        <div class="phone-input-group show" id="phoneInput">
             <div class="input-wrapper">
                 <label for="phone_number">
                     <i class="fas fa-phone"></i> Phone Number
@@ -663,31 +642,13 @@
                     <input type="tel" id="phone_number" name="phone_number"
                            placeholder="e.g. 0912345678"
                            value="{{ user.phone|default:'' }}"
-                           pattern="[0-9]{10,13}"
-                           title="Valid Ethiopian mobile number">
+                           pattern="[0-9\s+]{9,15}"
+                           title="Valid Ethiopian mobile number"
+                           required>
                 </div>
                 <span class="input-helper">
                     <i class="fas fa-info-circle"></i>
-                    Required for Telebirr (and recommended for Chapa)
-                </span>
-            </div>
-        </div>
-
-        <!-- Email (Chapa) -->
-        <div class="phone-input-group" id="emailInput">
-            <div class="input-wrapper">
-                <label for="email">
-                    <i class="fas fa-envelope"></i> Email
-                </label>
-                <div class="input-with-icon">
-                    <i class="fas fa-envelope"></i>
-                    <input type="email" id="email" name="email"
-                           placeholder="you@example.com"
-                           value="{{ user.email|default:'' }}">
-                </div>
-                <span class="input-helper">
-                    <i class="fas fa-info-circle"></i>
-                    Required for Chapa payments
+                    Required for Telebirr payment
                 </span>
             </div>
         </div>
@@ -751,78 +712,128 @@
         selectedMethod = methodId;
         
         const phoneInput = document.getElementById('phoneInput');
-        const emailInput = document.getElementById('emailInput');
         const phoneField = document.getElementById('phone_number');
-        const emailField = document.getElementById('email');
 
-        if (methodId === 'telebirr') {
-            phoneInput.classList.add('show');
-            if (phoneField) phoneField.required = true;
-            if (emailInput) emailInput.classList.remove('show');
-            if (emailField) emailField.required = false;
-        } else if (methodId === 'chapa') {
-            phoneInput.classList.add('show');
-            if (phoneField) phoneField.required = false;
-            if (emailInput) emailInput.classList.add('show');
-            if (emailField) emailField.required = true;
-        } else {
-            // PayPal — no extra fields required
-            phoneInput.classList.remove('show');
-            if (phoneField) phoneField.required = false;
-            if (emailInput) emailInput.classList.remove('show');
-            if (emailField) emailField.required = false;
-        }
+        // Telebirr only — always show phone field
+        if (phoneInput) phoneInput.classList.add('show');
+        if (phoneField) phoneField.required = true;
         
         // Enable pay button
         document.getElementById('payBtn').disabled = false;
     }
 
-    // Form submission
+    // Form submission via fetch so we can reset the button on errors
     document.getElementById('paymentForm').addEventListener('submit', function(e) {
+        e.preventDefault();
         const btn = document.getElementById('payBtn');
         const selected = document.querySelector('input[name="payment_method"]:checked');
-        
-        if (!selected) {
-            e.preventDefault();
-            alert('Please select a payment method.');
+        const phoneEl = document.getElementById('phone_number');
+        const phone = (phoneEl && phoneEl.value || '').trim().replace(/\s+/g, '');
+
+        if (!selected || selected.value !== 'telebirr') {
+            alert('Please select Telebirr as the payment method.');
             return;
         }
-        
-        // Show loading state
+        if (!phone || phone.length < 9) {
+            alert('Please enter a valid Telebirr phone number (e.g. 0912345678).');
+            if (phoneEl) phoneEl.focus();
+            return;
+        }
+
         btn.disabled = true;
         btn.classList.add('loading');
-        
-        if (selected.value === 'telebirr') {
-            const phone = document.getElementById('phone_number').value.trim();
-            if (!phone || phone.length < 10) {
-                e.preventDefault();
-                btn.disabled = false;
-                btn.classList.remove('loading');
-                alert('Please enter a valid Telebirr phone number.');
-                return;
+        const originalHtml = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Connecting to Telebirr...';
+
+        const form = e.target;
+        const formData = new FormData(form);
+        formData.set('phone_number', phone);
+        formData.set('payment_method', 'telebirr');
+
+        // Prefer JSON response if backend supports it; also accept redirects
+        const controller = new AbortController();
+        const timer = setTimeout(function() { controller.abort(); }, 45000);
+
+        fetch(form.action, {
+            method: 'POST',
+            body: formData,
+            credentials: 'same-origin',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json, text/html, */*'
+            },
+            signal: controller.signal,
+            redirect: 'follow'
+        }).then(function(res) {
+            clearTimeout(timer);
+            const ct = (res.headers.get('content-type') || '');
+            // If server redirected to Telebirr (external), fetch may not expose final URL cross-origin
+            if (res.redirected && res.url && res.url.indexOf('ethiotelebirr') >= 0 || res.url.indexOf('ethiomobilemoney') >= 0 || res.url.indexOf('paygate') >= 0) {
+                window.location.href = res.url;
+                return null;
             }
-        }
-        if (selected.value === 'chapa') {
-            const email = (document.getElementById('email') || {}).value || '';
-            if (!email.trim() || email.indexOf('@') < 0) {
-                e.preventDefault();
-                btn.disabled = false;
-                btn.classList.remove('loading');
-                alert('Please enter a valid email for Chapa.');
-                return;
+            if (ct.indexOf('application/json') >= 0) {
+                return res.json().then(function(data) {
+                    return { ok: res.ok, data: data, status: res.status };
+                });
             }
-        }
-        
-        // Production: form posts to real Telebirr / Chapa / PayPal checkout
+            // HTML response: try to detect success redirect URL in body or just reload messages
+            return res.text().then(function(html) {
+                return { ok: res.ok, html: html, status: res.status, url: res.url };
+            });
+        }).then(function(payload) {
+            if (!payload) return; // already redirected
+            if (payload.data) {
+                if (payload.data.success && (payload.data.redirect_url || payload.data.payment_url || payload.data.checkout_url)) {
+                    window.location.href = payload.data.redirect_url || payload.data.payment_url || payload.data.checkout_url;
+                    return;
+                }
+                const err = (payload.data.error || payload.data.message || 'Payment could not be started.');
+                alert(err);
+            } else if (payload.html) {
+                // Backend returned HTML (redirect to same page with messages, or error page)
+                // If final URL is external checkout, go there
+                if (payload.url && (payload.url.indexOf('paygate') >= 0 || payload.url.indexOf('ethiotelebirr') >= 0)) {
+                    window.location.href = payload.url;
+                    return;
+                }
+                // Parse django messages from HTML if present, else generic
+                const m = payload.html.match(/alert alert-\w+[\s\S]*?<\/div>/);
+                if (m) {
+                    const tmp = document.createElement('div');
+                    tmp.innerHTML = m[0];
+                    alert((tmp.textContent || 'Payment failed').trim().slice(0, 300));
+                } else if (!payload.ok) {
+                    alert('Payment request failed (HTTP ' + payload.status + '). Check server logs.');
+                } else {
+                    // Full page replace to show server messages
+                    document.open();
+                    document.write(payload.html);
+                    document.close();
+                    return;
+                }
+            }
+            btn.disabled = false;
+            btn.classList.remove('loading');
+            btn.innerHTML = originalHtml;
+        }).catch(function(err) {
+            clearTimeout(timer);
+            console.error(err);
+            if (err.name === 'AbortError') {
+                alert('Telebirr is taking too long. Please try again.');
+            } else {
+                alert('Network error: ' + (err.message || err));
+            }
+            btn.disabled = false;
+            btn.classList.remove('loading');
+            btn.innerHTML = originalHtml;
+        });
     });
 
-    // Auto-select Telebirr by default if available
+    // Auto-select Telebirr on load
     document.addEventListener('DOMContentLoaded', function() {
-        const defaultMethod = 'telebirr';
-        const radio = document.getElementById(`method_${defaultMethod}`);
-        if (radio) {
-            selectMethod(defaultMethod);
-        }
+        selectMethod('telebirr');
+        document.getElementById('payBtn').disabled = false;
     });
 </script>
 {% endblock %}
