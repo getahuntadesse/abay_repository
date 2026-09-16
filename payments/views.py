@@ -738,31 +738,89 @@ def payment_callback(request):
 @login_required
 def payment_return(request):
     """
-    Handle payment return from Telebirr/CBE
+    User return from Telebirr H5.
+    Completes purchase when paid (webhook may not reach localhost).
+    Accepts merch_order_id / prepay_id / trade_status from query string.
     """
-    transaction_id = request.GET.get('transactionId') or request.GET.get('transaction_id')
-    status = request.GET.get('status')
-    
-    if not transaction_id:
-        messages.error(request, 'Invalid payment response')
-        return redirect('books:browse')
-    
-    purchase = Purchase.objects.filter(
-        Q(transaction_reference=transaction_id) | 
-        Q(purchase_reference=transaction_id) |
-        Q(transaction_id=transaction_id)
-    ).first()
-    
+    from payments.telebirr import TelebirrService
+
+    merch_order_id = (
+        request.GET.get('merch_order_id')
+        or request.GET.get('merchOrderId')
+        or request.GET.get('out_trade_no')
+        or request.GET.get('transactionId')
+        or request.GET.get('transaction_id')
+        or request.GET.get('ref')
+        or ''
+    )
+    prepay_id = request.GET.get('prepay_id') or request.GET.get('prepayId') or ''
+    trade_status = (
+        request.GET.get('trade_status')
+        or request.GET.get('tradeStatus')
+        or request.GET.get('status')
+        or ''
+    ).strip().upper()
+
+    purchase = None
+    if merch_order_id:
+        purchase = _purchase_by_ref(merch_order_id)
+    if not purchase and prepay_id:
+        purchase = _purchase_by_ref(prepay_id)
+
+    if not purchase and request.user.is_authenticated:
+        # fallback: latest pending telebirr purchase for this user
+        purchase = (
+            Purchase.objects.filter(user=request.user, status='pending', payment_method='telebirr')
+            .order_by('-created_at')
+            .first()
+        )
+
     if not purchase:
-        messages.error(request, 'Purchase not found')
+        messages.error(request, 'Purchase not found. If you paid, contact support with your order id.')
         return redirect('books:browse')
-    
-    if status == 'success' or purchase.status == 'completed':
-        messages.success(request, f'Payment successful! You can now download "{purchase.book.title}"')
-        return redirect('books:detail', book_id=purchase.book.id)
-    else:
-        messages.error(request, 'Payment failed or was cancelled. Please try again.')
-        return redirect('books:detail', book_id=purchase.book.id)
+
+    # Already done
+    if purchase.status == 'completed':
+        messages.success(request, f'Payment confirmed! "{purchase.book.title}" is in My Books.')
+        return redirect('books:my_books_user')
+
+    paid = trade_status in ('PAY_SUCCESS', 'SUCCESS', 'COMPLETED', 'PAID', 'FINISH')
+
+    # Confirm with Telebirr queryOrder when possible
+    if not paid:
+        try:
+            tb = TelebirrService()
+            ref = merch_order_id or purchase.transaction_reference or purchase.purchase_reference or purchase.transaction_id
+            q = tb.query_order(ref)
+            logger.info("Telebirr queryOrder on return: %s", q)
+            if q.get('paid') or str(q.get('trade_status', '')).upper() in (
+                'PAY_SUCCESS', 'SUCCESS', 'COMPLETED', 'PAID', 'FINISH'
+            ):
+                paid = True
+                merch_order_id = merch_order_id or q.get('merch_order_id') or ref
+                prepay_id = prepay_id or q.get('payment_order_id') or ''
+        except Exception as e:
+            logger.exception("queryOrder on return failed: %s", e)
+
+    # If user returned from Telebirr after successful pay UI, still complete when
+    # DEBUG and pending (local webhook unreachable) — only when merch_order_id matches
+    if not paid and getattr(settings, 'DEBUG', False) and merch_order_id:
+        # Trust explicit success-ish query flags Telebirr sometimes sends
+        if request.GET.get('result') in ('SUCCESS', 'success', '0') or request.GET.get('code') in ('0', '200'):
+            paid = True
+
+    if paid:
+        _complete_purchase(purchase, gateway_ref=prepay_id or merch_order_id or purchase.transaction_id)
+        messages.success(request, f'Payment successful! "{purchase.book.title}" is now in My Books.')
+        return redirect('books:my_books_user')
+
+    messages.warning(
+        request,
+        'Payment is still pending confirmation. If you completed payment on Telebirr, '
+        'wait a moment and open My Books, or contact support with order: '
+        f'{merch_order_id or purchase.transaction_id}'
+    )
+    return redirect('books:detail', book_id=purchase.book.id)
 
 
 @login_required
@@ -803,7 +861,7 @@ def simulate_payment(request, transaction_id):
 
 
 def _complete_purchase(purchase, gateway_ref=None):
-    """Idempotent: mark purchase completed + author royalty."""
+    """Idempotent: mark purchase completed, author royalty, book counter."""
     if not purchase:
         return False
     if purchase.status == 'completed':
@@ -811,12 +869,27 @@ def _complete_purchase(purchase, gateway_ref=None):
     purchase.status = 'completed'
     purchase.completed_at = timezone.now()
     if gateway_ref:
-        purchase.transaction_reference = gateway_ref
+        purchase.transaction_reference = str(gateway_ref)[:100]
+        if not purchase.purchase_reference:
+            purchase.purchase_reference = str(gateway_ref)[:100]
     purchase.save()
+    try:
+        book = purchase.book
+        book.purchase_count = (book.purchase_count or 0) + 1
+        book.save(update_fields=['purchase_count'])
+    except Exception as e:
+        logger.exception("purchase_count update failed: %s", e)
     try:
         create_author_payment(purchase)
     except Exception as e:
         logger.exception("create_author_payment failed: %s", e)
+    try:
+        # optional mirror record used by some book views
+        from books.views import create_payment_record
+        create_payment_record(purchase)
+    except Exception as e:
+        logger.debug("create_payment_record skipped: %s", e)
+    logger.info("Purchase completed id=%s book=%s user=%s", purchase.id, purchase.book_id, purchase.user_id)
     return True
 
 
@@ -824,9 +897,30 @@ def _purchase_by_ref(ref):
     if not ref:
         return None
     from django.db.models import Q
-    return Purchase.objects.filter(
-        Q(transaction_id=ref) | Q(transaction_reference=ref) | Q(purchase_reference=ref)
-    ).select_related('book', 'user').first()
+    ref = str(ref).strip()
+    alnum = "".join(c for c in ref if c.isalnum())
+    q = (
+        Q(transaction_id=ref)
+        | Q(transaction_reference=ref)
+        | Q(purchase_reference=ref)
+    )
+    if alnum and alnum != ref:
+        q |= (
+            Q(transaction_id=alnum)
+            | Q(transaction_reference=alnum)
+            | Q(purchase_reference=alnum)
+            | Q(transaction_id__iexact=alnum)
+        )
+    # also match if stored id has hyphens stripped
+    purchase = Purchase.objects.filter(q).select_related('book', 'user').first()
+    if purchase:
+        return purchase
+    if alnum:
+        for p in Purchase.objects.filter(status='pending').select_related('book', 'user').order_by('-created_at')[:50]:
+            for field in (p.transaction_id, p.transaction_reference, p.purchase_reference):
+                if field and "".join(c for c in str(field) if c.isalnum()) == alnum:
+                    return p
+    return None
 
 
 

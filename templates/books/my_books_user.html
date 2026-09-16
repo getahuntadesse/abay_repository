@@ -536,7 +536,7 @@
         <div class="col-md-4 col-sm-6 fade-in book-item" 
              data-title="{{ book.title|lower }}" 
              data-author="{{ book.author.full_name|lower|default:book.author.username|lower }}"
-             data-date="{{ book.published_at|date:'U'|default:book.created_at|date:'U' }}"
+             data-date="{% if book.published_at %}{{ book.published_at|date:'U' }}{% else %}{{ book.created_at|date:'U' }}{% endif %}"
              data-downloads="{{ book.downloads_count }}">
             <div class="book-card">
                 <div class="book-image-wrapper">
@@ -579,7 +579,7 @@
                     <div class="book-meta mt-1" style="border-top: none; padding-top: 0;">
                         <span class="meta-item">
                             <i class="fas fa-calendar-alt"></i> 
-                            {{ book.published_at|default:book.created_at|date:"M d, Y" }}
+                            {% if book.published_at %}{{ book.published_at|date:"M d, Y" }}{% else %}{{ book.created_at|date:"M d, Y" }}{% endif %}
                         </span>
                         <span class="meta-item">
                             <i class="fas fa-tag"></i> 

@@ -1331,6 +1331,7 @@ def purchase_book(request, book_id):
                         return redirect('books:purchase_book', book_id=book_id)
                     checkout_url = result.get('checkout_url') or result.get('checkOutUrl')
                     reference = result.get('merch_order_id') or result.get('prepay_id')
+                    prepay_id = result.get('prepay_id') or ''
 
                 else:
                     purchase.status = 'failed'
@@ -1339,8 +1340,9 @@ def purchase_book(request, book_id):
                     return redirect('books:purchase_book', book_id=book_id)
 
                 if checkout_url:
+                    # Store both ids so return/webhook can find the purchase
                     purchase.transaction_reference = reference
-                    purchase.purchase_reference = reference
+                    purchase.purchase_reference = prepay_id or reference
                     purchase.save(update_fields=['transaction_reference', 'purchase_reference', 'updated_at'])
                     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
                         return JsonResponse({

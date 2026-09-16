@@ -234,7 +234,13 @@ class TelebirrService:
 
         total = f"{Decimal(str(amount)).quantize(Decimal('0.01'))}"
 
-        # Official demo biz_content fields only (extra fields can break sandbox)
+        # Build return URL with merch_order_id so we can complete purchase when user returns
+        # (notify webhook often cannot reach localhost)
+        ret = redirect_url or self.redirect_url or ""
+        if ret and "merch_order_id=" not in ret:
+            sep = "&" if "?" in ret else "?"
+            ret = f"{ret}{sep}merch_order_id={merch_order_id}"
+
         biz = {
             "notify_url": notify_url or self.notify_url or "https://www.google.com",
             "appid": self.merchant_app_id,
@@ -245,6 +251,7 @@ class TelebirrService:
             "total_amount": total,
             "trans_currency": "ETB",
             "timeout_express": self.timeout_express or "120m",
+            "redirect_url": ret,
         }
         req = {
             "timestamp": self._ts(),
@@ -325,6 +332,7 @@ class TelebirrService:
             token = self.apply_fabric_token()
         except Exception as e:
             return {"success": False, "error": str(e)}
+        merch_order_id = "".join(c for c in str(merch_order_id) if c.isalnum())
         biz = {
             "appid": self.merchant_app_id,
             "merch_code": self.merchant_code,
@@ -332,16 +340,16 @@ class TelebirrService:
         }
         req = {
             "timestamp": self._ts(),
-            "method": "payment.queryorder",
             "nonce_str": self._nonce(),
+            "method": "payment.queryorder",
             "version": "1.0",
             "biz_content": biz,
-            "sign_type": "SHA256WithRSA",
         }
         try:
             req["sign"] = self._sign(req)
         except Exception as e:
             return {"success": False, "error": str(e)}
+        req["sign_type"] = "SHA256WithRSA"
         headers = {
             "Content-Type": "application/json",
             "X-APP-Key": self.fabric_app_id,
@@ -352,6 +360,24 @@ class TelebirrService:
             r = requests.post(
                 url, headers=headers, json=req, timeout=25, verify=self.verify_ssl
             )
-            return {"success": r.status_code == 200, "raw": r.json() if r.content else {}}
+            data = r.json() if r.content else {}
+            biz_out = data.get("biz_content") if isinstance(data.get("biz_content"), dict) else {}
+            trade_status = str(biz_out.get("trade_status") or data.get("trade_status") or "").upper()
+            paid = trade_status in (
+                "PAY_SUCCESS", "SUCCESS", "COMPLETED", "PAID", "FINISH"
+            ) or str(data.get("code")) in ("0", "200") and trade_status in (
+                "PAY_SUCCESS", "SUCCESS", "COMPLETED", "PAID", "FINISH", ""
+            )
+            # Prefer explicit PAY_SUCCESS
+            if trade_status in ("PAY_SUCCESS", "SUCCESS", "COMPLETED", "PAID", "FINISH"):
+                paid = True
+            return {
+                "success": True,
+                "paid": bool(trade_status in ("PAY_SUCCESS", "SUCCESS", "COMPLETED", "PAID", "FINISH")),
+                "trade_status": trade_status,
+                "payment_order_id": biz_out.get("payment_order_id") or data.get("payment_order_id"),
+                "merch_order_id": merch_order_id,
+                "raw": data,
+            }
         except Exception as e:
             return {"success": False, "error": str(e)}

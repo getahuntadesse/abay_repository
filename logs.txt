@@ -4373,3 +4373,398 @@ RuntimeError: Telebirr fabric token failed: {'errorCode': '49401031101', 'errorM
 [2026-09-16 13:38:15] INFO payments.telebirr - Telebirr preorder OK merch_order_id=PUR1AB7E3419310 prepay_id=0116828bdd29ef1b21106394cae6d7efa9a0300
 [2026-09-16 13:38:15] INFO payments.telebirr - Telebirr preorder OK merch_order_id=PUR1AB7E3419310 prepay_id=0116828bdd29ef1b21106394cae6d7efa9a0300
 [2026-09-16 13:38:15] INFO django.server - "POST /books/6/purchase/ HTTP/1.1" 200 2027
+[2026-09-16 15:29:30] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 84513
+[2026-09-16 15:29:33] INFO django.server - "GET / HTTP/1.1" 200 91668
+[2026-09-16 15:29:33] INFO django.server - "GET /static/images/Abrehot.jpg HTTP/1.1" 304 0
+[2026-09-16 15:29:37] AUTH INFO - AUTH - User logged out: client, IP=127.0.0.1
+[2026-09-16 15:29:37] INFO accounts.views - AUTH - User logged out: client, IP=127.0.0.1
+[2026-09-16 15:29:37] INFO accounts.views - AUTH - User logged out: client, IP=127.0.0.1
+[2026-09-16 15:29:37] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-09-16 15:29:37] INFO django.server - "GET / HTTP/1.1" 200 90237
+[2026-09-16 15:29:39] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64909
+[2026-09-16 15:29:49] AUTH INFO - AUTH - Login successful: User=author, IP=127.0.0.1, Role=author
+[2026-09-16 15:29:49] INFO accounts.views - AUTH - Login successful: User=author, IP=127.0.0.1, Role=author
+[2026-09-16 15:29:49] INFO accounts.views - AUTH - Login successful: User=author, IP=127.0.0.1, Role=author
+[2026-09-16 15:29:49] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-09-16 15:29:49] AUTH INFO - Author dashboard accessed by: author
+[2026-09-16 15:29:49] INFO accounts.views - Author dashboard accessed by: author
+[2026-09-16 15:29:49] INFO accounts.views - Author dashboard accessed by: author
+[2026-09-16 15:29:49] INFO django.server - "GET /accounts/dashboard/author/ HTTP/1.1" 200 76502
+[2026-09-16 15:37:01] INFO django.server - "GET /books/upload/ HTTP/1.1" 200 85658
+[2026-09-16 15:37:04] INFO django.server - "GET /books/browse/ HTTP/1.1" 200 102280
+[2026-09-16 15:37:04] INFO django.server - "GET /media/books/covers/2026/09/pychology_b5LmZgq.png HTTP/1.1" 200 363640
+[2026-09-16 15:37:06] INFO django.server - "GET /books/6/ HTTP/1.1" 200 73709
+[2026-09-16 15:37:08] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 84510
+[2026-09-16 15:37:16] PAYMENT INFO - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': 'acf8c259f446417798d612e2d2e845c7', 'sign': 'WKJ9vMw56FlXin1b13eUJ9is7FbFXjrWWRyB0u0wTIcrIXVQMhj+cuPc39mctXs9aRAdQa4nJHJ5WA/4LD40FnQ0BdPe7iwdQLXBxjulcGRlNEPmC7kEDeWzxXC5ZECc4YsSGtrMMYQvIsFH+6lkg6SgCGQfZ6ZabRmmvx1ISOsCWQejiQs0oiuqjzrNLOI4DNKRq0WFMMs7GRKC32xBv7zBMpBXXkzUaGBcarHxigrtOfocm3EhRlAFZv5X/wtHP1aFjb+9xfYgo9vjZnWxrEz0/mcpznYE5rZCLCXrqL9mojUItk/TpP7ufihNyJAjWI/GQgrjZSVwUaMY+xTyYz9+Eb6Ez7xgVBUJ+KYd5hot5Rv3m4HAn5my0bpPvJ80Wy5oejU3PFLzAjjUedxDUVIJEWdqftCDtoYvrWLFdtUgewAmuN6sM0XonPRyN5q8uC//gufZ9WdRPwEmjvGrTJ24vojfTErMjfyN7y58vqqYhxiEgeBIXJhWlTR4x/nbCMHI/MrRCymAR/d1Pt71oEGUI37MxzEbBvz+dLmkOi3KIo2R6c6kEj+h5qB0klUSVQIMCvzUY6c2xmOlqDTrwkHunJzIYv40kxENHL8DFpc1Z5SmhEK/AiFSs6G8edDfZA1lTiilsQs1CF+RGMrIROz7Di8yHroszWXT7IH2lBE=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'PUR24BBAFB5E674', 'prepay_id': '0114a30b94de7981d8ddd4e15ece779939c0802'}}
+[2026-09-16 15:37:16] INFO payments.telebirr - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': 'acf8c259f446417798d612e2d2e845c7', 'sign': 'WKJ9vMw56FlXin1b13eUJ9is7FbFXjrWWRyB0u0wTIcrIXVQMhj+cuPc39mctXs9aRAdQa4nJHJ5WA/4LD40FnQ0BdPe7iwdQLXBxjulcGRlNEPmC7kEDeWzxXC5ZECc4YsSGtrMMYQvIsFH+6lkg6SgCGQfZ6ZabRmmvx1ISOsCWQejiQs0oiuqjzrNLOI4DNKRq0WFMMs7GRKC32xBv7zBMpBXXkzUaGBcarHxigrtOfocm3EhRlAFZv5X/wtHP1aFjb+9xfYgo9vjZnWxrEz0/mcpznYE5rZCLCXrqL9mojUItk/TpP7ufihNyJAjWI/GQgrjZSVwUaMY+xTyYz9+Eb6Ez7xgVBUJ+KYd5hot5Rv3m4HAn5my0bpPvJ80Wy5oejU3PFLzAjjUedxDUVIJEWdqftCDtoYvrWLFdtUgewAmuN6sM0XonPRyN5q8uC//gufZ9WdRPwEmjvGrTJ24vojfTErMjfyN7y58vqqYhxiEgeBIXJhWlTR4x/nbCMHI/MrRCymAR/d1Pt71oEGUI37MxzEbBvz+dLmkOi3KIo2R6c6kEj+h5qB0klUSVQIMCvzUY6c2xmOlqDTrwkHunJzIYv40kxENHL8DFpc1Z5SmhEK/AiFSs6G8edDfZA1lTiilsQs1CF+RGMrIROz7Di8yHroszWXT7IH2lBE=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'PUR24BBAFB5E674', 'prepay_id': '0114a30b94de7981d8ddd4e15ece779939c0802'}}
+[2026-09-16 15:37:16] INFO payments.telebirr - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': 'acf8c259f446417798d612e2d2e845c7', 'sign': 'WKJ9vMw56FlXin1b13eUJ9is7FbFXjrWWRyB0u0wTIcrIXVQMhj+cuPc39mctXs9aRAdQa4nJHJ5WA/4LD40FnQ0BdPe7iwdQLXBxjulcGRlNEPmC7kEDeWzxXC5ZECc4YsSGtrMMYQvIsFH+6lkg6SgCGQfZ6ZabRmmvx1ISOsCWQejiQs0oiuqjzrNLOI4DNKRq0WFMMs7GRKC32xBv7zBMpBXXkzUaGBcarHxigrtOfocm3EhRlAFZv5X/wtHP1aFjb+9xfYgo9vjZnWxrEz0/mcpznYE5rZCLCXrqL9mojUItk/TpP7ufihNyJAjWI/GQgrjZSVwUaMY+xTyYz9+Eb6Ez7xgVBUJ+KYd5hot5Rv3m4HAn5my0bpPvJ80Wy5oejU3PFLzAjjUedxDUVIJEWdqftCDtoYvrWLFdtUgewAmuN6sM0XonPRyN5q8uC//gufZ9WdRPwEmjvGrTJ24vojfTErMjfyN7y58vqqYhxiEgeBIXJhWlTR4x/nbCMHI/MrRCymAR/d1Pt71oEGUI37MxzEbBvz+dLmkOi3KIo2R6c6kEj+h5qB0klUSVQIMCvzUY6c2xmOlqDTrwkHunJzIYv40kxENHL8DFpc1Z5SmhEK/AiFSs6G8edDfZA1lTiilsQs1CF+RGMrIROz7Di8yHroszWXT7IH2lBE=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'PUR24BBAFB5E674', 'prepay_id': '0114a30b94de7981d8ddd4e15ece779939c0802'}}
+[2026-09-16 15:37:16] PAYMENT INFO - Telebirr preorder OK merch_order_id=PUR24BBAFB5E674 prepay_id=0114a30b94de7981d8ddd4e15ece779939c0802
+[2026-09-16 15:37:16] INFO payments.telebirr - Telebirr preorder OK merch_order_id=PUR24BBAFB5E674 prepay_id=0114a30b94de7981d8ddd4e15ece779939c0802
+[2026-09-16 15:37:16] INFO payments.telebirr - Telebirr preorder OK merch_order_id=PUR24BBAFB5E674 prepay_id=0114a30b94de7981d8ddd4e15ece779939c0802
+[2026-09-16 15:37:16] INFO django.server - "POST /books/6/purchase/ HTTP/1.1" 200 2027
+[2026-09-16 15:40:14] INFO django.server - "GET / HTTP/1.1" 200 89883
+[2026-09-16 15:40:14] INFO django.server - "GET /media/books/covers/2026/09/pychology_b5LmZgq.png HTTP/1.1" 200 363640
+[2026-09-16 15:40:17] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64909
+[2026-09-16 15:40:20] AUTH INFO - AUTH - Login successful: User=client, IP=127.0.0.1, Role=client
+[2026-09-16 15:40:20] INFO accounts.views - AUTH - Login successful: User=client, IP=127.0.0.1, Role=client
+[2026-09-16 15:40:20] INFO accounts.views - AUTH - Login successful: User=client, IP=127.0.0.1, Role=client
+[2026-09-16 15:40:20] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-09-16 15:40:20] AUTH INFO - Client dashboard accessed by: client
+[2026-09-16 15:40:20] INFO accounts.views - Client dashboard accessed by: client
+[2026-09-16 15:40:20] INFO accounts.views - Client dashboard accessed by: client
+[2026-09-16 15:40:20] INFO django.server - "GET /accounts/dashboard/client/ HTTP/1.1" 200 66708
+[2026-09-16 15:40:27] INFO django.server - "GET /books/browse/ HTTP/1.1" 200 102531
+[2026-09-16 15:40:27] INFO django.server - "GET /media/books/covers/2026/09/pychology_b5LmZgq.png HTTP/1.1" 200 363640
+[2026-09-16 15:40:32] INFO django.server - "GET /books/6/ HTTP/1.1" 200 73712
+[2026-09-16 15:40:33] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 84513
+[2026-09-16 15:40:40] PAYMENT INFO - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': '71ad8f075f5447e29ef314e42e8ae911', 'sign': 'PS5a6gueLDtzGRXQywc8Zff4NfitDoMtT7SK/5PifSEcvRJ+kJxKxcVr8gmcFKRgH0srOk/dYx9ZRF4jd2JegUmDANclaB8/De0N1hL6SZc1NsEdb7htKk/cc3+kxrHiG6+7dgppN+rUacDX7QOX5CMfApUSgNoMLU7Xpehf4/S1jMeq1aAR3ApNfYFB2pai+ZbpIcjVXT4c6nQ9fm2oAwLNDZGRYK4c5VoYD3Ip+CBVl6UwC2jqUFWLwgskLug4PLue9H8MRcNp7uKCHpVVP4G4/ba1jyZ+/Zt8+Kc5ncXECgkzDSsCAQ0OeFobewXg6YZvnWxKh7Kqp7XANQCxyn4Tuywpt0VRFwqfMPGOjv3lZBb6pXNL+LwRTXIewvt3WxVOw3qLJG4Xa8KDYxUKa32GsHvErzJ4tqjZpju1Mth9ASr3d9pcGUAT0DymCXtzyz5z4V8CktLlsJ2gV/1pmDUUkvh95MIw0Bh1Uf1yzpzzHt3GoQQNv+e9tRVi6LhSaanx2LKQPvtq8vcGLjwpzEL/n1joPxRda+Px/u5Qyxglr5CxQtCSY1rC7q4CBh3rB/v04G3lmPMh6WYpXo1lOUWP9pLCZuUgKXEotNz2calCq9iqpgWMetuTIlwe5M/thj0IFbQgCulvfBFodTbrZ57yeM+npsH0h6bf2OGliGM=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'PURD5296AD44D3C', 'prepay_id': '01177f736cd3f4c51068f12c5f0662a9b0a0700'}}
+[2026-09-16 15:40:40] INFO payments.telebirr - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': '71ad8f075f5447e29ef314e42e8ae911', 'sign': 'PS5a6gueLDtzGRXQywc8Zff4NfitDoMtT7SK/5PifSEcvRJ+kJxKxcVr8gmcFKRgH0srOk/dYx9ZRF4jd2JegUmDANclaB8/De0N1hL6SZc1NsEdb7htKk/cc3+kxrHiG6+7dgppN+rUacDX7QOX5CMfApUSgNoMLU7Xpehf4/S1jMeq1aAR3ApNfYFB2pai+ZbpIcjVXT4c6nQ9fm2oAwLNDZGRYK4c5VoYD3Ip+CBVl6UwC2jqUFWLwgskLug4PLue9H8MRcNp7uKCHpVVP4G4/ba1jyZ+/Zt8+Kc5ncXECgkzDSsCAQ0OeFobewXg6YZvnWxKh7Kqp7XANQCxyn4Tuywpt0VRFwqfMPGOjv3lZBb6pXNL+LwRTXIewvt3WxVOw3qLJG4Xa8KDYxUKa32GsHvErzJ4tqjZpju1Mth9ASr3d9pcGUAT0DymCXtzyz5z4V8CktLlsJ2gV/1pmDUUkvh95MIw0Bh1Uf1yzpzzHt3GoQQNv+e9tRVi6LhSaanx2LKQPvtq8vcGLjwpzEL/n1joPxRda+Px/u5Qyxglr5CxQtCSY1rC7q4CBh3rB/v04G3lmPMh6WYpXo1lOUWP9pLCZuUgKXEotNz2calCq9iqpgWMetuTIlwe5M/thj0IFbQgCulvfBFodTbrZ57yeM+npsH0h6bf2OGliGM=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'PURD5296AD44D3C', 'prepay_id': '01177f736cd3f4c51068f12c5f0662a9b0a0700'}}
+[2026-09-16 15:40:40] INFO payments.telebirr - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': '71ad8f075f5447e29ef314e42e8ae911', 'sign': 'PS5a6gueLDtzGRXQywc8Zff4NfitDoMtT7SK/5PifSEcvRJ+kJxKxcVr8gmcFKRgH0srOk/dYx9ZRF4jd2JegUmDANclaB8/De0N1hL6SZc1NsEdb7htKk/cc3+kxrHiG6+7dgppN+rUacDX7QOX5CMfApUSgNoMLU7Xpehf4/S1jMeq1aAR3ApNfYFB2pai+ZbpIcjVXT4c6nQ9fm2oAwLNDZGRYK4c5VoYD3Ip+CBVl6UwC2jqUFWLwgskLug4PLue9H8MRcNp7uKCHpVVP4G4/ba1jyZ+/Zt8+Kc5ncXECgkzDSsCAQ0OeFobewXg6YZvnWxKh7Kqp7XANQCxyn4Tuywpt0VRFwqfMPGOjv3lZBb6pXNL+LwRTXIewvt3WxVOw3qLJG4Xa8KDYxUKa32GsHvErzJ4tqjZpju1Mth9ASr3d9pcGUAT0DymCXtzyz5z4V8CktLlsJ2gV/1pmDUUkvh95MIw0Bh1Uf1yzpzzHt3GoQQNv+e9tRVi6LhSaanx2LKQPvtq8vcGLjwpzEL/n1joPxRda+Px/u5Qyxglr5CxQtCSY1rC7q4CBh3rB/v04G3lmPMh6WYpXo1lOUWP9pLCZuUgKXEotNz2calCq9iqpgWMetuTIlwe5M/thj0IFbQgCulvfBFodTbrZ57yeM+npsH0h6bf2OGliGM=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'PURD5296AD44D3C', 'prepay_id': '01177f736cd3f4c51068f12c5f0662a9b0a0700'}}
+[2026-09-16 15:40:40] PAYMENT INFO - Telebirr preorder OK merch_order_id=PURD5296AD44D3C prepay_id=01177f736cd3f4c51068f12c5f0662a9b0a0700
+[2026-09-16 15:40:40] INFO payments.telebirr - Telebirr preorder OK merch_order_id=PURD5296AD44D3C prepay_id=01177f736cd3f4c51068f12c5f0662a9b0a0700
+[2026-09-16 15:40:40] INFO payments.telebirr - Telebirr preorder OK merch_order_id=PURD5296AD44D3C prepay_id=01177f736cd3f4c51068f12c5f0662a9b0a0700
+[2026-09-16 15:40:40] INFO django.server - "POST /books/6/purchase/ HTTP/1.1" 200 2027
+[2026-09-16 17:14:10] INFO django.utils.autoreload - C:\abay_repository\payments\telebirr.py changed, reloading.
+[2026-09-16 17:14:10] INFO django.utils.autoreload - C:\abay_repository\payments\telebirr.py changed, reloading.
+[2026-09-16 17:14:12] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-16 17:14:12] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-16 17:14:45] INFO django.server - "GET / HTTP/1.1" 200 89883
+[2026-09-16 17:14:45] INFO django.server - "GET /static/images/Abrehot.jpg HTTP/1.1" 200 72716
+[2026-09-16 17:14:45] INFO django.server - "GET /static/images/logo.png HTTP/1.1" 200 157968
+[2026-09-16 17:14:46] INFO django.server - "GET /media/books/covers/2026/09/pychology_b5LmZgq.png HTTP/1.1" 200 363640
+[2026-09-16 17:14:46] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-16 17:14:47] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64909
+[2026-09-16 17:15:26] AUTH INFO - AUTH - Login successful: User=client, IP=127.0.0.1, Role=client
+[2026-09-16 17:15:26] INFO accounts.views - AUTH - Login successful: User=client, IP=127.0.0.1, Role=client
+[2026-09-16 17:15:26] INFO accounts.views - AUTH - Login successful: User=client, IP=127.0.0.1, Role=client
+[2026-09-16 17:15:26] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-09-16 17:15:26] AUTH INFO - Client dashboard accessed by: client
+[2026-09-16 17:15:26] INFO accounts.views - Client dashboard accessed by: client
+[2026-09-16 17:15:26] INFO accounts.views - Client dashboard accessed by: client
+[2026-09-16 17:15:27] INFO django.server - "GET /accounts/dashboard/client/ HTTP/1.1" 200 66708
+[2026-09-16 17:15:33] INFO django.server - "GET /books/browse/ HTTP/1.1" 200 102531
+[2026-09-16 17:15:33] INFO django.server - "GET /media/books/covers/2026/09/pychology_b5LmZgq.png HTTP/1.1" 200 363640
+[2026-09-16 17:15:35] INFO django.server - "GET /books/6/ HTTP/1.1" 200 73713
+[2026-09-16 17:15:37] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 84513
+[2026-09-16 17:15:46] PAYMENT INFO - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': '281af792d32d485d91f58b68e976cd9a', 'sign': 'GfTunzmITSpJVqZ2ZpdOlIwyj7tftlge7oOlTu7ZtwzebX32B2q9rOZ5JgZxyhM+zwu0Ef/jhVlGesb/xKiv2PPaLrTWdBcKEMqnM+wvzdkps1zDSGpygm8ASWOPLpbJwTkpgmADH/jxib00FrNj6D1U14ZM2bKWBAZsamMhbaftSDT6rHTy4AokVJv+mUAtf6ZupfblRQ/LV8BQYbtHiHmRpUy4PMkhdQbJgcD74bQqX8VZBSjLoNfmd2AEGrRgzyKGwsKA962undy9hDW41ISsoDpYsC/tdeKzSTC2AeppCLbjIcAy13l2fWO4bFmKeQXqVadET9RLrFmhIPK38ypglsRKq95ifynf1Gw+b3X2hfFDRr270r+hFU3F/nTg0utOPph3oGzALXi7Z94YtwdHxmCPFwNoLyEbHluzRPqdx2lL4IXyWykguh52V0fD9H0HXxLI2X/x83aehinja0ekg4WSZW4ZfFCCe5brD6hIWpMnVJzrl/mwknnVpqP+uU1mN6eMmlkxX9LaoMEDvgr4GEdMA8cAM0YRO7YceX5IarZK17SlHKdSWfpxnIOKcKhPfLvVwlL2oa9aMemp6dpB2QjsVJBlVj5Ohz0y1alKpmUYNqtcFXh8nhzYPqSJah6FH+wRR69dRRgfqgrqe/Jj3ECn5rikkIbvsQN5cmE=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'PURE163074DEB1A', 'prepay_id': '011a5e4afda22b5812dc7245357295523d50402'}}
+[2026-09-16 17:15:46] INFO payments.telebirr - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': '281af792d32d485d91f58b68e976cd9a', 'sign': 'GfTunzmITSpJVqZ2ZpdOlIwyj7tftlge7oOlTu7ZtwzebX32B2q9rOZ5JgZxyhM+zwu0Ef/jhVlGesb/xKiv2PPaLrTWdBcKEMqnM+wvzdkps1zDSGpygm8ASWOPLpbJwTkpgmADH/jxib00FrNj6D1U14ZM2bKWBAZsamMhbaftSDT6rHTy4AokVJv+mUAtf6ZupfblRQ/LV8BQYbtHiHmRpUy4PMkhdQbJgcD74bQqX8VZBSjLoNfmd2AEGrRgzyKGwsKA962undy9hDW41ISsoDpYsC/tdeKzSTC2AeppCLbjIcAy13l2fWO4bFmKeQXqVadET9RLrFmhIPK38ypglsRKq95ifynf1Gw+b3X2hfFDRr270r+hFU3F/nTg0utOPph3oGzALXi7Z94YtwdHxmCPFwNoLyEbHluzRPqdx2lL4IXyWykguh52V0fD9H0HXxLI2X/x83aehinja0ekg4WSZW4ZfFCCe5brD6hIWpMnVJzrl/mwknnVpqP+uU1mN6eMmlkxX9LaoMEDvgr4GEdMA8cAM0YRO7YceX5IarZK17SlHKdSWfpxnIOKcKhPfLvVwlL2oa9aMemp6dpB2QjsVJBlVj5Ohz0y1alKpmUYNqtcFXh8nhzYPqSJah6FH+wRR69dRRgfqgrqe/Jj3ECn5rikkIbvsQN5cmE=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'PURE163074DEB1A', 'prepay_id': '011a5e4afda22b5812dc7245357295523d50402'}}
+[2026-09-16 17:15:46] INFO payments.telebirr - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': '281af792d32d485d91f58b68e976cd9a', 'sign': 'GfTunzmITSpJVqZ2ZpdOlIwyj7tftlge7oOlTu7ZtwzebX32B2q9rOZ5JgZxyhM+zwu0Ef/jhVlGesb/xKiv2PPaLrTWdBcKEMqnM+wvzdkps1zDSGpygm8ASWOPLpbJwTkpgmADH/jxib00FrNj6D1U14ZM2bKWBAZsamMhbaftSDT6rHTy4AokVJv+mUAtf6ZupfblRQ/LV8BQYbtHiHmRpUy4PMkhdQbJgcD74bQqX8VZBSjLoNfmd2AEGrRgzyKGwsKA962undy9hDW41ISsoDpYsC/tdeKzSTC2AeppCLbjIcAy13l2fWO4bFmKeQXqVadET9RLrFmhIPK38ypglsRKq95ifynf1Gw+b3X2hfFDRr270r+hFU3F/nTg0utOPph3oGzALXi7Z94YtwdHxmCPFwNoLyEbHluzRPqdx2lL4IXyWykguh52V0fD9H0HXxLI2X/x83aehinja0ekg4WSZW4ZfFCCe5brD6hIWpMnVJzrl/mwknnVpqP+uU1mN6eMmlkxX9LaoMEDvgr4GEdMA8cAM0YRO7YceX5IarZK17SlHKdSWfpxnIOKcKhPfLvVwlL2oa9aMemp6dpB2QjsVJBlVj5Ohz0y1alKpmUYNqtcFXh8nhzYPqSJah6FH+wRR69dRRgfqgrqe/Jj3ECn5rikkIbvsQN5cmE=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'PURE163074DEB1A', 'prepay_id': '011a5e4afda22b5812dc7245357295523d50402'}}
+[2026-09-16 17:15:46] PAYMENT INFO - Telebirr preorder OK merch_order_id=PURE163074DEB1A prepay_id=011a5e4afda22b5812dc7245357295523d50402
+[2026-09-16 17:15:46] INFO payments.telebirr - Telebirr preorder OK merch_order_id=PURE163074DEB1A prepay_id=011a5e4afda22b5812dc7245357295523d50402
+[2026-09-16 17:15:46] INFO payments.telebirr - Telebirr preorder OK merch_order_id=PURE163074DEB1A prepay_id=011a5e4afda22b5812dc7245357295523d50402
+[2026-09-16 17:15:46] INFO django.server - "POST /books/6/purchase/ HTTP/1.1" 200 2027
+[2026-09-16 17:16:27] PAYMENT INFO - Payment created for author author: 280.000 ETB
+[2026-09-16 17:16:27] INFO payments.views - Payment created for author author: 280.000 ETB
+[2026-09-16 17:16:27] INFO payments.views - Payment created for author author: 280.000 ETB
+[2026-09-16 17:16:27] INFO books.views - Payment record created for author author: 280.000 ETB
+[2026-09-16 17:16:27] INFO books.views - Payment record created for author author: 280.000 ETB
+[2026-09-16 17:16:27] PAYMENT INFO - Purchase completed id=42 book=6 user=5
+[2026-09-16 17:16:27] INFO payments.views - Purchase completed id=42 book=6 user=5
+[2026-09-16 17:16:27] INFO payments.views - Purchase completed id=42 book=6 user=5
+[2026-09-16 17:16:27] INFO django.server - "GET /payments/return/?merch_order_id=PURE163074DEB1A?trans_end_time=2026-09-16%2017:15:26&notify_time=2026-09-16%2017:15:26&trans_currency=ETB&total_amount=400.00&merch_order_id=PURE163074DEB1A&appid=1697890795596801&trade_status=PAY_SUCCESS&merch_code=406488&notify_url=http://127.0.0.1:8000/payments/webhook/telebirr/&payment_order_id=011N11089G17152600001000&sign=NZpwtCki6CrJOf1dTHfg86VAdPVPzP49izt8pCw+alM1iM5Dj6YHWk4aw3ToCOZp9Bb+/r8ptVFkm0kFMg/rk6rmJUUzxOyR7IwWVlgRT94lEhx/RCN9r6fjzKfCFhU1oK8YztyVLNiK8uOvtRqiBRPZlsQkX6PW9OKllj75el+/FnKxaDWcG6iMn2rHPJetc/l15Jhj2or2dYqUdpge80XmaQmh6XjjoYFZfLz6nyizzqOraqIy/GohEdck85RrJzccT/INDX20nWxi6xBTGc8KlKVJQQqn0LKAYlajXTDzOOFwAlo7vmirRnvvSanepabvyxIVRsJMf6GyUpCY1JG+GFRRykQHi6UhfqCBeJFfQv4wlCF6/ePNjA+v0JsERwheLvxwxfZCSpz7ZaTDZn3Mf3f9PDyhJFSlDgCODcHVvGEiwx7GGHLbm7lgMnw52tbV67vWeDESalNGeoG4jeNhVXKapxr6ouugJi4TYGwIN140BdfvY2IMYD4L2U6LKofLVnVAdmInqj5XoU4Yu4tthnb0EIeZ26DdjC/E8PeqlFW2olJLipodouWStV7JED4pwYUNM4WuwigN53MjGtgpoxjSanBY4jaf81yJCws/0hX1Ur/CljutgkkH4GMZUEGm1VxV51LjvoGzpudYMHO4mYjDCb/HoPNWXXow/Dk=&sign_type=SHA256WithRSA HTTP/1.1" 302 0
+[2026-09-16 17:16:28] ERROR django.request - Internal Server Error: /books/my-books/user/
+Traceback (most recent call last):
+  File "C:\abay_repository\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\abay_repository\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\C4S\AppData\Local\Programs\Python\Python39\lib\contextlib.py", line 79, in inner
+    return func(*args, **kwds)
+  File "C:\abay_repository\venv\lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\abay_repository\books\views.py", line 1547, in my_books_user
+    return render(request, 'books/my_books_user.html', context)
+  File "C:\abay_repository\venv\lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 175, in render
+    return self._render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\loader_tags.py", line 63, in render
+    result = block.nodelist.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\defaulttags.py", line 321, in render
+    return nodelist.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\defaulttags.py", line 238, in render
+    nodelist.append(node.render_annotated(context))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1064, in render
+    output = self.filter_expression.resolve(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 742, in resolve
+    new_obj = func(obj, *arg_vals)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\defaultfilters.py", line 772, in date
+    return formats.date_format(value, arg)
+  File "C:\abay_repository\venv\lib\site-packages\django\utils\formats.py", line 158, in date_format
+    return dateformat.format(
+  File "C:\abay_repository\venv\lib\site-packages\django\utils\dateformat.py", line 324, in format
+    return df.format(format_string)
+  File "C:\abay_repository\venv\lib\site-packages\django\utils\dateformat.py", line 48, in format
+    pieces.append(str(getattr(self, piece)()))
+  File "C:\abay_repository\venv\lib\site-packages\django\utils\dateformat.py", line 297, in U
+    value = datetime.combine(value, time.min)
+TypeError: combine() argument 1 must be datetime.date, not str
+[2026-09-16 17:16:28] ERROR django.request log.log_response:241 - Internal Server Error: /books/my-books/user/
+Traceback (most recent call last):
+  File "C:\abay_repository\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\abay_repository\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\C4S\AppData\Local\Programs\Python\Python39\lib\contextlib.py", line 79, in inner
+    return func(*args, **kwds)
+  File "C:\abay_repository\venv\lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\abay_repository\books\views.py", line 1547, in my_books_user
+    return render(request, 'books/my_books_user.html', context)
+  File "C:\abay_repository\venv\lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 175, in render
+    return self._render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\loader_tags.py", line 63, in render
+    result = block.nodelist.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\defaulttags.py", line 321, in render
+    return nodelist.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\defaulttags.py", line 238, in render
+    nodelist.append(node.render_annotated(context))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1064, in render
+    output = self.filter_expression.resolve(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 742, in resolve
+    new_obj = func(obj, *arg_vals)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\defaultfilters.py", line 772, in date
+    return formats.date_format(value, arg)
+  File "C:\abay_repository\venv\lib\site-packages\django\utils\formats.py", line 158, in date_format
+    return dateformat.format(
+  File "C:\abay_repository\venv\lib\site-packages\django\utils\dateformat.py", line 324, in format
+    return df.format(format_string)
+  File "C:\abay_repository\venv\lib\site-packages\django\utils\dateformat.py", line 48, in format
+    pieces.append(str(getattr(self, piece)()))
+  File "C:\abay_repository\venv\lib\site-packages\django\utils\dateformat.py", line 297, in U
+    value = datetime.combine(value, time.min)
+TypeError: combine() argument 1 must be datetime.date, not str
+[2026-09-16 17:16:28] ERROR django.server - "GET /books/my-books/user/ HTTP/1.1" 500 248141
+[2026-09-16 17:16:28] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 17:16:28] WARNING django.server - "GET /static/favicon.ico HTTP/1.1" 404 1893
+[2026-09-16 17:16:59] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 302 0
+[2026-09-16 17:16:59] INFO django.server - "GET /books/6/ HTTP/1.1" 200 74173
+[2026-09-16 17:17:04] INFO django.server - "GET /books/browse/ HTTP/1.1" 200 102532
+[2026-09-16 17:17:07] ERROR django.request - Internal Server Error: /books/my-books/user/
+Traceback (most recent call last):
+  File "C:\abay_repository\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\abay_repository\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\C4S\AppData\Local\Programs\Python\Python39\lib\contextlib.py", line 79, in inner
+    return func(*args, **kwds)
+  File "C:\abay_repository\venv\lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\abay_repository\books\views.py", line 1547, in my_books_user
+    return render(request, 'books/my_books_user.html', context)
+  File "C:\abay_repository\venv\lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 175, in render
+    return self._render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\loader_tags.py", line 63, in render
+    result = block.nodelist.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\defaulttags.py", line 321, in render
+    return nodelist.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\defaulttags.py", line 238, in render
+    nodelist.append(node.render_annotated(context))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1064, in render
+    output = self.filter_expression.resolve(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 742, in resolve
+    new_obj = func(obj, *arg_vals)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\defaultfilters.py", line 772, in date
+    return formats.date_format(value, arg)
+  File "C:\abay_repository\venv\lib\site-packages\django\utils\formats.py", line 158, in date_format
+    return dateformat.format(
+  File "C:\abay_repository\venv\lib\site-packages\django\utils\dateformat.py", line 324, in format
+    return df.format(format_string)
+  File "C:\abay_repository\venv\lib\site-packages\django\utils\dateformat.py", line 48, in format
+    pieces.append(str(getattr(self, piece)()))
+  File "C:\abay_repository\venv\lib\site-packages\django\utils\dateformat.py", line 297, in U
+    value = datetime.combine(value, time.min)
+TypeError: combine() argument 1 must be datetime.date, not str
+[2026-09-16 17:17:07] ERROR django.request log.log_response:241 - Internal Server Error: /books/my-books/user/
+Traceback (most recent call last):
+  File "C:\abay_repository\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\abay_repository\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\C4S\AppData\Local\Programs\Python\Python39\lib\contextlib.py", line 79, in inner
+    return func(*args, **kwds)
+  File "C:\abay_repository\venv\lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\abay_repository\books\views.py", line 1547, in my_books_user
+    return render(request, 'books/my_books_user.html', context)
+  File "C:\abay_repository\venv\lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 175, in render
+    return self._render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\loader_tags.py", line 63, in render
+    result = block.nodelist.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\defaulttags.py", line 321, in render
+    return nodelist.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\defaulttags.py", line 238, in render
+    nodelist.append(node.render_annotated(context))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 1064, in render
+    output = self.filter_expression.resolve(context)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 742, in resolve
+    new_obj = func(obj, *arg_vals)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\defaultfilters.py", line 772, in date
+    return formats.date_format(value, arg)
+  File "C:\abay_repository\venv\lib\site-packages\django\utils\formats.py", line 158, in date_format
+    return dateformat.format(
+  File "C:\abay_repository\venv\lib\site-packages\django\utils\dateformat.py", line 324, in format
+    return df.format(format_string)
+  File "C:\abay_repository\venv\lib\site-packages\django\utils\dateformat.py", line 48, in format
+    pieces.append(str(getattr(self, piece)()))
+  File "C:\abay_repository\venv\lib\site-packages\django\utils\dateformat.py", line 297, in U
+    value = datetime.combine(value, time.min)
+TypeError: combine() argument 1 must be datetime.date, not str
+[2026-09-16 17:17:07] ERROR django.server - "GET /books/my-books/user/ HTTP/1.1" 500 248006
+[2026-09-16 17:17:07] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-16 17:17:07] WARNING django.server - "GET /static/favicon.ico HTTP/1.1" 404 1893
+[2026-09-16 17:19:48] INFO django.utils.autoreload - C:\abay_repository\payments\views.py changed, reloading.
+[2026-09-16 17:19:48] INFO django.utils.autoreload - C:\abay_repository\payments\views.py changed, reloading.
+[2026-09-16 17:19:50] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-16 17:19:50] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-16 17:19:57] INFO django.server - "GET /books/my-books/user/ HTTP/1.1" 200 78505
