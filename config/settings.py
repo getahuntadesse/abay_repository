@@ -692,6 +692,8 @@ TELEBIRR_WEB_BASE_URL = config(
     default='https://developerportal.ethiotelebirr.et:38443/payment/web/paygate?',
 )
 TELEBIRR_NOTIFY_URL = config('TELEBIRR_NOTIFY_URL', default=f"{BASE_URL}/payments/webhook/telebirr/")
+TELEBIRR_TRADE_TYPE = config('TELEBIRR_TRADE_TYPE', default='Checkout')
+TELEBIRR_BUSINESS_TYPE = config('TELEBIRR_BUSINESS_TYPE', default='TransferToOtherOrg')
 TELEBIRR_TIMEOUT_EXPRESS = config('TELEBIRR_TIMEOUT_EXPRESS', default='120m')
 SITE_NAME = config('SITE_NAME', default='Abay Repository')
 

@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% load humanize %}
+{% block title %}Finance Reports - Abay{% endblock %}
+{% block content %}
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 style="color:#DAA520">Finance Reports</h2>
+    <div>
+      <a href="{% url 'payments:finance_settings' %}" class="btn btn-outline-warning btn-sm">Settings</a>
+      <a href="{% url 'payments:dashboard' %}" class="btn btn-outline-secondary btn-sm">Dashboard</a>
+    </div>
+  </div>
+  <p class="text-muted">Current rates — Royalty {{ fin.royalty_rate }}% · Platform {{ fin.platform_rate }}% · Tax {{ fin.tax_rate_default }}% / culture {{ fin.tax_rate_culture }}% · Threshold {{ fin.tax_threshold }} ETB</p>
+  {% if messages %}{% for m in messages %}<div class="alert alert-info">{{ m }}</div>{% endfor %}{% endif %}
+
+  <div class="card p-3 mb-4 shadow-sm">
+    <h5>Generate report</h5>
+    <form method="post" class="row g-2 align-items-end">
+      {% csrf_token %}
+      <div class="col-md-3">
+        <label class="form-label">Period</label>
+        <select name="period_type" class="form-select" id="periodType">
+          <option value="weekly">Weekly</option>
+          <option value="monthly" selected>Monthly</option>
+          <option value="annual">Annual</option>
+          <option value="custom">Custom range</option>
+        </select>
+      </div>
+      <div class="col-md-3" id="customStart" style="display:none">
+        <label class="form-label">Start</label>
+        <input type="date" name="start" class="form-control">
+      </div>
+      <div class="col-md-3" id="customEnd" style="display:none">
+        <label class="form-label">End</label>
+        <input type="date" name="end" class="form-control">
+      </div>
+      <div class="col-md-3">
+        <button type="submit" class="btn btn-warning fw-bold w-100">Generate</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="table-responsive card shadow-sm">
+    <table class="table table-hover mb-0">
+      <thead class="table-light">
+        <tr>
+          <th>Title</th>
+          <th>Period</th>
+          <th>Gross</th>
+          <th>Royalty</th>
+          <th>Tax</th>
+          <th>Net authors</th>
+          <th>Generated</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in reports %}
+        <tr>
+          <td>{{ r.title }}</td>
+          <td>{{ r.get_period_type_display }}<br><small>{{ r.period_start }} → {{ r.period_end }}</small></td>
+          <td>{{ r.total_gross|floatformat:2 }}</td>
+          <td>{{ r.total_royalty|floatformat:2 }}</td>
+          <td>{{ r.total_tax|floatformat:2 }}</td>
+          <td>{{ r.total_net_authors|floatformat:2 }}</td>
+          <td>{{ r.generated_at|date:"M d, Y H:i" }}</td>
+          <td><a href="{% url 'payments:finance_report_detail' r.id %}" class="btn btn-sm btn-outline-primary">View</a></td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="8" class="text-center text-muted py-4">No reports yet. Generate one above.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+<script>
+document.getElementById('periodType').addEventListener('change', function() {
+  var c = this.value === 'custom';
+  document.getElementById('customStart').style.display = c ? '' : 'none';
+  document.getElementById('customEnd').style.display = c ? '' : 'none';
+});
+</script>
+{% endblock %}

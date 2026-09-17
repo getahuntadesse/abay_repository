@@ -250,9 +250,15 @@
             <i class="fas fa-coins me-2" style="color: var(--primary-gold);"></i>
             Payment Dashboard
         </h2>
-        {% if user.role == 'admin' or user.role == 'maker' %}
+        {% if True %}{# view already restricts to admin/maker/finance #}
         <div class="d-flex flex-wrap gap-2">
-            <a href="{% url 'payments:calculate_all' %}" class="btn btn-gold">
+                        <a href="{% url 'payments:finance_settings' %}" class="btn btn-outline-warning me-2">
+                <i class="fas fa-sliders-h me-2"></i> Finance Settings
+            </a>
+            <a href="{% url 'payments:finance_reports' %}" class="btn btn-outline-primary me-2">
+                <i class="fas fa-chart-line me-2"></i> Reports
+            </a>
+<a href="{% url 'payments:calculate_all' %}" class="btn btn-gold">
                 <i class="fas fa-calculator me-2"></i> Calculate All
             </a>
             <a href="{% url 'payments:payment_history' %}" class="btn btn-outline-gold">
@@ -273,7 +279,7 @@
         </div>
     </div>
 
-    {% if user.role == 'admin' or user.role == 'maker' %}
+    {% if user.role == 'admin' or user.role == 'maker' or user.role == 'finance' %}
     <!-- Admin View: Statistics -->
     <div class="row g-4 mb-4">
         <div class="col-md-3 col-sm-6">
@@ -392,8 +398,8 @@
                                     <i class="fas fa-eye"></i>
                                 </a>
                                 {% if author.total_pending > 0 %}
-                                <button onclick="processAuthorPayment({{ author.id }}, '{{ author.display_name|escapejs }}', {{ author.total_pending|floatformat:2 }})" 
-                                        class="btn btn-gold-small" title="Process Payment">
+                                <button type="button" onclick="processAuthorPayment({{ author.id }}, '{{ author.display_name|default:author.username|escapejs }}', {{ author.total_pending|default:0|floatformat:2 }}, '{{ author.phone|default:''|escapejs }}')" 
+                                        class="btn btn-gold-small" title="Pay via Telebirr">
                                     <i class="fas fa-money-bill-wave"></i> Transfer
                                 </button>
                                 {% endif %}
@@ -487,23 +493,32 @@
                 </div>
                 <form id="processAuthorForm" method="post">
                     {% csrf_token %}
+                    <input type="hidden" name="payment_method" value="telebirr">
                     <div class="mb-3">
-                        <label class="form-label fw-bold">Select Payment Method</label>
-                        <div id="paymentMethodOptions">
-                            <!-- Will be populated by JS -->
-                            <p class="text-muted">Loading payment methods...</p>
+                        <label class="form-label fw-bold">
+                            <i class="fas fa-mobile-alt me-1"></i> Telebirr phone number
+                        </label>
+                        <input type="tel" name="phone_number" id="authorPhone" class="form-control"
+                               placeholder="e.g. 0912345678" required pattern="[0-9+\s]{9,15}"
+                               title="Ethiopian mobile for Telebirr royalty payout">
+                        <small class="text-muted">
+                            Fetched from the author profile. Edit if the author wants to receive royalty on another Telebirr number.
+                        </small>
+                        <div class="form-check mt-2">
+                            <input class="form-check-input" type="checkbox" name="save_phone" value="1" id="savePhoneCheck">
+                            <label class="form-check-label" for="savePhoneCheck">Save this number on the author profile</label>
                         </div>
                     </div>
-                    <div class="alert alert-warning">
-                        <i class="fas fa-exclamation-triangle me-2"></i>
-                        This will transfer all pending payments for this author.
+                    <div class="alert alert-info mb-0">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Payout is <strong>Telebirr only</strong>. This pays all pending royalties for this author.
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="submit" form="processAuthorForm" class="btn btn-gold" id="processPaymentBtn" disabled>
-                    <i class="fas fa-check-circle me-2"></i> Process Payment
+                <button type="submit" form="processAuthorForm" class="btn btn-gold" id="processPaymentBtn">
+                    <i class="fas fa-check-circle me-2"></i> Pay via Telebirr
                 </button>
             </div>
         </div>
@@ -512,7 +527,22 @@
 
 {% block extra_js %}
 <script>
-    function processAuthorPayment(authorId, authorName, amount) {
+    function processAuthorPayment(authorId, authorName, amount, authorPhone) {
+        document.getElementById('authorName').textContent = authorName;
+        document.getElementById('authorAmount').textContent = (amount || 0).toLocaleString();
+        document.getElementById('processAuthorForm').action = '/payments/author/' + authorId + '/process/';
+        var phoneInput = document.getElementById('authorPhone');
+        if (phoneInput) { phoneInput.value = authorPhone || ''; phoneInput.dataset.userEdited = ''; }
+        fetch('/payments/author/' + authorId + '/payout-info/', { headers: { 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' } })
+          .then(function(r){ return r.json(); })
+          .then(function(data){
+            if (data && data.phone && phoneInput && !phoneInput.dataset.userEdited) phoneInput.value = data.phone;
+            if (data && data.pending_amount != null) document.getElementById('authorAmount').textContent = Number(data.pending_amount).toLocaleString();
+          }).catch(function(){});
+        if (phoneInput) phoneInput.oninput = function(){ phoneInput.dataset.userEdited = '1'; };
+        try { new bootstrap.Modal(document.getElementById('processAuthorModal')).show(); } catch(e) { $('#processAuthorModal').modal('show'); }
+        return; // skip legacy body
+        // legacy:
         document.getElementById('authorName').textContent = authorName;
         document.getElementById('authorAmount').textContent = amount.toLocaleString();
         document.getElementById('processAuthorForm').action = `/payments/author/${authorId}/process/`;
@@ -572,6 +602,58 @@
                            form.querySelector('select[name="payment_method"]').value;
         document.getElementById('processPaymentBtn').disabled = !hasSelection;
     }
+
+    // Submit royalty payout via fetch then redirect to Telebirr (same as book purchase)
+    (function() {
+        var form = document.getElementById('processAuthorForm');
+        if (!form || form.dataset.processAuthorFormSubmitBound) return;
+        form.dataset.processAuthorFormSubmitBound = '1';
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            var phone = (document.getElementById('authorPhone') || {}).value || '';
+            if (!phone || phone.replace(/\s/g,'').length < 9) {
+                alert('Enter a valid Telebirr phone number.');
+                return;
+            }
+            var btn = document.getElementById('processPaymentBtn');
+            if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Connecting to Telebirr...'; }
+            var fd = new FormData(form);
+            fd.set('phone_number', phone.trim());
+            fd.set('payment_method', 'telebirr');
+            fetch(form.action, {
+                method: 'POST',
+                body: fd,
+                credentials: 'same-origin',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json'
+                }
+            }).then(function(res) {
+                return res.json().then(function(data) {
+                    return { ok: res.ok, status: res.status, data: data };
+                }).catch(function() {
+                    return { ok: res.ok, status: res.status, data: null, url: res.url };
+                });
+            }).then(function(payload) {
+                var data = payload.data || {};
+                var url = data.checkout_url || data.redirect_url || data.payment_url;
+                if (url) {
+                    window.location.href = url;
+                    return;
+                }
+                if (payload.url && payload.url.indexOf('paygate') >= 0) {
+                    window.location.href = payload.url;
+                    return;
+                }
+                alert(data.error || data.message || ('Payment failed (HTTP ' + payload.status + ')'));
+                if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-check-circle me-2"></i> Pay via Telebirr'; }
+            }).catch(function(err) {
+                alert('Network error: ' + (err.message || err));
+                if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-check-circle me-2"></i> Pay via Telebirr'; }
+            });
+        });
+    })();
+
 </script>
 {% endblock %}
 {% endblock %}

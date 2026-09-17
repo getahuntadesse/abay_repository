@@ -70,7 +70,10 @@ class TelebirrService:
         self.redirect_url = getattr(settings, "TELEBIRR_RETURN_URL", "") or (
             base + "/payments/return/"
         )
-        self.timeout_express = getattr(settings, "TELEBIRR_TIMEOUT_EXPRESS", "120m")
+        self.timeout_express = getattr(settings, "TELEBIRR_TIMEOUT_EXPRESS", "120m") or "120m"
+        # B2B_WebCheckoutDemo defaults
+        self.trade_type = getattr(settings, "TELEBIRR_TRADE_TYPE", "Checkout") or "Checkout"
+        self.business_type = getattr(settings, "TELEBIRR_BUSINESS_TYPE", "") or ""
         self.verify_ssl = bool(getattr(settings, "TELEBIRR_VERIFY_SSL", False))
         self._rsa_key = self._load_private_key()
         self._token: Optional[str] = None
@@ -207,6 +210,16 @@ class TelebirrService:
             )
         raise RuntimeError(msg)
 
+
+    @staticmethod
+    def _sanitize_title(title: str, fallback: str = "Abay Payment") -> str:
+        """Telebirr title: strip forbidden punctuation (hyphen, quotes, etc.)."""
+        raw = (title or fallback or "Abay Payment").strip()
+        # Remove forbidden characters from Telebirr pattern
+        cleaned = re.sub(r'[~`!#$%^*()\-+=|/<>?;:"\[\]{}\\&]', " ", raw)
+        cleaned = re.sub(r"\s+", " ", cleaned).strip()
+        return (cleaned or fallback)[:128]
+
     def create_checkout(
         self,
         title: str,
@@ -215,7 +228,7 @@ class TelebirrService:
         notify_url: Optional[str] = None,
         redirect_url: Optional[str] = None,
     ) -> Dict[str, Any]:
-        """Create H5 pre-order matching official C2B_WebCheckoutDemo."""
+        """Create H5 pre-order matching official C2B_WebCheckoutDemo (same as book purchase)."""
         if not self.is_configured():
             return {
                 "success": False,
@@ -241,18 +254,22 @@ class TelebirrService:
             sep = "&" if "?" in ret else "?"
             ret = f"{ret}{sep}merch_order_id={merch_order_id}"
 
+        # Same C2B Checkout procedure as book purchase (C2B_WebCheckoutDemo)
         biz = {
             "notify_url": notify_url or self.notify_url or "https://www.google.com",
             "appid": self.merchant_app_id,
             "merch_code": self.merchant_code,
             "merch_order_id": merch_order_id,
-            "trade_type": "Checkout",
-            "title": (title or "Abay Repository")[:128],
+            "trade_type": self.trade_type or "Checkout",
+            "title": self._sanitize_title(title, "Abay Repository"),
             "total_amount": total,
             "trans_currency": "ETB",
             "timeout_express": self.timeout_express or "120m",
-            "redirect_url": ret,
         }
+        if ret:
+            biz["redirect_url"] = ret
+        if self.business_type:
+            biz["business_type"] = self.business_type
         req = {
             "timestamp": self._ts(),
             "nonce_str": self._nonce(),
@@ -325,7 +342,8 @@ class TelebirrService:
         base = self.web_base_url
         if not base.endswith("?") and "?" not in base:
             base = base + "?"
-        return f"{base}{query}&version=1.0&trade_type=Checkout"
+        # Same as book purchase / C2B_WebCheckoutDemo
+        return f"{base}{query}&version=1.0&trade_type={self.trade_type or 'Checkout'}"
 
     def query_order(self, merch_order_id: str) -> Dict[str, Any]:
         try:

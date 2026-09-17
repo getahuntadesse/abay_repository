@@ -29,6 +29,8 @@ urlpatterns = [
     path('author/', views.author_payments, name='author_payments'),
     path('author/<int:author_id>/', views.author_payment_detail, name='author_detail'),
     path('author/<int:author_id>/process/', views.process_author_payment, name='process_author'),
+    path('author/<int:author_id>/payout-info/', views.author_payout_info, name='author_payout_info'),
+    path('author/<int:author_id>/mark-paid/', views.mark_author_payments_paid, name='mark_author_paid'),
 
     # Payment details
     path('payment/<int:payment_id>/', views.payment_detail, name='payment_detail'),
@@ -36,4 +38,9 @@ urlpatterns = [
     # Admin actions
     path('calculate_all/', views.calculate_all_payments, name='calculate_all'),
     path('api/process_batch/', views.process_batch_payment, name='process_batch'),
+
+    # Finance officer settings & reports
+    path('finance/settings/', views.finance_settings_view, name='finance_settings'),
+    path('finance/reports/', views.finance_reports_view, name='finance_reports'),
+    path('finance/reports/<int:report_id>/', views.finance_report_detail, name='finance_report_detail'),
 ]

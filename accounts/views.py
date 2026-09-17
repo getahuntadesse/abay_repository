@@ -1555,6 +1555,11 @@ def finance_dashboard(request):
                 'tax_rate': tx.tax_rate or 0,
             })
 
+        try:
+            from payments.services.finance import get_finance_settings
+            fin = get_finance_settings()
+        except Exception:
+            fin = None
         context = {
             'user': request.user,
             'author_payments': author_payments,
@@ -1573,6 +1578,8 @@ def finance_dashboard(request):
             'total_net_payable': total_net_payable,
             'culture_tax': culture_tax,
             'other_tax': other_tax,
+            'fin': fin,
+            'show_finance_tools': True,
         }
         
         return render(request, 'dashboard/finance_dashboard.html', context)

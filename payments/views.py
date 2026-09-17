@@ -307,72 +307,46 @@ def purchase_book(request, book_id):
 
 def create_author_payment(purchase):
     """
-    Create payment record for the author after a successful purchase
+    Create payment record for the author after a successful purchase.
+    Rates come from FinanceSettings (officer-configurable), not hardcoded settings.
     """
     try:
+        from payments.services.finance import compute_royalty_breakdown
         book = purchase.book
         author = book.author
-        gross_amount = purchase.amount
-        
-        royalty_rate = getattr(settings, 'ROYALTY_RATE', 70)
-        abrehot_rate = 100 - royalty_rate
-        
-        author_royalty = gross_amount * (Decimal(royalty_rate) / Decimal(100))
-        abrehot_share = gross_amount * (Decimal(abrehot_rate) / Decimal(100))
-        
-        tax_rate = get_tax_rate_from_book(book)
-        tax_amount = Decimal('0.00')
-        is_taxable = False
-        
-        tax_threshold = getattr(settings, 'TAX_THRESHOLD', 500)
-        
-        if author_royalty >= Decimal(str(tax_threshold)):
-            is_taxable = True
-            tax_amount = author_royalty * (Decimal(tax_rate) / Decimal(100))
-        
-        final_amount = author_royalty - tax_amount
-        
+        # avoid duplicate payment rows for same purchase
+        existing = Payment.objects.filter(purchase=purchase).first()
+        if existing:
+            return existing
+
+        br = compute_royalty_breakdown(purchase.amount, book=book)
         payment = Payment.objects.create(
             book=book,
             author=author,
             purchase=purchase,
-            gross_amount=gross_amount,
-            author_royalty=author_royalty,
-            abrehot_share=abrehot_share,
-            abrehot_share_rate=abrehot_rate,
-            royalty_rate=royalty_rate,
-            tax_rate=tax_rate,
-            tax_amount=tax_amount,
-            is_taxable=is_taxable,
-            final_amount=final_amount,
+            gross_amount=br["gross_amount"],
+            author_royalty=br["author_royalty"],
+            abrehot_share=br["abrehot_share"],
+            abrehot_share_rate=br["abrehot_share_rate"],
+            royalty_rate=br["royalty_rate"],
+            tax_rate=br["tax_rate"],
+            tax_amount=br["tax_amount"],
+            is_taxable=br["is_taxable"],
+            final_amount=br["final_amount"],
             status='calculated'
         )
-        
-        logger.info(f"Payment created for author {author.username}: {final_amount} ETB")
+        logger.info(f"Payment created for author {author.username}: {br['final_amount']} ETB")
         return payment
-        
     except Exception as e:
         logger.error(f"Error creating author payment: {str(e)}")
+        logger.error(traceback.format_exc())
         return None
 
 
 def get_tax_rate_from_book(book):
-    """
-    Determine tax rate based on book genre
-    5% for culture-related genres, 10% for others
-    """
-    culture_genres = [
-        'culture', 'cultural', 'history', 'heritage', 'tradition',
-        'ethiopian', 'amharic', 'oromo', 'tigrinya', 'somali',
-        'african', 'folklore', 'mythology', 'traditional',
-        'language', 'literature', 'poetry', 'religious',
-        'spiritual', 'custom', 'ritual', 'celebration'
-    ]
-    
-    genre = book.genre.name.lower() if book.genre else ''
-    if any(g in genre for g in culture_genres):
-        return 5
-    return 10
+    """Tax rate from FinanceSettings (culture vs default)."""
+    from payments.services.finance import tax_rate_for_book
+    return tax_rate_for_book(book)
 
 
 def process_telebirr_payment(purchase):
@@ -442,9 +416,9 @@ def author_payments(request):
         'total_pending': total_pending,
         'total_tax': total_tax,
         'payment_count': payments.count(),
-        'royalty_rate': getattr(settings, 'ROYALTY_RATE', 70),
-        'abrehot_rate': 100 - getattr(settings, 'ROYALTY_RATE', 70),
-        'tax_threshold': getattr(settings, 'TAX_THRESHOLD', 500),
+        'royalty_rate': __import__('payments.services.finance', fromlist=['get_finance_settings']).get_finance_settings().royalty_rate,
+        'abrehot_rate': __import__('payments.services.finance', fromlist=['get_finance_settings']).get_finance_settings().platform_rate,
+        'tax_threshold': __import__('payments.services.finance', fromlist=['get_finance_settings']).get_finance_settings().tax_threshold,
     }
     return render(request, 'payments/author_payments.html', context)
 
@@ -476,11 +450,19 @@ def payment_dashboard(request):
         total_paid_author = author_payments.filter(status='paid').aggregate(total=Sum('final_amount'))['total'] or 0
         total_pending_author = author_payments.filter(status__in=['calculated', 'pending']).aggregate(total=Sum('final_amount'))['total'] or 0
         
+        phone = (
+            getattr(author, 'phone', None)
+            or getattr(author, 'phone_number', None)
+            or getattr(author, 'mobile', None)
+            or ''
+        )
         author_data.append({
             'id': author.id,
             'username': author.username,
             'full_name': author.full_name,
+            'display_name': getattr(author, 'display_name', None) or author.full_name or author.username,
             'email': author.email,
+            'phone': phone or '',
             'total_royalty': total_royalty,
             'total_tax': total_tax_author,
             'total_net': total_net,
@@ -490,6 +472,8 @@ def payment_dashboard(request):
     
     recent_payments = payments.order_by('-created_at')[:20]
     
+    from payments.services.finance import get_finance_settings
+    fin = get_finance_settings()
     context = {
         'authors': author_data,
         'recent_payments': recent_payments,
@@ -497,9 +481,10 @@ def payment_dashboard(request):
         'total_paid': total_paid,
         'total_pending': total_pending,
         'total_tax': total_tax,
-        'royalty_rate': getattr(settings, 'ROYALTY_RATE', 70),
-        'abrehot_rate': 100 - getattr(settings, 'ROYALTY_RATE', 70),
-        'tax_threshold': getattr(settings, 'TAX_THRESHOLD', 500),
+        'royalty_rate': fin.royalty_rate,
+        'abrehot_rate': fin.platform_rate,
+        'tax_threshold': fin.tax_threshold,
+        'fin': fin,
     }
     return render(request, 'payments/dashboard.html', context)
 
@@ -513,10 +498,9 @@ def calculate_all_payments(request):
         messages.error(request, 'You are not authorized to perform this action.')
         return redirect('home')
     
-    purchases = Purchase.objects.filter(
-        status='completed',
-        payment__isnull=True
-    )
+    # Reverse relation is related_name="payments" on Payment.purchase
+    paid_ids = Payment.objects.exclude(purchase_id=None).values_list('purchase_id', flat=True)
+    purchases = Purchase.objects.filter(status='completed').exclude(id__in=paid_ids)
     
     count = 0
     for purchase in purchases:
@@ -531,47 +515,106 @@ def calculate_all_payments(request):
 @login_required
 def process_author_payment(request, author_id):
     """
-    Process payment for a specific author
+    Pay author royalties via Telebirr — same C2B Checkout as book purchase.
+    Supports normal form POST (redirect) and AJAX (JSON with checkout_url).
     """
-    if request.user.role not in ['admin', 'maker', 'finance']:
-        messages.error(request, 'You are not authorized to perform this action.')
-        return redirect('home')
-    
-    if request.method != 'POST':
-        messages.error(request, 'Invalid request method.')
-        return redirect('payments:dashboard')
-    
-    author = get_object_or_404(CustomUser, id=author_id, role='author')
-    payment_method = request.POST.get('payment_method', 'telebirr')
-    
-    payments = Payment.objects.filter(
-        author=author,
-        status__in=['calculated', 'pending']
+    wants_json = (
+        request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+        or 'application/json' in (request.headers.get('Accept') or '')
     )
-    
-    if not payments.exists():
-        messages.warning(request, f'No pending payments for {author.full_name}.')
+
+    def fail(msg, status=400):
+        if wants_json:
+            return JsonResponse({'success': False, 'error': msg}, status=status)
+        messages.error(request, msg)
         return redirect('payments:dashboard')
-    
-    processed = 0
-    for payment in payments:
-        if payment_method == 'telebirr':
-            telebirr = TelebirrPayment()
-            # For author payment, we need to pass a purchase
-            # This is a simplified version - in production, handle this properly
-            result = {'success': True, 'reference': f"PAY-{uuid.uuid4().hex[:8].upper()}"}
-        else:
-            result = {'success': False, 'error': 'Unsupported payment method'}
-        
-        if result.get('success'):
-            payment.status = 'paid'
-            payment.paid_at = timezone.now()
-            payment.transaction_reference = result.get('reference')
+
+    def ok_redirect(url, msg=None):
+        if wants_json:
+            return JsonResponse({'success': True, 'checkout_url': url, 'redirect_url': url})
+        if msg:
+            messages.success(request, msg)
+        return redirect(url)
+
+    if request.user.role not in ['admin', 'maker', 'finance']:
+        return fail('You are not authorized to perform this action.', 403)
+
+    if request.method != 'POST':
+        return fail('Invalid request method.', 405)
+
+    author = get_object_or_404(CustomUser, id=author_id, role='author')
+    payments_qs = list(
+        Payment.objects.filter(author=author, status__in=['calculated', 'pending'])
+    )
+    if not payments_qs:
+        return fail(f'No pending payments for {author.full_name or author.username}.')
+
+    author_phone = str(
+        request.POST.get('phone_number')
+        or getattr(author, 'phone', None)
+        or getattr(author, 'phone_number', None)
+        or ''
+    ).strip().replace(' ', '')
+    if not author_phone or len(author_phone) < 9:
+        return fail(f'Enter a valid Telebirr phone number for {author.username}.')
+
+    if request.POST.get('save_phone') == '1':
+        for field in ('phone', 'phone_number', 'mobile'):
+            if hasattr(author, field):
+                setattr(author, field, author_phone)
+                try:
+                    author.save(update_fields=[field])
+                except Exception:
+                    try:
+                        author.save()
+                    except Exception:
+                        pass
+                break
+
+    total = sum((p.final_amount or Decimal('0') for p in payments_qs), Decimal('0.00'))
+    if total <= 0:
+        return fail('Pending amount is zero.')
+
+    tb = TelebirrService()
+    if not tb.is_configured():
+        return fail('Telebirr is not configured. Cannot pay authors.')
+
+    merch_id = ''.join(c for c in f'AUTH{author.id}{uuid.uuid4().hex[:10]}'.upper() if c.isalnum())[:32]
+    try:
+        result = tb.create_checkout(
+            title=f'Author royalty {author.username}',
+            amount=float(total),
+            merch_order_id=merch_id,
+        )
+    except Exception as e:
+        logger.exception('Telebirr create_checkout for royalty failed')
+        return fail(f'Telebirr error: {e}')
+
+    if not result.get('success'):
+        return fail(f"Telebirr checkout failed: {result.get('error')}")
+
+    checkout_url = result.get('checkout_url') or result.get('checkOutUrl')
+    ref = result.get('merch_order_id') or result.get('prepay_id') or merch_id
+    if not checkout_url:
+        return fail('Telebirr did not return a checkout URL.')
+
+    for payment in payments_qs:
+        payment.status = 'pending'
+        payment.transaction_reference = str(ref)[:100]
+        try:
             payment.save()
-            processed += 1
-    
-    messages.success(request, f'Successfully processed {processed} payments for {author.full_name}.')
-    return redirect('payments:dashboard')
+        except Exception as e:
+            logger.warning('Could not update payment %s: %s', payment.id, e)
+
+    logger.info(
+        'Royalty Telebirr checkout author=%s total=%s url=%s',
+        author.id, total, checkout_url[:80],
+    )
+    return ok_redirect(
+        checkout_url,
+        msg=f'Telebirr royalty payout for {author.username}: {total} ETB. Complete payment on Telebirr.',
+    )
+
 
 
 @login_required
@@ -615,9 +658,9 @@ def author_payment_detail(request, author_id):
         'total_paid': total_paid,
         'total_pending': total_pending,
         'total_tax': total_tax,
-        'royalty_rate': getattr(settings, 'ROYALTY_RATE', 70),
-        'abrehot_rate': 100 - getattr(settings, 'ROYALTY_RATE', 70),
-        'tax_threshold': getattr(settings, 'TAX_THRESHOLD', 500),
+        'royalty_rate': __import__('payments.services.finance', fromlist=['get_finance_settings']).get_finance_settings().royalty_rate,
+        'abrehot_rate': __import__('payments.services.finance', fromlist=['get_finance_settings']).get_finance_settings().platform_rate,
+        'tax_threshold': __import__('payments.services.finance', fromlist=['get_finance_settings']).get_finance_settings().tax_threshold,
     }
     return render(request, 'payments/author_detail.html', context)
 
@@ -636,7 +679,7 @@ def process_batch_payment(request):
     try:
         data = json.loads(request.body)
         author_ids = data.get('author_ids', [])
-        method = data.get('method', 'telebirr')
+        method = 'telebirr'  # only Telebirr payouts supported
         
         if not author_ids:
             return JsonResponse({'success': False, 'error': 'No authors selected'}, status=400)
@@ -1128,3 +1171,148 @@ def paypal_return(request):
     return redirect('books:browse')
 
 
+
+
+
+# ---------------------------------------------------------------------------
+# Finance officer: settings + reports
+# ---------------------------------------------------------------------------
+
+def _finance_staff(user):
+    return getattr(user, "role", None) in ("admin", "maker", "finance")
+
+
+@login_required
+def finance_settings_view(request):
+    """Officer edits royalty / tax rates (not hardcoded)."""
+    from payments.models import FinanceSettings
+    from payments.services.finance import get_finance_settings
+
+    if not _finance_staff(request.user):
+        messages.error(request, "You are not authorized to manage finance settings.")
+        return redirect("home")
+
+    fin = get_finance_settings()
+    if request.method == "POST":
+        try:
+            fin.royalty_rate = Decimal(str(request.POST.get("royalty_rate", fin.royalty_rate)))
+            fin.tax_rate_default = Decimal(str(request.POST.get("tax_rate_default", fin.tax_rate_default)))
+            fin.tax_rate_culture = Decimal(str(request.POST.get("tax_rate_culture", fin.tax_rate_culture)))
+            fin.tax_threshold = Decimal(str(request.POST.get("tax_threshold", fin.tax_threshold)))
+            fin.culture_genres = request.POST.get("culture_genres", fin.culture_genres) or fin.culture_genres
+            fin.notes = request.POST.get("notes", "") or ""
+            fin.updated_by = request.user
+            if fin.royalty_rate < 0 or fin.royalty_rate > 100:
+                raise ValueError("Royalty rate must be between 0 and 100")
+            fin.save()
+            messages.success(request, "Finance settings saved. New purchases will use these rates.")
+            return redirect("payments:finance_settings")
+        except Exception as e:
+            messages.error(request, f"Could not save settings: {e}")
+
+    return render(request, "payments/finance_settings.html", {"fin": fin})
+
+
+@login_required
+def finance_reports_view(request):
+    """List reports + generate weekly / monthly / annual."""
+    from payments.models import FinanceReport
+    from payments.services.finance import generate_finance_report, get_finance_settings
+
+    if not _finance_staff(request.user):
+        messages.error(request, "You are not authorized to view finance reports.")
+        return redirect("home")
+
+    if request.method == "POST":
+        period = (request.POST.get("period_type") or "monthly").lower()
+        if period not in ("weekly", "monthly", "annual", "custom"):
+            period = "monthly"
+        try:
+            start = end = None
+            if period == "custom":
+                start = request.POST.get("start")
+                end = request.POST.get("end")
+                from datetime import date as date_cls
+                start = date_cls.fromisoformat(start) if start else None
+                end = date_cls.fromisoformat(end) if end else None
+            report = generate_finance_report(
+                period_type=period,
+                user=request.user,
+                start=start,
+                end=end,
+            )
+            messages.success(request, f"Report generated: {report.title}")
+            return redirect("payments:finance_report_detail", report_id=report.id)
+        except Exception as e:
+            logger.exception("report generation failed")
+            messages.error(request, f"Report failed: {e}")
+
+    reports = FinanceReport.objects.all()[:50]
+    fin = get_finance_settings()
+    return render(
+        request,
+        "payments/finance_reports.html",
+        {"reports": reports, "fin": fin},
+    )
+
+
+@login_required
+def finance_report_detail(request, report_id):
+    from payments.models import FinanceReport
+
+    if not _finance_staff(request.user):
+        messages.error(request, "Not authorized.")
+        return redirect("home")
+    report = get_object_or_404(FinanceReport, id=report_id)
+    return render(request, "payments/finance_report_detail.html", {"report": report})
+
+
+
+@login_required
+def mark_author_payments_paid(request, author_id):
+    """Finance officer confirms Telebirr royalty payout completed."""
+    if request.user.role not in ['admin', 'maker', 'finance']:
+        messages.error(request, 'Not authorized.')
+        return redirect('home')
+    if request.method != 'POST':
+        return redirect('payments:dashboard')
+    author = get_object_or_404(CustomUser, id=author_id, role='author')
+    ref = (request.POST.get('transaction_reference') or '').strip()
+    qs = Payment.objects.filter(author=author, status__in=['calculated', 'pending'])
+    if ref:
+        qs = qs.filter(transaction_reference=ref)
+    n = 0
+    for payment in qs:
+        payment.status = 'paid'
+        payment.paid_at = timezone.now()
+        if ref:
+            payment.transaction_reference = ref
+        payment.save()
+        n += 1
+    messages.success(request, f'Marked {n} Telebirr royalty payment(s) as paid for {author.username}.')
+    return redirect('payments:dashboard')
+
+
+
+@login_required
+def author_payout_info(request, author_id):
+    """JSON: author phone + pending amount for payout modal."""
+    if request.user.role not in ['admin', 'maker', 'finance']:
+        return JsonResponse({'error': 'forbidden'}, status=403)
+    author = get_object_or_404(CustomUser, id=author_id, role='author')
+    phone = (
+        getattr(author, 'phone', None)
+        or getattr(author, 'phone_number', None)
+        or getattr(author, 'mobile', None)
+        or ''
+    )
+    pending = Payment.objects.filter(
+        author=author, status__in=['calculated', 'pending']
+    ).aggregate(total=Sum('final_amount'))['total'] or 0
+    return JsonResponse({
+        'author_id': author.id,
+        'username': author.username,
+        'display_name': getattr(author, 'display_name', None) or author.full_name or author.username,
+        'phone': str(phone or ''),
+        'pending_amount': float(pending),
+    })

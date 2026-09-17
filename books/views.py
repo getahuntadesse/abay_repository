@@ -734,9 +734,11 @@ def get_tax_rate(book):
 
 
 def create_payment_record(purchase):
-    """Create payment record for a completed purchase"""
+    """Create payment record for a completed purchase (FinanceSettings rates)."""
     try:
-        from payments.models import Payment
+        from payments.views import create_author_payment as _cap
+        return _cap(purchase)
+        from payments.models import Payment  # noqa
         
         book = purchase.book
         author = book.author

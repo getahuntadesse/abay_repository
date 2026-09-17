@@ -23,50 +23,10 @@ logger = logging.getLogger("payments")
 
 
 def _create_author_payment(purchase: Purchase):
-    """Create royalty Payment record after successful purchase (unchanged business logic)."""
-    try:
-        book = purchase.book
-        author = book.author
-        gross = purchase.amount
-        royalty_rate = Decimal(str(getattr(settings, "ROYALTY_RATE", 70)))
-        abrehot_rate = Decimal("100") - royalty_rate
-        author_royalty = (gross * royalty_rate / Decimal("100")).quantize(Decimal("0.01"))
-        abrehot_share = (gross * abrehot_rate / Decimal("100")).quantize(Decimal("0.01"))
+    """Royalty from FinanceSettings (officer-set rates). Telebirr is the only gateway."""
+    from payments.views import create_author_payment
+    return create_author_payment(purchase)
 
-        tax_rate = Decimal("10")
-        culture_genres = {
-            "culture", "cultural", "history", "heritage", "tradition",
-            "ethiopian", "amharic", "oromo", "tigrinya", "literature", "poetry",
-        }
-        genre = (getattr(book, "genre", "") or "").lower()
-        if any(g in genre for g in culture_genres):
-            tax_rate = Decimal("5")
-
-        tax_threshold = Decimal(str(getattr(settings, "TAX_THRESHOLD", 500)))
-        tax_amount = Decimal("0.00")
-        is_taxable = False
-        if author_royalty >= tax_threshold:
-            is_taxable = True
-            tax_amount = (author_royalty * tax_rate / Decimal("100")).quantize(Decimal("0.01"))
-
-        final_amount = author_royalty - tax_amount
-        Payment.objects.create(
-            book=book,
-            author=author,
-            purchase=purchase,
-            gross_amount=gross,
-            author_royalty=author_royalty,
-            abrehot_share=abrehot_share,
-            abrehot_share_rate=abrehot_rate,
-            royalty_rate=royalty_rate,
-            tax_rate=tax_rate,
-            tax_amount=tax_amount,
-            is_taxable=is_taxable,
-            final_amount=final_amount,
-            status="calculated",
-        )
-    except Exception as e:
-        logger.exception("Author payment creation failed: %s", e)
 
 
 @login_required

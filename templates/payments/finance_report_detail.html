@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load humanize %}
+{% block title %}{{ report.title }} - Abay{% endblock %}
+{% block content %}
+<div class="container py-4">
+  <a href="{% url 'payments:finance_reports' %}" class="btn btn-sm btn-outline-secondary mb-3">← All reports</a>
+  <h2 style="color:#DAA520">{{ report.title }}</h2>
+  <p class="text-muted">{{ report.get_period_type_display }} · {{ report.period_start }} → {{ report.period_end }} · Generated {{ report.generated_at|date:"M d, Y H:i" }}</p>
+
+  <div class="row g-3 mb-4">
+    <div class="col-md-3"><div class="card p-3 text-center"><div class="text-muted small">Gross sales</div><div class="fs-4 fw-bold">{{ report.total_gross|floatformat:2 }}</div></div></div>
+    <div class="col-md-3"><div class="card p-3 text-center"><div class="text-muted small">Author royalty</div><div class="fs-4 fw-bold">{{ report.total_royalty|floatformat:2 }}</div></div></div>
+    <div class="col-md-3"><div class="card p-3 text-center"><div class="text-muted small">Tax withheld</div><div class="fs-4 fw-bold">{{ report.total_tax|floatformat:2 }}</div></div></div>
+    <div class="col-md-3"><div class="card p-3 text-center"><div class="text-muted small">Net to authors</div><div class="fs-4 fw-bold">{{ report.total_net_authors|floatformat:2 }}</div></div></div>
+    <div class="col-md-3"><div class="card p-3 text-center"><div class="text-muted small">Platform share</div><div class="fs-4 fw-bold">{{ report.total_platform|floatformat:2 }}</div></div></div>
+    <div class="col-md-3"><div class="card p-3 text-center"><div class="text-muted small">Paid out</div><div class="fs-4 fw-bold">{{ report.total_paid|floatformat:2 }}</div></div></div>
+    <div class="col-md-3"><div class="card p-3 text-center"><div class="text-muted small">Pending</div><div class="fs-4 fw-bold">{{ report.total_pending|floatformat:2 }}</div></div></div>
+    <div class="col-md-3"><div class="card p-3 text-center"><div class="text-muted small">Purchases / authors</div><div class="fs-4 fw-bold">{{ report.purchase_count }} / {{ report.author_count }}</div></div></div>
+  </div>
+
+  <p class="small text-muted">Rate snapshot: royalty {{ report.royalty_rate_snapshot }}% · platform {{ report.platform_rate_snapshot }}% · tax threshold {{ report.tax_threshold_snapshot }} ETB</p>
+
+  <h5 class="mt-4">By author</h5>
+  <div class="table-responsive card">
+    <table class="table mb-0">
+      <thead><tr><th>Author</th><th>Payments</th><th>Royalty</th><th>Tax</th><th>Net</th></tr></thead>
+      <tbody>
+        {% for a in report.details.authors %}
+        <tr>
+          <td>{{ a.author__username }}</td>
+          <td>{{ a.count }}</td>
+          <td>{{ a.royalty }}</td>
+          <td>{{ a.tax }}</td>
+          <td>{{ a.net }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5" class="text-muted text-center">No author rows</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

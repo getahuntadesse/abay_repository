@@ -2,7 +2,7 @@
 from django.contrib import admin
 from django.utils.html import format_html
 from django.urls import reverse
-from .models import Purchase, Payment, PaymentBatch, PaymentTransaction
+from .models import Purchase, Payment, PaymentBatch, PaymentTransaction, FinanceSettings, FinanceReport
 
 
 @admin.register(Purchase)
@@ -181,3 +181,12 @@ class PaymentTransactionAdmin(admin.ModelAdmin):
             'classes': ('collapse',)
         }),
     )
+
+@admin.register(FinanceSettings)
+class FinanceSettingsAdmin(admin.ModelAdmin):
+    list_display = ('id', 'royalty_rate', 'platform_rate', 'tax_rate_default', 'tax_threshold', 'updated_at')
+
+@admin.register(FinanceReport)
+class FinanceReportAdmin(admin.ModelAdmin):
+    list_display = ('title', 'period_type', 'period_start', 'period_end', 'total_gross', 'generated_at')
+    list_filter = ('period_type',)

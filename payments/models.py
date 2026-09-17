@@ -466,3 +466,123 @@ def get_tax_rate(book):
     if any(g in genre for g in culture_genres):
         return 5
     return 10
+
+
+class FinanceSettings(models.Model):
+    """
+    Singleton-style finance configuration editable by finance officers.
+    Rates are percentages (0-100). Not hardcoded in settings.py.
+    """
+    royalty_rate = models.DecimalField(
+        max_digits=5, decimal_places=2, default=Decimal("70.00"),
+        help_text="Author royalty share of gross sale (%)",
+    )
+    platform_rate = models.DecimalField(
+        max_digits=5, decimal_places=2, default=Decimal("30.00"),
+        help_text="Platform (Abrehot) share of gross sale (%)",
+    )
+    tax_rate_default = models.DecimalField(
+        max_digits=5, decimal_places=2, default=Decimal("10.00"),
+        help_text="Default withholding tax on author royalty (%)",
+    )
+    tax_rate_culture = models.DecimalField(
+        max_digits=5, decimal_places=2, default=Decimal("5.00"),
+        help_text="Withholding tax for culture-related genres (%)",
+    )
+    tax_threshold = models.DecimalField(
+        max_digits=12, decimal_places=2, default=Decimal("500.00"),
+        help_text="Royalty amount above which tax applies (ETB)",
+    )
+    culture_genres = models.TextField(
+        default="culture,cultural,history,heritage,tradition,ethiopian,amharic,oromo,tigrinya,somali,african,folklore,mythology,traditional,language,literature,poetry,religious,spiritual,custom,ritual,celebration",
+        help_text="Comma-separated genre keywords that use culture tax rate",
+    )
+    currency = models.CharField(max_length=8, default="ETB")
+    notes = models.TextField(blank=True, default="")
+    updated_by = models.ForeignKey(
+        User, null=True, blank=True, on_delete=models.SET_NULL, related_name="finance_settings_updates"
+    )
+    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = "finance_settings"
+        verbose_name = "Finance settings"
+        verbose_name_plural = "Finance settings"
+
+    def __str__(self):
+        return f"FinanceSettings royalty={self.royalty_rate}% tax={self.tax_rate_default}%"
+
+    def clean(self):
+        from django.core.exceptions import ValidationError
+        if self.royalty_rate + self.platform_rate != Decimal("100.00"):
+            # auto-balance platform to 100 - royalty
+            self.platform_rate = Decimal("100.00") - self.royalty_rate
+
+    def save(self, *args, **kwargs):
+        self.platform_rate = Decimal("100.00") - Decimal(str(self.royalty_rate))
+        super().save(*args, **kwargs)
+
+    @classmethod
+    def get_solo(cls):
+        obj = cls.objects.order_by("id").first()
+        if obj is None:
+            obj = cls.objects.create()
+        return obj
+
+    def genre_keywords(self):
+        return [g.strip().lower() for g in (self.culture_genres or "").split(",") if g.strip()]
+
+
+class FinanceReport(models.Model):
+    """Generated weekly / monthly / annual finance reports."""
+    PERIOD_WEEKLY = "weekly"
+    PERIOD_MONTHLY = "monthly"
+    PERIOD_ANNUAL = "annual"
+    PERIOD_CUSTOM = "custom"
+    PERIOD_CHOICES = (
+        (PERIOD_WEEKLY, "Weekly"),
+        (PERIOD_MONTHLY, "Monthly"),
+        (PERIOD_ANNUAL, "Annual"),
+        (PERIOD_CUSTOM, "Custom"),
+    )
+
+    period_type = models.CharField(max_length=20, choices=PERIOD_CHOICES)
+    period_start = models.DateField()
+    period_end = models.DateField()
+    title = models.CharField(max_length=200, blank=True, default="")
+
+    # Aggregates (ETB)
+    total_gross = models.DecimalField(max_digits=14, decimal_places=2, default=Decimal("0.00"))
+    total_royalty = models.DecimalField(max_digits=14, decimal_places=2, default=Decimal("0.00"))
+    total_platform = models.DecimalField(max_digits=14, decimal_places=2, default=Decimal("0.00"))
+    total_tax = models.DecimalField(max_digits=14, decimal_places=2, default=Decimal("0.00"))
+    total_net_authors = models.DecimalField(max_digits=14, decimal_places=2, default=Decimal("0.00"))
+    total_paid = models.DecimalField(max_digits=14, decimal_places=2, default=Decimal("0.00"))
+    total_pending = models.DecimalField(max_digits=14, decimal_places=2, default=Decimal("0.00"))
+    purchase_count = models.PositiveIntegerField(default=0)
+    payment_count = models.PositiveIntegerField(default=0)
+    author_count = models.PositiveIntegerField(default=0)
+
+    # Snapshot of rates used when generating
+    royalty_rate_snapshot = models.DecimalField(max_digits=5, decimal_places=2, default=Decimal("70.00"))
+    platform_rate_snapshot = models.DecimalField(max_digits=5, decimal_places=2, default=Decimal("30.00"))
+    tax_threshold_snapshot = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal("500.00"))
+
+    # JSON breakdown (authors, daily series, etc.)
+    details = models.JSONField(default=dict, blank=True)
+
+    generated_by = models.ForeignKey(
+        User, null=True, blank=True, on_delete=models.SET_NULL, related_name="finance_reports"
+    )
+    generated_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = "finance_reports"
+        ordering = ["-period_end", "-generated_at"]
+        indexes = [
+            models.Index(fields=["period_type", "period_start", "period_end"]),
+        ]
+
+    def __str__(self):
+        return self.title or f"{self.period_type} {self.period_start} → {self.period_end}"
