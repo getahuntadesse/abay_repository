@@ -6466,3 +6466,9 @@ django.template.exceptions.TemplateSyntaxError: Unclosed tag on line 245: 'block
 [2026-09-17 14:22:13] INFO django.server - "GET /static/images/Abrehot.jpg HTTP/1.1" 200 72716
 [2026-09-17 14:22:13] INFO django.server - "GET /static/images/logo.png HTTP/1.1" 200 157968
 [2026-09-17 14:22:13] INFO django.server - "GET /media/books/covers/2026/09/pychology_b5LmZgq.png HTTP/1.1" 200 363640
+[2026-09-17 14:26:19] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-17 14:26:19] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-17 14:26:32] INFO django.server - "GET / HTTP/1.1" 200 89883
+[2026-09-17 14:26:33] INFO django.server - "GET / HTTP/1.1" 200 89883
+[2026-09-17 14:26:34] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 14:26:36] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
