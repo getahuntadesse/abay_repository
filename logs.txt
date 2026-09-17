@@ -6781,3 +6781,27 @@ django.template.exceptions.TemplateSyntaxError: Unclosed tag on line 245: 'block
 [2026-09-17 16:23:40] INFO django.utils.autoreload - C:\abay_repository\books\urls.py changed, reloading.
 [2026-09-17 16:23:42] INFO django.utils.autoreload - Watching for file changes with StatReloader
 [2026-09-17 16:23:42] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-17 16:24:25] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64909
+[2026-09-17 16:24:27] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 16:24:28] AUTH INFO - AUTH - Login successful: User=author, IP=127.0.0.1, Role=author
+[2026-09-17 16:24:28] INFO accounts.views - AUTH - Login successful: User=author, IP=127.0.0.1, Role=author
+[2026-09-17 16:24:28] INFO accounts.views - AUTH - Login successful: User=author, IP=127.0.0.1, Role=author
+[2026-09-17 16:24:28] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-09-17 16:24:28] AUTH INFO - Author dashboard accessed by: author
+[2026-09-17 16:24:28] INFO accounts.views - Author dashboard accessed by: author
+[2026-09-17 16:24:28] INFO accounts.views - Author dashboard accessed by: author
+[2026-09-17 16:24:28] INFO django.server - "GET /accounts/dashboard/author/ HTTP/1.1" 200 76501
+[2026-09-17 16:24:30] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 16:24:39] INFO django.server - "GET /books/my-books/author/ HTTP/1.1" 200 76112
+[2026-09-17 16:24:39] INFO django.server - "GET /media/books/covers/2026/09/pychology_b5LmZgq.png HTTP/1.1" 200 363640
+[2026-09-17 16:24:41] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 16:24:42] INFO django.server - "GET / HTTP/1.1" 200 91665
+[2026-09-17 16:24:44] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 16:24:44] INFO django.server - "GET /books/browse/ HTTP/1.1" 200 102281
+[2026-09-17 16:24:46] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 16:24:46] INFO django.server - "GET /books/6/ HTTP/1.1" 200 73710
+[2026-09-17 16:24:48] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 16:24:50] INFO django.server - "GET /books/upload/ HTTP/1.1" 200 85727
+[2026-09-17 16:24:52] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 16:27:36] INFO django.server - "GET /books/upload/ HTTP/1.1" 200 90580
+[2026-09-17 16:27:37] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
