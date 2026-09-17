@@ -1756,31 +1756,99 @@ def upload_book(request):
         return redirect('home')
     
     if request.method == 'POST':
-        title = request.POST.get('title')
-        description = request.POST.get('description')
+        title = (request.POST.get('title') or '').strip()
+        description = (request.POST.get('description') or '').strip()
         genre_id = request.POST.get('genre')
-        language = request.POST.get('language')
-        price = request.POST.get('price', 0)
-        is_free = request.POST.get('is_free') == 'on'
-        isbn = request.POST.get('isbn', '').strip()
-        subtitle = request.POST.get('subtitle', '')
-        edition = request.POST.get('edition', '1')
+        language = (request.POST.get('language') or '').strip()
+        price_raw = request.POST.get('price', '0')
+        is_free = request.POST.get('is_free') in ('on', 'true', '1', 'yes')
+        isbn = (request.POST.get('isbn') or '').strip()
+        subtitle = (request.POST.get('subtitle') or '').strip()
+        edition = (request.POST.get('edition') or '1').strip() or '1'
         page_count = request.POST.get('page_count', 0)
-        publication_year = request.POST.get('publication_year', 2024)
-        keywords = request.POST.get('keywords', '')
-        
-        # Get submit action from form
+        publication_year = request.POST.get('publication_year', timezone.now().year)
+        keywords = (request.POST.get('keywords') or '').strip()
         submit_action = request.POST.get('submit_action', 'draft')
-        
-        if not all([title, description, genre_id, language]):
-            messages.error(request, 'Please fill in all required fields.')
+
+        errors = []
+        if not title or len(title) < 2:
+            errors.append('Title is required (at least 2 characters).')
+        if not description or len(description) < 20:
+            errors.append('Description is required (at least 20 characters).')
+        if not genre_id:
+            errors.append('Please select a genre.')
+        if not language:
+            errors.append('Please select a language.')
+
+        # Price rules: free => 0; paid => must be positive (> 0)
+        try:
+            price_val = Decimal(str(price_raw or '0').replace(',', ''))
+        except Exception:
+            price_val = None
+            errors.append('Price must be a valid number.')
+
+        if is_free:
+            # Free books only via checkbox — price stored as 0
+            price_val = Decimal('0.00')
+        elif price_val is not None:
+            if price_val <= 0:
+                errors.append('Price cannot be zero. Enter a positive price, or mark the book as free.')
+            elif price_val < Decimal('0.01'):
+                errors.append('Price must be at least 0.01 ETB.')
+            else:
+                is_free = False
+
+        # PDF or EPUB — accept book_file or file field names
+        upload = request.FILES.get('book_file') or request.FILES.get('file')
+        if not upload:
+            errors.append('Please upload a PDF or EPUB file of the book.')
+        else:
+            name_lower = (upload.name or '').lower()
+            content_type = (getattr(upload, 'content_type', '') or '').lower()
+            is_pdf = name_lower.endswith('.pdf') or 'pdf' in content_type
+            is_epub = (
+                name_lower.endswith('.epub')
+                or 'epub' in content_type
+                or content_type in ('application/epub+zip', 'application/epub')
+            )
+            if not (is_pdf or is_epub):
+                errors.append('Only PDF or EPUB files are allowed for the eBook upload.')
+            if getattr(upload, 'size', 0) and upload.size > 50 * 1024 * 1024:
+                errors.append('eBook file must be 50 MB or smaller.')
+
+        cover = request.FILES.get('cover_image')
+        if cover:
+            cname = (cover.name or '').lower()
+            if not any(cname.endswith(ext) for ext in ('.jpg', '.jpeg', '.png')):
+                errors.append('Cover image must be JPG or PNG only.')
+
+        sample = request.FILES.get('sample_file')
+        if sample:
+            sname = (sample.name or '').lower()
+            if not sname.endswith('.pdf'):
+                errors.append('Sample/preview file must be a PDF.')
+
+        try:
+            page_count_i = int(page_count) if page_count not in (None, '') else 0
+            if page_count_i < 0:
+                errors.append('Page count cannot be negative.')
+        except (TypeError, ValueError):
+            page_count_i = 0
+            errors.append('Page count must be a whole number.')
+
+        try:
+            year_i = int(publication_year) if publication_year not in (None, '') else timezone.now().year
+            if year_i < 1900 or year_i > timezone.now().year + 1:
+                errors.append('Publication year looks invalid.')
+        except (TypeError, ValueError):
+            year_i = timezone.now().year
+            errors.append('Publication year must be a number.')
+
+        if errors:
+            for msg in errors:
+                messages.error(request, msg)
             return redirect('books:upload')
-        
-        # Validate file
-        if not request.FILES.get('file'):
-            messages.error(request, 'Please upload a book file (PDF or EPUB).')
-            return redirect('books:upload')
-        
+
         try:
             # Determine initial status based on submit action
             if submit_action == 'submit':
@@ -1791,7 +1859,7 @@ def upload_book(request):
                 initial_status = Book.STATUS_DRAFT
                 submitted_at = None
                 success_message = f'Book "{title}" saved as draft. You can submit it for review later from your dashboard.'
-            
+
             book = Book.objects.create(
                 title=title,
                 subtitle=subtitle,
@@ -1799,9 +1867,9 @@ def upload_book(request):
                 genre_id=genre_id,
                 language=language,
                 edition=edition,
-                page_count=int(page_count) if page_count else 0,
-                publication_year=int(publication_year) if publication_year else 2024,
-                price=float(price) if not is_free else 0,
+                page_count=page_count_i,
+                publication_year=year_i,
+                price=price_val,
                 is_free=is_free,
                 isbn=isbn if isbn else None,
                 keywords=keywords,
@@ -1812,15 +1880,14 @@ def upload_book(request):
                 current_version=0,
                 revision_count=0,
             )
-            
-            # Save files
-            if request.FILES.get('file'):
-                book.file = request.FILES['file']
-            if request.FILES.get('cover_image'):
-                book.cover_image = request.FILES['cover_image']
-            if request.FILES.get('sample_file'):
-                book.sample_file = request.FILES['sample_file']
-            
+
+            # Save files (PDF only for manuscript)
+            book.file = upload
+            if cover:
+                book.cover_image = cover
+            if sample:
+                book.sample_file = sample
+
             book.save()
             
             # Create initial version

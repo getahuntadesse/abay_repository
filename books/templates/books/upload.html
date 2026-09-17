@@ -317,9 +317,10 @@
                         
                         <div class="mb-3" id="priceSection">
                             <label class="form-label">Price (ETB) <span class="required">*</span></label>
+                            <small class="text-muted d-block mb-1">Price cannot be zero. Enter a positive amount, or check “This book is free”.</small>
                             <div class="input-group">
                                 <span class="input-group-text">ETB</span>
-                                <input type="number" name="price" class="form-control" step="0.01" min="0" 
+                                <input type="number" name="price" class="form-control" step="0.01" min="0.01" 
                                        placeholder="29.99" id="bookPrice" value="29.99">
                             </div>
                         </div>
@@ -345,7 +346,8 @@
                                 <i class="fas fa-file-pdf fa-3x mb-2" style="color: var(--primary-gold);"></i>
                                 <p class="mb-1">Click or drag to upload</p>
                                 <small class="text-muted">PDF, EPUB, MOBI (Max 50MB)</small>
-                                <input type="file" name="book_file" class="d-none" accept=".pdf,.epub,.mobi" required id="ebookFile">
+                                <p class="text-muted small mb-2">PDF or EPUB only (max 50 MB).</p>
+                                <input type="file" name="book_file" class="d-none" accept="application/pdf,.pdf,application/epub+zip,.epub" data-max-mb="50" required id="ebookFile">
                             </div>
                             <div id="ebookFileName" class="file-info"></div>
                             <div id="fileError" class="error-feedback"></div>
@@ -369,7 +371,7 @@
                                 <i class="fas fa-file-alt fa-3x mb-2" style="color: var(--primary-gold);"></i>
                                 <p class="mb-1">Click or drag to upload</p>
                                 <small class="text-muted">PDF, EPUB (Preview for readers, Max 5MB)</small>
-                                <input type="file" name="sample_file" class="d-none" accept=".pdf,.epub" id="sampleFile">
+                                <input type="file" name="sample_file" class="d-none" accept="application/pdf,.pdf,application/epub+zip,.epub" id="sampleFile">
                             </div>
                             <div id="sampleFileName" class="file-info"></div>
                         </div>
@@ -633,7 +635,7 @@
             const maxSize = 50 * 1024 * 1024;
             
             if (!isValid) {
-                fileError.textContent = 'Invalid file type. Please upload PDF, EPUB, or MOBI files only.';
+                fileError.textContent = 'Invalid file type. Please upload PDF only files only.';
                 fileError.style.display = 'block';
                 this.value = '';
                 display.innerHTML = '';
@@ -727,4 +729,93 @@
         border: 1px solid #dee2e6;
     }
 </style>
+
+<script>
+(function() {
+  function validateUploadForm(e) {
+    var errors = [];
+    var title = (document.querySelector('[name=title]') || {}).value || '';
+    var desc = (document.querySelector('[name=description]') || {}).value || '';
+    var genre = (document.querySelector('[name=genre]') || {}).value || '';
+    var lang = (document.querySelector('[name=language]') || {}).value || '';
+    var isFree = (document.getElementById('isFreeCheckbox') || {}).checked;
+    var priceEl = document.getElementById('bookPrice') || document.querySelector('[name=price]');
+    var price = priceEl ? parseFloat(priceEl.value) : NaN;
+    var fileInput = document.getElementById('ebookFile') || document.querySelector('[name=book_file], [name=file]');
+    var file = fileInput && fileInput.files && fileInput.files[0];
+
+    if (title.trim().length < 2) errors.push('Title is required.');
+    if (desc.trim().length < 20) errors.push('Description must be at least 20 characters.');
+    if (!genre) errors.push('Select a genre.');
+    if (!lang) errors.push('Select a language.');
+    if (!isFree) {
+      if (!(price > 0)) errors.push('Price cannot be zero. Enter a positive price, or mark the book as free.');
+    }
+    if (!file) {
+      errors.push('Please upload a PDF file.');
+    } else {
+      var n = (file.name || '').toLowerCase();
+      if (!n.endsWith('.pdf')) errors.push('Only PDF or EPUB files are allowed.');
+      if (file.size > 50 * 1024 * 1024) errors.push('PDF must be 50 MB or smaller.');
+    }
+    if (errors.length) {
+      e.preventDefault();
+      alert(errors.join('\\n'));
+      return false;
+    }
+    // free => force price 0
+    if (isFree && priceEl) priceEl.value = '0';
+    return true;
+  }
+  var form = document.getElementById('uploadForm') || document.querySelector('form[enctype="multipart/form-data"]');
+  if (form) form.addEventListener('submit', validateUploadForm);
+
+  var fileInput = document.getElementById('ebookFile') || document.querySelector('[name=book_file], [name=file]');
+  if (fileInput) {
+    fileInput.setAttribute('accept', 'application/pdf,.pdf,application/epub+zip,.epub');
+    fileInput.addEventListener('change', function() {
+      var f = this.files && this.files[0];
+      if (!f) return;
+      if (!(f.name || '').toLowerCase().endsWith('.pdf')) {
+        alert('Only PDF or EPUB files are allowed.');
+        this.value = '';
+      }
+    });
+  }
+  var freeCb = document.getElementById('isFreeCheckbox');
+  var priceEl = document.getElementById('bookPrice') || document.querySelector('[name=price]');
+  if (freeCb && priceEl) {
+    freeCb.addEventListener('change', function() {
+      if (this.checked) {
+        priceEl.value = '0';
+        priceEl.removeAttribute('required');
+        priceEl.min = '0';
+      } else {
+        priceEl.setAttribute('required', 'required');
+        priceEl.min = '0.01';
+        if (parseFloat(priceEl.value) <= 0) priceEl.value = '';
+      }
+    });
+  }
+})();
+</script>
+
+
+<script>
+(function(){
+  var cover = document.getElementById('coverFile') || document.querySelector('[name=cover_image]');
+  if (!cover) return;
+  cover.setAttribute('accept', 'image/jpeg,image/png,.jpg,.jpeg,.png');
+  cover.addEventListener('change', function(){
+    var f = this.files && this.files[0];
+    if (!f) return;
+    var n = (f.name||'').toLowerCase();
+    if (!(n.endsWith('.jpg')||n.endsWith('.jpeg')||n.endsWith('.png'))) {
+      alert('Cover image must be JPG or PNG only.');
+      this.value = '';
+    }
+  });
+})();
+</script>
+
 {% endblock %}
