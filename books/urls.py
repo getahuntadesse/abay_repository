@@ -10,19 +10,19 @@ urlpatterns = [
     # ============================================
     path('browse/', views.browse_books, name='browse'),
     path('search/', views.search_books, name='search'),
-    
+
     # ============================================
     # BOOK DETAIL
     # ============================================
     path('<int:book_id>/', views.book_detail, name='detail'),
-    
+
     # ============================================
     # PURCHASE & PAYMENT
     # ============================================
     path('<int:book_id>/purchase/', views.purchase_book, name='purchase_book'),
     path('payment/<int:purchase_id>/', views.process_payment, name='payment'),
     path('payment/success/<int:purchase_id>/', views.payment_success, name='payment_success'),
-    
+
     # ============================================
     # DOWNLOAD & READING
     # ============================================
@@ -32,7 +32,7 @@ urlpatterns = [
     path('<int:book_id>/stream/', views.stream_book_pdf, name='stream'),
     path('offline/', views.offline_library, name='offline_library'),
     path('sw.js', views.reader_service_worker, name='reader_sw'),
-    
+
     # ============================================
     # TELEBIRR PAYMENT CALLBACKS
     # ============================================
@@ -41,31 +41,42 @@ urlpatterns = [
     path('telebirr/simulate/<str:transaction_id>/', views.telebirr_simulate, name='telebirr_simulate'),
     path('telebirr/pay/<str:transaction_id>/', views.telebirr_pay_simulate, name='telebirr_pay_simulate'),
     path('telebirr/process/<str:transaction_id>/', views.telebirr_pay_process, name='telebirr_pay_process'),
-    
+
     # ============================================
     # USER'S BOOKS (MY LIBRARY)
     # ============================================
     path('my-books/', views.my_books_user, name='my_books'),
     path('my-books/user/', views.my_books_user, name='my_books_user'),
     path('my-books/author/', views.my_books_author, name='my_books_author'),
-    
+
     # ============================================
     # WISHLIST
     # ============================================
     path('wishlist/', views.my_wishlist, name='my_wishlist'),
     path('<int:book_id>/wishlist/add/', views.add_to_wishlist, name='add_to_wishlist'),
     path('<int:book_id>/wishlist/remove/', views.remove_from_wishlist, name='remove_from_wishlist'),
-    
+
     # ============================================
     # AUTHOR URLS
     # ============================================
     path('upload/', views.upload_book, name='upload'),
+
+    # Submit book for review
     path('submit/<int:book_id>/', views.submit_book, name='submit_book'),
-    path('<int:book_id>/edit/', views.edit_book, name='edit'),
+
+    # Edit book — both names supported for safety
+    path('<int:book_id>/edit/', views.edit_book, name='edit_book'),
+    path('<int:book_id>/edit-old/', views.edit_book, name='edit'),
+
+    # Delete book
     path('<int:book_id>/delete/', views.delete_book, name='delete'),
+
+    # Author revision (checker requested changes)
     path('author/revision/<int:book_id>/', views.author_revision_submit, name='author_revision_submit'),
+
+    # Author dashboard
     path('author/dashboard/', views.author_dashboard, name='author_dashboard'),
-    
+
     # ============================================
     # MAKER URLS
     # ============================================
@@ -78,7 +89,7 @@ urlpatterns = [
     path('maker/reject/<int:book_id>/', views.maker_reject_book, name='maker_reject_book'),
     path('maker/pending-approval/', views.pending_approval, name='pending_approval'),
     path('maker/publications/', views.my_publications, name='my_publications'),
-    
+
     # ============================================
     # CHECKER URLS
     # ============================================
@@ -89,12 +100,12 @@ urlpatterns = [
     path('checker/submit-review/<int:assignment_id>/', views.checker_submit_review, name='checker_submit_review'),
     path('checker/process-review/', views.process_checker_review, name='process_checker_review'),
     path('checker/view/<int:book_id>/', views.view_book_for_review, name='view_book_for_review'),
-    
+
     # ============================================
     # ADMIN URLS
     # ============================================
     path('admin/dashboard/', views.admin_dashboard, name='admin_dashboard'),
-    
+
     # ============================================
     # PUBLIC URLS
     # ============================================

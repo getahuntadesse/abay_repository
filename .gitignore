@@ -213,17 +213,6 @@ fayda_*.pem
 *.pfx
 *.p8
 
-# Telebirr credentials
-telebirr_*.pem
-telebirr_*.key
-TELEBIRR_PRIVATE_KEY_*.pem
-TELEBIRR_PUBLIC_KEY_*.pem
-
-# CBE Birr credentials
-cbe_*.pem
-cbe_*.key
-CBE_*.pem
-CBE_*.key
 
 # SSL/TLS certificates
 certificates/

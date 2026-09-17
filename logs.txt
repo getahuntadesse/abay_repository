@@ -6621,3 +6621,163 @@ django.template.exceptions.TemplateSyntaxError: Unclosed tag on line 245: 'block
 [2026-09-17 15:25:00] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
 [2026-09-17 15:25:14] INFO django.server - "GET / HTTP/1.1" 200 91329
 [2026-09-17 15:25:16] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 15:36:03] INFO django.server - "GET / HTTP/1.1" 200 91329
+[2026-09-17 15:36:05] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 15:38:08] AUTH INFO - AUTH - User logged out: maker, IP=127.0.0.1
+[2026-09-17 15:38:08] INFO accounts.views - AUTH - User logged out: maker, IP=127.0.0.1
+[2026-09-17 15:38:08] INFO accounts.views - AUTH - User logged out: maker, IP=127.0.0.1
+[2026-09-17 15:38:08] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-09-17 15:38:08] INFO django.server - "GET / HTTP/1.1" 200 90237
+[2026-09-17 15:38:08] INFO django.server - "GET /media/books/covers/2026/09/pychology_b5LmZgq.png HTTP/1.1" 200 363640
+[2026-09-17 15:38:10] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64909
+[2026-09-17 15:38:11] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 15:38:12] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 15:38:17] AUTH INFO - AUTH - Login successful: User=author, IP=127.0.0.1, Role=author
+[2026-09-17 15:38:17] INFO accounts.views - AUTH - Login successful: User=author, IP=127.0.0.1, Role=author
+[2026-09-17 15:38:17] INFO accounts.views - AUTH - Login successful: User=author, IP=127.0.0.1, Role=author
+[2026-09-17 15:38:17] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-09-17 15:38:17] AUTH INFO - Author dashboard accessed by: author
+[2026-09-17 15:38:17] INFO accounts.views - Author dashboard accessed by: author
+[2026-09-17 15:38:17] INFO accounts.views - Author dashboard accessed by: author
+[2026-09-17 15:38:17] INFO django.server - "GET /accounts/dashboard/author/ HTTP/1.1" 200 76501
+[2026-09-17 15:38:19] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 15:39:47] INFO django.server - "GET /books/upload/ HTTP/1.1" 200 85727
+[2026-09-17 15:39:49] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 15:39:50] AUTH INFO - Author dashboard accessed by: author
+[2026-09-17 15:39:50] INFO accounts.views - Author dashboard accessed by: author
+[2026-09-17 15:39:50] INFO accounts.views - Author dashboard accessed by: author
+[2026-09-17 15:39:50] INFO django.server - "GET /accounts/dashboard/author/ HTTP/1.1" 200 76166
+[2026-09-17 15:39:52] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 15:39:54] AUTH INFO - AUTH - User logged out: author, IP=127.0.0.1
+[2026-09-17 15:39:54] INFO accounts.views - AUTH - User logged out: author, IP=127.0.0.1
+[2026-09-17 15:39:54] INFO accounts.views - AUTH - User logged out: author, IP=127.0.0.1
+[2026-09-17 15:39:54] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-09-17 15:39:54] INFO django.server - "GET / HTTP/1.1" 200 90237
+[2026-09-17 15:39:56] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 16:11:45] AUTH INFO - AUTH - User logged out: client, IP=127.0.0.1
+[2026-09-17 16:11:45] INFO accounts.views - AUTH - User logged out: client, IP=127.0.0.1
+[2026-09-17 16:11:45] INFO accounts.views - AUTH - User logged out: client, IP=127.0.0.1
+[2026-09-17 16:11:45] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-09-17 16:11:45] INFO django.server - "GET / HTTP/1.1" 200 90237
+[2026-09-17 16:11:45] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 16:11:45] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 16:11:45] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 16:11:45] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 16:11:45] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 16:11:47] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 16:11:47] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64909
+[2026-09-17 16:11:47] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 16:11:47] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 16:11:47] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 16:11:47] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 16:11:47] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 16:11:49] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 16:12:08] AUTH INFO - AUTH - Login successful: User=author, IP=127.0.0.1, Role=author
+[2026-09-17 16:12:08] INFO accounts.views - AUTH - Login successful: User=author, IP=127.0.0.1, Role=author
+[2026-09-17 16:12:08] INFO accounts.views - AUTH - Login successful: User=author, IP=127.0.0.1, Role=author
+[2026-09-17 16:12:08] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-09-17 16:12:08] AUTH INFO - Author dashboard accessed by: author
+[2026-09-17 16:12:08] INFO accounts.views - Author dashboard accessed by: author
+[2026-09-17 16:12:08] INFO accounts.views - Author dashboard accessed by: author
+[2026-09-17 16:12:08] INFO django.server - "GET /accounts/dashboard/author/ HTTP/1.1" 200 76501
+[2026-09-17 16:12:08] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 16:12:08] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 16:12:08] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 16:12:08] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 16:12:08] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 16:12:10] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 16:12:25] AUTH INFO - AUTH - User logged out: author, IP=127.0.0.1
+[2026-09-17 16:12:25] INFO accounts.views - AUTH - User logged out: author, IP=127.0.0.1
+[2026-09-17 16:12:25] INFO accounts.views - AUTH - User logged out: author, IP=127.0.0.1
+[2026-09-17 16:12:25] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-09-17 16:12:26] INFO django.server - "GET / HTTP/1.1" 200 90237
+[2026-09-17 16:12:26] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 16:12:26] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 16:12:26] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 16:12:26] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 16:12:26] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 16:12:27] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64909
+[2026-09-17 16:12:27] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 16:12:27] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 16:12:27] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 16:12:27] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 16:12:27] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 16:12:27] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 16:12:29] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 16:12:42] AUTH INFO - AUTH - Login successful: User=checker, IP=127.0.0.1, Role=checker
+[2026-09-17 16:12:42] INFO accounts.views - AUTH - Login successful: User=checker, IP=127.0.0.1, Role=checker
+[2026-09-17 16:12:42] INFO accounts.views - AUTH - Login successful: User=checker, IP=127.0.0.1, Role=checker
+[2026-09-17 16:12:43] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-09-17 16:12:43] INFO django.server - "GET /books/checker/dashboard/ HTTP/1.1" 200 77352
+[2026-09-17 16:12:43] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 16:12:43] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 16:12:43] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 16:12:43] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 16:12:43] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 16:12:45] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 16:12:48] AUTH INFO - AUTH - User logged out: checker, IP=127.0.0.1
+[2026-09-17 16:12:48] INFO accounts.views - AUTH - User logged out: checker, IP=127.0.0.1
+[2026-09-17 16:12:48] INFO accounts.views - AUTH - User logged out: checker, IP=127.0.0.1
+[2026-09-17 16:12:48] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-09-17 16:12:48] INFO django.server - "GET / HTTP/1.1" 200 90237
+[2026-09-17 16:12:48] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 16:12:48] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 16:12:48] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 16:12:48] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 16:12:48] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 16:12:50] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64909
+[2026-09-17 16:12:50] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 16:12:50] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 16:12:50] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 16:12:50] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 16:12:50] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 16:12:50] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 16:12:51] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 16:12:59] AUTH INFO - AUTH - Login successful: User=maker, IP=127.0.0.1, Role=maker
+[2026-09-17 16:12:59] INFO accounts.views - AUTH - Login successful: User=maker, IP=127.0.0.1, Role=maker
+[2026-09-17 16:12:59] INFO accounts.views - AUTH - Login successful: User=maker, IP=127.0.0.1, Role=maker
+[2026-09-17 16:12:59] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-09-17 16:12:59] INFO books.views - Maker dashboard: 0 new submissions found
+[2026-09-17 16:12:59] INFO books.views - Maker dashboard: 0 new submissions found
+[2026-09-17 16:13:00] INFO django.server - "GET /books/maker/dashboard/ HTTP/1.1" 200 84859
+[2026-09-17 16:13:00] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 16:13:00] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 16:13:00] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 16:13:00] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 16:13:00] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 16:13:01] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 16:13:10] AUTH INFO - AUTH - User logged out: maker, IP=127.0.0.1
+[2026-09-17 16:13:10] INFO accounts.views - AUTH - User logged out: maker, IP=127.0.0.1
+[2026-09-17 16:13:10] INFO accounts.views - AUTH - User logged out: maker, IP=127.0.0.1
+[2026-09-17 16:13:10] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-09-17 16:13:10] INFO django.server - "GET / HTTP/1.1" 200 90237
+[2026-09-17 16:13:10] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 16:13:10] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 16:13:11] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 16:13:11] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 16:13:12] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64909
+[2026-09-17 16:13:12] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 16:13:12] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 16:13:12] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 16:13:12] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 16:13:12] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 16:13:12] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 16:13:14] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 16:13:21] AUTH INFO - AUTH - Login successful: User=finance_officer, IP=127.0.0.1, Role=finance
+[2026-09-17 16:13:21] INFO accounts.views - AUTH - Login successful: User=finance_officer, IP=127.0.0.1, Role=finance
+[2026-09-17 16:13:21] INFO accounts.views - AUTH - Login successful: User=finance_officer, IP=127.0.0.1, Role=finance
+[2026-09-17 16:13:21] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-09-17 16:13:21] AUTH INFO - Finance dashboard accessed by: finance_officer
+[2026-09-17 16:13:21] INFO accounts.views - Finance dashboard accessed by: finance_officer
+[2026-09-17 16:13:21] INFO accounts.views - Finance dashboard accessed by: finance_officer
+[2026-09-17 16:13:21] INFO django.server - "GET /accounts/dashboard/finance/ HTTP/1.1" 200 69237
+[2026-09-17 16:13:21] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 16:13:21] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 16:13:21] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 16:13:22] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 16:13:22] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 16:13:23] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 16:23:40] INFO django.utils.autoreload - C:\abay_repository\books\urls.py changed, reloading.
+[2026-09-17 16:23:40] INFO django.utils.autoreload - C:\abay_repository\books\urls.py changed, reloading.
+[2026-09-17 16:23:42] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-17 16:23:42] INFO django.utils.autoreload - Watching for file changes with StatReloader
