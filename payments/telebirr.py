@@ -72,7 +72,7 @@ class TelebirrService:
         )
         self.timeout_express = getattr(settings, "TELEBIRR_TIMEOUT_EXPRESS", "120m") or "120m"
         # B2B_WebCheckoutDemo defaults
-        self.trade_type = getattr(settings, "TELEBIRR_TRADE_TYPE", "Checkout") or "Checkout"
+        self.trade_type = getattr(settings, "TELEBIRR_TRADE_TYPE", "Checkout") or "Checkout"  # C2B only
         self.business_type = getattr(settings, "TELEBIRR_BUSINESS_TYPE", "") or ""
         self.verify_ssl = bool(getattr(settings, "TELEBIRR_VERIFY_SSL", False))
         self._rsa_key = self._load_private_key()
@@ -268,7 +268,8 @@ class TelebirrService:
         }
         if ret:
             biz["redirect_url"] = ret
-        if self.business_type:
+        # business_type is B2B-only; omitting avoids initiator/type mismatch on C2B merchants
+        if self.business_type and self.trade_type not in ("Checkout", "InApp"):
             biz["business_type"] = self.business_type
         req = {
             "timestamp": self._ts(),
@@ -329,21 +330,34 @@ class TelebirrService:
             return {"success": False, "error": str(e)}
 
     def _build_checkout_url(self, prepay_id: str) -> str:
+        """
+        Official C2B_WebCheckoutDemo: sign ONLY appid, merch_code, nonce_str,
+        prepay_id, timestamp — then append sign, sign_type, version, trade_type.
+        Including sign_type in the signature causes H5 "type/initiator mismatch".
+        """
         maps = {
             "appid": self.merchant_app_id,
             "merch_code": self.merchant_code,
             "nonce_str": self._nonce(),
             "prepay_id": prepay_id,
             "timestamp": self._ts(),
-            "sign_type": "SHA256WithRSA",
         }
-        maps["sign"] = self._sign(maps)
-        query = "&".join(f"{k}={v}" for k, v in maps.items())
-        base = self.web_base_url
+        sign = self._sign(maps)
+        # Query field order matches official demo createRawRequest
+        raw = (
+            f"appid={maps['appid']}"
+            f"&merch_code={maps['merch_code']}"
+            f"&nonce_str={maps['nonce_str']}"
+            f"&prepay_id={maps['prepay_id']}"
+            f"&timestamp={maps['timestamp']}"
+            f"&sign={sign}"
+            f"&sign_type=SHA256WithRSA"
+        )
+        base = self.web_base_url or ""
         if not base.endswith("?") and "?" not in base:
             base = base + "?"
-        # Same as book purchase / C2B_WebCheckoutDemo
-        return f"{base}{query}&version=1.0&trade_type={self.trade_type or 'Checkout'}"
+        trade = self.trade_type or "Checkout"
+        return f"{base}{raw}&version=1.0&trade_type={trade}"
 
     def query_order(self, merch_order_id: str) -> Dict[str, Any]:
         try:

@@ -402,6 +402,35 @@
             font-size: 14px;
         }
     }
+
+    /* Anti-capture / anti-print for online reader */
+    body.reader-active, body.reader-active * {
+        -webkit-user-select: none !important;
+        -moz-user-select: none !important;
+        user-select: none !important;
+        -webkit-touch-callout: none !important;
+    }
+    body.reader-active img, body.reader-active canvas {
+        pointer-events: none;
+        -webkit-user-drag: none;
+    }
+    @media print {
+        html, body { background: #000 !important; }
+        body.reader-active * { visibility: hidden !important; }
+        body.reader-active::after {
+            visibility: visible !important;
+            content: "Printing this book is not allowed.";
+            color: #fff !important;
+            display: block !important;
+            padding: 3rem;
+            font-size: 1.25rem;
+        }
+    }
+    #reader-capture-veil {
+        position: fixed; inset: 0; background: #000;
+        z-index: 2147483646; display: none;
+    }
+
 </style>
 {% endblock %}
 
@@ -932,4 +961,99 @@
     document.addEventListener('DOMContentLoaded', loadText);
     {% endif %}
 </script>
+
+<script>
+(function () {
+  function isReader() {
+    return document.body.classList.contains('reader-active')
+      || document.querySelector('.reader-shell, #viewer, #pdf-canvas, .reader-main');
+  }
+  document.addEventListener('contextmenu', function (e) {
+    if (isReader()) e.preventDefault();
+  }, true);
+  document.addEventListener('keydown', function (e) {
+    if (!isReader()) return;
+    var k = (e.key || '').toLowerCase();
+    var ctrl = e.ctrlKey || e.metaKey;
+    if (ctrl && (k === 'p' || k === 's' || k === 'u' || k === 'c')) {
+      e.preventDefault(); e.stopPropagation(); return false;
+    }
+    if (k === 'printscreen' || e.keyCode === 44) {
+      e.preventDefault();
+      try { navigator.clipboard && navigator.clipboard.writeText && navigator.clipboard.writeText(''); } catch (err) {}
+    }
+  }, true);
+  document.addEventListener('keyup', function (e) {
+    if (!isReader()) return;
+    if ((e.key || '').toLowerCase() === 'printscreen' || e.keyCode === 44) {
+      try { navigator.clipboard && navigator.clipboard.writeText && navigator.clipboard.writeText(''); } catch (err) {}
+    }
+  }, true);
+  var veil = document.getElementById('reader-capture-veil');
+  if (!veil) {
+    veil = document.createElement('div');
+    veil.id = 'reader-capture-veil';
+    veil.setAttribute('aria-hidden', 'true');
+    document.addEventListener('DOMContentLoaded', function () { document.body.appendChild(veil); });
+    if (document.body) document.body.appendChild(veil);
+  }
+  document.addEventListener('visibilitychange', function () {
+    if (!veil) return;
+    veil.style.display = document.hidden ? 'block' : 'none';
+  });
+  document.addEventListener('dragstart', function (e) {
+    if (isReader()) e.preventDefault();
+  }, true);
+})();
+</script>
+
 {% endblock %}
+
+<script>
+(function () {
+  // Best-effort anti-capture for online reader (not DRM; reduces casual screenshots)
+  document.addEventListener('contextmenu', function (e) {
+    if (document.body.classList.contains('reader-active') || document.getElementById('viewer') || document.querySelector('.reader-shell')) {
+      e.preventDefault();
+    }
+  });
+  document.addEventListener('keydown', function (e) {
+    var key = (e.key || '').toLowerCase();
+    var ctrl = e.ctrlKey || e.metaKey;
+    // Print / save / view-source style shortcuts
+    if (ctrl && (key === 'p' || key === 's' || key === 'u')) {
+      e.preventDefault();
+      e.stopPropagation();
+      return false;
+    }
+    // PrintScreen (limited browser support)
+    if (key === 'printscreen') {
+      e.preventDefault();
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText('');
+        }
+      } catch (err) {}
+    }
+  }, true);
+  // Blank overlay while tab is hidden (reduces some screen-recording clarity)
+  var veil = document.createElement('div');
+  veil.id = 'reader-capture-veil';
+  veil.setAttribute('aria-hidden', 'true');
+  veil.style.cssText = 'position:fixed;inset:0;background:#000;z-index:2147483646;display:none;';
+  document.addEventListener('DOMContentLoaded', function () {
+    document.body.appendChild(veil);
+  });
+  document.addEventListener('visibilitychange', function () {
+    if (!veil.parentNode) return;
+    veil.style.display = document.hidden ? 'block' : 'none';
+  });
+  // Block drag of images/canvas
+  document.addEventListener('dragstart', function (e) {
+    if (e.target && (e.target.closest && e.target.closest('.reader-shell, #viewer, canvas'))) {
+      e.preventDefault();
+    }
+  });
+})();
+</script>
+

@@ -38,9 +38,12 @@ urlpatterns = [
     # Admin actions
     path('calculate_all/', views.calculate_all_payments, name='calculate_all'),
     path('api/process_batch/', views.process_batch_payment, name='process_batch'),
+    path('finance/confirm-purchase/', views.finance_confirm_purchase, name='finance_confirm_purchase'),
 
     # Finance officer settings & reports
     path('finance/settings/', views.finance_settings_view, name='finance_settings'),
     path('finance/reports/', views.finance_reports_view, name='finance_reports'),
     path('finance/reports/<int:report_id>/', views.finance_report_detail, name='finance_report_detail'),
+    path('finance/reports/<int:report_id>/export/<str:fmt>/', views.finance_report_export, name='finance_report_export'),
+    path('finance/export/<str:fmt>/', views.finance_export_current, name='finance_export_current'),
 ]

@@ -5380,3 +5380,964 @@ django.core.exceptions.FieldError: Cannot resolve keyword 'payment' into field. 
 [2026-09-17 10:55:34] INFO django.server - "POST /payments/author/6/process/ HTTP/1.1" 200 1311
 [2026-09-17 10:58:40] INFO django.utils.autoreload - Watching for file changes with StatReloader
 [2026-09-17 10:58:40] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-17 11:07:06] INFO django.server - "GET /payments/dashboard/ HTTP/1.1" 200 98633
+[2026-09-17 11:10:33] INFO django.server - "GET /payments/author/6/payout-info/ HTTP/1.1" 200 112
+[2026-09-17 11:10:40] PAYMENT INFO - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': '65e445f100d041f7a63d3a39eac607af', 'sign': 'HltiiBARUYiG1puIklgD4M2vCPvLlQlU9CRoMCljV1egtiwTap1Eqmn2UcfDUM2NbLFL5UUBKPE+H1GNwlE7nU/L8s3Te5h/InyYc/tOXOtb9RwZOAg0GZvD1cXc4YFECyK+cbavD589Zs2/swE8txnEe9wG/2i75uYA9RGeFIRJ2Q2fMXE8PcEoXEJeSabQqTluP3zB5yliWmWz2EHE0FoTSxnC51t/dC68pYpQzeNW3PX/YXBfwPxejbOfrfr20H5w1jSRl7r8uboD/DCDx90Nr2C4HnK2dQjJxl5XhArsdISZNcAY2j5Da9pOuZp2U3+fQZCVHTF/ND/w2SUEiN033FuvMawRawNMwkXwRShkqgFokDw/3WCC5I3njYU0pBOYZgwj/2O3AvK0hKrg/SKqPOi++ryuCm1AjsFmiPUPH5I5xudDDvBzvtf23Eh2Dufx7LH+i7Huud/sYmV2W3ZzgDmf8hGQQbvGWGyfR0+34IM9w6V7hd19d+Tv+uqUYdZz1OAeyfzuKz831nGZGTkJtbZm4AmkU7DptrMwapMBA9wyTMkBi8HS6mIuCiYeG+o2YIRlF6RQU4DIWzyKjmt1xNHS8GFWOj+F62nVOt3aVCMx0yqXjCocb1IH0AH5Q4+RxSGC/EVyplSFCoParE3+wk4uQhXNG5wkokXmJAk=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'AUTH6B6D1C5A851', 'prepay_id': '011f74ea5b507103fe8be2b76dee325f8260800'}}
+[2026-09-17 11:10:40] INFO payments.telebirr - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': '65e445f100d041f7a63d3a39eac607af', 'sign': 'HltiiBARUYiG1puIklgD4M2vCPvLlQlU9CRoMCljV1egtiwTap1Eqmn2UcfDUM2NbLFL5UUBKPE+H1GNwlE7nU/L8s3Te5h/InyYc/tOXOtb9RwZOAg0GZvD1cXc4YFECyK+cbavD589Zs2/swE8txnEe9wG/2i75uYA9RGeFIRJ2Q2fMXE8PcEoXEJeSabQqTluP3zB5yliWmWz2EHE0FoTSxnC51t/dC68pYpQzeNW3PX/YXBfwPxejbOfrfr20H5w1jSRl7r8uboD/DCDx90Nr2C4HnK2dQjJxl5XhArsdISZNcAY2j5Da9pOuZp2U3+fQZCVHTF/ND/w2SUEiN033FuvMawRawNMwkXwRShkqgFokDw/3WCC5I3njYU0pBOYZgwj/2O3AvK0hKrg/SKqPOi++ryuCm1AjsFmiPUPH5I5xudDDvBzvtf23Eh2Dufx7LH+i7Huud/sYmV2W3ZzgDmf8hGQQbvGWGyfR0+34IM9w6V7hd19d+Tv+uqUYdZz1OAeyfzuKz831nGZGTkJtbZm4AmkU7DptrMwapMBA9wyTMkBi8HS6mIuCiYeG+o2YIRlF6RQU4DIWzyKjmt1xNHS8GFWOj+F62nVOt3aVCMx0yqXjCocb1IH0AH5Q4+RxSGC/EVyplSFCoParE3+wk4uQhXNG5wkokXmJAk=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'AUTH6B6D1C5A851', 'prepay_id': '011f74ea5b507103fe8be2b76dee325f8260800'}}
+[2026-09-17 11:10:40] INFO payments.telebirr - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': '65e445f100d041f7a63d3a39eac607af', 'sign': 'HltiiBARUYiG1puIklgD4M2vCPvLlQlU9CRoMCljV1egtiwTap1Eqmn2UcfDUM2NbLFL5UUBKPE+H1GNwlE7nU/L8s3Te5h/InyYc/tOXOtb9RwZOAg0GZvD1cXc4YFECyK+cbavD589Zs2/swE8txnEe9wG/2i75uYA9RGeFIRJ2Q2fMXE8PcEoXEJeSabQqTluP3zB5yliWmWz2EHE0FoTSxnC51t/dC68pYpQzeNW3PX/YXBfwPxejbOfrfr20H5w1jSRl7r8uboD/DCDx90Nr2C4HnK2dQjJxl5XhArsdISZNcAY2j5Da9pOuZp2U3+fQZCVHTF/ND/w2SUEiN033FuvMawRawNMwkXwRShkqgFokDw/3WCC5I3njYU0pBOYZgwj/2O3AvK0hKrg/SKqPOi++ryuCm1AjsFmiPUPH5I5xudDDvBzvtf23Eh2Dufx7LH+i7Huud/sYmV2W3ZzgDmf8hGQQbvGWGyfR0+34IM9w6V7hd19d+Tv+uqUYdZz1OAeyfzuKz831nGZGTkJtbZm4AmkU7DptrMwapMBA9wyTMkBi8HS6mIuCiYeG+o2YIRlF6RQU4DIWzyKjmt1xNHS8GFWOj+F62nVOt3aVCMx0yqXjCocb1IH0AH5Q4+RxSGC/EVyplSFCoParE3+wk4uQhXNG5wkokXmJAk=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'AUTH6B6D1C5A851', 'prepay_id': '011f74ea5b507103fe8be2b76dee325f8260800'}}
+[2026-09-17 11:10:40] PAYMENT INFO - Telebirr preorder OK merch_order_id=AUTH6B6D1C5A851 prepay_id=011f74ea5b507103fe8be2b76dee325f8260800
+[2026-09-17 11:10:40] INFO payments.telebirr - Telebirr preorder OK merch_order_id=AUTH6B6D1C5A851 prepay_id=011f74ea5b507103fe8be2b76dee325f8260800
+[2026-09-17 11:10:40] INFO payments.telebirr - Telebirr preorder OK merch_order_id=AUTH6B6D1C5A851 prepay_id=011f74ea5b507103fe8be2b76dee325f8260800
+[2026-09-17 11:10:40] PAYMENT INFO - Royalty Telebirr checkout author=6 total=980.00 url=https://developerportal.ethiotelebirr.et:38443/payment/web/paygate?appid=1697890
+[2026-09-17 11:10:40] INFO payments.views - Royalty Telebirr checkout author=6 total=980.00 url=https://developerportal.ethiotelebirr.et:38443/payment/web/paygate?appid=1697890
+[2026-09-17 11:10:40] INFO payments.views - Royalty Telebirr checkout author=6 total=980.00 url=https://developerportal.ethiotelebirr.et:38443/payment/web/paygate?appid=1697890
+[2026-09-17 11:10:40] INFO django.server - "POST /payments/author/6/process/ HTTP/1.1" 200 1311
+[2026-09-17 11:12:27] INFO django.server - "GET /payments/dashboard/ HTTP/1.1" 200 98633
+[2026-09-17 11:12:29] INFO django.server - "GET /payments/author/6/payout-info/ HTTP/1.1" 200 112
+[2026-09-17 11:12:35] PAYMENT INFO - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': '0c1dfa554e234a43a97cb0bdd208e0b9', 'sign': 'BglQfXOGW9VUtmUhjvrQZ/NfEauSbQ9jNB5fZgJaqQpNxEHhVuT43W55FiK10NWdZtqOTnuVVQ4mmW9Ac0iz9d5uvfWsPhjFf1hWDWGnplMWit9kHNW+Y+uIyEuBD6LdMAuaxMiSTCpThK6lGwybNXk2XSfDrmeCi54E/FGfxEmXilOT6P8LCMY6krUZzUCbkImtrJR+s6sVIigOSEpYrcyqXASSrmSMREesFmUBHc7TB7aDOo87+jfAEAVNjTd3gu0jtnYMbwlIpmgukgdLbVwTZu27SfeOepkgx6bFQJLNNRlAnLT2geYX81+JfE7N6YNfDC/ofg6Y9fEHpp1Ohl3PWu1O+G3sVuJabTN3pgDP5x8LPmRQQBkYn+Mh04FL8CHxeBqcZlj2VWYoJ8ZeREhoeLfd8k0G2tyQ5lXb8b2KmUiewPIScP4w/fJYAiCiomwXLsMlRikPitz/EQL7mETfBDAz48R4nqy8XVlN4Di24iFTPTLFdBWHmPFDs5BHBoONEPzjDcCdWJJ7i9A68yiI3olByPOL24Oii4j+meXFANfY+Rf/trugpcmJytMYJyC1M1oedg0lIkfaguY24poynpDoZDM1hWYesHb1VsCGD3m5DXxos92cMByMvY9WFiczk88M8L1nm04GUVZlQ4Nf0z2fp4Uk5NmonTaT5ZM=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'AUTH6643EEA51D0', 'prepay_id': '01195904db2e5cb68e7a7815ce1b590407f0801'}}
+[2026-09-17 11:12:35] INFO payments.telebirr - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': '0c1dfa554e234a43a97cb0bdd208e0b9', 'sign': 'BglQfXOGW9VUtmUhjvrQZ/NfEauSbQ9jNB5fZgJaqQpNxEHhVuT43W55FiK10NWdZtqOTnuVVQ4mmW9Ac0iz9d5uvfWsPhjFf1hWDWGnplMWit9kHNW+Y+uIyEuBD6LdMAuaxMiSTCpThK6lGwybNXk2XSfDrmeCi54E/FGfxEmXilOT6P8LCMY6krUZzUCbkImtrJR+s6sVIigOSEpYrcyqXASSrmSMREesFmUBHc7TB7aDOo87+jfAEAVNjTd3gu0jtnYMbwlIpmgukgdLbVwTZu27SfeOepkgx6bFQJLNNRlAnLT2geYX81+JfE7N6YNfDC/ofg6Y9fEHpp1Ohl3PWu1O+G3sVuJabTN3pgDP5x8LPmRQQBkYn+Mh04FL8CHxeBqcZlj2VWYoJ8ZeREhoeLfd8k0G2tyQ5lXb8b2KmUiewPIScP4w/fJYAiCiomwXLsMlRikPitz/EQL7mETfBDAz48R4nqy8XVlN4Di24iFTPTLFdBWHmPFDs5BHBoONEPzjDcCdWJJ7i9A68yiI3olByPOL24Oii4j+meXFANfY+Rf/trugpcmJytMYJyC1M1oedg0lIkfaguY24poynpDoZDM1hWYesHb1VsCGD3m5DXxos92cMByMvY9WFiczk88M8L1nm04GUVZlQ4Nf0z2fp4Uk5NmonTaT5ZM=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'AUTH6643EEA51D0', 'prepay_id': '01195904db2e5cb68e7a7815ce1b590407f0801'}}
+[2026-09-17 11:12:35] INFO payments.telebirr - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': '0c1dfa554e234a43a97cb0bdd208e0b9', 'sign': 'BglQfXOGW9VUtmUhjvrQZ/NfEauSbQ9jNB5fZgJaqQpNxEHhVuT43W55FiK10NWdZtqOTnuVVQ4mmW9Ac0iz9d5uvfWsPhjFf1hWDWGnplMWit9kHNW+Y+uIyEuBD6LdMAuaxMiSTCpThK6lGwybNXk2XSfDrmeCi54E/FGfxEmXilOT6P8LCMY6krUZzUCbkImtrJR+s6sVIigOSEpYrcyqXASSrmSMREesFmUBHc7TB7aDOo87+jfAEAVNjTd3gu0jtnYMbwlIpmgukgdLbVwTZu27SfeOepkgx6bFQJLNNRlAnLT2geYX81+JfE7N6YNfDC/ofg6Y9fEHpp1Ohl3PWu1O+G3sVuJabTN3pgDP5x8LPmRQQBkYn+Mh04FL8CHxeBqcZlj2VWYoJ8ZeREhoeLfd8k0G2tyQ5lXb8b2KmUiewPIScP4w/fJYAiCiomwXLsMlRikPitz/EQL7mETfBDAz48R4nqy8XVlN4Di24iFTPTLFdBWHmPFDs5BHBoONEPzjDcCdWJJ7i9A68yiI3olByPOL24Oii4j+meXFANfY+Rf/trugpcmJytMYJyC1M1oedg0lIkfaguY24poynpDoZDM1hWYesHb1VsCGD3m5DXxos92cMByMvY9WFiczk88M8L1nm04GUVZlQ4Nf0z2fp4Uk5NmonTaT5ZM=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'AUTH6643EEA51D0', 'prepay_id': '01195904db2e5cb68e7a7815ce1b590407f0801'}}
+[2026-09-17 11:12:35] PAYMENT INFO - Telebirr preorder OK merch_order_id=AUTH6643EEA51D0 prepay_id=01195904db2e5cb68e7a7815ce1b590407f0801
+[2026-09-17 11:12:35] INFO payments.telebirr - Telebirr preorder OK merch_order_id=AUTH6643EEA51D0 prepay_id=01195904db2e5cb68e7a7815ce1b590407f0801
+[2026-09-17 11:12:35] INFO payments.telebirr - Telebirr preorder OK merch_order_id=AUTH6643EEA51D0 prepay_id=01195904db2e5cb68e7a7815ce1b590407f0801
+[2026-09-17 11:12:35] PAYMENT INFO - Royalty Telebirr checkout author=6 total=980.00 url=https://developerportal.ethiotelebirr.et:38443/payment/web/paygate?appid=1697890
+[2026-09-17 11:12:35] INFO payments.views - Royalty Telebirr checkout author=6 total=980.00 url=https://developerportal.ethiotelebirr.et:38443/payment/web/paygate?appid=1697890
+[2026-09-17 11:12:35] INFO payments.views - Royalty Telebirr checkout author=6 total=980.00 url=https://developerportal.ethiotelebirr.et:38443/payment/web/paygate?appid=1697890
+[2026-09-17 11:12:35] INFO django.server - "POST /payments/author/6/process/ HTTP/1.1" 200 1311
+[2026-09-17 11:28:30] INFO django.server - "GET /payments/dashboard/ HTTP/1.1" 200 98633
+[2026-09-17 11:29:07] INFO django.server - "GET /payments/author/6/payout-info/ HTTP/1.1" 200 112
+[2026-09-17 11:29:09] PAYMENT INFO - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': '87d66ada8cc3442ba667e3098c0e2567', 'sign': 'MKYNokJh4X3Vo3RBV9VInNjfUlXQjgnlmy0XixiMWQ1k1jPI6NUV857+tWGI7OYxVdd5D1CYmVZktDXcRlBH7i3ElaX/ptj1pjtX8bYVhD+xbhUcHbq72YHm4dag3xZ1nYN7KqsBgCCNffBbYnP7rrs+TRXm703mvoC6N98WsuGTA/aPoCmb1lijQ8unAOUSjidnvxTJ6aK7r5ZbnSOPeqjZdyZZMey1rLBRv17xq1/L7U82p35LDvqEy8LdZtTOn8+4NI+H7gDlvsdxMXE5zReLhspUn+eneIsphg/mEJYX9JENtNMZ8dCq/y+Mycb31Hp8I6NeOMKCQrTvqPy66RNleKqwEGn8SYxnqBKUF34TDL19cta4A5f7dG9pnE+YeAhzBj+L+gY8qbWCEECyaRLP3DrMLxWZkwtyM0hQmvCan5JGWFrh+5BG9zFANRAV6bm68y2LBI7UzdncZRrUh0KZhTZ98NdDZVodNdXmRRUz37Xp7hb8/nmP5KmUor5ttBj+fAu+iolm7IWunm3NceFrZun1QzGsHRbbgvs9GYl2H7Lk3g7bbM0a9Dn2Z99vDYfuT7AQDDXxikZXkTLYA624FabpnNZ4d6p1jnURFfnrfjvfYL0vG9AzhG7vLKjK0IaqVYaV6Vd69Wmi9Eg1nCfpdgtypt+sTq/CItiHiVg=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'AUTH68B87A7FB82', 'prepay_id': '011bb96e5c6cb6c2088b8de4ee7e6ff5fd00101'}}
+[2026-09-17 11:29:09] INFO payments.telebirr - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': '87d66ada8cc3442ba667e3098c0e2567', 'sign': 'MKYNokJh4X3Vo3RBV9VInNjfUlXQjgnlmy0XixiMWQ1k1jPI6NUV857+tWGI7OYxVdd5D1CYmVZktDXcRlBH7i3ElaX/ptj1pjtX8bYVhD+xbhUcHbq72YHm4dag3xZ1nYN7KqsBgCCNffBbYnP7rrs+TRXm703mvoC6N98WsuGTA/aPoCmb1lijQ8unAOUSjidnvxTJ6aK7r5ZbnSOPeqjZdyZZMey1rLBRv17xq1/L7U82p35LDvqEy8LdZtTOn8+4NI+H7gDlvsdxMXE5zReLhspUn+eneIsphg/mEJYX9JENtNMZ8dCq/y+Mycb31Hp8I6NeOMKCQrTvqPy66RNleKqwEGn8SYxnqBKUF34TDL19cta4A5f7dG9pnE+YeAhzBj+L+gY8qbWCEECyaRLP3DrMLxWZkwtyM0hQmvCan5JGWFrh+5BG9zFANRAV6bm68y2LBI7UzdncZRrUh0KZhTZ98NdDZVodNdXmRRUz37Xp7hb8/nmP5KmUor5ttBj+fAu+iolm7IWunm3NceFrZun1QzGsHRbbgvs9GYl2H7Lk3g7bbM0a9Dn2Z99vDYfuT7AQDDXxikZXkTLYA624FabpnNZ4d6p1jnURFfnrfjvfYL0vG9AzhG7vLKjK0IaqVYaV6Vd69Wmi9Eg1nCfpdgtypt+sTq/CItiHiVg=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'AUTH68B87A7FB82', 'prepay_id': '011bb96e5c6cb6c2088b8de4ee7e6ff5fd00101'}}
+[2026-09-17 11:29:09] INFO payments.telebirr - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': '87d66ada8cc3442ba667e3098c0e2567', 'sign': 'MKYNokJh4X3Vo3RBV9VInNjfUlXQjgnlmy0XixiMWQ1k1jPI6NUV857+tWGI7OYxVdd5D1CYmVZktDXcRlBH7i3ElaX/ptj1pjtX8bYVhD+xbhUcHbq72YHm4dag3xZ1nYN7KqsBgCCNffBbYnP7rrs+TRXm703mvoC6N98WsuGTA/aPoCmb1lijQ8unAOUSjidnvxTJ6aK7r5ZbnSOPeqjZdyZZMey1rLBRv17xq1/L7U82p35LDvqEy8LdZtTOn8+4NI+H7gDlvsdxMXE5zReLhspUn+eneIsphg/mEJYX9JENtNMZ8dCq/y+Mycb31Hp8I6NeOMKCQrTvqPy66RNleKqwEGn8SYxnqBKUF34TDL19cta4A5f7dG9pnE+YeAhzBj+L+gY8qbWCEECyaRLP3DrMLxWZkwtyM0hQmvCan5JGWFrh+5BG9zFANRAV6bm68y2LBI7UzdncZRrUh0KZhTZ98NdDZVodNdXmRRUz37Xp7hb8/nmP5KmUor5ttBj+fAu+iolm7IWunm3NceFrZun1QzGsHRbbgvs9GYl2H7Lk3g7bbM0a9Dn2Z99vDYfuT7AQDDXxikZXkTLYA624FabpnNZ4d6p1jnURFfnrfjvfYL0vG9AzhG7vLKjK0IaqVYaV6Vd69Wmi9Eg1nCfpdgtypt+sTq/CItiHiVg=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'AUTH68B87A7FB82', 'prepay_id': '011bb96e5c6cb6c2088b8de4ee7e6ff5fd00101'}}
+[2026-09-17 11:29:09] PAYMENT INFO - Telebirr preorder OK merch_order_id=AUTH68B87A7FB82 prepay_id=011bb96e5c6cb6c2088b8de4ee7e6ff5fd00101
+[2026-09-17 11:29:09] INFO payments.telebirr - Telebirr preorder OK merch_order_id=AUTH68B87A7FB82 prepay_id=011bb96e5c6cb6c2088b8de4ee7e6ff5fd00101
+[2026-09-17 11:29:09] INFO payments.telebirr - Telebirr preorder OK merch_order_id=AUTH68B87A7FB82 prepay_id=011bb96e5c6cb6c2088b8de4ee7e6ff5fd00101
+[2026-09-17 11:29:09] PAYMENT INFO - Royalty Telebirr checkout author=6 total=980.00 url=https://developerportal.ethiotelebirr.et:38443/payment/web/paygate?appid=1697890
+[2026-09-17 11:29:09] INFO payments.views - Royalty Telebirr checkout author=6 total=980.00 url=https://developerportal.ethiotelebirr.et:38443/payment/web/paygate?appid=1697890
+[2026-09-17 11:29:09] INFO payments.views - Royalty Telebirr checkout author=6 total=980.00 url=https://developerportal.ethiotelebirr.et:38443/payment/web/paygate?appid=1697890
+[2026-09-17 11:29:09] INFO django.server - "POST /payments/author/6/process/ HTTP/1.1" 200 1311
+[2026-09-17 11:29:43] INFO django.server - "GET /payments/dashboard/ HTTP/1.1" 200 98633
+[2026-09-17 11:30:10] INFO django.server - "GET /payments/calculate_all/ HTTP/1.1" 302 0
+[2026-09-17 11:30:10] INFO django.server - "GET /payments/dashboard/ HTTP/1.1" 200 98979
+[2026-09-17 11:30:32] INFO django.server - "GET /payments/author/6/payout-info/ HTTP/1.1" 200 112
+[2026-09-17 11:30:36] PAYMENT INFO - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': 'e673098cb9c04a9dad275db526922069', 'sign': 'QNBEvYp9EJve5kfiNMrN99RfQnxwm8fB1TZBP8oiTcIu/31zHrWdy4fH+bs7TLO6NriwSwnHBfvi9yJMKOLjMtUdNQsEIq6NRvcEv6WWKxbpTY3CEH3jr/7GCr1hciaKz10QMWRj9vDq52XlzQMyUNqPIbg0m1nwjO9ttfewd+XjdwniSrg+daeknyJSWe9mv44YRx8AufztR3HppnwAiKDAqBfKDjxBC+cs2b88xyWCgKmmWn/BGlddncSlZ7eCpSC0GLPZUjgNf1fjJlFby4CKkbFls2OAUFkZNPQkVGZs5aLQA0IulfDRYAlvriKBLU4PJFxv8BXTODaOsRXyEVS/ousyUGfRrtyZslpZQLR5d6x/NWSaj4XZTmDMBqWISnaVxZj7cLkWBzpjFho31wGiht3vmCB53roVroyVpZ7twQGzIjjd9Cz30lmhfgJ2yVebN4J4WwuNuVaixm743aMQmPZ3u6k8PiftZWGro66i6CpPQtzVKYnidz4s6K6v47CfqMuaolXD5s5blp7zftqIoIlSN5GG1Sz4qzpucET9BL8XhWdyEyBcLS72kuxhYPhCJ696Eguu6KxvwLF7vF0OeUV7N/2pxwfwNvPgV6ytwYHl7wXq3SqJo+WcNGlCEfA5tC9XKYerB2UcCQLvN4TFwIvFxDlREk5TetLbQ+w=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'AUTH6BCACC79059', 'prepay_id': '01143001e9e5129030081307ea77c0e06bb0401'}}
+[2026-09-17 11:30:36] INFO payments.telebirr - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': 'e673098cb9c04a9dad275db526922069', 'sign': 'QNBEvYp9EJve5kfiNMrN99RfQnxwm8fB1TZBP8oiTcIu/31zHrWdy4fH+bs7TLO6NriwSwnHBfvi9yJMKOLjMtUdNQsEIq6NRvcEv6WWKxbpTY3CEH3jr/7GCr1hciaKz10QMWRj9vDq52XlzQMyUNqPIbg0m1nwjO9ttfewd+XjdwniSrg+daeknyJSWe9mv44YRx8AufztR3HppnwAiKDAqBfKDjxBC+cs2b88xyWCgKmmWn/BGlddncSlZ7eCpSC0GLPZUjgNf1fjJlFby4CKkbFls2OAUFkZNPQkVGZs5aLQA0IulfDRYAlvriKBLU4PJFxv8BXTODaOsRXyEVS/ousyUGfRrtyZslpZQLR5d6x/NWSaj4XZTmDMBqWISnaVxZj7cLkWBzpjFho31wGiht3vmCB53roVroyVpZ7twQGzIjjd9Cz30lmhfgJ2yVebN4J4WwuNuVaixm743aMQmPZ3u6k8PiftZWGro66i6CpPQtzVKYnidz4s6K6v47CfqMuaolXD5s5blp7zftqIoIlSN5GG1Sz4qzpucET9BL8XhWdyEyBcLS72kuxhYPhCJ696Eguu6KxvwLF7vF0OeUV7N/2pxwfwNvPgV6ytwYHl7wXq3SqJo+WcNGlCEfA5tC9XKYerB2UcCQLvN4TFwIvFxDlREk5TetLbQ+w=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'AUTH6BCACC79059', 'prepay_id': '01143001e9e5129030081307ea77c0e06bb0401'}}
+[2026-09-17 11:30:36] INFO payments.telebirr - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': 'e673098cb9c04a9dad275db526922069', 'sign': 'QNBEvYp9EJve5kfiNMrN99RfQnxwm8fB1TZBP8oiTcIu/31zHrWdy4fH+bs7TLO6NriwSwnHBfvi9yJMKOLjMtUdNQsEIq6NRvcEv6WWKxbpTY3CEH3jr/7GCr1hciaKz10QMWRj9vDq52XlzQMyUNqPIbg0m1nwjO9ttfewd+XjdwniSrg+daeknyJSWe9mv44YRx8AufztR3HppnwAiKDAqBfKDjxBC+cs2b88xyWCgKmmWn/BGlddncSlZ7eCpSC0GLPZUjgNf1fjJlFby4CKkbFls2OAUFkZNPQkVGZs5aLQA0IulfDRYAlvriKBLU4PJFxv8BXTODaOsRXyEVS/ousyUGfRrtyZslpZQLR5d6x/NWSaj4XZTmDMBqWISnaVxZj7cLkWBzpjFho31wGiht3vmCB53roVroyVpZ7twQGzIjjd9Cz30lmhfgJ2yVebN4J4WwuNuVaixm743aMQmPZ3u6k8PiftZWGro66i6CpPQtzVKYnidz4s6K6v47CfqMuaolXD5s5blp7zftqIoIlSN5GG1Sz4qzpucET9BL8XhWdyEyBcLS72kuxhYPhCJ696Eguu6KxvwLF7vF0OeUV7N/2pxwfwNvPgV6ytwYHl7wXq3SqJo+WcNGlCEfA5tC9XKYerB2UcCQLvN4TFwIvFxDlREk5TetLbQ+w=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'AUTH6BCACC79059', 'prepay_id': '01143001e9e5129030081307ea77c0e06bb0401'}}
+[2026-09-17 11:30:36] PAYMENT INFO - Telebirr preorder OK merch_order_id=AUTH6BCACC79059 prepay_id=01143001e9e5129030081307ea77c0e06bb0401
+[2026-09-17 11:30:36] INFO payments.telebirr - Telebirr preorder OK merch_order_id=AUTH6BCACC79059 prepay_id=01143001e9e5129030081307ea77c0e06bb0401
+[2026-09-17 11:30:36] INFO payments.telebirr - Telebirr preorder OK merch_order_id=AUTH6BCACC79059 prepay_id=01143001e9e5129030081307ea77c0e06bb0401
+[2026-09-17 11:30:36] PAYMENT INFO - Royalty Telebirr checkout author=6 total=980.00 url=https://developerportal.ethiotelebirr.et:38443/payment/web/paygate?appid=1697890
+[2026-09-17 11:30:36] INFO payments.views - Royalty Telebirr checkout author=6 total=980.00 url=https://developerportal.ethiotelebirr.et:38443/payment/web/paygate?appid=1697890
+[2026-09-17 11:30:36] INFO payments.views - Royalty Telebirr checkout author=6 total=980.00 url=https://developerportal.ethiotelebirr.et:38443/payment/web/paygate?appid=1697890
+[2026-09-17 11:30:36] INFO django.server - "POST /payments/author/6/process/ HTTP/1.1" 200 1311
+[2026-09-17 11:37:16] INFO django.server - "GET /payments/dashboard/ HTTP/1.1" 200 98633
+[2026-09-17 11:37:20] INFO django.server - "GET / HTTP/1.1" 200 91194
+[2026-09-17 11:37:20] INFO django.server - "GET /media/books/covers/2026/09/pychology_b5LmZgq.png HTTP/1.1" 200 363640
+[2026-09-17 11:37:26] INFO django.server - "GET /accounts/dashboard/ HTTP/1.1" 302 0
+[2026-09-17 11:37:26] AUTH INFO - Finance dashboard accessed by: finance_officer
+[2026-09-17 11:37:26] INFO accounts.views - Finance dashboard accessed by: finance_officer
+[2026-09-17 11:37:26] INFO accounts.views - Finance dashboard accessed by: finance_officer
+[2026-09-17 11:37:26] INFO django.server - "GET /accounts/dashboard/finance/ HTTP/1.1" 200 63635
+[2026-09-17 11:37:52] INFO django.server - "GET /payments/dashboard/ HTTP/1.1" 200 98633
+[2026-09-17 12:01:04] INFO django.server - "GET / HTTP/1.1" 200 89883
+[2026-09-17 12:01:05] INFO django.server - "GET /static/images/Abrehot.jpg HTTP/1.1" 200 72716
+[2026-09-17 12:01:05] INFO django.server - "GET /static/images/logo.png HTTP/1.1" 200 157968
+[2026-09-17 12:01:05] INFO django.server - "GET /media/books/covers/2026/09/pychology_b5LmZgq.png HTTP/1.1" 200 363640
+[2026-09-17 12:01:06] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:01:06] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:01:07] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:01:07] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:01:08] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:01:08] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:01:08] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:01:08] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:01:11] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64909
+[2026-09-17 12:01:11] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:01:13] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:01:13] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:01:13] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:01:13] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:01:13] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:01:13] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:01:13] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:01:13] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:02:03] AUTH INFO - AUTH - Login successful: User=finance_officer, IP=127.0.0.1, Role=finance
+[2026-09-17 12:02:03] INFO accounts.views - AUTH - Login successful: User=finance_officer, IP=127.0.0.1, Role=finance
+[2026-09-17 12:02:03] INFO accounts.views - AUTH - Login successful: User=finance_officer, IP=127.0.0.1, Role=finance
+[2026-09-17 12:02:03] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-09-17 12:02:03] AUTH INFO - Finance dashboard accessed by: finance_officer
+[2026-09-17 12:02:03] INFO accounts.views - Finance dashboard accessed by: finance_officer
+[2026-09-17 12:02:03] INFO accounts.views - Finance dashboard accessed by: finance_officer
+[2026-09-17 12:02:03] INFO django.server - "GET /accounts/dashboard/finance/ HTTP/1.1" 200 63970
+[2026-09-17 12:02:03] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:02:05] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:02:05] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:02:05] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:02:05] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:02:05] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:02:05] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:02:05] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:02:05] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:02:19] INFO django.server - "GET /payments/dashboard/ HTTP/1.1" 200 98633
+[2026-09-17 12:02:19] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:02:21] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:02:21] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:02:21] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:02:21] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:02:21] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:02:21] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:02:21] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:02:21] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:02:28] INFO django.server - "GET /payments/author/6/payout-info/ HTTP/1.1" 200 112
+[2026-09-17 12:02:31] PAYMENT INFO - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': '35cce6b6efc64fa3be06b7ac12696625', 'sign': 'VDxIHZl1naVokFlfv52GvPmgiq/EYz33E4AuphUDADt2tEZUmlzrMODG/fw6Sb5FFXsk+jDDSsMyCriGxjQwkrJUO0DObQoNEGJFxjwNxt+UHcXOvQZyuhHKoptxcRK5K+XSpYk+IgsajFCtvAfBW9aDzD8bb6f7SmzElFGRfJwmmFuIKYgcbjVEBqPp7N5KN82XcDX8atiGcKcYOeL9yU3nGL5aXEmYk4NMZft9o9Bj/Ub+MWkMt+5/d+OVZTrzJotK27EVMLXVqcR/t/ZKSTsurYwkdmppzPDWA2FTp2+ETasSkwvMheVlGEUm5iwl6eKc7KCe6ahKftm6aEC7NKt9zm6qfZz/5kFvR0GPKaodc29Nv8iagcY/JFDM1a7vT5MW/vAZieUjFPWAAg/VT5qo6LqN5rAbX2qojfxTBELF+2AnNyEgmcMunxgLlpMyIw+gAc5ko9Bxh1qFlrTwvXLrr8kqpIbgkMhSZLk1ZpivO9AGPgDPwyKnAZ7THj04he5xuqDiEGwviMOVf2DH/IdY9fe8/VORKB7umu8wWAOOJYW7kV9eI+dVI87qokfCEDzt656MGn/hKvWvu2gToqjg+IhO/JIwrpbZ7eWGj8qCR40jMP5hfz5d/u4gdSd+izxMd6c0qJ53egNZeX1VEdPltq8ANAG6VlfRK4Ufkf4=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'AUTH6434B040EC3', 'prepay_id': '011bef5cdb28615a7a4cae4db41315e656c0702'}}
+[2026-09-17 12:02:31] INFO payments.telebirr - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': '35cce6b6efc64fa3be06b7ac12696625', 'sign': 'VDxIHZl1naVokFlfv52GvPmgiq/EYz33E4AuphUDADt2tEZUmlzrMODG/fw6Sb5FFXsk+jDDSsMyCriGxjQwkrJUO0DObQoNEGJFxjwNxt+UHcXOvQZyuhHKoptxcRK5K+XSpYk+IgsajFCtvAfBW9aDzD8bb6f7SmzElFGRfJwmmFuIKYgcbjVEBqPp7N5KN82XcDX8atiGcKcYOeL9yU3nGL5aXEmYk4NMZft9o9Bj/Ub+MWkMt+5/d+OVZTrzJotK27EVMLXVqcR/t/ZKSTsurYwkdmppzPDWA2FTp2+ETasSkwvMheVlGEUm5iwl6eKc7KCe6ahKftm6aEC7NKt9zm6qfZz/5kFvR0GPKaodc29Nv8iagcY/JFDM1a7vT5MW/vAZieUjFPWAAg/VT5qo6LqN5rAbX2qojfxTBELF+2AnNyEgmcMunxgLlpMyIw+gAc5ko9Bxh1qFlrTwvXLrr8kqpIbgkMhSZLk1ZpivO9AGPgDPwyKnAZ7THj04he5xuqDiEGwviMOVf2DH/IdY9fe8/VORKB7umu8wWAOOJYW7kV9eI+dVI87qokfCEDzt656MGn/hKvWvu2gToqjg+IhO/JIwrpbZ7eWGj8qCR40jMP5hfz5d/u4gdSd+izxMd6c0qJ53egNZeX1VEdPltq8ANAG6VlfRK4Ufkf4=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'AUTH6434B040EC3', 'prepay_id': '011bef5cdb28615a7a4cae4db41315e656c0702'}}
+[2026-09-17 12:02:31] INFO payments.telebirr - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': '35cce6b6efc64fa3be06b7ac12696625', 'sign': 'VDxIHZl1naVokFlfv52GvPmgiq/EYz33E4AuphUDADt2tEZUmlzrMODG/fw6Sb5FFXsk+jDDSsMyCriGxjQwkrJUO0DObQoNEGJFxjwNxt+UHcXOvQZyuhHKoptxcRK5K+XSpYk+IgsajFCtvAfBW9aDzD8bb6f7SmzElFGRfJwmmFuIKYgcbjVEBqPp7N5KN82XcDX8atiGcKcYOeL9yU3nGL5aXEmYk4NMZft9o9Bj/Ub+MWkMt+5/d+OVZTrzJotK27EVMLXVqcR/t/ZKSTsurYwkdmppzPDWA2FTp2+ETasSkwvMheVlGEUm5iwl6eKc7KCe6ahKftm6aEC7NKt9zm6qfZz/5kFvR0GPKaodc29Nv8iagcY/JFDM1a7vT5MW/vAZieUjFPWAAg/VT5qo6LqN5rAbX2qojfxTBELF+2AnNyEgmcMunxgLlpMyIw+gAc5ko9Bxh1qFlrTwvXLrr8kqpIbgkMhSZLk1ZpivO9AGPgDPwyKnAZ7THj04he5xuqDiEGwviMOVf2DH/IdY9fe8/VORKB7umu8wWAOOJYW7kV9eI+dVI87qokfCEDzt656MGn/hKvWvu2gToqjg+IhO/JIwrpbZ7eWGj8qCR40jMP5hfz5d/u4gdSd+izxMd6c0qJ53egNZeX1VEdPltq8ANAG6VlfRK4Ufkf4=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'AUTH6434B040EC3', 'prepay_id': '011bef5cdb28615a7a4cae4db41315e656c0702'}}
+[2026-09-17 12:02:31] PAYMENT INFO - Telebirr preorder OK merch_order_id=AUTH6434B040EC3 prepay_id=011bef5cdb28615a7a4cae4db41315e656c0702
+[2026-09-17 12:02:31] INFO payments.telebirr - Telebirr preorder OK merch_order_id=AUTH6434B040EC3 prepay_id=011bef5cdb28615a7a4cae4db41315e656c0702
+[2026-09-17 12:02:31] INFO payments.telebirr - Telebirr preorder OK merch_order_id=AUTH6434B040EC3 prepay_id=011bef5cdb28615a7a4cae4db41315e656c0702
+[2026-09-17 12:02:31] PAYMENT INFO - Royalty Telebirr checkout author=6 total=980.00 url=https://developerportal.ethiotelebirr.et:38443/payment/web/paygate?appid=1697890
+[2026-09-17 12:02:31] INFO payments.views - Royalty Telebirr checkout author=6 total=980.00 url=https://developerportal.ethiotelebirr.et:38443/payment/web/paygate?appid=1697890
+[2026-09-17 12:02:31] INFO payments.views - Royalty Telebirr checkout author=6 total=980.00 url=https://developerportal.ethiotelebirr.et:38443/payment/web/paygate?appid=1697890
+[2026-09-17 12:02:31] INFO django.server - "POST /payments/author/6/process/ HTTP/1.1" 200 1311
+[2026-09-17 12:04:06] INFO django.server - "GET /payments/return/?merch_order_id=AUTH6434B040EC3 HTTP/1.1" 302 0
+[2026-09-17 12:04:06] INFO django.server - "GET /accounts/login/?next=/payments/return/%3Fmerch_order_id%3DAUTH6434B040EC3 HTTP/1.1" 200 64909
+[2026-09-17 12:04:06] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:04:06] INFO django.server - "GET /static/images/logo.png HTTP/1.1" 200 157968
+[2026-09-17 12:04:07] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:04:07] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:04:07] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:04:07] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:04:07] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:04:07] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:04:36] AUTH INFO - AUTH - Login successful: User=finance_officer, IP=127.0.0.1, Role=finance
+[2026-09-17 12:04:36] INFO accounts.views - AUTH - Login successful: User=finance_officer, IP=127.0.0.1, Role=finance
+[2026-09-17 12:04:36] INFO accounts.views - AUTH - Login successful: User=finance_officer, IP=127.0.0.1, Role=finance
+[2026-09-17 12:04:36] INFO django.server - "POST /accounts/login/?next=/payments/return/%3Fmerch_order_id%3DAUTH6434B040EC3 HTTP/1.1" 302 0
+[2026-09-17 12:04:36] AUTH INFO - Finance dashboard accessed by: finance_officer
+[2026-09-17 12:04:36] INFO accounts.views - Finance dashboard accessed by: finance_officer
+[2026-09-17 12:04:36] INFO accounts.views - Finance dashboard accessed by: finance_officer
+[2026-09-17 12:04:36] INFO django.server - "GET /accounts/dashboard/finance/ HTTP/1.1" 200 63970
+[2026-09-17 12:04:36] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:04:36] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:04:36] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:04:36] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:04:36] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:04:36] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:04:36] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:04:36] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:04:36] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:04:43] INFO django.server - "GET /payments/finance/settings/ HTTP/1.1" 200 62404
+[2026-09-17 12:04:43] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:04:43] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:04:43] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:04:43] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:04:43] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:04:43] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:04:43] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:04:43] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:04:43] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:04:56] INFO django.server - "POST /payments/finance/settings/ HTTP/1.1" 302 0
+[2026-09-17 12:04:56] INFO django.server - "GET /payments/finance/settings/ HTTP/1.1" 200 62878
+[2026-09-17 12:04:56] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:04:56] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:04:56] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:04:56] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:04:56] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:04:56] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:04:56] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:04:56] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:04:56] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:04:58] INFO django.server - "GET / HTTP/1.1" 200 91194
+[2026-09-17 12:04:59] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:04:59] INFO django.server - "GET /static/images/Abrehot.jpg HTTP/1.1" 200 72716
+[2026-09-17 12:04:59] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:04:59] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:04:59] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:04:59] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:04:59] INFO django.server - "GET /media/books/covers/2026/09/pychology_b5LmZgq.png HTTP/1.1" 200 363640
+[2026-09-17 12:04:59] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:04:59] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:04:59] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:04:59] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:05:04] AUTH INFO - AUTH - User logged out: finance_officer, IP=127.0.0.1
+[2026-09-17 12:05:04] INFO accounts.views - AUTH - User logged out: finance_officer, IP=127.0.0.1
+[2026-09-17 12:05:04] INFO accounts.views - AUTH - User logged out: finance_officer, IP=127.0.0.1
+[2026-09-17 12:05:04] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-09-17 12:05:04] INFO django.server - "GET / HTTP/1.1" 200 90237
+[2026-09-17 12:05:04] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:05:04] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:05:04] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:05:04] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:05:04] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:05:04] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:05:04] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:05:04] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:05:04] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:05:15] INFO django.server - "GET /books/6/ HTTP/1.1" 200 71052
+[2026-09-17 12:05:15] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:05:15] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:05:15] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:05:15] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:05:15] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:05:15] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:05:15] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:05:15] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:05:15] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:05:17] INFO django.server - "GET /accounts/login/?next=/books/6/ HTTP/1.1" 200 64909
+[2026-09-17 12:05:17] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:05:17] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:05:17] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:05:17] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:05:17] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:05:17] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:05:17] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:05:17] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:05:17] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:05:25] AUTH INFO - AUTH - Login successful: User=client, IP=127.0.0.1, Role=client
+[2026-09-17 12:05:25] INFO accounts.views - AUTH - Login successful: User=client, IP=127.0.0.1, Role=client
+[2026-09-17 12:05:25] INFO accounts.views - AUTH - Login successful: User=client, IP=127.0.0.1, Role=client
+[2026-09-17 12:05:25] INFO django.server - "POST /accounts/login/?next=/books/6/ HTTP/1.1" 302 0
+[2026-09-17 12:05:25] AUTH INFO - Client dashboard accessed by: client
+[2026-09-17 12:05:25] INFO accounts.views - Client dashboard accessed by: client
+[2026-09-17 12:05:25] INFO accounts.views - Client dashboard accessed by: client
+[2026-09-17 12:05:25] INFO django.server - "GET /accounts/dashboard/client/ HTTP/1.1" 200 66795
+[2026-09-17 12:05:25] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:05:25] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:05:25] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:05:25] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:05:25] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:05:25] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:05:25] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:05:25] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:05:25] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:05:28] INFO django.server - "GET /books/browse/ HTTP/1.1" 200 102532
+[2026-09-17 12:05:28] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:05:28] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:05:28] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:05:28] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:05:28] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:05:28] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:05:28] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:05:28] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:05:28] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:05:30] INFO django.server - "GET /books/6/ HTTP/1.1" 200 73454
+[2026-09-17 12:05:30] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:05:30] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:05:30] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:05:30] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:05:30] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:05:30] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:05:30] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:05:30] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:05:30] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:05:32] INFO django.server - "GET /books/6/read/ HTTP/1.1" 200 133106
+[2026-09-17 12:05:33] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:05:33] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:05:33] INFO django.server - "GET /static/js/pdf-offline-cache.js HTTP/1.1" 200 5319
+[2026-09-17 12:05:33] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:05:33] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 12:05:33] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:05:33] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:05:33] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:05:33] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:05:33] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:05:33] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:05:33] INFO books.views - Book streamed for reading: pyschology by client
+[2026-09-17 12:05:33] INFO books.views - Book streamed for reading: pyschology by client
+[2026-09-17 12:05:33] INFO django.server - "GET /books/6/stream/ HTTP/1.1" 200 2623192
+[2026-09-17 12:10:23] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:10:23] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:10:57] INFO django.server - "GET /payments/author/6/payout-info/ HTTP/1.1" 200 112
+[2026-09-17 12:11:00] PAYMENT INFO - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': 'efb60f52fb204d30b8cedbf6ede001e0', 'sign': 'eL654Tcwah5Cc6J7eW+Xy2gYOHRS9qX7NmZ0XIU9zBCXX3/yf8URKncpvD0p5Nv0p0z93NHFk/lrEYdrkImbJqFTqDWre0tbeIMmseR5J2ZFVVrufHYlNjUXu8QKQRuzdWOe92xlc9/XTrXAkM+zLU+CccnZIlgV/QvdmC0Ue3Eid4nzFW59mNMZw0L8fPYG90vo9WjzPh6HExIW7oqzMBJhWAV7HkK2AxqEPtmu8nYLxpbfMm7E7of+lHb1kROCG7GAmRULZX6OjUQfOqzf7rwmTf0cx+OJnMwO3IBa644rsD8HRkGQ5RnKGjGW6FMqoOpSOOeWK25XEIwdBBbm67QfrfGAHANgkuwMkGrSARQ1aEQFFIUWAA68XVyhIjnacHvVQ+iDkmHUnR9yJffWEtFUtvfxO0KovlhEschRprWC1iDpL/cn30I6BuPzqH4C8wT50o7lFTCl/e4tFLa785Mn4SkItISu/wzXeLKQ68EzhkTu416c1kumsmt7cUoMWRy6U46e9QO0KTuMXvnE7Dr8hghxYD5sBGvGb6QG+ato/7Eu2VI/fJVNK5UCW4plXuTDiEgkvztXpR3/2zoBWs7W66WmUTTecus8UlEe30WPx5GA/5KReLmLBiYHmRboJ74rHoqwlseWfCnpeXn6DgXshC4GcL9EVOPuhmVpsZU=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'AUTH6CA346B88B5', 'prepay_id': '01168a186ecc572e42cea03ddc3f96d232c0101'}}
+[2026-09-17 12:11:00] INFO payments.telebirr - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': 'efb60f52fb204d30b8cedbf6ede001e0', 'sign': 'eL654Tcwah5Cc6J7eW+Xy2gYOHRS9qX7NmZ0XIU9zBCXX3/yf8URKncpvD0p5Nv0p0z93NHFk/lrEYdrkImbJqFTqDWre0tbeIMmseR5J2ZFVVrufHYlNjUXu8QKQRuzdWOe92xlc9/XTrXAkM+zLU+CccnZIlgV/QvdmC0Ue3Eid4nzFW59mNMZw0L8fPYG90vo9WjzPh6HExIW7oqzMBJhWAV7HkK2AxqEPtmu8nYLxpbfMm7E7of+lHb1kROCG7GAmRULZX6OjUQfOqzf7rwmTf0cx+OJnMwO3IBa644rsD8HRkGQ5RnKGjGW6FMqoOpSOOeWK25XEIwdBBbm67QfrfGAHANgkuwMkGrSARQ1aEQFFIUWAA68XVyhIjnacHvVQ+iDkmHUnR9yJffWEtFUtvfxO0KovlhEschRprWC1iDpL/cn30I6BuPzqH4C8wT50o7lFTCl/e4tFLa785Mn4SkItISu/wzXeLKQ68EzhkTu416c1kumsmt7cUoMWRy6U46e9QO0KTuMXvnE7Dr8hghxYD5sBGvGb6QG+ato/7Eu2VI/fJVNK5UCW4plXuTDiEgkvztXpR3/2zoBWs7W66WmUTTecus8UlEe30WPx5GA/5KReLmLBiYHmRboJ74rHoqwlseWfCnpeXn6DgXshC4GcL9EVOPuhmVpsZU=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'AUTH6CA346B88B5', 'prepay_id': '01168a186ecc572e42cea03ddc3f96d232c0101'}}
+[2026-09-17 12:11:00] INFO payments.telebirr - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': 'efb60f52fb204d30b8cedbf6ede001e0', 'sign': 'eL654Tcwah5Cc6J7eW+Xy2gYOHRS9qX7NmZ0XIU9zBCXX3/yf8URKncpvD0p5Nv0p0z93NHFk/lrEYdrkImbJqFTqDWre0tbeIMmseR5J2ZFVVrufHYlNjUXu8QKQRuzdWOe92xlc9/XTrXAkM+zLU+CccnZIlgV/QvdmC0Ue3Eid4nzFW59mNMZw0L8fPYG90vo9WjzPh6HExIW7oqzMBJhWAV7HkK2AxqEPtmu8nYLxpbfMm7E7of+lHb1kROCG7GAmRULZX6OjUQfOqzf7rwmTf0cx+OJnMwO3IBa644rsD8HRkGQ5RnKGjGW6FMqoOpSOOeWK25XEIwdBBbm67QfrfGAHANgkuwMkGrSARQ1aEQFFIUWAA68XVyhIjnacHvVQ+iDkmHUnR9yJffWEtFUtvfxO0KovlhEschRprWC1iDpL/cn30I6BuPzqH4C8wT50o7lFTCl/e4tFLa785Mn4SkItISu/wzXeLKQ68EzhkTu416c1kumsmt7cUoMWRy6U46e9QO0KTuMXvnE7Dr8hghxYD5sBGvGb6QG+ato/7Eu2VI/fJVNK5UCW4plXuTDiEgkvztXpR3/2zoBWs7W66WmUTTecus8UlEe30WPx5GA/5KReLmLBiYHmRboJ74rHoqwlseWfCnpeXn6DgXshC4GcL9EVOPuhmVpsZU=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'AUTH6CA346B88B5', 'prepay_id': '01168a186ecc572e42cea03ddc3f96d232c0101'}}
+[2026-09-17 12:11:00] PAYMENT INFO - Telebirr preorder OK merch_order_id=AUTH6CA346B88B5 prepay_id=01168a186ecc572e42cea03ddc3f96d232c0101
+[2026-09-17 12:11:00] INFO payments.telebirr - Telebirr preorder OK merch_order_id=AUTH6CA346B88B5 prepay_id=01168a186ecc572e42cea03ddc3f96d232c0101
+[2026-09-17 12:11:00] INFO payments.telebirr - Telebirr preorder OK merch_order_id=AUTH6CA346B88B5 prepay_id=01168a186ecc572e42cea03ddc3f96d232c0101
+[2026-09-17 12:11:00] PAYMENT INFO - Royalty Telebirr checkout author=6 total=980.00 url=https://developerportal.ethiotelebirr.et:38443/payment/web/paygate?appid=1697890
+[2026-09-17 12:11:00] INFO payments.views - Royalty Telebirr checkout author=6 total=980.00 url=https://developerportal.ethiotelebirr.et:38443/payment/web/paygate?appid=1697890
+[2026-09-17 12:11:00] INFO payments.views - Royalty Telebirr checkout author=6 total=980.00 url=https://developerportal.ethiotelebirr.et:38443/payment/web/paygate?appid=1697890
+[2026-09-17 12:11:00] INFO django.server - "POST /payments/author/6/process/ HTTP/1.1" 200 1311
+[2026-09-17 12:25:00] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:25:00] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:37:29] INFO django.utils.autoreload - C:\abay_repository\payments\views.py changed, reloading.
+[2026-09-17 12:37:29] INFO django.utils.autoreload - C:\abay_repository\payments\views.py changed, reloading.
+[2026-09-17 12:37:31] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-17 12:37:31] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-17 12:37:40] INFO django.server - "GET /payments/dashboard/ HTTP/1.1" 200 100108
+[2026-09-17 12:37:48] INFO django.server - "GET /payments/dashboard/ HTTP/1.1" 200 100108
+[2026-09-17 12:37:48] INFO django.server - "GET /static/images/logo.png HTTP/1.1" 200 157968
+[2026-09-17 12:37:49] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:37:55] INFO django.server - "GET /payments/author/6/payout-info/ HTTP/1.1" 200 112
+[2026-09-17 12:38:30] WARNING django.server - "POST /payments/dashboard/[object%20HTMLInputElement] HTTP/1.1" 404 8007
+[2026-09-17 12:38:44] WARNING django.server - "POST /payments/dashboard/[object%20HTMLInputElement] HTTP/1.1" 404 8007
+[2026-09-17 12:40:54] WARNING django.server - "POST /payments/dashboard/[object%20HTMLInputElement] HTTP/1.1" 404 8007
+[2026-09-17 12:48:25] INFO django.utils.autoreload - C:\abay_repository\payments\urls.py changed, reloading.
+[2026-09-17 12:48:25] INFO django.utils.autoreload - C:\abay_repository\payments\urls.py changed, reloading.
+[2026-09-17 12:48:26] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-17 12:48:26] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-17 12:48:33] ERROR django.request - Internal Server Error: /payments/dashboard/
+Traceback (most recent call last):
+  File "C:\abay_repository\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\abay_repository\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\C4S\AppData\Local\Programs\Python\Python39\lib\contextlib.py", line 79, in inner
+    return func(*args, **kwds)
+  File "C:\abay_repository\venv\lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\abay_repository\payments\views.py", line 490, in payment_dashboard
+    return render(request, 'payments/dashboard.html', context)
+  File "C:\abay_repository\venv\lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\backends\django.py", line 33, in get_template
+    return Template(self.engine.get_template(template_name), self)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\engine.py", line 175, in get_template
+    template, origin = self.find_template(template_name)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\engine.py", line 157, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 200, in compile_nodelist
+    return parser.parse()
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 513, in parse
+    raise self.error(token, e)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\loader_tags.py", line 293, in do_extends
+    nodelist = parser.parse()
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 513, in parse
+    raise self.error(token, e)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\loader_tags.py", line 232, in do_block
+    nodelist = parser.parse(("endblock",))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 518, in parse
+    self.unclosed_block_tag(parse_until)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 581, in unclosed_block_tag
+    raise self.error(token, msg)
+django.template.exceptions.TemplateSyntaxError: Unclosed tag on line 245: 'block'. Looking for one of: endblock.
+[2026-09-17 12:48:33] ERROR django.request log.log_response:241 - Internal Server Error: /payments/dashboard/
+Traceback (most recent call last):
+  File "C:\abay_repository\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\abay_repository\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\C4S\AppData\Local\Programs\Python\Python39\lib\contextlib.py", line 79, in inner
+    return func(*args, **kwds)
+  File "C:\abay_repository\venv\lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\abay_repository\payments\views.py", line 490, in payment_dashboard
+    return render(request, 'payments/dashboard.html', context)
+  File "C:\abay_repository\venv\lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\backends\django.py", line 33, in get_template
+    return Template(self.engine.get_template(template_name), self)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\engine.py", line 175, in get_template
+    template, origin = self.find_template(template_name)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\engine.py", line 157, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 200, in compile_nodelist
+    return parser.parse()
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 513, in parse
+    raise self.error(token, e)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\loader_tags.py", line 293, in do_extends
+    nodelist = parser.parse()
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 513, in parse
+    raise self.error(token, e)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\loader_tags.py", line 232, in do_block
+    nodelist = parser.parse(("endblock",))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 518, in parse
+    self.unclosed_block_tag(parse_until)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 581, in unclosed_block_tag
+    raise self.error(token, msg)
+django.template.exceptions.TemplateSyntaxError: Unclosed tag on line 245: 'block'. Looking for one of: endblock.
+[2026-09-17 12:48:33] ERROR django.server - "GET /payments/dashboard/ HTTP/1.1" 500 228021
+[2026-09-17 12:48:33] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:48:33] WARNING django.server - "GET /static/favicon.ico HTTP/1.1" 404 1893
+[2026-09-17 12:48:49] AUTH INFO - Finance dashboard accessed by: finance_officer
+[2026-09-17 12:48:49] INFO accounts.views - Finance dashboard accessed by: finance_officer
+[2026-09-17 12:48:49] INFO accounts.views - Finance dashboard accessed by: finance_officer
+[2026-09-17 12:48:49] INFO django.server - "GET /accounts/dashboard/finance/ HTTP/1.1" 200 63635
+[2026-09-17 12:48:50] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 12:48:52] ERROR django.request - Internal Server Error: /payments/dashboard/
+Traceback (most recent call last):
+  File "C:\abay_repository\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\abay_repository\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\C4S\AppData\Local\Programs\Python\Python39\lib\contextlib.py", line 79, in inner
+    return func(*args, **kwds)
+  File "C:\abay_repository\venv\lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\abay_repository\payments\views.py", line 490, in payment_dashboard
+    return render(request, 'payments/dashboard.html', context)
+  File "C:\abay_repository\venv\lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\backends\django.py", line 33, in get_template
+    return Template(self.engine.get_template(template_name), self)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\engine.py", line 175, in get_template
+    template, origin = self.find_template(template_name)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\engine.py", line 157, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 200, in compile_nodelist
+    return parser.parse()
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 513, in parse
+    raise self.error(token, e)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\loader_tags.py", line 293, in do_extends
+    nodelist = parser.parse()
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 513, in parse
+    raise self.error(token, e)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\loader_tags.py", line 232, in do_block
+    nodelist = parser.parse(("endblock",))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 518, in parse
+    self.unclosed_block_tag(parse_until)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 581, in unclosed_block_tag
+    raise self.error(token, msg)
+django.template.exceptions.TemplateSyntaxError: Unclosed tag on line 245: 'block'. Looking for one of: endblock.
+[2026-09-17 12:48:52] ERROR django.request log.log_response:241 - Internal Server Error: /payments/dashboard/
+Traceback (most recent call last):
+  File "C:\abay_repository\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\abay_repository\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\C4S\AppData\Local\Programs\Python\Python39\lib\contextlib.py", line 79, in inner
+    return func(*args, **kwds)
+  File "C:\abay_repository\venv\lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\abay_repository\payments\views.py", line 490, in payment_dashboard
+    return render(request, 'payments/dashboard.html', context)
+  File "C:\abay_repository\venv\lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\backends\django.py", line 33, in get_template
+    return Template(self.engine.get_template(template_name), self)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\engine.py", line 175, in get_template
+    template, origin = self.find_template(template_name)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\engine.py", line 157, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 200, in compile_nodelist
+    return parser.parse()
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 513, in parse
+    raise self.error(token, e)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\loader_tags.py", line 293, in do_extends
+    nodelist = parser.parse()
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 513, in parse
+    raise self.error(token, e)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\loader_tags.py", line 232, in do_block
+    nodelist = parser.parse(("endblock",))
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 518, in parse
+    self.unclosed_block_tag(parse_until)
+  File "C:\abay_repository\venv\lib\site-packages\django\template\base.py", line 581, in unclosed_block_tag
+    raise self.error(token, msg)
+django.template.exceptions.TemplateSyntaxError: Unclosed tag on line 245: 'block'. Looking for one of: endblock.
+[2026-09-17 12:48:52] ERROR django.server - "GET /payments/dashboard/ HTTP/1.1" 500 227756
+[2026-09-17 12:51:10] INFO django.utils.autoreload - C:\abay_repository\payments\services\__init__.py changed, reloading.
+[2026-09-17 12:51:10] INFO django.utils.autoreload - C:\abay_repository\payments\services\__init__.py changed, reloading.
+[2026-09-17 12:51:11] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-17 12:51:11] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-17 12:51:21] INFO django.server - "GET /payments/dashboard/ HTTP/1.1" 200 92691
+[2026-09-17 12:51:22] INFO django.server - "GET /static/images/logo.png HTTP/1.1" 200 157968
+[2026-09-17 12:51:24] INFO django.server - "GET /payments/calculate_all/ HTTP/1.1" 302 0
+[2026-09-17 12:51:25] INFO django.server - "GET /payments/dashboard/ HTTP/1.1" 200 93037
+[2026-09-17 12:51:31] INFO django.server - "GET /payments/author/6/payout-info/ HTTP/1.1" 200 112
+[2026-09-17 12:51:35] WARNING django.server - "POST /payments/dashboard/[object%20HTMLInputElement] HTTP/1.1" 404 8007
+[2026-09-17 12:51:39] WARNING django.server - "POST /payments/dashboard/[object%20HTMLInputElement] HTTP/1.1" 404 8007
+[2026-09-17 12:52:00] AUTH INFO - AUTH - User logged out: finance_officer, IP=127.0.0.1
+[2026-09-17 12:52:00] INFO accounts.views - AUTH - User logged out: finance_officer, IP=127.0.0.1
+[2026-09-17 12:52:00] INFO accounts.views - AUTH - User logged out: finance_officer, IP=127.0.0.1
+[2026-09-17 12:52:00] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-09-17 12:52:00] INFO django.server - "GET / HTTP/1.1" 200 90237
+[2026-09-17 12:52:00] INFO django.server - "GET /media/books/covers/2026/09/pychology_b5LmZgq.png HTTP/1.1" 200 363640
+[2026-09-17 12:52:02] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64909
+[2026-09-17 12:52:06] AUTH INFO - AUTH - Login successful: User=client, IP=127.0.0.1, Role=client
+[2026-09-17 12:52:06] INFO accounts.views - AUTH - Login successful: User=client, IP=127.0.0.1, Role=client
+[2026-09-17 12:52:06] INFO accounts.views - AUTH - Login successful: User=client, IP=127.0.0.1, Role=client
+[2026-09-17 12:52:06] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-09-17 12:52:06] AUTH INFO - Client dashboard accessed by: client
+[2026-09-17 12:52:06] INFO accounts.views - Client dashboard accessed by: client
+[2026-09-17 12:52:06] INFO accounts.views - Client dashboard accessed by: client
+[2026-09-17 12:52:06] INFO django.server - "GET /accounts/dashboard/client/ HTTP/1.1" 200 66795
+[2026-09-17 12:52:08] INFO django.server - "GET /books/browse/ HTTP/1.1" 200 102532
+[2026-09-17 12:52:08] INFO django.server - "GET /media/books/covers/2026/09/pychology_b5LmZgq.png HTTP/1.1" 200 363640
+[2026-09-17 12:52:16] AUTH INFO - AUTH - User logged out: client, IP=127.0.0.1
+[2026-09-17 12:52:16] INFO accounts.views - AUTH - User logged out: client, IP=127.0.0.1
+[2026-09-17 12:52:16] INFO accounts.views - AUTH - User logged out: client, IP=127.0.0.1
+[2026-09-17 12:52:16] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-09-17 12:52:16] INFO django.server - "GET / HTTP/1.1" 200 90237
+[2026-09-17 12:52:18] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64909
+[2026-09-17 12:52:23] AUTH INFO - AUTH - Login successful: User=admin, IP=127.0.0.1, Role=admin
+[2026-09-17 12:52:23] INFO accounts.views - AUTH - Login successful: User=admin, IP=127.0.0.1, Role=admin
+[2026-09-17 12:52:23] INFO accounts.views - AUTH - Login successful: User=admin, IP=127.0.0.1, Role=admin
+[2026-09-17 12:52:23] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-09-17 12:52:23] AUTH INFO - Admin dashboard accessed by: admin
+[2026-09-17 12:52:23] INFO accounts.views - Admin dashboard accessed by: admin
+[2026-09-17 12:52:23] INFO accounts.views - Admin dashboard accessed by: admin
+[2026-09-17 12:52:24] INFO django.server - "GET /accounts/dashboard/admin/ HTTP/1.1" 200 107771
+[2026-09-17 12:52:24] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 123063
+[2026-09-17 12:52:28] INFO django.server - "GET /admin/ HTTP/1.1" 200 21509
+[2026-09-17 12:52:28] INFO django.server - "GET /static/admin/css/base.css HTTP/1.1" 200 21207
+[2026-09-17 12:52:28] INFO django.server - "GET /static/admin/css/dark_mode.css HTTP/1.1" 200 2929
+[2026-09-17 12:52:28] INFO django.server - "GET /static/admin/css/responsive.css HTTP/1.1" 200 18533
+[2026-09-17 12:52:28] INFO django.server - "GET /static/admin/css/nav_sidebar.css HTTP/1.1" 200 2694
+[2026-09-17 12:52:28] INFO django.server - "GET /static/admin/css/dashboard.css HTTP/1.1" 200 441
+[2026-09-17 12:52:28] INFO django.server - "GET /static/admin/js/theme.js HTTP/1.1" 200 1943
+[2026-09-17 12:52:28] INFO django.server - "GET /static/admin/img/icon-changelink.svg HTTP/1.1" 200 380
+[2026-09-17 12:52:28] INFO django.server - "GET /static/admin/img/icon-addlink.svg HTTP/1.1" 200 331
+[2026-09-17 12:52:28] INFO django.server - "GET /static/admin/js/nav_sidebar.js HTTP/1.1" 200 3063
+[2026-09-17 12:52:28] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-17 12:52:28] WARNING django.server - "GET /static/favicon.ico HTTP/1.1" 404 1893
+[2026-09-17 12:52:40] INFO django.server - "GET /admin/accounts/customuser/ HTTP/1.1" 200 42383
+[2026-09-17 12:52:40] INFO django.server - "GET /static/admin/css/changelists.css HTTP/1.1" 200 6566
+[2026-09-17 12:52:40] INFO django.server - "GET /static/admin/js/jquery.init.js HTTP/1.1" 200 347
+[2026-09-17 12:52:40] INFO django.server - "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+[2026-09-17 12:52:40] INFO django.server - "GET /static/admin/js/core.js HTTP/1.1" 200 5682
+[2026-09-17 12:52:40] INFO django.server - "GET /static/admin/js/admin/RelatedObjectLookups.js HTTP/1.1" 200 8943
+[2026-09-17 12:52:40] INFO django.server - "GET /static/admin/js/actions.js HTTP/1.1" 200 7872
+[2026-09-17 12:52:40] INFO django.server - "GET /static/admin/js/urlify.js HTTP/1.1" 200 7887
+[2026-09-17 12:52:40] INFO django.server - "GET /static/admin/js/prepopulate.js HTTP/1.1" 200 1531
+[2026-09-17 12:52:40] INFO django.server - "GET /static/admin/img/search.svg HTTP/1.1" 200 458
+[2026-09-17 12:52:40] INFO django.server - "GET /static/admin/img/icon-yes.svg HTTP/1.1" 200 436
+[2026-09-17 12:52:40] INFO django.server - "GET /static/admin/img/icon-no.svg HTTP/1.1" 200 560
+[2026-09-17 12:52:40] INFO django.server - "GET /static/admin/js/vendor/jquery/jquery.js HTTP/1.1" 200 292458
+[2026-09-17 12:52:40] INFO django.server - "GET /static/admin/js/filters.js HTTP/1.1" 200 978
+[2026-09-17 12:52:40] INFO django.server - "GET /static/admin/js/vendor/xregexp/xregexp.js HTTP/1.1" 200 232381
+[2026-09-17 12:52:40] INFO django.server - "GET /static/admin/img/tooltag-add.svg HTTP/1.1" 200 331
+[2026-09-17 12:52:40] INFO django.server - "GET /static/admin/img/sorting-icons.svg HTTP/1.1" 200 1097
+[2026-09-17 12:52:58] INFO django.server - "POST /admin/logout/ HTTP/1.1" 302 0
+[2026-09-17 12:52:58] INFO django.server - "GET / HTTP/1.1" 200 89883
+[2026-09-17 12:53:00] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64909
+[2026-09-17 12:53:05] AUTH INFO - AUTH - Login successful: User=manager, IP=127.0.0.1, Role=client
+[2026-09-17 12:53:05] INFO accounts.views - AUTH - Login successful: User=manager, IP=127.0.0.1, Role=client
+[2026-09-17 12:53:05] INFO accounts.views - AUTH - Login successful: User=manager, IP=127.0.0.1, Role=client
+[2026-09-17 12:53:05] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-09-17 12:53:05] AUTH INFO - Client dashboard accessed by: manager
+[2026-09-17 12:53:05] INFO accounts.views - Client dashboard accessed by: manager
+[2026-09-17 12:53:05] INFO accounts.views - Client dashboard accessed by: manager
+[2026-09-17 12:53:05] INFO django.server - "GET /accounts/dashboard/client/ HTTP/1.1" 200 66842
+[2026-09-17 12:53:09] INFO django.server - "GET /books/my-books/user/ HTTP/1.1" 200 76585
+[2026-09-17 12:53:10] INFO django.server - "GET /books/browse/ HTTP/1.1" 200 102665
+[2026-09-17 12:53:12] INFO django.server - "GET /books/6/ HTTP/1.1" 200 73846
+[2026-09-17 12:53:14] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 84646
+[2026-09-17 12:53:21] PAYMENT INFO - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': '49b8a62caeed436583fb3f6a7345f02f', 'sign': 'W2V9VAgfXR4d6+C4c+cC+KRLuk+RgxCKhRwMHWpxi8uw7k2To0c8e3ZB8sgXdW2A0GUN4j0GlB8xhlypOFhpIRlbnZQ4QTdIGEVtaWrDL/jPnh7bXwZRHCmkNhLWMTO9OzjO+L/u+51SZVlsTO2imQyLKctQPGl9eX9dB9Prf+hrZ0il4Von3UxHfnLFMl6sNgdgzYhoDFl57qrJx8JtYGX2NncpUr46tNQHRdVZUKf9zK0n4k25RYnp2xJ6L/NHauN2Ov4tZJ7bYKDx0UjGXvOZG3v4ECmR/Fw/dmfa++iDmQYo1wKKrnUmrUD5Z3WnRbRLT3qWrDzy79PC88enk8l3GEZcHkbmZ8LsOrTPrJiff8dCTzUvlr8icSsxx4YheB/i+PeFwT86Bl+E95dKfoa74mlmw/sqCEmJhKwAXdcua8mxPqLMGOXg/QwBJ5IHOjIVzrMtMagniKx7AKhwlXNYu06s+QJ77oar2TOCcl2iutyPkxCP1tYzCcUSdzK4Dcl33iIgU2jcuq0Lb5/UB9LHxvLtQCF3fdsyYc7kTy7latsBLFlsABWN0VXxVfRCAIUIc6TjJKfeB9DepdwqE9nlA01Aw6pxAHmNvc4unGF5LhUz0izVPyRJSuxXookzK7kbdUScp2f7o5Qys96JpSRrUNZ3x6k1FIaFNFRUuX8=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'PUR3E31009B127F', 'prepay_id': '0113be8a691e1685cab1a764efe99869a500301'}}
+[2026-09-17 12:53:21] INFO payments.telebirr - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': '49b8a62caeed436583fb3f6a7345f02f', 'sign': 'W2V9VAgfXR4d6+C4c+cC+KRLuk+RgxCKhRwMHWpxi8uw7k2To0c8e3ZB8sgXdW2A0GUN4j0GlB8xhlypOFhpIRlbnZQ4QTdIGEVtaWrDL/jPnh7bXwZRHCmkNhLWMTO9OzjO+L/u+51SZVlsTO2imQyLKctQPGl9eX9dB9Prf+hrZ0il4Von3UxHfnLFMl6sNgdgzYhoDFl57qrJx8JtYGX2NncpUr46tNQHRdVZUKf9zK0n4k25RYnp2xJ6L/NHauN2Ov4tZJ7bYKDx0UjGXvOZG3v4ECmR/Fw/dmfa++iDmQYo1wKKrnUmrUD5Z3WnRbRLT3qWrDzy79PC88enk8l3GEZcHkbmZ8LsOrTPrJiff8dCTzUvlr8icSsxx4YheB/i+PeFwT86Bl+E95dKfoa74mlmw/sqCEmJhKwAXdcua8mxPqLMGOXg/QwBJ5IHOjIVzrMtMagniKx7AKhwlXNYu06s+QJ77oar2TOCcl2iutyPkxCP1tYzCcUSdzK4Dcl33iIgU2jcuq0Lb5/UB9LHxvLtQCF3fdsyYc7kTy7latsBLFlsABWN0VXxVfRCAIUIc6TjJKfeB9DepdwqE9nlA01Aw6pxAHmNvc4unGF5LhUz0izVPyRJSuxXookzK7kbdUScp2f7o5Qys96JpSRrUNZ3x6k1FIaFNFRUuX8=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'PUR3E31009B127F', 'prepay_id': '0113be8a691e1685cab1a764efe99869a500301'}}
+[2026-09-17 12:53:21] INFO payments.telebirr - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': '49b8a62caeed436583fb3f6a7345f02f', 'sign': 'W2V9VAgfXR4d6+C4c+cC+KRLuk+RgxCKhRwMHWpxi8uw7k2To0c8e3ZB8sgXdW2A0GUN4j0GlB8xhlypOFhpIRlbnZQ4QTdIGEVtaWrDL/jPnh7bXwZRHCmkNhLWMTO9OzjO+L/u+51SZVlsTO2imQyLKctQPGl9eX9dB9Prf+hrZ0il4Von3UxHfnLFMl6sNgdgzYhoDFl57qrJx8JtYGX2NncpUr46tNQHRdVZUKf9zK0n4k25RYnp2xJ6L/NHauN2Ov4tZJ7bYKDx0UjGXvOZG3v4ECmR/Fw/dmfa++iDmQYo1wKKrnUmrUD5Z3WnRbRLT3qWrDzy79PC88enk8l3GEZcHkbmZ8LsOrTPrJiff8dCTzUvlr8icSsxx4YheB/i+PeFwT86Bl+E95dKfoa74mlmw/sqCEmJhKwAXdcua8mxPqLMGOXg/QwBJ5IHOjIVzrMtMagniKx7AKhwlXNYu06s+QJ77oar2TOCcl2iutyPkxCP1tYzCcUSdzK4Dcl33iIgU2jcuq0Lb5/UB9LHxvLtQCF3fdsyYc7kTy7latsBLFlsABWN0VXxVfRCAIUIc6TjJKfeB9DepdwqE9nlA01Aw6pxAHmNvc4unGF5LhUz0izVPyRJSuxXookzK7kbdUScp2f7o5Qys96JpSRrUNZ3x6k1FIaFNFRUuX8=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'PUR3E31009B127F', 'prepay_id': '0113be8a691e1685cab1a764efe99869a500301'}}
+[2026-09-17 12:53:21] PAYMENT INFO - Telebirr preorder OK merch_order_id=PUR3E31009B127F prepay_id=0113be8a691e1685cab1a764efe99869a500301
+[2026-09-17 12:53:21] INFO payments.telebirr - Telebirr preorder OK merch_order_id=PUR3E31009B127F prepay_id=0113be8a691e1685cab1a764efe99869a500301
+[2026-09-17 12:53:21] INFO payments.telebirr - Telebirr preorder OK merch_order_id=PUR3E31009B127F prepay_id=0113be8a691e1685cab1a764efe99869a500301
+[2026-09-17 12:53:21] INFO django.server - "POST /books/6/purchase/ HTTP/1.1" 200 2027
+[2026-09-17 12:59:15] INFO django.utils.autoreload - C:\abay_repository\payments\models.py changed, reloading.
+[2026-09-17 12:59:15] INFO django.utils.autoreload - C:\abay_repository\payments\models.py changed, reloading.
+[2026-09-17 12:59:17] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-17 12:59:17] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-17 12:59:28] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 84646
+[2026-09-17 12:59:28] INFO django.server - "GET /media/books/covers/2026/09/pychology_b5LmZgq.png HTTP/1.1" 200 363640
+[2026-09-17 12:59:36] PAYMENT INFO - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': '9a25b8e42fb34f6c9d4b7d5fe3dea3b1', 'sign': 'LobewJNR3M5x3H9QW8Vnx3Lc9q09ZLBr3V+U0lOKBUmSP0mBp4nHZExqUzisXW4uHZmMFYGGP5dpnzGMu5HeseNJ2ndsxulgQR3ZyTo7VEBpBbX/TfzHfgSa7c1a9/PHyvdtbKSw2OqhU4jfQKp+h+qCyNxuxREjjRfc2Y45GU4FMvq1wYOxBuYAqE19aRKDkw2L+TckkKTItnGt62dpJgqFkm6WwUkWvl6L9FPHoPo/5UzCpQwZWUt7IATjX6tDm9eCoZcrFdbbpOKSbQYohIjQUr3EGnyy/KVqVTGIfvSEqrWnkJnLz3TMIoS5gC9omLRCInedC9qLthHre9Evy4iRd+XdhFblQGvW+c4ry5ucvJkz/6baypVH3imq4zIH53/OaNQcdBDxIaLgqcMRUgmUazVI1tq3LIoLCaAISplIUZsOpTtMl9aV94EXpKyQKikeGxkj4inlcO8ONJBUboXsvyPNIeAFzutr7WiUfJlb8Shdj/BMpVhnGe6LUYt5ljKzCYr/CQ2G87MCq/s7tM7oLk6HCs/lf/tmDMow0EPvAiJi9+xVVTtwzYWEpi1BXq8+5UmRTgMeTsFCvNmIjDFFwWJ8n7Rtc/FV8u3kA8syHl5UQOiHxbqYgxLrzcntdH+R3q8kd9I3wEi7zxBXItcUhdaSvDZ4hHCIruGfYkQ=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'PUR33A231EA7667', 'prepay_id': '0115503b66b40e480043707f3fb997d40710500'}}
+[2026-09-17 12:59:36] INFO payments.telebirr - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': '9a25b8e42fb34f6c9d4b7d5fe3dea3b1', 'sign': 'LobewJNR3M5x3H9QW8Vnx3Lc9q09ZLBr3V+U0lOKBUmSP0mBp4nHZExqUzisXW4uHZmMFYGGP5dpnzGMu5HeseNJ2ndsxulgQR3ZyTo7VEBpBbX/TfzHfgSa7c1a9/PHyvdtbKSw2OqhU4jfQKp+h+qCyNxuxREjjRfc2Y45GU4FMvq1wYOxBuYAqE19aRKDkw2L+TckkKTItnGt62dpJgqFkm6WwUkWvl6L9FPHoPo/5UzCpQwZWUt7IATjX6tDm9eCoZcrFdbbpOKSbQYohIjQUr3EGnyy/KVqVTGIfvSEqrWnkJnLz3TMIoS5gC9omLRCInedC9qLthHre9Evy4iRd+XdhFblQGvW+c4ry5ucvJkz/6baypVH3imq4zIH53/OaNQcdBDxIaLgqcMRUgmUazVI1tq3LIoLCaAISplIUZsOpTtMl9aV94EXpKyQKikeGxkj4inlcO8ONJBUboXsvyPNIeAFzutr7WiUfJlb8Shdj/BMpVhnGe6LUYt5ljKzCYr/CQ2G87MCq/s7tM7oLk6HCs/lf/tmDMow0EPvAiJi9+xVVTtwzYWEpi1BXq8+5UmRTgMeTsFCvNmIjDFFwWJ8n7Rtc/FV8u3kA8syHl5UQOiHxbqYgxLrzcntdH+R3q8kd9I3wEi7zxBXItcUhdaSvDZ4hHCIruGfYkQ=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'PUR33A231EA7667', 'prepay_id': '0115503b66b40e480043707f3fb997d40710500'}}
+[2026-09-17 12:59:36] INFO payments.telebirr - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': '9a25b8e42fb34f6c9d4b7d5fe3dea3b1', 'sign': 'LobewJNR3M5x3H9QW8Vnx3Lc9q09ZLBr3V+U0lOKBUmSP0mBp4nHZExqUzisXW4uHZmMFYGGP5dpnzGMu5HeseNJ2ndsxulgQR3ZyTo7VEBpBbX/TfzHfgSa7c1a9/PHyvdtbKSw2OqhU4jfQKp+h+qCyNxuxREjjRfc2Y45GU4FMvq1wYOxBuYAqE19aRKDkw2L+TckkKTItnGt62dpJgqFkm6WwUkWvl6L9FPHoPo/5UzCpQwZWUt7IATjX6tDm9eCoZcrFdbbpOKSbQYohIjQUr3EGnyy/KVqVTGIfvSEqrWnkJnLz3TMIoS5gC9omLRCInedC9qLthHre9Evy4iRd+XdhFblQGvW+c4ry5ucvJkz/6baypVH3imq4zIH53/OaNQcdBDxIaLgqcMRUgmUazVI1tq3LIoLCaAISplIUZsOpTtMl9aV94EXpKyQKikeGxkj4inlcO8ONJBUboXsvyPNIeAFzutr7WiUfJlb8Shdj/BMpVhnGe6LUYt5ljKzCYr/CQ2G87MCq/s7tM7oLk6HCs/lf/tmDMow0EPvAiJi9+xVVTtwzYWEpi1BXq8+5UmRTgMeTsFCvNmIjDFFwWJ8n7Rtc/FV8u3kA8syHl5UQOiHxbqYgxLrzcntdH+R3q8kd9I3wEi7zxBXItcUhdaSvDZ4hHCIruGfYkQ=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'PUR33A231EA7667', 'prepay_id': '0115503b66b40e480043707f3fb997d40710500'}}
+[2026-09-17 12:59:36] PAYMENT INFO - Telebirr preorder OK merch_order_id=PUR33A231EA7667 prepay_id=0115503b66b40e480043707f3fb997d40710500
+[2026-09-17 12:59:36] INFO payments.telebirr - Telebirr preorder OK merch_order_id=PUR33A231EA7667 prepay_id=0115503b66b40e480043707f3fb997d40710500
+[2026-09-17 12:59:36] INFO payments.telebirr - Telebirr preorder OK merch_order_id=PUR33A231EA7667 prepay_id=0115503b66b40e480043707f3fb997d40710500
+[2026-09-17 12:59:36] INFO django.server - "POST /books/6/purchase/ HTTP/1.1" 200 2027
+[2026-09-17 13:00:36] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 84646
+[2026-09-17 13:00:43] AUTH INFO - AUTH - User logged out: manager, IP=127.0.0.1
+[2026-09-17 13:00:43] INFO accounts.views - AUTH - User logged out: manager, IP=127.0.0.1
+[2026-09-17 13:00:43] INFO accounts.views - AUTH - User logged out: manager, IP=127.0.0.1
+[2026-09-17 13:00:43] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-09-17 13:00:44] INFO django.server - "GET / HTTP/1.1" 200 90237
+[2026-09-17 13:00:46] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64909
+[2026-09-17 13:00:49] AUTH INFO - AUTH - Login successful: User=manager, IP=127.0.0.1, Role=client
+[2026-09-17 13:00:49] INFO accounts.views - AUTH - Login successful: User=manager, IP=127.0.0.1, Role=client
+[2026-09-17 13:00:49] INFO accounts.views - AUTH - Login successful: User=manager, IP=127.0.0.1, Role=client
+[2026-09-17 13:00:49] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-09-17 13:00:49] AUTH INFO - Client dashboard accessed by: manager
+[2026-09-17 13:00:49] INFO accounts.views - Client dashboard accessed by: manager
+[2026-09-17 13:00:49] INFO accounts.views - Client dashboard accessed by: manager
+[2026-09-17 13:00:49] INFO django.server - "GET /accounts/dashboard/client/ HTTP/1.1" 200 66842
+[2026-09-17 13:00:53] AUTH INFO - AUTH - User logged out: manager, IP=127.0.0.1
+[2026-09-17 13:00:53] INFO accounts.views - AUTH - User logged out: manager, IP=127.0.0.1
+[2026-09-17 13:00:53] INFO accounts.views - AUTH - User logged out: manager, IP=127.0.0.1
+[2026-09-17 13:00:53] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-09-17 13:00:53] INFO django.server - "GET / HTTP/1.1" 200 90237
+[2026-09-17 13:00:56] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64909
+[2026-09-17 13:01:00] AUTH INFO - AUTH - Login successful: User=finance_officer, IP=127.0.0.1, Role=finance
+[2026-09-17 13:01:00] INFO accounts.views - AUTH - Login successful: User=finance_officer, IP=127.0.0.1, Role=finance
+[2026-09-17 13:01:00] INFO accounts.views - AUTH - Login successful: User=finance_officer, IP=127.0.0.1, Role=finance
+[2026-09-17 13:01:00] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-09-17 13:01:00] AUTH INFO - Finance dashboard accessed by: finance_officer
+[2026-09-17 13:01:00] INFO accounts.views - Finance dashboard accessed by: finance_officer
+[2026-09-17 13:01:00] INFO accounts.views - Finance dashboard accessed by: finance_officer
+[2026-09-17 13:01:00] INFO django.server - "GET /accounts/dashboard/finance/ HTTP/1.1" 200 63970
+[2026-09-17 13:01:07] INFO django.server - "GET /payments/dashboard/ HTTP/1.1" 200 91079
+[2026-09-17 13:01:12] INFO django.server - "GET /payments/author/6/payout-info/ HTTP/1.1" 200 112
+[2026-09-17 13:01:18] WARNING django.server - "POST /payments/dashboard/[object%20HTMLInputElement] HTTP/1.1" 404 8221
+[2026-09-17 13:02:32] INFO django.server - "GET /accounts/dashboard/ HTTP/1.1" 302 0
+[2026-09-17 13:02:32] AUTH INFO - Finance dashboard accessed by: finance_officer
+[2026-09-17 13:02:32] INFO accounts.views - Finance dashboard accessed by: finance_officer
+[2026-09-17 13:02:32] INFO accounts.views - Finance dashboard accessed by: finance_officer
+[2026-09-17 13:02:32] INFO django.server - "GET /accounts/dashboard/finance/ HTTP/1.1" 200 63635
+[2026-09-17 13:05:43] INFO django.utils.autoreload - C:\abay_repository\payments\services\finance.py changed, reloading.
+[2026-09-17 13:05:43] INFO django.utils.autoreload - C:\abay_repository\payments\services\finance.py changed, reloading.
+[2026-09-17 13:05:44] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-17 13:05:44] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-17 13:05:49] AUTH INFO - Finance dashboard accessed by: finance_officer
+[2026-09-17 13:05:49] INFO accounts.views - Finance dashboard accessed by: finance_officer
+[2026-09-17 13:05:49] INFO accounts.views - Finance dashboard accessed by: finance_officer
+[2026-09-17 13:05:49] INFO django.server - "GET /accounts/dashboard/finance/ HTTP/1.1" 200 63635
+[2026-09-17 13:05:49] INFO django.server - "GET /static/images/logo.png HTTP/1.1" 200 157968
+[2026-09-17 13:05:54] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 13:06:01] INFO django.server - "GET /payments/dashboard/ HTTP/1.1" 200 87330
+[2026-09-17 13:06:11] WARNING django.server - "POST /payments/dashboard/[object%20HTMLInputElement] HTTP/1.1" 404 8221
+[2026-09-17 13:11:08] INFO django.utils.autoreload - C:\abay_repository\config\settings.py changed, reloading.
+[2026-09-17 13:11:08] INFO django.utils.autoreload - C:\abay_repository\config\settings.py changed, reloading.
+[2026-09-17 13:11:10] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-17 13:11:10] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-17 13:11:15] INFO django.server - "GET /payments/dashboard/ HTTP/1.1" 200 87474
+[2026-09-17 13:11:15] INFO django.server - "GET /static/images/logo.png HTTP/1.1" 200 157968
+[2026-09-17 13:11:16] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 13:11:26] INFO django.server - "POST /payments/author/6/process/ HTTP/1.1" 200 201
+[2026-09-17 13:11:32] INFO django.server - "GET /payments/dashboard/ HTTP/1.1" 200 87063
+[2026-09-17 13:11:54] INFO django.server - "GET /accounts/dashboard/ HTTP/1.1" 302 0
+[2026-09-17 13:11:54] AUTH INFO - Finance dashboard accessed by: finance_officer
+[2026-09-17 13:11:54] INFO accounts.views - Finance dashboard accessed by: finance_officer
+[2026-09-17 13:11:54] INFO accounts.views - Finance dashboard accessed by: finance_officer
+[2026-09-17 13:11:54] INFO django.server - "GET /accounts/dashboard/finance/ HTTP/1.1" 200 63623
+[2026-09-17 13:12:06] INFO django.server - "GET /payments/dashboard/ HTTP/1.1" 200 87063
+[2026-09-17 13:12:11] INFO django.server - "GET /payments/finance/settings/ HTTP/1.1" 200 62404
+[2026-09-17 13:12:13] INFO django.server - "GET / HTTP/1.1" 200 91194
+[2026-09-17 13:12:13] INFO django.server - "GET /media/books/covers/2026/09/pychology_b5LmZgq.png HTTP/1.1" 200 363640
+[2026-09-17 13:12:17] INFO django.server - "GET /accounts/dashboard/ HTTP/1.1" 302 0
+[2026-09-17 13:12:17] AUTH INFO - Finance dashboard accessed by: finance_officer
+[2026-09-17 13:12:17] INFO accounts.views - Finance dashboard accessed by: finance_officer
+[2026-09-17 13:12:17] INFO accounts.views - Finance dashboard accessed by: finance_officer
+[2026-09-17 13:12:17] INFO django.server - "GET /accounts/dashboard/finance/ HTTP/1.1" 200 63623
+[2026-09-17 13:13:17] INFO django.server - "GET /payments/dashboard/ HTTP/1.1" 200 87063
+[2026-09-17 13:19:41] INFO django.utils.autoreload - C:\abay_repository\config\settings.py changed, reloading.
+[2026-09-17 13:19:41] INFO django.utils.autoreload - C:\abay_repository\config\settings.py changed, reloading.
+[2026-09-17 13:19:43] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-17 13:19:43] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-17 13:19:48] INFO django.server - "GET /payments/dashboard/ HTTP/1.1" 200 87941
+[2026-09-17 13:19:48] INFO django.server - "GET /static/images/logo.png HTTP/1.1" 200 157968
+[2026-09-17 13:19:53] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 13:20:13] INFO django.server - "GET /payments/finance/reports/ HTTP/1.1" 200 64435
+[2026-09-17 13:20:17] INFO django.server - "GET /payments/finance/export/pdf/?period=weekly HTTP/1.1" 200 1009
+[2026-09-17 13:20:45] INFO django.server - "GET /payments/dashboard/ HTTP/1.1" 200 87941
+[2026-09-17 13:20:53] INFO django.server - "GET /accounts/dashboard/ HTTP/1.1" 302 0
+[2026-09-17 13:20:53] AUTH INFO - Finance dashboard accessed by: finance_officer
+[2026-09-17 13:20:53] INFO accounts.views - Finance dashboard accessed by: finance_officer
+[2026-09-17 13:20:53] INFO accounts.views - Finance dashboard accessed by: finance_officer
+[2026-09-17 13:20:53] INFO django.server - "GET /accounts/dashboard/finance/ HTTP/1.1" 200 68615
+[2026-09-17 13:21:09] INFO django.server - "GET /payments/dashboard/ HTTP/1.1" 200 87941
+[2026-09-17 13:21:19] INFO django.server - "GET /payments/history/ HTTP/1.1" 200 65130
+[2026-09-17 13:21:22] INFO django.server - "GET /books/6/ HTTP/1.1" 200 73239
+[2026-09-17 13:21:27] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 84039
+[2026-09-17 13:21:35] PAYMENT INFO - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': '4d501df4bcf841b09ffd4d991ff6c06b', 'sign': 'UuK4nM7+brP9vh0sYGDprD7RCTy0JRH1ykpd18NWSC5zqIMjkgyIJjIDmwPwUHznKq5OPuvFLmDfsx8peIn4FyJATjnrNKp8P/nPFM+fRMQK8b2FRYmj+BeR4ONXkj/KAx+Zj67mC5yq1C7uaKwz4vuj1zJWFnpeRYqEwV1H1/nXPjuTcSp2mopgD4NJ70CqnLsh4NlGcKpzRKj3C1EX300+nAHQyNVTPIzdkESylmn0qxD7B4++SJoJR2yEXe2aAdXdE0T813FB6ZZqVI16jVTPxRYUTXTkZVEMCL7ZWQimp4VBDmsUJbrrO6w1xMTfvNuG4TEkx0Dba1hpxXDQs5gkBSczSfq85L7qUkev1uGUN8l+5DUR9hxYwrgh29k2k2fSMAA/jB+yVlZ5huH6B0XK+ZaaN5Yi/mAN67+l3+xOI6/HVc/uXHlSgBWvB9JBN+5ACBczhiPCLYiqnbte1tHliRkdW2vzFtlheiheB2f5MlGofU3vPr6+zfacopBMF81R0+aM95Ko8YHYS+XrloCgDIcQsgu82v11X3/sK+OyJcTSrZrRZEuG4ZHZm9xQxKfaFLQNh/5rSF5JdvjkvRlhuOJzjLhJAAPoHoGGBjQ72NocxSv+VOThY0IJyniu5Cy/KXvg19qxrpcbvzsjFAAqMteRwowoElBMywppJHg=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'PUR54094D57B528', 'prepay_id': '01149db8936303958a3f29edf91449ebb860301'}}
+[2026-09-17 13:21:35] INFO payments.telebirr - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': '4d501df4bcf841b09ffd4d991ff6c06b', 'sign': 'UuK4nM7+brP9vh0sYGDprD7RCTy0JRH1ykpd18NWSC5zqIMjkgyIJjIDmwPwUHznKq5OPuvFLmDfsx8peIn4FyJATjnrNKp8P/nPFM+fRMQK8b2FRYmj+BeR4ONXkj/KAx+Zj67mC5yq1C7uaKwz4vuj1zJWFnpeRYqEwV1H1/nXPjuTcSp2mopgD4NJ70CqnLsh4NlGcKpzRKj3C1EX300+nAHQyNVTPIzdkESylmn0qxD7B4++SJoJR2yEXe2aAdXdE0T813FB6ZZqVI16jVTPxRYUTXTkZVEMCL7ZWQimp4VBDmsUJbrrO6w1xMTfvNuG4TEkx0Dba1hpxXDQs5gkBSczSfq85L7qUkev1uGUN8l+5DUR9hxYwrgh29k2k2fSMAA/jB+yVlZ5huH6B0XK+ZaaN5Yi/mAN67+l3+xOI6/HVc/uXHlSgBWvB9JBN+5ACBczhiPCLYiqnbte1tHliRkdW2vzFtlheiheB2f5MlGofU3vPr6+zfacopBMF81R0+aM95Ko8YHYS+XrloCgDIcQsgu82v11X3/sK+OyJcTSrZrRZEuG4ZHZm9xQxKfaFLQNh/5rSF5JdvjkvRlhuOJzjLhJAAPoHoGGBjQ72NocxSv+VOThY0IJyniu5Cy/KXvg19qxrpcbvzsjFAAqMteRwowoElBMywppJHg=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'PUR54094D57B528', 'prepay_id': '01149db8936303958a3f29edf91449ebb860301'}}
+[2026-09-17 13:21:35] INFO payments.telebirr - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': '4d501df4bcf841b09ffd4d991ff6c06b', 'sign': 'UuK4nM7+brP9vh0sYGDprD7RCTy0JRH1ykpd18NWSC5zqIMjkgyIJjIDmwPwUHznKq5OPuvFLmDfsx8peIn4FyJATjnrNKp8P/nPFM+fRMQK8b2FRYmj+BeR4ONXkj/KAx+Zj67mC5yq1C7uaKwz4vuj1zJWFnpeRYqEwV1H1/nXPjuTcSp2mopgD4NJ70CqnLsh4NlGcKpzRKj3C1EX300+nAHQyNVTPIzdkESylmn0qxD7B4++SJoJR2yEXe2aAdXdE0T813FB6ZZqVI16jVTPxRYUTXTkZVEMCL7ZWQimp4VBDmsUJbrrO6w1xMTfvNuG4TEkx0Dba1hpxXDQs5gkBSczSfq85L7qUkev1uGUN8l+5DUR9hxYwrgh29k2k2fSMAA/jB+yVlZ5huH6B0XK+ZaaN5Yi/mAN67+l3+xOI6/HVc/uXHlSgBWvB9JBN+5ACBczhiPCLYiqnbte1tHliRkdW2vzFtlheiheB2f5MlGofU3vPr6+zfacopBMF81R0+aM95Ko8YHYS+XrloCgDIcQsgu82v11X3/sK+OyJcTSrZrRZEuG4ZHZm9xQxKfaFLQNh/5rSF5JdvjkvRlhuOJzjLhJAAPoHoGGBjQ72NocxSv+VOThY0IJyniu5Cy/KXvg19qxrpcbvzsjFAAqMteRwowoElBMywppJHg=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'PUR54094D57B528', 'prepay_id': '01149db8936303958a3f29edf91449ebb860301'}}
+[2026-09-17 13:21:35] PAYMENT INFO - Telebirr preorder OK merch_order_id=PUR54094D57B528 prepay_id=01149db8936303958a3f29edf91449ebb860301
+[2026-09-17 13:21:35] INFO payments.telebirr - Telebirr preorder OK merch_order_id=PUR54094D57B528 prepay_id=01149db8936303958a3f29edf91449ebb860301
+[2026-09-17 13:21:35] INFO payments.telebirr - Telebirr preorder OK merch_order_id=PUR54094D57B528 prepay_id=01149db8936303958a3f29edf91449ebb860301
+[2026-09-17 13:21:35] INFO django.server - "POST /books/6/purchase/ HTTP/1.1" 200 2027
+[2026-09-17 13:23:17] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 84039
+[2026-09-17 13:23:20] PAYMENT INFO - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': 'a24f1e242b8a4099a436733fa37f5475', 'sign': 'HRRtjLk97q3QoLnZUiuwK0s9vVfshm96Z20VOOLPjOwe0Bmprz2EDngvWWoekH+s6pyL5O6o4CIdkNhpCmdMe8hcuViEv8WExIezPA5P2j3b652N8ZgvgsP+xhZONPgc4Gq5oPCSq3ucCV+2p94LUzoe5p9djXuo2NSlaDCUkL07IFvTs6Kd+T1cnFIHL7vvfK58q5j6Evkzi/nQBT9XFRxNbgkIrFvS4BaLWRY4FI2pupaZrl5d/NTD+W4g09pXgXIZWzP+EJkpFP00pf+rSdZr82hIkVlA/JO3zH5ylzwb46+I0hm2ocfjIOFbXiJZ8R5n79/o0xv4A9xbrMywTRCiKdYSRHgSPWOvkNrec3S5gzFjIjgT1zw7DMk28cQv8bJJHLkR3oMmfXSgCGptgQY6rbLMsFKf7TvZ1Is6DuXBcCSOuIk2BgZAbirPmejmVvvI9+PcUmFJtW1nklanqAYSo0T7z1DV+NSq0FtA145HRocnHwcZREkJX25uM37UK597Rar+h0NJO9Wfo0AHEidEggzT2U+JRJ7uPWyweq0H5aV/NSo9rmuJ5efPWtzWFeaEQ96zS1zZhJDB7mjo68+q+ir9nfHAaQr+IzjuhiHyQkb+mWEfKq7rRMTpok93JfqrBU52SZSQlreSPBSqxgFKZ/qI3fojwdLE6ARZ8Gc=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'PUR81CC28A48EE6', 'prepay_id': '011ab8fc9a95eedfc880e384e8210e7e52b0902'}}
+[2026-09-17 13:23:20] INFO payments.telebirr - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': 'a24f1e242b8a4099a436733fa37f5475', 'sign': 'HRRtjLk97q3QoLnZUiuwK0s9vVfshm96Z20VOOLPjOwe0Bmprz2EDngvWWoekH+s6pyL5O6o4CIdkNhpCmdMe8hcuViEv8WExIezPA5P2j3b652N8ZgvgsP+xhZONPgc4Gq5oPCSq3ucCV+2p94LUzoe5p9djXuo2NSlaDCUkL07IFvTs6Kd+T1cnFIHL7vvfK58q5j6Evkzi/nQBT9XFRxNbgkIrFvS4BaLWRY4FI2pupaZrl5d/NTD+W4g09pXgXIZWzP+EJkpFP00pf+rSdZr82hIkVlA/JO3zH5ylzwb46+I0hm2ocfjIOFbXiJZ8R5n79/o0xv4A9xbrMywTRCiKdYSRHgSPWOvkNrec3S5gzFjIjgT1zw7DMk28cQv8bJJHLkR3oMmfXSgCGptgQY6rbLMsFKf7TvZ1Is6DuXBcCSOuIk2BgZAbirPmejmVvvI9+PcUmFJtW1nklanqAYSo0T7z1DV+NSq0FtA145HRocnHwcZREkJX25uM37UK597Rar+h0NJO9Wfo0AHEidEggzT2U+JRJ7uPWyweq0H5aV/NSo9rmuJ5efPWtzWFeaEQ96zS1zZhJDB7mjo68+q+ir9nfHAaQr+IzjuhiHyQkb+mWEfKq7rRMTpok93JfqrBU52SZSQlreSPBSqxgFKZ/qI3fojwdLE6ARZ8Gc=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'PUR81CC28A48EE6', 'prepay_id': '011ab8fc9a95eedfc880e384e8210e7e52b0902'}}
+[2026-09-17 13:23:20] INFO payments.telebirr - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': 'a24f1e242b8a4099a436733fa37f5475', 'sign': 'HRRtjLk97q3QoLnZUiuwK0s9vVfshm96Z20VOOLPjOwe0Bmprz2EDngvWWoekH+s6pyL5O6o4CIdkNhpCmdMe8hcuViEv8WExIezPA5P2j3b652N8ZgvgsP+xhZONPgc4Gq5oPCSq3ucCV+2p94LUzoe5p9djXuo2NSlaDCUkL07IFvTs6Kd+T1cnFIHL7vvfK58q5j6Evkzi/nQBT9XFRxNbgkIrFvS4BaLWRY4FI2pupaZrl5d/NTD+W4g09pXgXIZWzP+EJkpFP00pf+rSdZr82hIkVlA/JO3zH5ylzwb46+I0hm2ocfjIOFbXiJZ8R5n79/o0xv4A9xbrMywTRCiKdYSRHgSPWOvkNrec3S5gzFjIjgT1zw7DMk28cQv8bJJHLkR3oMmfXSgCGptgQY6rbLMsFKf7TvZ1Is6DuXBcCSOuIk2BgZAbirPmejmVvvI9+PcUmFJtW1nklanqAYSo0T7z1DV+NSq0FtA145HRocnHwcZREkJX25uM37UK597Rar+h0NJO9Wfo0AHEidEggzT2U+JRJ7uPWyweq0H5aV/NSo9rmuJ5efPWtzWFeaEQ96zS1zZhJDB7mjo68+q+ir9nfHAaQr+IzjuhiHyQkb+mWEfKq7rRMTpok93JfqrBU52SZSQlreSPBSqxgFKZ/qI3fojwdLE6ARZ8Gc=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'PUR81CC28A48EE6', 'prepay_id': '011ab8fc9a95eedfc880e384e8210e7e52b0902'}}
+[2026-09-17 13:23:20] PAYMENT INFO - Telebirr preorder OK merch_order_id=PUR81CC28A48EE6 prepay_id=011ab8fc9a95eedfc880e384e8210e7e52b0902
+[2026-09-17 13:23:20] INFO payments.telebirr - Telebirr preorder OK merch_order_id=PUR81CC28A48EE6 prepay_id=011ab8fc9a95eedfc880e384e8210e7e52b0902
+[2026-09-17 13:23:20] INFO payments.telebirr - Telebirr preorder OK merch_order_id=PUR81CC28A48EE6 prepay_id=011ab8fc9a95eedfc880e384e8210e7e52b0902
+[2026-09-17 13:23:20] INFO django.server - "POST /books/6/purchase/ HTTP/1.1" 200 2027
+[2026-09-17 13:24:30] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 84039
+[2026-09-17 13:24:34] AUTH INFO - AUTH - User logged out: finance_officer, IP=127.0.0.1
+[2026-09-17 13:24:34] INFO accounts.views - AUTH - User logged out: finance_officer, IP=127.0.0.1
+[2026-09-17 13:24:34] INFO accounts.views - AUTH - User logged out: finance_officer, IP=127.0.0.1
+[2026-09-17 13:24:34] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-09-17 13:24:34] INFO django.server - "GET / HTTP/1.1" 200 90237
+[2026-09-17 13:24:34] INFO django.server - "GET /media/books/covers/2026/09/pychology_b5LmZgq.png HTTP/1.1" 200 363640
+[2026-09-17 13:24:36] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64909
+[2026-09-17 13:24:39] AUTH INFO - AUTH - Login successful: User=client, IP=127.0.0.1, Role=client
+[2026-09-17 13:24:39] INFO accounts.views - AUTH - Login successful: User=client, IP=127.0.0.1, Role=client
+[2026-09-17 13:24:39] INFO accounts.views - AUTH - Login successful: User=client, IP=127.0.0.1, Role=client
+[2026-09-17 13:24:39] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-09-17 13:24:39] AUTH INFO - Client dashboard accessed by: client
+[2026-09-17 13:24:39] INFO accounts.views - Client dashboard accessed by: client
+[2026-09-17 13:24:39] INFO accounts.views - Client dashboard accessed by: client
+[2026-09-17 13:24:39] INFO django.server - "GET /accounts/dashboard/client/ HTTP/1.1" 200 66795
+[2026-09-17 13:24:44] INFO django.server - "GET /books/my-books/user/ HTTP/1.1" 200 78505
+[2026-09-17 13:24:52] INFO django.server - "GET /books/6/read/ HTTP/1.1" 200 135455
+[2026-09-17 13:24:52] INFO django.server - "GET /static/js/pdf-offline-cache.js HTTP/1.1" 200 5319
+[2026-09-17 13:24:52] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 13:24:52] INFO books.views - Book streamed for reading: pyschology by client
+[2026-09-17 13:24:52] INFO books.views - Book streamed for reading: pyschology by client
+[2026-09-17 13:24:52] INFO django.server - "GET /books/6/stream/ HTTP/1.1" 200 2623192
+[2026-09-17 13:27:40] INFO django.server - "GET /books/my-books/user/ HTTP/1.1" 200 78505
+[2026-09-17 13:27:40] INFO django.server - "GET /media/books/covers/2026/09/pychology_b5LmZgq.png HTTP/1.1" 200 363640
+[2026-09-17 13:27:41] AUTH INFO - Client dashboard accessed by: client
+[2026-09-17 13:27:41] INFO accounts.views - Client dashboard accessed by: client
+[2026-09-17 13:27:41] INFO accounts.views - Client dashboard accessed by: client
+[2026-09-17 13:27:41] INFO django.server - "GET /accounts/dashboard/client/ HTTP/1.1" 200 66460
+[2026-09-17 13:27:43] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 13:27:44] AUTH INFO - AUTH - User logged out: client, IP=127.0.0.1
+[2026-09-17 13:27:44] INFO accounts.views - AUTH - User logged out: client, IP=127.0.0.1
+[2026-09-17 13:27:44] INFO accounts.views - AUTH - User logged out: client, IP=127.0.0.1
+[2026-09-17 13:27:44] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-09-17 13:27:44] INFO django.server - "GET / HTTP/1.1" 200 90237
+[2026-09-17 13:27:44] INFO django.server - "GET /media/books/covers/2026/09/pychology_b5LmZgq.png HTTP/1.1" 200 363640
+[2026-09-17 13:27:46] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 13:27:46] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64909
+[2026-09-17 13:27:48] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 13:27:53] AUTH INFO - AUTH - Login successful: User=author, IP=127.0.0.1, Role=author
+[2026-09-17 13:27:53] INFO accounts.views - AUTH - Login successful: User=author, IP=127.0.0.1, Role=author
+[2026-09-17 13:27:53] INFO accounts.views - AUTH - Login successful: User=author, IP=127.0.0.1, Role=author
+[2026-09-17 13:27:53] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-09-17 13:27:53] AUTH INFO - Author dashboard accessed by: author
+[2026-09-17 13:27:53] INFO accounts.views - Author dashboard accessed by: author
+[2026-09-17 13:27:53] INFO accounts.views - Author dashboard accessed by: author
+[2026-09-17 13:27:54] INFO django.server - "GET /accounts/dashboard/author/ HTTP/1.1" 200 76500
+[2026-09-17 13:27:55] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 13:28:20] AUTH INFO - AUTH - User logged out: author, IP=127.0.0.1
+[2026-09-17 13:28:20] INFO accounts.views - AUTH - User logged out: author, IP=127.0.0.1
+[2026-09-17 13:28:20] INFO accounts.views - AUTH - User logged out: author, IP=127.0.0.1
+[2026-09-17 13:28:20] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-09-17 13:28:20] INFO django.server - "GET / HTTP/1.1" 200 90237
+[2026-09-17 13:28:22] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 13:28:22] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64909
+[2026-09-17 13:28:24] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 13:28:29] AUTH INFO - AUTH - Login successful: User=maker, IP=127.0.0.1, Role=maker
+[2026-09-17 13:28:29] INFO accounts.views - AUTH - Login successful: User=maker, IP=127.0.0.1, Role=maker
+[2026-09-17 13:28:29] INFO accounts.views - AUTH - Login successful: User=maker, IP=127.0.0.1, Role=maker
+[2026-09-17 13:28:29] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-09-17 13:28:29] INFO books.views - Maker dashboard: 0 new submissions found
+[2026-09-17 13:28:29] INFO books.views - Maker dashboard: 0 new submissions found
+[2026-09-17 13:28:29] INFO django.server - "GET /books/maker/dashboard/ HTTP/1.1" 200 84859
+[2026-09-17 13:28:31] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 13:28:47] AUTH INFO - AUTH - User logged out: maker, IP=127.0.0.1
+[2026-09-17 13:28:47] INFO accounts.views - AUTH - User logged out: maker, IP=127.0.0.1
+[2026-09-17 13:28:47] INFO accounts.views - AUTH - User logged out: maker, IP=127.0.0.1
+[2026-09-17 13:28:47] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-09-17 13:28:47] INFO django.server - "GET / HTTP/1.1" 200 90237
+[2026-09-17 13:28:49] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64909
+[2026-09-17 13:28:49] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 13:28:50] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 13:28:55] AUTH INFO - AUTH - Login successful: User=checker, IP=127.0.0.1, Role=checker
+[2026-09-17 13:28:55] INFO accounts.views - AUTH - Login successful: User=checker, IP=127.0.0.1, Role=checker
+[2026-09-17 13:28:55] INFO accounts.views - AUTH - Login successful: User=checker, IP=127.0.0.1, Role=checker
+[2026-09-17 13:28:55] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-09-17 13:28:55] INFO django.server - "GET /books/checker/dashboard/ HTTP/1.1" 200 77353
+[2026-09-17 13:28:57] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 13:30:34] INFO django.utils.autoreload - C:\abay_repository\payments\admin.py changed, reloading.
+[2026-09-17 13:30:34] INFO django.utils.autoreload - C:\abay_repository\payments\admin.py changed, reloading.
+[2026-09-17 13:30:36] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-17 13:30:36] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-17 13:30:45] INFO django.server - "GET /books/checker/dashboard/ HTTP/1.1" 200 77008
+[2026-09-17 13:30:45] INFO django.server - "GET /static/images/logo.png HTTP/1.1" 200 157968
+[2026-09-17 13:30:46] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 13:32:03] INFO django.server - "GET /books/checker/dashboard/ HTTP/1.1" 200 77007
+[2026-09-17 13:32:04] INFO django.server - "GET /static/images/logo.png HTTP/1.1" 200 157968
+[2026-09-17 13:32:05] WARNING django.server - "GET /static/images/favicon.ico HTTP/1.1" 404 1914
+[2026-09-17 13:32:22] AUTH INFO - AUTH - User logged out: checker, IP=127.0.0.1
+[2026-09-17 13:32:22] INFO accounts.views - AUTH - User logged out: checker, IP=127.0.0.1
+[2026-09-17 13:32:22] INFO accounts.views - AUTH - User logged out: checker, IP=127.0.0.1
+[2026-09-17 13:32:22] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-09-17 13:32:22] INFO django.server - "GET / HTTP/1.1" 200 90237
+[2026-09-17 13:32:24] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 13:32:25] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64909
+[2026-09-17 13:32:26] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 13:32:32] AUTH INFO - AUTH - Login successful: User=manager, IP=127.0.0.1, Role=client
+[2026-09-17 13:32:32] INFO accounts.views - AUTH - Login successful: User=manager, IP=127.0.0.1, Role=client
+[2026-09-17 13:32:32] INFO accounts.views - AUTH - Login successful: User=manager, IP=127.0.0.1, Role=client
+[2026-09-17 13:32:32] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-09-17 13:32:32] AUTH INFO - Client dashboard accessed by: manager
+[2026-09-17 13:32:32] INFO accounts.views - Client dashboard accessed by: manager
+[2026-09-17 13:32:32] INFO accounts.views - Client dashboard accessed by: manager
+[2026-09-17 13:32:32] INFO django.server - "GET /accounts/dashboard/client/ HTTP/1.1" 200 66842
+[2026-09-17 13:32:33] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 13:32:34] INFO django.server - "GET /books/browse/ HTTP/1.1" 200 102665
+[2026-09-17 13:32:36] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 13:32:36] INFO django.server - "GET /books/6/ HTTP/1.1" 200 73846
+[2026-09-17 13:32:37] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 84646
+[2026-09-17 13:32:38] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 13:32:39] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 13:32:45] PAYMENT INFO - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': '7af461b2bc544efe87c454cee7eeba94', 'sign': 'CLGJ4xxMzMhF3YYHwplULnbsNH1jyaw310bV2ZmiHoIujlFq8Y/U4Brx20jWNE+AbHuy7s3ja00eTDpyRYHXfuUN+kfJhdPfQv8UjPMiyblBdJfl3aJX/qXUTAV9QUIWQG4NnISlq8VXFkCbNcY5U+8bKhJu7um6EtWJTyYqn0lHgMY86h87MOXzICbDPDU3Ekpepa86TZKNf87SZHr+L4+X/UMvvp68BKbK4v0TmfNEofsAG1OJGtNuPtrR0V4bcpESpGkA7JSCNudcZ6vrjxc8o95OeJSJWYp2QYPjfSqb0+cSGImpqX+/s4RowkpCWu38ZC/ff+TzxnKWkWdnQUWRQbGKWO22MWFpVJ5LI4Uxev9tR8s/IOIEklNdvyXBRSwuGoifgxeJQCrIuXqPDraL65cQeNNj5QC7WDhiEg8yfmCL7hkcdiEFxHe5eW+x2BQkks/CBeavmxxmXhvUijPIT9xbz92aJvPqcR+Bj2yeWXQaOLZ0OwBZtL44JrIOETD52s50zvqFdnT5StOD8RjbOh4/1SeDOneZypLixqH5u/7BTJAKLU0vxZzSkm51HbY687mMq5kmCdXdvXbQflEVk2J4b0baRVfvEFl76pkRHWVoV00rWqwC45xRKUmStQmqqZz2ZPAKXcOeB5YXlvGuCJWGeLYbO23K9VNKe44=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'PUR2759DEB9819D', 'prepay_id': '011966b9447fac50fde95fafd6c8ae4cde30601'}}
+[2026-09-17 13:32:45] INFO payments.telebirr - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': '7af461b2bc544efe87c454cee7eeba94', 'sign': 'CLGJ4xxMzMhF3YYHwplULnbsNH1jyaw310bV2ZmiHoIujlFq8Y/U4Brx20jWNE+AbHuy7s3ja00eTDpyRYHXfuUN+kfJhdPfQv8UjPMiyblBdJfl3aJX/qXUTAV9QUIWQG4NnISlq8VXFkCbNcY5U+8bKhJu7um6EtWJTyYqn0lHgMY86h87MOXzICbDPDU3Ekpepa86TZKNf87SZHr+L4+X/UMvvp68BKbK4v0TmfNEofsAG1OJGtNuPtrR0V4bcpESpGkA7JSCNudcZ6vrjxc8o95OeJSJWYp2QYPjfSqb0+cSGImpqX+/s4RowkpCWu38ZC/ff+TzxnKWkWdnQUWRQbGKWO22MWFpVJ5LI4Uxev9tR8s/IOIEklNdvyXBRSwuGoifgxeJQCrIuXqPDraL65cQeNNj5QC7WDhiEg8yfmCL7hkcdiEFxHe5eW+x2BQkks/CBeavmxxmXhvUijPIT9xbz92aJvPqcR+Bj2yeWXQaOLZ0OwBZtL44JrIOETD52s50zvqFdnT5StOD8RjbOh4/1SeDOneZypLixqH5u/7BTJAKLU0vxZzSkm51HbY687mMq5kmCdXdvXbQflEVk2J4b0baRVfvEFl76pkRHWVoV00rWqwC45xRKUmStQmqqZz2ZPAKXcOeB5YXlvGuCJWGeLYbO23K9VNKe44=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'PUR2759DEB9819D', 'prepay_id': '011966b9447fac50fde95fafd6c8ae4cde30601'}}
+[2026-09-17 13:32:45] INFO payments.telebirr - Telebirr preOrder response: {'result': 'SUCCESS', 'code': '0', 'msg': 'success', 'nonce_str': '7af461b2bc544efe87c454cee7eeba94', 'sign': 'CLGJ4xxMzMhF3YYHwplULnbsNH1jyaw310bV2ZmiHoIujlFq8Y/U4Brx20jWNE+AbHuy7s3ja00eTDpyRYHXfuUN+kfJhdPfQv8UjPMiyblBdJfl3aJX/qXUTAV9QUIWQG4NnISlq8VXFkCbNcY5U+8bKhJu7um6EtWJTyYqn0lHgMY86h87MOXzICbDPDU3Ekpepa86TZKNf87SZHr+L4+X/UMvvp68BKbK4v0TmfNEofsAG1OJGtNuPtrR0V4bcpESpGkA7JSCNudcZ6vrjxc8o95OeJSJWYp2QYPjfSqb0+cSGImpqX+/s4RowkpCWu38ZC/ff+TzxnKWkWdnQUWRQbGKWO22MWFpVJ5LI4Uxev9tR8s/IOIEklNdvyXBRSwuGoifgxeJQCrIuXqPDraL65cQeNNj5QC7WDhiEg8yfmCL7hkcdiEFxHe5eW+x2BQkks/CBeavmxxmXhvUijPIT9xbz92aJvPqcR+Bj2yeWXQaOLZ0OwBZtL44JrIOETD52s50zvqFdnT5StOD8RjbOh4/1SeDOneZypLixqH5u/7BTJAKLU0vxZzSkm51HbY687mMq5kmCdXdvXbQflEVk2J4b0baRVfvEFl76pkRHWVoV00rWqwC45xRKUmStQmqqZz2ZPAKXcOeB5YXlvGuCJWGeLYbO23K9VNKe44=', 'sign_type': 'SHA256WithRSA', 'biz_content': {'merch_order_id': 'PUR2759DEB9819D', 'prepay_id': '011966b9447fac50fde95fafd6c8ae4cde30601'}}
+[2026-09-17 13:32:45] PAYMENT INFO - Telebirr preorder OK merch_order_id=PUR2759DEB9819D prepay_id=011966b9447fac50fde95fafd6c8ae4cde30601
+[2026-09-17 13:32:45] INFO payments.telebirr - Telebirr preorder OK merch_order_id=PUR2759DEB9819D prepay_id=011966b9447fac50fde95fafd6c8ae4cde30601
+[2026-09-17 13:32:45] INFO payments.telebirr - Telebirr preorder OK merch_order_id=PUR2759DEB9819D prepay_id=011966b9447fac50fde95fafd6c8ae4cde30601
+[2026-09-17 13:32:45] INFO django.server - "POST /books/6/purchase/ HTTP/1.1" 200 2027
+[2026-09-17 13:33:30] PAYMENT INFO - Payment created for author author: 252.00 ETB
+[2026-09-17 13:33:30] INFO payments.views - Payment created for author author: 252.00 ETB
+[2026-09-17 13:33:30] INFO payments.views - Payment created for author author: 252.00 ETB
+[2026-09-17 13:33:30] PAYMENT INFO - Purchase completed id=48 book=6 user=20
+[2026-09-17 13:33:30] INFO payments.views - Purchase completed id=48 book=6 user=20
+[2026-09-17 13:33:30] INFO payments.views - Purchase completed id=48 book=6 user=20
+[2026-09-17 13:33:30] INFO django.server - "GET /payments/return/?merch_order_id=PUR2759DEB9819D?trans_end_time=2026-09-17%2013:32:36&notify_time=2026-09-17%2013:32:36&trans_currency=ETB&total_amount=400.00&merch_order_id=PUR2759DEB9819D&appid=1697890795596801&trade_status=PAY_SUCCESS&merch_code=406488&notify_url=http://127.0.0.1:8000/payments/webhook/telebirr/&payment_order_id=011N11089H13323500001001&sign=BXoqfepvz+J4iLngW1N+gXs/3YAHR17KWJFsd7bW4PJHNCgYgIwwRtSOZgaJ1jKYHqSDRSU3Gd3IVHc9ka5wNVrlITJwyUzTDa3ICtrOUA6D0VMdxOU9a8FtKZsJ9igFL1GARzGBwUZTX+vmtIPxxv9YCpJPJhTO0OuGuwKAp5qtObTRmYnAeP0wYqNRlTJxj4HGhRhvU5CrPx1ooqBpDPQDRtAKwSvgGOcLG47t+uhjXu2+U5dgSI93lQ7BlIHUr85d3VVlGHCJ6chhggxidSvjSkTGIVm3ftH0CNbfY/DwkSnVWpCQVUfutLQq7i+BJd2k1uZmykIZveLeH1YwgerCwLsi+pG3XbIfo69jaXW+UFFDMyGrjZ7f0u+x6YK/s41wTOlMv9bA6W94O7VqdDOn7gJhP5mQ5JVL9Eb8a0aUROHxMUlyBcLkhdWRMcTHqQK6vPfynERL+9zk8aK8RsUj3H6K4S8zU6OOUWbi8jSbcE0XoMGy+tgqL29CsfKuRracGwJBauPrj+mCl2yqKl0KFKY6786Sv1I/AXYhxL27VJvee2fLn3NXaPDvBtIOce6F7VVLP0llhfylNaN4ZPb4fXmJQSmlZrvZ8ftCh2unr+2tQNBn0IVu3i8xvopLXNmJkGpQhorVG6YGPtqbxDHFv6FOwskP0oRk5YrCK8c=&sign_type=SHA256WithRSA HTTP/1.1" 302 0
+[2026-09-17 13:33:30] INFO django.server - "GET /books/my-books/user/ HTTP/1.1" 200 79020
+[2026-09-17 13:33:30] INFO django.server - "GET /media/books/covers/2026/09/pychology_b5LmZgq.png HTTP/1.1" 200 363640
+[2026-09-17 13:33:32] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 13:33:43] AUTH INFO - AUTH - User logged out: manager, IP=127.0.0.1
+[2026-09-17 13:33:43] INFO accounts.views - AUTH - User logged out: manager, IP=127.0.0.1
+[2026-09-17 13:33:43] INFO accounts.views - AUTH - User logged out: manager, IP=127.0.0.1
+[2026-09-17 13:33:43] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-09-17 13:33:43] INFO django.server - "GET / HTTP/1.1" 200 90237
+[2026-09-17 13:33:43] INFO django.server - "GET /media/books/covers/2026/09/pychology_b5LmZgq.png HTTP/1.1" 200 363640
+[2026-09-17 13:33:45] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64909
+[2026-09-17 13:33:45] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 13:33:47] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 13:33:50] AUTH INFO - AUTH - Login successful: User=finance_officer, IP=127.0.0.1, Role=finance
+[2026-09-17 13:33:50] INFO accounts.views - AUTH - Login successful: User=finance_officer, IP=127.0.0.1, Role=finance
+[2026-09-17 13:33:50] INFO accounts.views - AUTH - Login successful: User=finance_officer, IP=127.0.0.1, Role=finance
+[2026-09-17 13:33:50] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-09-17 13:33:50] AUTH INFO - Finance dashboard accessed by: finance_officer
+[2026-09-17 13:33:50] INFO accounts.views - Finance dashboard accessed by: finance_officer
+[2026-09-17 13:33:50] INFO accounts.views - Finance dashboard accessed by: finance_officer
+[2026-09-17 13:33:50] INFO django.server - "GET /accounts/dashboard/finance/ HTTP/1.1" 200 69250
+[2026-09-17 13:33:52] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 13:34:03] INFO django.server - "GET /payments/dashboard/ HTTP/1.1" 200 89044
+[2026-09-17 13:34:05] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 13:34:06] INFO django.server - "GET /payments/calculate_all/ HTTP/1.1" 302 0
+[2026-09-17 13:34:07] INFO django.server - "GET /payments/dashboard/ HTTP/1.1" 200 89390
+[2026-09-17 13:34:08] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 13:34:43] INFO django.server - "POST /payments/author/6/process/ HTTP/1.1" 200 227
+[2026-09-17 13:34:47] INFO django.server - "GET /payments/dashboard/ HTTP/1.1" 200 88645
+[2026-09-17 13:34:49] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 13:36:05] INFO django.server - "GET /payments/finance/reports/ HTTP/1.1" 200 65115
+[2026-09-17 13:36:07] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 13:36:38] INFO django.server - "GET /accounts/dashboard/ HTTP/1.1" 302 0
+[2026-09-17 13:36:38] AUTH INFO - Finance dashboard accessed by: finance_officer
+[2026-09-17 13:36:38] INFO accounts.views - Finance dashboard accessed by: finance_officer
+[2026-09-17 13:36:38] INFO accounts.views - Finance dashboard accessed by: finance_officer
+[2026-09-17 13:36:38] INFO django.server - "GET /accounts/dashboard/finance/ HTTP/1.1" 200 68902
+[2026-09-17 13:36:40] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 13:36:47] INFO django.server - "GET /payments/dashboard/ HTTP/1.1" 200 88645
+[2026-09-17 13:36:49] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 13:39:30] AUTH INFO - AUTH - User logged out: finance_officer, IP=127.0.0.1
+[2026-09-17 13:39:30] INFO accounts.views - AUTH - User logged out: finance_officer, IP=127.0.0.1
+[2026-09-17 13:39:30] INFO accounts.views - AUTH - User logged out: finance_officer, IP=127.0.0.1
+[2026-09-17 13:39:30] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-09-17 13:39:30] INFO django.server - "GET / HTTP/1.1" 200 90237
+[2026-09-17 13:39:31] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64909
+[2026-09-17 13:39:33] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 13:39:37] AUTH INFO - AUTH - Login successful: User=manager, IP=127.0.0.1, Role=client
+[2026-09-17 13:39:37] INFO accounts.views - AUTH - Login successful: User=manager, IP=127.0.0.1, Role=client
+[2026-09-17 13:39:37] INFO accounts.views - AUTH - Login successful: User=manager, IP=127.0.0.1, Role=client
+[2026-09-17 13:39:37] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-09-17 13:39:37] AUTH INFO - Client dashboard accessed by: manager
+[2026-09-17 13:39:37] INFO accounts.views - Client dashboard accessed by: manager
+[2026-09-17 13:39:37] INFO accounts.views - Client dashboard accessed by: manager
+[2026-09-17 13:39:37] INFO django.server - "GET /accounts/dashboard/client/ HTTP/1.1" 200 66929
+[2026-09-17 13:39:39] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 13:39:44] INFO django.server - "GET /books/my-books/user/ HTTP/1.1" 200 78638
+[2026-09-17 13:39:44] INFO django.server - "GET /media/books/covers/2026/09/pychology_b5LmZgq.png HTTP/1.1" 200 363640
+[2026-09-17 13:39:46] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 13:39:49] INFO django.server - "GET /books/6/read/ HTTP/1.1" 200 138311
+[2026-09-17 13:39:52] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 13:42:51] INFO django.server - "GET /books/6/ HTTP/1.1" 200 73587
+[2026-09-17 13:42:53] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 13:42:55] AUTH INFO - AUTH - User logged out: manager, IP=127.0.0.1
+[2026-09-17 13:42:55] INFO accounts.views - AUTH - User logged out: manager, IP=127.0.0.1
+[2026-09-17 13:42:55] INFO accounts.views - AUTH - User logged out: manager, IP=127.0.0.1
+[2026-09-17 13:42:55] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-09-17 13:42:55] INFO django.server - "GET / HTTP/1.1" 200 90237
+[2026-09-17 13:42:55] INFO django.server - "GET /media/books/covers/2026/09/pychology_b5LmZgq.png HTTP/1.1" 200 363640
+[2026-09-17 13:42:57] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 13:42:57] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64909
+[2026-09-17 13:42:59] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 13:43:02] AUTH INFO - AUTH - Login successful: User=finance_officer, IP=127.0.0.1, Role=finance
+[2026-09-17 13:43:02] INFO accounts.views - AUTH - Login successful: User=finance_officer, IP=127.0.0.1, Role=finance
+[2026-09-17 13:43:02] INFO accounts.views - AUTH - Login successful: User=finance_officer, IP=127.0.0.1, Role=finance
+[2026-09-17 13:43:02] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-09-17 13:43:02] AUTH INFO - Finance dashboard accessed by: finance_officer
+[2026-09-17 13:43:02] INFO accounts.views - Finance dashboard accessed by: finance_officer
+[2026-09-17 13:43:02] INFO accounts.views - Finance dashboard accessed by: finance_officer
+[2026-09-17 13:43:02] INFO django.server - "GET /accounts/dashboard/finance/ HTTP/1.1" 200 69237
+[2026-09-17 13:43:04] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 13:43:06] INFO django.server - "GET /payments/finance/export/csv/?period=monthly HTTP/1.1" 200 348
+[2026-09-17 13:43:07] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 13:44:01] INFO django.server - "GET /payments/finance/reports/ HTTP/1.1" 200 65786
+[2026-09-17 13:44:03] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 13:44:08] INFO django.server - "POST /payments/finance/reports/ HTTP/1.1" 302 0
+[2026-09-17 13:44:08] INFO django.server - "GET /payments/finance/reports/5/ HTTP/1.1" 200 62913
+[2026-09-17 13:44:10] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 13:44:13] INFO django.server - "GET /payments/finance/reports/5/export/csv/ HTTP/1.1" 200 342
+[2026-09-17 13:44:14] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 13:45:08] INFO django.server - "GET /payments/finance/reports/ HTTP/1.1" 200 66446
+[2026-09-17 13:45:10] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 13:45:11] INFO django.server - "GET / HTTP/1.1" 200 91194
+[2026-09-17 13:45:11] INFO django.server - "GET /media/books/covers/2026/09/pychology_b5LmZgq.png HTTP/1.1" 200 363640
+[2026-09-17 13:45:13] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 13:45:15] INFO django.server - "GET /accounts/dashboard/ HTTP/1.1" 302 0
+[2026-09-17 13:45:15] AUTH INFO - Finance dashboard accessed by: finance_officer
+[2026-09-17 13:45:15] INFO accounts.views - Finance dashboard accessed by: finance_officer
+[2026-09-17 13:45:15] INFO accounts.views - Finance dashboard accessed by: finance_officer
+[2026-09-17 13:45:15] INFO django.server - "GET /accounts/dashboard/finance/ HTTP/1.1" 200 68902
+[2026-09-17 13:45:17] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 13:45:30] INFO django.server - "GET / HTTP/1.1" 200 91194
+[2026-09-17 13:45:32] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 13:45:34] AUTH INFO - AUTH - User logged out: finance_officer, IP=127.0.0.1
+[2026-09-17 13:45:34] INFO accounts.views - AUTH - User logged out: finance_officer, IP=127.0.0.1
+[2026-09-17 13:45:34] INFO accounts.views - AUTH - User logged out: finance_officer, IP=127.0.0.1
+[2026-09-17 13:45:34] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-09-17 13:45:34] INFO django.server - "GET / HTTP/1.1" 200 90237
+[2026-09-17 13:45:36] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64909
+[2026-09-17 13:45:36] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 13:45:37] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 13:45:43] AUTH INFO - AUTH - Login successful: User=author, IP=127.0.0.1, Role=author
+[2026-09-17 13:45:43] INFO accounts.views - AUTH - Login successful: User=author, IP=127.0.0.1, Role=author
+[2026-09-17 13:45:43] INFO accounts.views - AUTH - Login successful: User=author, IP=127.0.0.1, Role=author
+[2026-09-17 13:45:43] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-09-17 13:45:43] AUTH INFO - Author dashboard accessed by: author
+[2026-09-17 13:45:43] INFO accounts.views - Author dashboard accessed by: author
+[2026-09-17 13:45:43] INFO accounts.views - Author dashboard accessed by: author
+[2026-09-17 13:45:43] INFO django.server - "GET /accounts/dashboard/author/ HTTP/1.1" 200 76501
+[2026-09-17 13:45:45] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 13:45:59] INFO django.server - "GET / HTTP/1.1" 200 91665
+[2026-09-17 13:46:01] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828

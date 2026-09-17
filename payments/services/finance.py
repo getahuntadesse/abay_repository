@@ -177,3 +177,142 @@ def generate_finance_report(
         generated_by=user if getattr(user, "is_authenticated", False) else None,
     )
     return report
+
+
+
+def notify_author_royalty_paid(author, total_amount, transaction_reference, payment_count=1):
+    """In-app notification + email when royalty is recorded as paid."""
+    import logging
+    logger = logging.getLogger(__name__)
+    total_s = str(total_amount)
+    title = "Royalty payment recorded"
+    message = (
+        f"Your royalty payment of {total_s} ETB has been recorded by finance "
+        f"({payment_count} payment row(s)). Reference: {transaction_reference}."
+    )
+    try:
+        from notifications.models import Notification
+        Notification.objects.create(
+            user=author,
+            type="success",
+            title=title,
+            message=message,
+            link="/payments/author/",
+        )
+    except Exception as e:
+        logger.warning("In-app notification failed: %s", e)
+    try:
+        from django.core.mail import send_mail
+        from django.conf import settings
+        email = getattr(author, "email", None)
+        if email:
+            send_mail(
+                subject=f"[Abay] {title}",
+                message=message + "\n\nYou can review your payments in the author payments section.",
+                from_email=getattr(settings, "DEFAULT_FROM_EMAIL", None) or getattr(settings, "EMAIL_HOST_USER", None) or "noreply@abay.local",
+                recipient_list=[email],
+                fail_silently=True,
+            )
+    except Exception as e:
+        logger.warning("Royalty email failed: %s", e)
+
+
+def report_to_csv_bytes(report) -> bytes:
+    import csv
+    import io
+    buf = io.StringIO()
+    w = csv.writer(buf)
+    w.writerow(["Finance Report", report.title or ""])
+    w.writerow(["Period", f"{report.period_start} to {report.period_end}"])
+    w.writerow(["Type", report.period_type])
+    w.writerow([])
+    w.writerow(["Metric", "Amount (ETB)"])
+    w.writerow(["Gross sales", report.total_gross])
+    w.writerow(["Author royalty", report.total_royalty])
+    w.writerow(["Platform share", report.total_platform])
+    w.writerow(["Tax withheld", report.total_tax])
+    w.writerow(["Net to authors", report.total_net_authors])
+    w.writerow(["Paid out", report.total_paid])
+    w.writerow(["Pending", report.total_pending])
+    w.writerow(["Purchases", report.purchase_count])
+    w.writerow(["Authors", report.author_count])
+    w.writerow([])
+    w.writerow(["Author", "Payments", "Royalty", "Tax", "Net"])
+    for a in (report.details or {}).get("authors") or []:
+        w.writerow([
+            a.get("author__username") or a.get("author_id"),
+            a.get("count"),
+            a.get("royalty"),
+            a.get("tax"),
+            a.get("net"),
+        ])
+    return buf.getvalue().encode("utf-8-sig")
+
+
+def report_to_pdf_bytes(report) -> bytes:
+    """Minimal single-page PDF without external deps."""
+    lines = [
+        report.title or "Finance Report",
+        f"Period: {report.period_start} to {report.period_end} ({report.period_type})",
+        "",
+        f"Gross sales: {report.total_gross} ETB",
+        f"Author royalty: {report.total_royalty} ETB",
+        f"Platform share: {report.total_platform} ETB",
+        f"Tax withheld: {report.total_tax} ETB",
+        f"Net to authors: {report.total_net_authors} ETB",
+        f"Paid out: {report.total_paid} ETB",
+        f"Pending: {report.total_pending} ETB",
+        f"Purchases: {report.purchase_count}  Authors: {report.author_count}",
+        "",
+        "By author:",
+    ]
+    for a in (report.details or {}).get("authors") or []:
+        lines.append(
+            f"  {a.get('author__username') or a.get('author_id')}: "
+            f"net {a.get('net')} (royalty {a.get('royalty')}, tax {a.get('tax')})"
+        )
+    return _simple_pdf("\n".join(lines))
+
+
+def _simple_pdf(text: str) -> bytes:
+    # Very small PDF 1.4 text document
+    def esc(s):
+        return s.replace("\\", "\\\\").replace("(", "\\(").replace(")", "\\)")
+
+    y = 800
+    content_lines = ["BT", "/F1 11 Tf", "50 800 Td", "14 TL"]
+    first = True
+    for line in text.splitlines()[:60]:
+        safe = esc(line[:110])
+        if first:
+            content_lines.append(f"({safe}) Tj")
+            first = False
+        else:
+            content_lines.append(f"T* ({safe}) Tj")
+    content_lines.append("ET")
+    stream = "\n".join(content_lines).encode("latin-1", errors="replace")
+    objs = []
+    objs.append(b"1 0 obj<< /Type /Catalog /Pages 2 0 R >>endobj\n")
+    objs.append(b"2 0 obj<< /Type /Pages /Kids [3 0 R] /Count 1 >>endobj\n")
+    objs.append(
+        b"3 0 obj<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] "
+        b"/Contents 4 0 R /Resources<< /Font<< /F1 5 0 R >> >> >>endobj\n"
+    )
+    objs.append(
+        f"4 0 obj<< /Length {len(stream)} >>stream\n".encode() + stream + b"\nendstream\nendobj\n"
+    )
+    objs.append(b"5 0 obj<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>endobj\n")
+    out = bytearray(b"%PDF-1.4\n")
+    offsets = [0]
+    for o in objs:
+        offsets.append(len(out))
+        out.extend(o)
+    xref_pos = len(out)
+    out.extend(f"xref\n0 {len(offsets)}\n".encode())
+    out.extend(b"0000000000 65535 f \n")
+    for off in offsets[1:]:
+        out.extend(f"{off:010d} 00000 n \n".encode())
+    out.extend(
+        f"trailer<< /Size {len(offsets)} /Root 1 0 R >>\nstartxref\n{xref_pos}\n%%EOF\n".encode()
+    )
+    return bytes(out)

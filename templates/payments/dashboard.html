@@ -284,79 +284,92 @@
     <div class="row g-4 mb-4">
         <div class="col-md-3 col-sm-6">
             <div class="stat-card">
-                <div class="stat-icon"><i class="fas fa-money-bill-wave"></i></div>
-                <div class="stat-value">{{ total_earnings|floatformat:2|intcomma }} ETB</div>
-                <div class="stat-label">Total Earnings</div>
+                <div class="stat-icon"><i class="fas fa-coins"></i></div>
+                <div class="stat-value">{{ total_gross|default:0|floatformat:2|intcomma }}</div>
+                <div class="stat-label">Gross book sales (ETB)</div>
             </div>
         </div>
         <div class="col-md-3 col-sm-6">
             <div class="stat-card">
-                <div class="stat-icon"><i class="fas fa-check-circle" style="color: #28a745;"></i></div>
-                <div class="stat-value">{{ total_paid|floatformat:2|intcomma }} ETB</div>
-                <div class="stat-label">Total Paid</div>
+                <div class="stat-icon"><i class="fas fa-user-edit"></i></div>
+                <div class="stat-value" style="color: var(--primary-gold);">{{ total_royalty|default:0|floatformat:2|intcomma }}</div>
+                <div class="stat-label">Author royalty before tax ({{ royalty_rate }}%)</div>
             </div>
         </div>
         <div class="col-md-3 col-sm-6">
             <div class="stat-card">
-                <div class="stat-icon"><i class="fas fa-clock" style="color: #ffc107;"></i></div>
-                <div class="stat-value">{{ total_pending|floatformat:2|intcomma }} ETB</div>
-                <div class="stat-label">Pending Payment</div>
+                <div class="stat-icon"><i class="fas fa-building" style="color:#6c757d;"></i></div>
+                <div class="stat-value" style="color:#6c757d;">{{ total_abrehot_share|default:0|floatformat:2|intcomma }}</div>
+                <div class="stat-label">Platform share ({{ abrehot_rate }}%)</div>
             </div>
         </div>
         <div class="col-md-3 col-sm-6">
             <div class="stat-card">
-                <div class="stat-icon"><i class="fas fa-users" style="color: #17a2b8;"></i></div>
-                <div class="stat-value">{{ authors.count|intcomma }}</div>
-                <div class="stat-label">Total Authors</div>
+                <div class="stat-icon"><i class="fas fa-percent" style="color:#dc3545;"></i></div>
+                <div class="stat-value" style="color:#dc3545;">{{ total_tax|default:0|floatformat:2|intcomma }}</div>
+                <div class="stat-label">Tax withheld (ETB)</div>
             </div>
         </div>
     </div>
 
-    <!-- Split Breakdown -->
     <div class="row g-4 mb-4">
-        <div class="col-md-4">
+        <div class="col-md-3 col-sm-6">
             <div class="stat-card">
-                <div class="stat-icon"><i class="fas fa-user-edit" style="color: var(--primary-gold);"></i></div>
-                <div class="stat-value" style="color: var(--primary-gold);">{{ total_royalty|floatformat:2|intcomma }} ETB</div>
-                <div class="stat-label">Total Author Royalty ({{ royalty_rate }}%)</div>
+                <div class="stat-icon"><i class="fas fa-wallet"></i></div>
+                <div class="stat-value">{{ total_earnings|default:0|floatformat:2|intcomma }}</div>
+                <div class="stat-label">Net payable to authors (ETB)</div>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3 col-sm-6">
             <div class="stat-card">
-                <div class="stat-icon"><i class="fas fa-building" style="color: #6c757d;"></i></div>
-                <div class="stat-value" style="color: #6c757d;">{{ total_abrehot_share|floatformat:2|intcomma }} ETB</div>
-                <div class="stat-label">Abrehot Share ({{ abrehot_rate }}%)</div>
+                <div class="stat-icon"><i class="fas fa-check-circle" style="color:#28a745;"></i></div>
+                <div class="stat-value" style="color:#28a745;">{{ total_paid|default:0|floatformat:2|intcomma }}</div>
+                <div class="stat-label">Already paid out (ETB)</div>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3 col-sm-6">
             <div class="stat-card">
-                <div class="stat-icon"><i class="fas fa-percent" style="color: #dc3545;"></i></div>
-                <div class="stat-value" style="color: #dc3545;">{{ total_tax|floatformat:2|intcomma }} ETB</div>
-                <div class="stat-label">Total Tax Withheld</div>
+                <div class="stat-icon"><i class="fas fa-hourglass-half" style="color:#ffc107;"></i></div>
+                <div class="stat-value" style="color:#b8860b;">{{ total_pending|default:0|floatformat:2|intcomma }}</div>
+                <div class="stat-label">Pending royalty payments (ETB)</div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-users"></i></div>
+                <div class="stat-value">{{ author_count|default:authors|length }}</div>
+                <div class="stat-label">Authors with sales</div>
             </div>
         </div>
     </div>
 
     <!-- Quick Actions -->
     <div class="row g-4 mb-4">
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div class="quick-action-card" onclick="location.href='{% url 'payments:calculate_all' %}'">
                 <div class="quick-action-icon"><i class="fas fa-calculator"></i></div>
-                <div class="quick-action-title">Calculate All Payments</div>
-                <div class="quick-action-desc">Calculate payments for all books</div>
+                <div class="quick-action-title">Calculate All</div>
+                <div class="quick-action-desc">Create royalty rows for completed purchases</div>
             </div>
         </div>
-        <div class="col-md-6">
-            <div class="quick-action-card" onclick="location.href='{% url 'payments:payment_history' %}'">
-                <div class="quick-action-icon"><i class="fas fa-history"></i></div>
-                <div class="quick-action-title">Payment History</div>
-                <div class="quick-action-desc">View all payment batches</div>
+        <div class="col-md-4">
+            <div class="quick-action-card" onclick="document.getElementById('authorsTable') && document.getElementById('authorsTable').scrollIntoView({behavior:'smooth'})">
+                <div class="quick-action-icon"><i class="fas fa-hand-holding-usd"></i></div>
+                <div class="quick-action-title">Make royalty payment</div>
+                <div class="quick-action-desc">Record paid royalties with a transaction reference</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="quick-action-card" onclick="location.href='{% url 'payments:finance_reports' %}'">
+                <div class="quick-action-icon"><i class="fas fa-chart-line"></i></div>
+                <div class="quick-action-title">Reports</div>
+                <div class="quick-action-desc">Weekly, monthly and annual finance reports</div>
             </div>
         </div>
     </div>
 
     <!-- Authors List -->
-    <div class="chart-container mb-4">
+    <div class="chart-container mb-4" id="authorsTable">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h5 class="mb-0">
                 <i class="fas fa-users me-2" style="color: var(--primary-gold);"></i>
@@ -399,8 +412,8 @@
                                 </a>
                                 {% if author.total_pending > 0 %}
                                 <button type="button" onclick="processAuthorPayment({{ author.id }}, '{{ author.display_name|default:author.username|escapejs }}', {{ author.total_pending|default:0|floatformat:2 }}, '{{ author.phone|default:''|escapejs }}')" 
-                                        class="btn btn-gold-small" title="Pay via Telebirr">
-                                    <i class="fas fa-money-bill-wave"></i> Transfer
+                                        class="btn btn-gold-small" title="Record royalty payment">
+                                    <i class="fas fa-hand-holding-usd"></i> Royalty payment
                                 </button>
                                 {% endif %}
                             </div>
@@ -476,13 +489,13 @@
     {% endif %}
 </div>
 
-<!-- Process Author Payment Modal -->
+<!-- Royalty payment Modal -->
 <div class="modal fade" id="processAuthorModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">
-                    <i class="fas fa-money-bill-wave me-2"></i> Process Author Payment
+                    <i class="fas fa-money-bill-wave me-2"></i> Royalty payment
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
@@ -491,169 +504,124 @@
                     <p><strong>Author:</strong> <span id="authorName"></span></p>
                     <p><strong>Total Pending:</strong> <span id="authorAmount" class="text-warning fw-bold"></span> ETB</p>
                 </div>
-                <form id="processAuthorForm" method="post">
+                <form id="processAuthorForm" method="post" action="">
                     {% csrf_token %}
-                    <input type="hidden" name="payment_method" value="telebirr">
+                                        <div class="alert alert-info">
+                        <i class="fas fa-database me-2"></i>
+                        <strong>Database record only.</strong> Finance settles royalties outside this system.
+                        Enter a <em>transaction reference number</em> for the audit trail, then confirm.
+                    </div>
                     <div class="mb-3">
                         <label class="form-label fw-bold">
-                            <i class="fas fa-mobile-alt me-1"></i> Telebirr phone number
+                            <i class="fas fa-receipt me-1"></i> Transaction reference number
                         </label>
-                        <input type="tel" name="phone_number" id="authorPhone" class="form-control"
-                               placeholder="e.g. 0912345678" required pattern="[0-9+\s]{9,15}"
-                               title="Ethiopian mobile for Telebirr royalty payout">
-                        <small class="text-muted">
-                            Fetched from the author profile. Edit if the author wants to receive royalty on another Telebirr number.
-                        </small>
-                        <div class="form-check mt-2">
-                            <input class="form-check-input" type="checkbox" name="save_phone" value="1" id="savePhoneCheck">
-                            <label class="form-check-label" for="savePhoneCheck">Save this number on the author profile</label>
-                        </div>
+                        <input type="text" name="transaction_reference" id="royaltyTxRef" class="form-control"
+                               placeholder="Bank / Telebirr / internal voucher number" required>
+                        <small class="text-muted">Stored on each royalty row for finance records.</small>
                     </div>
-                    <div class="alert alert-info mb-0">
-                        <i class="fas fa-info-circle me-2"></i>
-                        Payout is <strong>Telebirr only</strong>. This pays all pending royalties for this author.
-                    </div>
+                    <input type="hidden" name="payout_action" value="mark_paid">
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                 <button type="submit" form="processAuthorForm" class="btn btn-gold" id="processPaymentBtn">
-                    <i class="fas fa-check-circle me-2"></i> Pay via Telebirr
+                    <i class="fas fa-check-circle me-2"></i> Record royalty payment
                 </button>
             </div>
         </div>
     </div>
 </div>
 
+{% endblock %}
+
 {% block extra_js %}
 <script>
-    function processAuthorPayment(authorId, authorName, amount, authorPhone) {
-        document.getElementById('authorName').textContent = authorName;
-        document.getElementById('authorAmount').textContent = (amount || 0).toLocaleString();
-        document.getElementById('processAuthorForm').action = '/payments/author/' + authorId + '/process/';
-        var phoneInput = document.getElementById('authorPhone');
-        if (phoneInput) { phoneInput.value = authorPhone || ''; phoneInput.dataset.userEdited = ''; }
-        fetch('/payments/author/' + authorId + '/payout-info/', { headers: { 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' } })
-          .then(function(r){ return r.json(); })
-          .then(function(data){
-            if (data && data.phone && phoneInput && !phoneInput.dataset.userEdited) phoneInput.value = data.phone;
-            if (data && data.pending_amount != null) document.getElementById('authorAmount').textContent = Number(data.pending_amount).toLocaleString();
-          }).catch(function(){});
-        if (phoneInput) phoneInput.oninput = function(){ phoneInput.dataset.userEdited = '1'; };
-        try { new bootstrap.Modal(document.getElementById('processAuthorModal')).show(); } catch(e) { $('#processAuthorModal').modal('show'); }
-        return; // skip legacy body
-        // legacy:
-        document.getElementById('authorName').textContent = authorName;
-        document.getElementById('authorAmount').textContent = amount.toLocaleString();
-        document.getElementById('processAuthorForm').action = `/payments/author/${authorId}/process/`;
-        
-        // Fetch available payment methods
-        fetch(`/payments/author/${authorId}/details/?method=telebirr`)
-            .then(response => response.json())
-            .then(data => {
-                // This will be used to show available methods
-                // For now, we'll show a simple selection
-                const container = document.getElementById('paymentMethodOptions');
-                // We'll show the actual methods in the detail page
-                container.innerHTML = `
-                    <div class="row g-3">
-                        <div class="col-6">
-                            <label class="payment-method-select">
-                                <input type="radio" name="payment_method" value="telebirr" onchange="enableProcessButton()">
-                                <div class="card text-center">
-                                    <i class="fas fa-mobile-alt" style="font-size: 1.5rem; color: #28a745;"></i>
-                                    <strong>Telebirr</strong>
-                                    <small class="text-muted">Mobile Money</small>
-                                </div>
-                            </label>
-                        </div>
-                        <div class="col-6">
-                            <label class="payment-method-select">
-                                <input type="radio" name="payment_method" value="cbe" onchange="enableProcessButton()">
-                                <div class="card text-center">
-                                    <i class="fas fa-university" style="font-size: 1.5rem; color: #0d6efd;"></i>
-                                    <strong>CBE Birr</strong>
-                                    <small class="text-muted">Bank Transfer</small>
-                                </div>
-                            </label>
-                        </div>
-                    </div>
-                `;
-            })
-            .catch(() => {
-                // Fallback to simple selection
-                document.getElementById('paymentMethodOptions').innerHTML = `
-                    <select name="payment_method" class="form-select" required onchange="enableProcessButton()">
-                        <option value="">Select payment method...</option>
-                        <option value="telebirr">Telebirr</option>
-                        <option value="cbe">CBE Birr</option>
-                        <option value="bank_transfer">Bank Transfer</option>
-                        <option value="cash">Cash</option>
-                    </select>
-                `;
-            });
-        
+function getCookie(name) {
+    var v = document.cookie.match('(^|;)\s*' + name + '\s*=\s*([^;]+)');
+    return v ? v.pop() : '';
+}
+
+function processAuthorPayment(authorId, authorName, amount, authorPhone) {
+    var nameEl = document.getElementById('authorName');
+    var amtEl = document.getElementById('authorAmount');
+    var form = document.getElementById('processAuthorForm');
+    if (nameEl) nameEl.textContent = authorName || '';
+    if (amtEl) amtEl.textContent = (Number(amount) || 0).toLocaleString();
+    if (form) {
+        form.setAttribute('action', '/payments/author/' + encodeURIComponent(authorId) + '/process/');
+        form.dataset.authorId = String(authorId);
+    }
+    var refInput = document.getElementById('royaltyTxRef');
+    if (refInput) refInput.value = '';
+    try {
         new bootstrap.Modal(document.getElementById('processAuthorModal')).show();
+    } catch (e) {
+        if (window.jQuery) jQuery('#processAuthorModal').modal('show');
     }
+}
 
-    function enableProcessButton() {
-        const form = document.getElementById('processAuthorForm');
-        const hasSelection = form.querySelector('input[name="payment_method"]:checked') || 
-                           form.querySelector('select[name="payment_method"]').value;
-        document.getElementById('processPaymentBtn').disabled = !hasSelection;
-    }
-
-    // Submit royalty payout via fetch then redirect to Telebirr (same as book purchase)
-    (function() {
-        var form = document.getElementById('processAuthorForm');
-        if (!form || form.dataset.processAuthorFormSubmitBound) return;
-        form.dataset.processAuthorFormSubmitBound = '1';
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            var phone = (document.getElementById('authorPhone') || {}).value || '';
-            if (!phone || phone.replace(/\s/g,'').length < 9) {
-                alert('Enter a valid Telebirr phone number.');
+(function bindRoyaltyForm() {
+    var form = document.getElementById('processAuthorForm');
+    if (!form || form.dataset.boundRoyalty === '1') return;
+    form.dataset.boundRoyalty = '1';
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var btn = document.getElementById('processPaymentBtn');
+        var refInput = document.getElementById('royaltyTxRef');
+        var tx = (refInput && refInput.value ? refInput.value : '').trim();
+        if (!tx) {
+            alert('Enter a transaction reference number.');
+            return;
+        }
+        var postUrl = form.getAttribute('action') || '';
+        if (!postUrl || postUrl.indexOf('/payments/author/') !== 0) {
+            alert('Form not ready. Close and open Royalty payment again.');
+            return;
+        }
+        if (btn) {
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Saving...';
+        }
+        var fd = new FormData(form);
+        fd.set('transaction_reference', tx);
+        fd.set('payout_action', 'mark_paid');
+        var csrf = (form.querySelector('[name=csrfmiddlewaretoken]') || {}).value || getCookie('csrftoken');
+        fetch(postUrl, {
+            method: 'POST',
+            body: fd,
+            credentials: 'same-origin',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json',
+                'X-CSRFToken': csrf || ''
+            }
+        }).then(function (res) {
+            return res.text().then(function (text) {
+                var data = null;
+                try { data = JSON.parse(text); } catch (err) { data = null; }
+                return { status: res.status, ok: res.ok, data: data, text: text };
+            });
+        }).then(function (payload) {
+            if (payload.data && payload.data.success) {
+                alert(payload.data.message || 'Royalty recorded as paid.');
+                window.location.reload();
                 return;
             }
-            var btn = document.getElementById('processPaymentBtn');
-            if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Connecting to Telebirr...'; }
-            var fd = new FormData(form);
-            fd.set('phone_number', phone.trim());
-            fd.set('payment_method', 'telebirr');
-            fetch(form.action, {
-                method: 'POST',
-                body: fd,
-                credentials: 'same-origin',
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'Accept': 'application/json'
-                }
-            }).then(function(res) {
-                return res.json().then(function(data) {
-                    return { ok: res.ok, status: res.status, data: data };
-                }).catch(function() {
-                    return { ok: res.ok, status: res.status, data: null, url: res.url };
-                });
-            }).then(function(payload) {
-                var data = payload.data || {};
-                var url = data.checkout_url || data.redirect_url || data.payment_url;
-                if (url) {
-                    window.location.href = url;
-                    return;
-                }
-                if (payload.url && payload.url.indexOf('paygate') >= 0) {
-                    window.location.href = payload.url;
-                    return;
-                }
-                alert(data.error || data.message || ('Payment failed (HTTP ' + payload.status + ')'));
-                if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-check-circle me-2"></i> Pay via Telebirr'; }
-            }).catch(function(err) {
-                alert('Network error: ' + (err.message || err));
-                if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-check-circle me-2"></i> Pay via Telebirr'; }
-            });
+            var err = (payload.data && (payload.data.error || payload.data.message))
+                || ('Request failed (HTTP ' + payload.status + '). ' + (payload.text || '').slice(0, 200));
+            alert(err);
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-check-circle me-2"></i> Record royalty payment';
+            }
+        }).catch(function (err) {
+            alert('Network error: ' + (err && err.message ? err.message : err));
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-check-circle me-2"></i> Record royalty payment';
+            }
         });
-    })();
-
+    });
+})();
 </script>
-{% endblock %}
 {% endblock %}

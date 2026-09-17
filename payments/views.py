@@ -9,8 +9,10 @@ from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from decimal import Decimal
 import logging
+import traceback
 import uuid
 import json
+import re
 import hashlib
 import hmac
 import requests
@@ -474,13 +476,22 @@ def payment_dashboard(request):
     
     from payments.services.finance import get_finance_settings
     fin = get_finance_settings()
+    total_royalty = payments.aggregate(total=Sum('author_royalty'))['total'] or 0
+    total_abrehot_share = payments.aggregate(total=Sum('abrehot_share'))['total'] or 0
+    total_gross = payments.aggregate(total=Sum('gross_amount'))['total'] or 0
+    author_count = len(author_data)
     context = {
         'authors': author_data,
         'recent_payments': recent_payments,
-        'total_earnings': total_earnings,
+        'total_earnings': total_earnings,  # net to authors (final_amount sum)
+        'total_net_authors': total_earnings,
         'total_paid': total_paid,
         'total_pending': total_pending,
         'total_tax': total_tax,
+        'total_royalty': total_royalty,
+        'total_abrehot_share': total_abrehot_share,
+        'total_gross': total_gross,
+        'author_count': author_count,
         'royalty_rate': fin.royalty_rate,
         'abrehot_rate': fin.platform_rate,
         'tax_threshold': fin.tax_threshold,
@@ -515,105 +526,85 @@ def calculate_all_payments(request):
 @login_required
 def process_author_payment(request, author_id):
     """
-    Pay author royalties via Telebirr — same C2B Checkout as book purchase.
-    Supports normal form POST (redirect) and AJAX (JSON with checkout_url).
+    Record royalty as paid in DB. Finance settles money outside the app.
+    Always returns JSON when requested (avoids "Invalid response" on HTML errors).
     """
-    wants_json = (
-        request.headers.get('X-Requested-With') == 'XMLHttpRequest'
-        or 'application/json' in (request.headers.get('Accept') or '')
-    )
+    wants_json = True  # this endpoint is used from dashboard AJAX
 
-    def fail(msg, status=400):
-        if wants_json:
-            return JsonResponse({'success': False, 'error': msg}, status=status)
-        messages.error(request, msg)
-        return redirect('payments:dashboard')
+    def respond(success, message, status=200, **extra):
+        data = {'success': bool(success), 'message': str(message)}
+        if not success:
+            data['error'] = str(message)
+        data.update(extra)
+        return JsonResponse(data, status=status)
 
-    def ok_redirect(url, msg=None):
-        if wants_json:
-            return JsonResponse({'success': True, 'checkout_url': url, 'redirect_url': url})
-        if msg:
-            messages.success(request, msg)
-        return redirect(url)
-
-    if request.user.role not in ['admin', 'maker', 'finance']:
-        return fail('You are not authorized to perform this action.', 403)
-
-    if request.method != 'POST':
-        return fail('Invalid request method.', 405)
-
-    author = get_object_or_404(CustomUser, id=author_id, role='author')
-    payments_qs = list(
-        Payment.objects.filter(author=author, status__in=['calculated', 'pending'])
-    )
-    if not payments_qs:
-        return fail(f'No pending payments for {author.full_name or author.username}.')
-
-    author_phone = str(
-        request.POST.get('phone_number')
-        or getattr(author, 'phone', None)
-        or getattr(author, 'phone_number', None)
-        or ''
-    ).strip().replace(' ', '')
-    if not author_phone or len(author_phone) < 9:
-        return fail(f'Enter a valid Telebirr phone number for {author.username}.')
-
-    if request.POST.get('save_phone') == '1':
-        for field in ('phone', 'phone_number', 'mobile'):
-            if hasattr(author, field):
-                setattr(author, field, author_phone)
-                try:
-                    author.save(update_fields=[field])
-                except Exception:
-                    try:
-                        author.save()
-                    except Exception:
-                        pass
-                break
-
-    total = sum((p.final_amount or Decimal('0') for p in payments_qs), Decimal('0.00'))
-    if total <= 0:
-        return fail('Pending amount is zero.')
-
-    tb = TelebirrService()
-    if not tb.is_configured():
-        return fail('Telebirr is not configured. Cannot pay authors.')
-
-    merch_id = ''.join(c for c in f'AUTH{author.id}{uuid.uuid4().hex[:10]}'.upper() if c.isalnum())[:32]
     try:
-        result = tb.create_checkout(
-            title=f'Author royalty {author.username}',
-            amount=float(total),
-            merch_order_id=merch_id,
+        if not request.user.is_authenticated:
+            return respond(False, 'Please log in again.', 401)
+
+        if getattr(request.user, 'role', None) not in ('admin', 'maker', 'finance'):
+            return respond(False, 'Not authorized to record royalty payments.', 403)
+
+        if request.method != 'POST':
+            return respond(False, 'Invalid method. Use POST.', 405)
+
+        try:
+            author = CustomUser.objects.get(id=author_id)
+        except CustomUser.DoesNotExist:
+            return respond(False, f'Author id {author_id} not found.', 404)
+
+        payments_qs = list(
+            Payment.objects.filter(author_id=author.id, status__in=['calculated', 'pending'])
+        )
+        if not payments_qs:
+            return respond(
+                False,
+                'No pending royalties for this author. Click Calculate All first.',
+            )
+
+        tx_ref = (
+            request.POST.get('transaction_reference')
+            or request.POST.get('telebirr_ref')
+            or request.POST.get('reference')
+            or ''
+        )
+        tx_ref = re.sub(r'\s+', '', str(tx_ref).strip())
+        if not tx_ref:
+            return respond(False, 'Transaction reference number is required.')
+
+        if len(tx_ref) > 100:
+            tx_ref = tx_ref[:100]
+
+        total = Decimal('0.00')
+        n = 0
+        for payment in payments_qs:
+            amt = payment.final_amount or Decimal('0.00')
+            total += Decimal(str(amt))
+            payment.status = 'paid'
+            payment.paid_at = timezone.now()
+            payment.transaction_reference = tx_ref
+            payment.save()
+            n += 1
+
+        try:
+            from payments.services.finance import notify_author_royalty_paid
+            notify_author_royalty_paid(author, total, tx_ref, payment_count=n)
+        except Exception as e:
+            logger.warning('Author notify failed: %s', e)
+
+        return respond(
+            True,
+            f'Recorded {n} royalty payment(s) as paid for '
+            f'{getattr(author, "username", author.id)}: {total} ETB (ref {tx_ref}). '
+            f'Author has been notified.',
+            paid_count=n,
+            total=str(total),
+            transaction_reference=tx_ref,
+            author_id=author.id,
         )
     except Exception as e:
-        logger.exception('Telebirr create_checkout for royalty failed')
-        return fail(f'Telebirr error: {e}')
-
-    if not result.get('success'):
-        return fail(f"Telebirr checkout failed: {result.get('error')}")
-
-    checkout_url = result.get('checkout_url') or result.get('checkOutUrl')
-    ref = result.get('merch_order_id') or result.get('prepay_id') or merch_id
-    if not checkout_url:
-        return fail('Telebirr did not return a checkout URL.')
-
-    for payment in payments_qs:
-        payment.status = 'pending'
-        payment.transaction_reference = str(ref)[:100]
-        try:
-            payment.save()
-        except Exception as e:
-            logger.warning('Could not update payment %s: %s', payment.id, e)
-
-    logger.info(
-        'Royalty Telebirr checkout author=%s total=%s url=%s',
-        author.id, total, checkout_url[:80],
-    )
-    return ok_redirect(
-        checkout_url,
-        msg=f'Telebirr royalty payout for {author.username}: {total} ETB. Complete payment on Telebirr.',
-    )
+        logger.exception('process_author_payment error')
+        return respond(False, f'Server error: {e}', 500)
 
 
 
@@ -852,17 +843,29 @@ def payment_return(request):
         if request.GET.get('result') in ('SUCCESS', 'success', '0') or request.GET.get('code') in ('0', '200'):
             paid = True
 
+    # Telebirr H5 sometimes shows "transaction result is failed" even when the
+    # order is still pending or will succeed after query — never mark failed here.
+    failed_hint = trade_status in ('PAY_FAILED', 'FAILED', 'FAIL', 'CANCEL', 'CANCELLED', 'PAY_CANCEL')
+
     if paid:
         _complete_purchase(purchase, gateway_ref=prepay_id or merch_order_id or purchase.transaction_id)
         messages.success(request, f'Payment successful! "{purchase.book.title}" is now in My Books.')
         return redirect('books:my_books_user')
 
-    messages.warning(
-        request,
-        'Payment is still pending confirmation. If you completed payment on Telebirr, '
-        'wait a moment and open My Books, or contact support with order: '
-        f'{merch_order_id or purchase.transaction_id}'
-    )
+    if failed_hint:
+        messages.warning(
+            request,
+            'Telebirr reported a failed or cancelled attempt. Your order is still pending — '
+            'you can try paying again. Order: '
+            f'{merch_order_id or purchase.transaction_id or purchase.id}'
+        )
+    else:
+        messages.warning(
+            request,
+            'Payment not confirmed yet. If you finished on Telebirr, wait a minute and open My Books, '
+            'or ask finance to confirm with your transaction reference. Order: '
+            f'{merch_order_id or purchase.transaction_id or purchase.id}'
+        )
     return redirect('books:detail', book_id=purchase.book.id)
 
 
@@ -885,16 +888,12 @@ def simulate_payment(request, transaction_id):
         messages.error(request, 'Purchase not found')
         return redirect('books:browse')
     
-    purchase.status = 'completed'
-    purchase.completed_at = timezone.now()
     purchase.transaction_reference = transaction_id
     purchase.purchase_reference = transaction_id
     purchase.save()
-    
-    create_author_payment(purchase)
-    
-    messages.success(request, f'Payment simulated successfully! You can download "{purchase.book.title}"')
-    return redirect('books:detail', book_id=purchase.book.id)
+    _complete_purchase(purchase, gateway_ref=transaction_id)
+    messages.success(request, f'Payment simulated successfully! "{purchase.book.title}" is in My Books.')
+    return redirect('books:my_books_user')
 
 
 
@@ -1316,3 +1315,114 @@ def author_payout_info(request, author_id):
         'phone': str(phone or ''),
         'pending_amount': float(pending),
     })
+
+
+
+@login_required
+def finance_confirm_purchase(request):
+    """
+    Finance/admin: mark a pending book purchase completed using a transaction reference.
+    Used when Telebirr H5 fails or webhook cannot reach the server.
+    """
+    if getattr(request.user, 'role', None) not in ('admin', 'maker', 'finance'):
+        messages.error(request, 'Not authorized.')
+        return redirect('home')
+    if request.method != 'POST':
+        return redirect('payments:dashboard')
+
+    purchase_id = request.POST.get('purchase_id') or ''
+    tx_ref = str(request.POST.get('transaction_reference') or '').strip()
+    tx_ref = re.sub(r'\s+', '', tx_ref)
+
+    purchase = None
+    if purchase_id:
+        purchase = Purchase.objects.filter(id=purchase_id).first()
+    if not purchase and tx_ref:
+        purchase = (
+            Purchase.objects.filter(status='pending')
+            .filter(
+                Q(transaction_id=tx_ref)
+                | Q(transaction_reference=tx_ref)
+                | Q(purchase_reference=tx_ref)
+            )
+            .order_by('-created_at')
+            .first()
+        )
+    if not purchase:
+        messages.error(request, 'Pending purchase not found.')
+        return redirect('payments:dashboard')
+    if not tx_ref:
+        messages.error(request, 'Transaction reference is required.')
+        return redirect('payments:dashboard')
+
+    purchase.transaction_reference = tx_ref[:100]
+    purchase.purchase_reference = tx_ref[:100]
+    purchase.save(update_fields=['transaction_reference', 'purchase_reference', 'updated_at'] if hasattr(purchase, 'updated_at') else None)
+    try:
+        purchase.save()
+    except Exception:
+        pass
+    _complete_purchase(purchase, gateway_ref=tx_ref)
+    messages.success(
+        request,
+        f'Book purchase #{purchase.id} marked completed (ref {tx_ref}). '
+        f'"{purchase.book.title}" is in the buyer\'s My Books.'
+    )
+    return redirect('payments:dashboard')
+
+
+
+@login_required
+def finance_report_export(request, report_id, fmt):
+    """Download finance report as csv or pdf."""
+    from payments.models import FinanceReport
+    from payments.services.finance import report_to_csv_bytes, report_to_pdf_bytes
+    from django.http import HttpResponse
+
+    if getattr(request.user, 'role', None) not in ('admin', 'maker', 'finance'):
+        messages.error(request, 'Not authorized.')
+        return redirect('home')
+
+    report = get_object_or_404(FinanceReport, id=report_id)
+    fmt = (fmt or 'csv').lower()
+    safe_title = ''.join(c if c.isalnum() or c in '-_' else '_' for c in (report.title or f'report_{report.id}'))[:80]
+
+    if fmt == 'pdf':
+        data = report_to_pdf_bytes(report)
+        resp = HttpResponse(data, content_type='application/pdf')
+        resp['Content-Disposition'] = f'attachment; filename="{safe_title}.pdf"'
+        return resp
+
+    data = report_to_csv_bytes(report)
+    resp = HttpResponse(data, content_type='text/csv; charset=utf-8')
+    resp['Content-Disposition'] = f'attachment; filename="{safe_title}.csv"'
+    return resp
+
+
+@login_required
+def finance_export_current(request, fmt):
+    """Generate a report for current month and export immediately as csv/pdf."""
+    from payments.services.finance import generate_finance_report, report_to_csv_bytes, report_to_pdf_bytes
+    from django.http import HttpResponse
+
+    if getattr(request.user, 'role', None) not in ('admin', 'maker', 'finance'):
+        messages.error(request, 'Not authorized.')
+        return redirect('home')
+
+    period = (request.GET.get('period') or 'monthly').lower()
+    if period not in ('weekly', 'monthly', 'annual'):
+        period = 'monthly'
+    report = generate_finance_report(period_type=period, user=request.user)
+    fmt = (fmt or 'csv').lower()
+    safe_title = ''.join(c if c.isalnum() or c in '-_' else '_' for c in (report.title or 'finance'))[:80]
+
+    if fmt == 'pdf':
+        data = report_to_pdf_bytes(report)
+        resp = HttpResponse(data, content_type='application/pdf')
+        resp['Content-Disposition'] = f'attachment; filename="{safe_title}.pdf"'
+        return resp
+
+    data = report_to_csv_bytes(report)
+    resp = HttpResponse(data, content_type='text/csv; charset=utf-8')
+    resp['Content-Disposition'] = f'attachment; filename="{safe_title}.csv"'
+    return resp

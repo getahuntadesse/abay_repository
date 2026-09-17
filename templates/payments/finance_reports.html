@@ -11,6 +11,14 @@
     </div>
   </div>
   <p class="text-muted">Current rates — Royalty {{ fin.royalty_rate }}% · Platform {{ fin.platform_rate }}% · Tax {{ fin.tax_rate_default }}% / culture {{ fin.tax_rate_culture }}% · Threshold {{ fin.tax_threshold }} ETB</p>
+  <div class="mb-3">
+    <a href="{% url 'payments:finance_export_current' 'csv' %}?period=weekly" class="btn btn-sm btn-outline-success">Weekly CSV</a>
+    <a href="{% url 'payments:finance_export_current' 'pdf' %}?period=weekly" class="btn btn-sm btn-outline-danger">Weekly PDF</a>
+    <a href="{% url 'payments:finance_export_current' 'csv' %}?period=monthly" class="btn btn-sm btn-outline-success">Monthly CSV</a>
+    <a href="{% url 'payments:finance_export_current' 'pdf' %}?period=monthly" class="btn btn-sm btn-outline-danger">Monthly PDF</a>
+    <a href="{% url 'payments:finance_export_current' 'csv' %}?period=annual" class="btn btn-sm btn-outline-success">Annual CSV</a>
+    <a href="{% url 'payments:finance_export_current' 'pdf' %}?period=annual" class="btn btn-sm btn-outline-danger">Annual PDF</a>
+  </div>
   {% if messages %}{% for m in messages %}<div class="alert alert-info">{{ m }}</div>{% endfor %}{% endif %}
 
   <div class="card p-3 mb-4 shadow-sm">
@@ -64,7 +72,11 @@
           <td>{{ r.total_tax|floatformat:2 }}</td>
           <td>{{ r.total_net_authors|floatformat:2 }}</td>
           <td>{{ r.generated_at|date:"M d, Y H:i" }}</td>
-          <td><a href="{% url 'payments:finance_report_detail' r.id %}" class="btn btn-sm btn-outline-primary">View</a></td>
+          <td class="text-nowrap">
+            <a href="{% url 'payments:finance_report_detail' r.id %}" class="btn btn-sm btn-outline-primary">View</a>
+            <a href="{% url 'payments:finance_report_export' r.id 'csv' %}" class="btn btn-sm btn-outline-success">CSV</a>
+            <a href="{% url 'payments:finance_report_export' r.id 'pdf' %}" class="btn btn-sm btn-outline-danger">PDF</a>
+          </td>
         </tr>
         {% empty %}
         <tr><td colspan="8" class="text-center text-muted py-4">No reports yet. Generate one above.</td></tr>

@@ -552,7 +552,7 @@
                             <td>{{ review.book.author.full_name|default:"Unknown" }}</td>
                             <td>
                                 <span class="badge {% if review.overall_score >= 7 %}bg-success{% else %}bg-danger{% endif %}">
-                                    {{ review.overall_score|floatformat:1 }}/10
+                                    {{ review.overall_score|floatformat:1 }}/5
                                 </span>
                             </td>
                             <td>

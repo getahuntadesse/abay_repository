@@ -1,92 +1,251 @@
 {% extends "base.html" %}
 {% load humanize %}
-{% block title %}Finance Dashboard - Abay{% endblock %}
+{% block title %}Finance Dashboard - Abay Repository{% endblock %}
+
+{% block extra_css %}
+<style>
+    :root {
+        --primary-gold: #DAA520;
+        --primary-gold-dark: #B8860B;
+        --primary-dark: #2C2C2C;
+    }
+    .stat-card {
+        background: white;
+        border-radius: 15px;
+        padding: 1.5rem;
+        text-align: center;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+        border: none;
+        position: relative;
+        overflow: hidden;
+        height: 100%;
+    }
+    .stat-card::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--primary-gold), var(--primary-gold-dark));
+    }
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    }
+    .stat-icon { font-size: 2rem; color: var(--primary-gold); margin-bottom: 0.5rem; }
+    .stat-value { font-size: 1.6rem; font-weight: 700; color: var(--primary-dark); }
+    .stat-label { color: #6c757d; font-size: 0.85rem; }
+    .btn-gold {
+        background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark));
+        color: var(--primary-dark);
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 10px;
+        font-weight: 600;
+    }
+    .btn-gold:hover { color: var(--primary-dark); box-shadow: 0 5px 15px rgba(218,165,32,0.35); }
+    .btn-outline-gold {
+        border: 2px solid var(--primary-gold);
+        color: var(--primary-gold);
+        background: transparent;
+        border-radius: 10px;
+        font-weight: 600;
+    }
+    .btn-outline-gold:hover { background: var(--primary-gold); color: var(--primary-dark); }
+    .section-card {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        padding: 1.25rem;
+        margin-bottom: 1.5rem;
+    }
+    .section-title {
+        font-weight: 700;
+        color: var(--primary-dark);
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    .section-title i { color: var(--primary-gold); }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="container py-4">
+<div class="container mt-4 mb-5">
   <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
-    <h2 style="color:#DAA520"><i class="fas fa-coins me-2"></i> Finance Dashboard</h2>
+    <h2>
+      <i class="fas fa-coins me-2" style="color: var(--primary-gold);"></i>
+      Finance Dashboard
+    </h2>
     <div class="d-flex flex-wrap gap-2">
-      <a href="{% url 'payments:finance_settings' %}" class="btn btn-warning fw-bold">
+      <a href="{% url 'payments:finance_settings' %}" class="btn btn-outline-gold">
         <i class="fas fa-sliders-h me-1"></i> Finance Settings
       </a>
-      <a href="{% url 'payments:finance_reports' %}" class="btn btn-primary fw-bold">
+      <a href="{% url 'payments:finance_reports' %}" class="btn btn-outline-gold">
         <i class="fas fa-chart-line me-1"></i> Reports
       </a>
-      <a href="{% url 'payments:dashboard' %}" class="btn btn-outline-dark">
-        <i class="fas fa-money-bill-wave me-1"></i> Payment Dashboard
+      <a href="{% url 'payments:dashboard' %}" class="btn btn-gold">
+        <i class="fas fa-hand-holding-usd me-1"></i> Make royalty payment
       </a>
       <a href="{% url 'payments:calculate_all' %}" class="btn btn-outline-secondary">
         <i class="fas fa-calculator me-1"></i> Calculate All
       </a>
+      <div class="btn-group">
+        <a href="{% url 'payments:finance_export_current' 'csv' %}?period=monthly" class="btn btn-outline-success">
+          <i class="fas fa-file-csv me-1"></i> Export CSV
+        </a>
+        <a href="{% url 'payments:finance_export_current' 'pdf' %}?period=monthly" class="btn btn-outline-danger">
+          <i class="fas fa-file-pdf me-1"></i> Export PDF
+        </a>
+      </div>
     </div>
   </div>
 
-  <div class="alert alert-info">
-    <strong>Royalty / tax rates</strong> are set by finance officers (not hardcoded).
+  <div class="alert alert-info mb-4">
+    <i class="fas fa-info-circle me-2"></i>
+    <strong>Royalty / tax rates</strong> are set by finance officers.
     {% if fin %}
-      Current: Royalty {{ fin.royalty_rate }}% · Platform {{ fin.platform_rate }}% ·
-      Tax {{ fin.tax_rate_default }}% (culture {{ fin.tax_rate_culture }}%) ·
-      Threshold {{ fin.tax_threshold }} ETB
+      Current: <span class="badge bg-warning text-dark">{{ fin.royalty_rate }}% Author</span>
+      <span class="badge bg-secondary">{{ fin.platform_rate }}% Platform</span>
+      <span class="badge bg-info text-dark">Tax {{ fin.tax_rate_default }}% / culture {{ fin.tax_rate_culture }}%</span>
+      <span class="badge bg-light text-dark">Threshold {{ fin.tax_threshold|intcomma }} ETB</span>
     {% else %}
       Open <a href="{% url 'payments:finance_settings' %}">Finance Settings</a> to configure.
     {% endif %}
   </div>
 
-  <div class="row g-3 mb-4">
-    <div class="col-md-3"><div class="card p-3 text-center shadow-sm"><div class="text-muted small">Net payable</div><div class="fs-4 fw-bold">{{ total_net_payable|default:total_revenue|floatformat:2|intcomma }}</div></div></div>
-    <div class="col-md-3"><div class="card p-3 text-center shadow-sm"><div class="text-muted small">Paid out</div><div class="fs-4 fw-bold text-success">{{ total_paid|floatformat:2|intcomma }}</div></div></div>
-    <div class="col-md-3"><div class="card p-3 text-center shadow-sm"><div class="text-muted small">Pending payouts</div><div class="fs-4 fw-bold text-warning">{{ pending_payouts|floatformat:2|intcomma }}</div></div></div>
-    <div class="col-md-3"><div class="card p-3 text-center shadow-sm"><div class="text-muted small">Tax withheld</div><div class="fs-4 fw-bold">{{ total_tax_withheld|floatformat:2|intcomma }}</div></div></div>
+  <!-- Stat cards — same gold theme as payment dashboard -->
+  <div class="row g-4 mb-4">
+    <div class="col-md-3 col-sm-6">
+      <div class="stat-card">
+        <div class="stat-icon"><i class="fas fa-wallet"></i></div>
+        <div class="stat-value">{{ total_net_payable|default:0|floatformat:2|intcomma }}</div>
+        <div class="stat-label">Net payable to authors (ETB)</div>
+      </div>
+    </div>
+    <div class="col-md-3 col-sm-6">
+      <div class="stat-card">
+        <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+        <div class="stat-value text-success">{{ total_paid|default:0|floatformat:2|intcomma }}</div>
+        <div class="stat-label">Already paid out (ETB)</div>
+      </div>
+    </div>
+    <div class="col-md-3 col-sm-6">
+      <div class="stat-card">
+        <div class="stat-icon"><i class="fas fa-hourglass-half"></i></div>
+        <div class="stat-value text-warning">{{ pending_payouts|default:0|floatformat:2|intcomma }}</div>
+        <div class="stat-label">Pending royalties (ETB)</div>
+      </div>
+    </div>
+    <div class="col-md-3 col-sm-6">
+      <div class="stat-card">
+        <div class="stat-icon"><i class="fas fa-receipt"></i></div>
+        <div class="stat-value">{{ total_tax_withheld|default:0|floatformat:2|intcomma }}</div>
+        <div class="stat-label">Tax withheld (ETB)</div>
+      </div>
+    </div>
   </div>
 
-  <h5 class="mb-3">Authors — pending royalties (Telebirr)</h5>
-  <div class="table-responsive card shadow-sm mb-4">
-    <table class="table table-hover mb-0">
-      <thead class="table-light">
-        <tr>
-          <th>Author</th>
-          <th>Phone</th>
-          <th class="text-end">Amount</th>
-          <th class="text-end">Tax</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for a in author_payments %}
-        <tr>
-          <td>{{ a.author_name }}</td>
-          <td>{{ a.phone }}</td>
-          <td class="text-end">{{ a.amount|floatformat:2|intcomma }}</td>
-          <td class="text-end">{{ a.tax_amount|default:0|floatformat:2|intcomma }}</td>
-          <td class="text-end">
-            <a href="{% url 'payments:dashboard' %}" class="btn btn-sm btn-warning">Pay via Telebirr</a>
-          </td>
-        </tr>
-        {% empty %}
-        <tr><td colspan="5" class="text-center text-muted py-4">No author payment rows yet.</td></tr>
-        {% endfor %}
-      </tbody>
-    </table>
+  <div class="row g-4 mb-4">
+    <div class="col-md-4 col-sm-6">
+      <div class="stat-card">
+        <div class="stat-icon"><i class="fas fa-book"></i></div>
+        <div class="stat-value">{{ total_royalties|default:0|floatformat:2|intcomma }}</div>
+        <div class="stat-label">Gross sales recorded (ETB)</div>
+      </div>
+    </div>
+    <div class="col-md-4 col-sm-6">
+      <div class="stat-card">
+        <div class="stat-icon"><i class="fas fa-users"></i></div>
+        <div class="stat-value">{{ total_authors|default:0 }}</div>
+        <div class="stat-label">Active authors</div>
+      </div>
+    </div>
+    <div class="col-md-4 col-sm-6">
+      <div class="stat-card">
+        <div class="stat-icon"><i class="fas fa-list"></i></div>
+        <div class="stat-value">{{ pending_count|default:0 }}</div>
+        <div class="stat-label">Pending payment rows</div>
+      </div>
+    </div>
   </div>
 
-  <h5 class="mb-3">Recent transactions</h5>
-  <div class="table-responsive card shadow-sm">
-    <table class="table mb-0">
-      <thead class="table-light"><tr><th>Author</th><th>Amount</th><th>Status</th><th>Method</th><th>Date</th></tr></thead>
-      <tbody>
-        {% for tx in recent_transactions %}
-        <tr>
-          <td>{{ tx.author_name }}</td>
-          <td>{{ tx.amount|floatformat:2 }}</td>
-          <td>{{ tx.status }}</td>
-          <td>Telebirr</td>
-          <td>{{ tx.date|date:"M d, Y H:i" }}</td>
-        </tr>
-        {% empty %}
-        <tr><td colspan="5" class="text-muted text-center">No transactions</td></tr>
-        {% endfor %}
-      </tbody>
-    </table>
+  <div class="section-card">
+    <div class="section-title">
+      <i class="fas fa-user-edit"></i> Authors — royalties
+      <a href="{% url 'payments:dashboard' %}" class="btn btn-gold btn-sm ms-auto">
+        <i class="fas fa-hand-holding-usd me-1"></i> Make royalty payment
+      </a>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-hover mb-0 align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>Author</th>
+            <th>Phone</th>
+            <th class="text-end">Amount (ETB)</th>
+            <th class="text-end">Tax</th>
+            <th class="text-center">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for a in author_payments %}
+          <tr>
+            <td><strong>{{ a.author_name }}</strong></td>
+            <td>{{ a.phone|default:"—" }}</td>
+            <td class="text-end">{{ a.amount|default:0|floatformat:2|intcomma }}</td>
+            <td class="text-end">{{ a.tax_amount|default:0|floatformat:2|intcomma }}</td>
+            <td class="text-center">
+              <a href="{% url 'payments:dashboard' %}" class="btn btn-gold btn-sm">
+                <i class="fas fa-hand-holding-usd me-1"></i> Make royalty payment
+              </a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="5" class="text-center text-muted py-4">No author royalty rows yet.</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <div class="section-title"><i class="fas fa-history"></i> Recent transactions</div>
+    <div class="table-responsive">
+      <table class="table mb-0 align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>Author</th>
+            <th class="text-end">Amount</th>
+            <th>Status</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for tx in recent_transactions %}
+          <tr>
+            <td>{{ tx.author_name }}</td>
+            <td class="text-end">{{ tx.amount|floatformat:2|intcomma }}</td>
+            <td>
+              {% if tx.status == 'paid' %}
+                <span class="badge bg-success">Paid</span>
+              {% elif tx.status == 'pending' or tx.status == 'calculated' %}
+                <span class="badge bg-warning text-dark">Pending</span>
+              {% else %}
+                <span class="badge bg-secondary">{{ tx.status }}</span>
+              {% endif %}
+            </td>
+            <td>{{ tx.date|date:"M d, Y H:i" }}</td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="4" class="text-center text-muted py-3">No transactions yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
 {% endblock %}

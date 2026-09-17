@@ -3,7 +3,17 @@
 {% block title %}{{ report.title }} - Abay{% endblock %}
 {% block content %}
 <div class="container py-4">
-  <a href="{% url 'payments:finance_reports' %}" class="btn btn-sm btn-outline-secondary mb-3">← All reports</a>
+  <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+    <a href="{% url 'payments:finance_reports' %}" class="btn btn-sm btn-outline-secondary">← All reports</a>
+    <div>
+      <a href="{% url 'payments:finance_report_export' report.id 'csv' %}" class="btn btn-sm btn-outline-success">
+        <i class="fas fa-file-csv me-1"></i> CSV
+      </a>
+      <a href="{% url 'payments:finance_report_export' report.id 'pdf' %}" class="btn btn-sm btn-outline-danger">
+        <i class="fas fa-file-pdf me-1"></i> PDF
+      </a>
+    </div>
+  </div>
   <h2 style="color:#DAA520">{{ report.title }}</h2>
   <p class="text-muted">{{ report.get_period_type_display }} · {{ report.period_start }} → {{ report.period_end }} · Generated {{ report.generated_at|date:"M d, Y H:i" }}</p>
 
