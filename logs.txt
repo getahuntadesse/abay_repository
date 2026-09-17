@@ -6526,3 +6526,98 @@ django.template.exceptions.TemplateSyntaxError: Unclosed tag on line 245: 'block
 [2026-09-17 14:36:49] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88308
 [2026-09-17 14:36:59] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88290
 [2026-09-17 14:37:09] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88279
+[2026-09-17 14:37:19] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88268
+[2026-09-17 14:37:29] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88255
+[2026-09-17 14:37:39] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88261
+[2026-09-17 14:37:49] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88267
+[2026-09-17 14:37:59] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88271
+[2026-09-17 14:38:33] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88279
+[2026-09-17 14:38:53] INFO django.server - code 400, message Bad request version ('\x03\x9d(~Ýü4S\x9a¹Xä\x1b/×\x9a!o\x10Y')
+[2026-09-17 14:38:53] ERROR django.server - You're accessing the development server over HTTPS, but it only supports HTTP.
+[2026-09-17 14:38:53] INFO django.server - code 400, message Bad request version ('\x9a\x9a\x13\x01\x13\x02\x13\x03À+À/À,À0Ì©Ì¨À\x13À\x14\x00\x9c\x00\x9d\x00/\x005\x01\x00\x06\x8d')
+[2026-09-17 14:38:53] ERROR django.server - You're accessing the development server over HTTPS, but it only supports HTTP.
+[2026-09-17 14:39:33] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88558
+[2026-09-17 14:40:33] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88570
+[2026-09-17 14:41:33] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88582
+[2026-09-17 14:42:33] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88604
+[2026-09-17 14:43:33] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88620
+[2026-09-17 14:44:33] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88632
+[2026-09-17 14:45:33] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88637
+[2026-09-17 14:46:33] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88619
+[2026-09-17 14:47:33] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88650
+[2026-09-17 14:48:33] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88654
+[2026-09-17 14:49:34] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88666
+[2026-09-17 14:50:33] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88678
+[2026-09-17 14:51:33] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88700
+[2026-09-17 14:52:33] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88716
+[2026-09-17 14:53:33] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88728
+[2026-09-17 14:54:33] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88717
+[2026-09-17 14:55:33] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88706
+[2026-09-17 14:56:33] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88693
+[2026-09-17 14:57:33] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88699
+[2026-09-17 14:58:33] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88705
+[2026-09-17 14:59:33] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88709
+[2026-09-17 15:00:33] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88717
+[2026-09-17 15:01:33] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88729
+[2026-09-17 15:02:28] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88733
+[2026-09-17 15:02:29] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88739
+[2026-09-17 15:02:29] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88729
+[2026-09-17 15:02:33] AUTH INFO - Admin dashboard accessed by: admin
+[2026-09-17 15:02:33] INFO accounts.views - Admin dashboard accessed by: admin
+[2026-09-17 15:02:33] INFO accounts.views - Admin dashboard accessed by: admin
+[2026-09-17 15:02:33] INFO django.server - "GET /accounts/dashboard/admin/ HTTP/1.1" 200 104804
+[2026-09-17 15:02:33] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88704
+[2026-09-17 15:02:35] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 15:02:43] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88705
+[2026-09-17 15:02:53] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88719
+[2026-09-17 15:03:03] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88742
+[2026-09-17 15:03:13] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88756
+[2026-09-17 15:03:23] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88770
+[2026-09-17 15:03:33] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88724
+[2026-09-17 15:04:33] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88678
+[2026-09-17 15:05:33] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88642
+[2026-09-17 15:06:33] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 87732
+[2026-09-17 15:07:33] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 86822
+[2026-09-17 15:08:33] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 85922
+[2026-09-17 15:09:34] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 85936
+[2026-09-17 15:10:34] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 85950
+[2026-09-17 15:11:33] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 85904
+[2026-09-17 15:12:33] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 85858
+[2026-09-17 15:13:33] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 85822
+[2026-09-17 15:14:33] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 84912
+[2026-09-17 15:15:33] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 84002
+[2026-09-17 15:16:33] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 83102
+[2026-09-17 15:17:33] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 83116
+[2026-09-17 15:18:33] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 83098
+[2026-09-17 15:19:33] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 83129
+[2026-09-17 15:20:33] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 83148
+[2026-09-17 15:21:33] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 83153
+[2026-09-17 15:22:33] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 83158
+[2026-09-17 15:23:33] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 83173
+[2026-09-17 15:23:55] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 83189
+[2026-09-17 15:23:55] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 83194
+[2026-09-17 15:24:03] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 83216
+[2026-09-17 15:24:13] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 83238
+[2026-09-17 15:24:17] AUTH INFO - AUTH - User logged out: admin, IP=127.0.0.1
+[2026-09-17 15:24:17] INFO accounts.views - AUTH - User logged out: admin, IP=127.0.0.1
+[2026-09-17 15:24:17] INFO accounts.views - AUTH - User logged out: admin, IP=127.0.0.1
+[2026-09-17 15:24:17] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-09-17 15:24:17] INFO django.server - "GET / HTTP/1.1" 200 90237
+[2026-09-17 15:24:19] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 15:24:37] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64909
+[2026-09-17 15:24:39] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 15:24:44] AUTH INFO - AUTH - Login successful: User=maker, IP=127.0.0.1, Role=maker
+[2026-09-17 15:24:44] INFO accounts.views - AUTH - Login successful: User=maker, IP=127.0.0.1, Role=maker
+[2026-09-17 15:24:44] INFO accounts.views - AUTH - Login successful: User=maker, IP=127.0.0.1, Role=maker
+[2026-09-17 15:24:44] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-09-17 15:24:44] INFO books.views - Maker dashboard: 0 new submissions found
+[2026-09-17 15:24:44] INFO books.views - Maker dashboard: 0 new submissions found
+[2026-09-17 15:24:44] INFO django.server - "GET /books/maker/dashboard/ HTTP/1.1" 200 84859
+[2026-09-17 15:24:46] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 15:24:56] INFO django.server - "GET /books/6/ HTTP/1.1" 200 73374
+[2026-09-17 15:24:56] INFO django.server - "GET /media/books/covers/2026/09/pychology_b5LmZgq.png HTTP/1.1" 200 363640
+[2026-09-17 15:24:58] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 15:24:58] INFO django.server - "GET /books/6/purchase/ HTTP/1.1" 200 84184
+[2026-09-17 15:25:00] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 15:25:14] INFO django.server - "GET / HTTP/1.1" 200 91329
+[2026-09-17 15:25:16] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
