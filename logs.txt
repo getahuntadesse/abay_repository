@@ -6472,3 +6472,57 @@ django.template.exceptions.TemplateSyntaxError: Unclosed tag on line 245: 'block
 [2026-09-17 14:26:33] INFO django.server - "GET / HTTP/1.1" 200 89883
 [2026-09-17 14:26:34] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
 [2026-09-17 14:26:36] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 14:31:55] INFO django.server - code 400, message Bad request version ('\x18\x00Ukmi\x98')
+[2026-09-17 14:31:55] ERROR django.server - You're accessing the development server over HTTPS, but it only supports HTTP.
+[2026-09-17 14:31:55] INFO django.server - code 400, message Bad HTTP/0.9 request type ('\x16\x03\x01\x06ú\x01\x00\x06ö\x03\x03:|')
+[2026-09-17 14:31:55] ERROR django.server - You're accessing the development server over HTTPS, but it only supports HTTP.
+[2026-09-17 14:32:03] INFO django.server - code 400, message Bad request version ('¡ÿ×\x935\x95HtúM{Òz§\x8dIßÞÂë')
+[2026-09-17 14:32:03] ERROR django.server - You're accessing the development server over HTTPS, but it only supports HTTP.
+[2026-09-17 14:32:03] INFO django.server - code 400, message Bad request version ('¥')
+[2026-09-17 14:32:03] ERROR django.server - You're accessing the development server over HTTPS, but it only supports HTTP.
+[2026-09-17 14:32:12] INFO django.server - code 400, message Bad request version ('9V')
+[2026-09-17 14:32:12] ERROR django.server - You're accessing the development server over HTTPS, but it only supports HTTP.
+[2026-09-17 14:32:12] INFO django.server - code 400, message Bad request version ('\x14¨\x14Â\x83ÈU\x96bqÁzGB\x9di\x81w')
+[2026-09-17 14:32:12] ERROR django.server - You're accessing the development server over HTTPS, but it only supports HTTP.
+[2026-09-17 14:32:33] INFO django.server - code 400, message Bad request version ('::\x13\x01\x13\x02\x13\x03À+À/À,À0Ì©Ì¨À\x13À\x14\x00\x9c\x00\x9d\x00/\x005\x01\x00\x06\x8d')
+[2026-09-17 14:32:33] ERROR django.server - You're accessing the development server over HTTPS, but it only supports HTTP.
+[2026-09-17 14:32:33] INFO django.server - code 400, message Bad request version ('\x00\x02\x01\x00\x00+\x00\x07\x06jj\x03\x04\x03\x03\x00\x1b\x00\x03\x02\x00\x02DÍ\x00\x05\x00\x03\x02h2\x00\x17\x00\x00\x00')
+[2026-09-17 14:32:33] ERROR django.server - You're accessing the development server over HTTPS, but it only supports HTTP.
+[2026-09-17 14:32:42] INFO django.server - "GET / HTTP/1.1" 200 89883
+[2026-09-17 14:32:45] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 14:34:03] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64909
+[2026-09-17 14:34:05] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 14:34:09] AUTH INFO - AUTH - Login successful: User=admin, IP=127.0.0.1, Role=admin
+[2026-09-17 14:34:09] INFO accounts.views - AUTH - Login successful: User=admin, IP=127.0.0.1, Role=admin
+[2026-09-17 14:34:09] INFO accounts.views - AUTH - Login successful: User=admin, IP=127.0.0.1, Role=admin
+[2026-09-17 14:34:09] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-09-17 14:34:09] AUTH INFO - Admin dashboard accessed by: admin
+[2026-09-17 14:34:09] INFO accounts.views - Admin dashboard accessed by: admin
+[2026-09-17 14:34:09] INFO accounts.views - Admin dashboard accessed by: admin
+[2026-09-17 14:34:09] INFO django.server - "GET /accounts/dashboard/admin/ HTTP/1.1" 200 107771
+[2026-09-17 14:34:09] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88384
+[2026-09-17 14:34:11] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 14:34:19] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88337
+[2026-09-17 14:34:29] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88349
+[2026-09-17 14:34:39] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88352
+[2026-09-17 14:34:49] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88334
+[2026-09-17 14:34:59] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88338
+[2026-09-17 14:35:09] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88350
+[2026-09-17 14:35:19] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88362
+[2026-09-17 14:35:29] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88384
+[2026-09-17 14:35:40] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88400
+[2026-09-17 14:35:50] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88378
+[2026-09-17 14:36:00] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88356
+[2026-09-17 14:36:10] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88332
+[2026-09-17 14:36:17] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88338
+[2026-09-17 14:36:19] AUTH INFO - Admin dashboard accessed by: admin
+[2026-09-17 14:36:19] INFO accounts.views - Admin dashboard accessed by: admin
+[2026-09-17 14:36:19] INFO accounts.views - Admin dashboard accessed by: admin
+[2026-09-17 14:36:19] INFO django.server - "GET /accounts/dashboard/admin/ HTTP/1.1" 200 104804
+[2026-09-17 14:36:19] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88285
+[2026-09-17 14:36:21] INFO django.server - "GET /sw.js HTTP/1.1" 200 2828
+[2026-09-17 14:36:29] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88292
+[2026-09-17 14:36:39] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88296
+[2026-09-17 14:36:49] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88308
+[2026-09-17 14:36:59] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88290
+[2026-09-17 14:37:09] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 88279
