@@ -732,7 +732,7 @@ def verify_2fa(request):
 
         if resend:
             otp = generate_otp()
-            store_otp(user.id, otp)
+            store_otp(user.id, otp, request=request)
             ok, msg = send_otp_email(user, otp)
             if ok:
                 messages.success(request, msg)
@@ -744,7 +744,7 @@ def verify_2fa(request):
             messages.error(request, "Enter the verification code.")
             return render(request, "accounts/verify_2fa.html", {"email": user.email})
 
-        ok = verify_otp(user.id, token) or consume_backup_code(user, token)
+        ok = verify_otp(user.id, token, request=request) or consume_backup_code(user, token)
         if not ok:
             messages.error(request, "Invalid or expired code. Try again or use a backup code.")
             return render(request, "accounts/verify_2fa.html", {"email": user.email})

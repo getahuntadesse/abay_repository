@@ -297,12 +297,24 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 # 15. CACHING
 # =============================================
 
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': 'unique-snowflake',
+# LocMemCache is NOT shared across Gunicorn workers — breaks 2FA OTP in production.
+# Use DatabaseCache by default; set REDIS_URL for Redis if available.
+_redis_url = config('REDIS_URL', default='')
+if _redis_url:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+            'LOCATION': _redis_url,
+        }
     }
-}
+else:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+            'LOCATION': 'abay_cache_table',
+        }
+    }
+
 
 # =============================================
 # 16. 2FA EMAIL SETTINGS
@@ -310,7 +322,7 @@ CACHES = {
 
 OTP_EMAIL_SUBJECT = "Your Abay Repository Verification Code"
 OTP_EMAIL_SENDER = config('DEFAULT_FROM_EMAIL', default='noreply@abay.abrehot.org.et')
-OTP_EMAIL_TOKEN_VALIDITY = 300
+OTP_EMAIL_TOKEN_VALIDITY = config('OTP_EMAIL_TOKEN_VALIDITY', default=900, cast=int)  # 15 min for production email delay
 OTP_EMAIL_THROTTLE_FACTOR = 1
 
 OTP_EMAIL_BODY_TEMPLATE = """
@@ -735,3 +747,9 @@ ADMIN_ALLOWED_IPS = [ip.strip() for ip in config('ADMIN_ALLOWED_IPS', default=''
 # Login lockout
 LOGIN_MAX_ATTEMPTS = config('LOGIN_MAX_ATTEMPTS', default=5, cast=int)
 LOGIN_LOCKOUT_SECONDS = config('LOGIN_LOCKOUT_SECONDS', default=900, cast=int)
+
+# Shared sessions across workers (required for 2FA OTP in session)
+SESSION_ENGINE = config(
+    'SESSION_ENGINE',
+    default='django.contrib.sessions.backends.db',
+)

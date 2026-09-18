@@ -8183,3 +8183,7 @@ AttributeError: 'WSGIRequest' object has no attribute 'user'
 [2026-09-18 12:14:21] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
 [2026-09-18 12:14:21] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
 [2026-09-18 12:14:21] WARNING django.server - "GET /static/favicon.ico HTTP/1.1" 404 1893
+[2026-09-18 12:20:10] INFO django.utils.autoreload - C:\abay_repository\accounts\two_factor.py changed, reloading.
+[2026-09-18 12:20:10] INFO django.utils.autoreload - C:\abay_repository\accounts\two_factor.py changed, reloading.
+[2026-09-18 12:20:12] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-18 12:20:12] INFO django.utils.autoreload - Watching for file changes with StatReloader
