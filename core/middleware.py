@@ -26,6 +26,13 @@ class SecurityHeadersMiddleware(MiddlewareMixin):
     """
 
     def process_response(self, request, response):
+        try:
+            return self._process_response_safe(request, response)
+        except Exception as e:
+            logger.exception("SecurityHeadersMiddleware error: %s", e)
+            return response
+
+    def _process_response_safe(self, request, response):
         path = request.path or ""
 
         # SAR 6.1: media must never execute scripts (stored XSS via SVG/HTML)
@@ -197,9 +204,9 @@ class SecurityHeadersMiddleware(MiddlewareMixin):
 
     def _add_cross_origin_headers(self, response):
         """Add cross-origin isolation headers."""
-        response['Cross-Origin-Embedder-Policy'] = 'require-corp'
+        # COEP require-corp breaks CDN scripts/admin; use safer defaults
         response['Cross-Origin-Opener-Policy'] = 'same-origin'
-        response['Cross-Origin-Resource-Policy'] = 'same-origin'
+        response['Cross-Origin-Resource-Policy'] = 'same-site'
 
     def _add_cache_control(self, request, response):
         """

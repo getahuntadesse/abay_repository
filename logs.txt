@@ -8187,3 +8187,7 @@ AttributeError: 'WSGIRequest' object has no attribute 'user'
 [2026-09-18 12:20:10] INFO django.utils.autoreload - C:\abay_repository\accounts\two_factor.py changed, reloading.
 [2026-09-18 12:20:12] INFO django.utils.autoreload - Watching for file changes with StatReloader
 [2026-09-18 12:20:12] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-18 12:24:44] INFO django.utils.autoreload - C:\abay_repository\payments\urls.py changed, reloading.
+[2026-09-18 12:24:44] INFO django.utils.autoreload - C:\abay_repository\payments\urls.py changed, reloading.
+[2026-09-18 12:24:46] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-18 12:24:46] INFO django.utils.autoreload - Watching for file changes with StatReloader

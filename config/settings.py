@@ -297,9 +297,16 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 # 15. CACHING
 # =============================================
 
-# LocMemCache is NOT shared across Gunicorn workers — breaks 2FA OTP in production.
-# Use DatabaseCache by default; set REDIS_URL for Redis if available.
+# Cache must be shared across Gunicorn workers (2FA OTP). LocMem breaks multi-worker.
+# Preference: REDIS_URL → FileBasedCache (no DB table required) → DatabaseCache.
+import os as _os
 _redis_url = config('REDIS_URL', default='')
+_cache_dir = _os.path.join(str(BASE_DIR), '.django_cache')
+try:
+    _os.makedirs(_cache_dir, exist_ok=True)
+except Exception:
+    pass
+
 if _redis_url:
     CACHES = {
         'default': {
@@ -308,10 +315,13 @@ if _redis_url:
         }
     }
 else:
+    # File-based cache is shared by all workers on the same server and needs no migration.
     CACHES = {
         'default': {
-            'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
-            'LOCATION': 'abay_cache_table',
+            'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+            'LOCATION': _cache_dir,
+            'TIMEOUT': 900,
+            'OPTIONS': {'MAX_ENTRIES': 5000},
         }
     }
 
