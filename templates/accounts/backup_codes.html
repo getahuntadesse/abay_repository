@@ -1,46 +1,29 @@
-{% extends 'base.html' %}
-{% load static %}
-
-{% block title %}Backup Codes - Abay Repository{% endblock %}
-
+{% extends "base.html" %}
+{% block title %}Backup codes{% endblock %}
 {% block content %}
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow-sm">
-                <div class="card-header bg-warning text-dark">
-                    <h4 class="mb-0"><i class="fas fa-save me-2"></i>Backup Codes</h4>
-                </div>
-                <div class="card-body">
-                    {% if messages %}
-                        {% for message in messages %}
-                            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
-                        {% endfor %}
-                    {% endif %}
-                    <div class="alert alert-warning">
-                        <strong>Save these codes</strong> in a safe place. Each code works once if you cannot receive email.
-                    </div>
-                    <div class="bg-light p-3 rounded font-monospace">
-                        {% for code in codes %}
-                            <div class="py-1">{{ code }}</div>
-                        {% empty %}
-                            <p class="text-muted mb-0">No codes available. Regenerate below.</p>
-                        {% endfor %}
-                    </div>
-                    <form method="POST" class="mt-3">
-                        {% csrf_token %}
-                        <input type="hidden" name="regenerate" value="1">
-                        <button type="submit" class="btn btn-outline-dark">
-                            <i class="fas fa-sync me-1"></i>Regenerate codes
-                        </button>
-                        <a href="{% url 'accounts:profile' %}" class="btn btn-gold">Done</a>
-                    </form>
-                </div>
-            </div>
+<div class="container mt-5 mb-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card border-0 shadow-sm" style="border-radius:12px;">
+        <div class="card-body p-4">
+          <h4 style="color:#B8860B;">2FA backup codes</h4>
+          <p class="text-muted">Store these safely. Each code works once if you cannot receive email.</p>
+          <ul class="list-group mb-3">
+            {% for c in codes %}
+              <li class="list-group-item font-monospace">{{ c }}</li>
+            {% empty %}
+              <li class="list-group-item text-muted">No codes available. Regenerate below.</li>
+            {% endfor %}
+          </ul>
+          <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="regenerate" value="1">
+            <button type="submit" class="btn btn-outline-secondary">Regenerate codes</button>
+          </form>
+          <a href="{% url 'accounts:setup_2fa' %}" class="small d-block mt-3">← Back</a>
         </div>
+      </div>
     </div>
+  </div>
 </div>
-<style>
-.btn-gold { background: linear-gradient(135deg,#DAA520,#B8860B); color:#1A1A1A; border:none; font-weight:600; }
-</style>
 {% endblock %}

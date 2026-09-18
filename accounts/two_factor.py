@@ -59,31 +59,51 @@ def verify_otp(user_id: int, otp: str) -> bool:
 
 
 def send_otp_email(user, otp: str) -> Tuple[bool, str]:
-    """Send 6-digit OTP to user.email. Returns (ok, message)."""
+    """Send 6-digit OTP to user.email via central email service. Returns (ok, message)."""
     if not user.email:
         return False, "No email address on your account. Add one in Profile before enabling 2FA."
 
     subject = getattr(settings, "OTP_EMAIL_SUBJECT", "Your Abay Repository Verification Code")
-    from_email = getattr(
-        settings,
-        "OTP_EMAIL_SENDER",
-        getattr(settings, "DEFAULT_FROM_EMAIL", "noreply@abay.abrehot.org.et"),
-    )
     minutes = max(1, OTP_TTL_SECONDS // 60)
+    name = getattr(user, "full_name", None) or user.username
     body = (
-        f"Hello {user.full_name or user.username},\n\n"
-        f"Your verification code is: {otp}\n\n"
-        f"This code expires in {minutes} minute(s).\n"
-        f"If you did not request this, ignore this email.\n\n"
-        f"— Abay Repository"
+        f"Hello {name}," + chr(10) + chr(10)
+        + f"Your Abay Repository verification code is:" + chr(10) + chr(10)
+        + f"    {otp}" + chr(10) + chr(10)
+        + f"This code expires in {minutes} minute(s)." + chr(10)
+        + "If you did not try to sign in, ignore this email and secure your account." + chr(10) + chr(10)
+        + "— Abay Repository Security"
     )
+    html = f"""<!DOCTYPE html>
+<html><body style="font-family:Arial,sans-serif;line-height:1.5;color:#222;">
+  <div style="max-width:480px;margin:0 auto;padding:24px;border:1px solid #eee;border-radius:12px;">
+    <h2 style="color:#B8860B;margin-top:0;">Abay Repository</h2>
+    <p>Hello {name},</p>
+    <p>Your verification code is:</p>
+    <p style="font-size:28px;letter-spacing:6px;font-weight:bold;text-align:center;
+              background:#f8f5eb;padding:16px;border-radius:8px;">{otp}</p>
+    <p style="font-size:13px;color:#666;">Expires in {minutes} minute(s). Do not share this code.</p>
+    <p style="font-size:13px;color:#666;">If you did not try to sign in, ignore this email.</p>
+    <p>— Abay Repository Security</p>
+  </div>
+</body></html>"""
     try:
-        send_mail(subject, body, from_email, [user.email], fail_silently=False)
-        logger.info("2FA OTP sent to user_id=%s email=%s", user.id, user.email)
-        return True, f"A verification code was sent to {user.email}."
+        try:
+            from books.services.email_service import send_app_email
+            ok = send_app_email(subject, body, user.email, html_message=html, fail_silently=False)
+        except Exception:
+            # Fallback to Django send_mail
+            send_mail(subject, body, getattr(settings, "DEFAULT_FROM_EMAIL", None), [user.email], fail_silently=False)
+            ok = True
+        if ok:
+            logger.info("2FA OTP emailed to user_id=%s email=%s", user.id, user.email)
+            return True, f"A verification code was sent to {user.email}."
+        logger.warning("2FA OTP email returned False for user_id=%s", user.id)
+        return False, "Could not send the verification email. Check email settings or try again."
     except Exception as e:
         logger.exception("Failed to send 2FA OTP: %s", e)
         return False, f"Could not send email: {e}"
+
 
 
 def start_2fa_challenge(request, user, remember: bool = False) -> Tuple[bool, str]:

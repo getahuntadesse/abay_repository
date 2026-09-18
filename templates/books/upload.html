@@ -107,14 +107,6 @@
         margin-bottom: 0.5rem;
         color: #DAA520;
     }
-    /* Highlight required file uploads that haven't been filled */
-    .file-upload-label.required-empty {
-        border-color: #dc3545;
-        background: #fff5f5;
-    }
-    .file-upload-label.required-empty i {
-        color: #dc3545;
-    }
     .form-text {
         font-size: 0.8rem;
         color: #6c757d;
@@ -157,15 +149,6 @@
         margin-bottom: 1rem;
         color: #856404;
     }
-    .error-message {
-        color: #dc3545;
-        font-size: 0.85rem;
-        margin-top: 0.25rem;
-        display: none;
-    }
-    .error-message.show {
-        display: block;
-    }
     @media (max-width: 768px) {
         .card-body {
             padding: 1rem;
@@ -186,37 +169,28 @@
                 <p class="text-white-50 mb-0 small">Fill in the details below to submit your book for review</p>
             </div>
             <div class="card-body">
-                {% if messages %}
-                    {% for message in messages %}
-                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                            {{ message }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                        </div>
-                    {% endfor %}
-                {% endif %}
-
-                <form method="POST" enctype="multipart/form-data" id="uploadForm" novalidate>
+                <form method="POST" enctype="multipart/form-data" id="uploadForm">
                     {% csrf_token %}
-
+                    
                     <!-- Book Information -->
                     <h6 class="text-muted mb-3"><i class="fas fa-info-circle me-2" style="color: #DAA520;"></i>Book Information</h6>
-
+                    
                     <div class="mb-3">
                         <label class="form-label required-field">Title</label>
                         <input type="text" name="title" class="form-control" required placeholder="Enter book title">
                     </div>
-
+                    
                     <div class="mb-3">
                         <label class="form-label">Subtitle</label>
                         <input type="text" name="subtitle" class="form-control" placeholder="Enter subtitle (optional)">
                     </div>
-
+                    
                     <div class="mb-3">
                         <label class="form-label required-field">Description</label>
                         <textarea name="description" class="form-control" rows="5" required placeholder="Provide a detailed description of your book"></textarea>
                         <div class="form-text">Minimum 50 characters recommended</div>
                     </div>
-
+                    
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label required-field">Genre</label>
@@ -246,10 +220,10 @@
                             </select>
                         </div>
                     </div>
-
+                    
                     <!-- Publication Details -->
                     <h6 class="text-muted mt-4 mb-3"><i class="fas fa-book me-2" style="color: #DAA520;"></i>Publication Details</h6>
-
+                    
                     <div class="row">
                         <div class="col-md-4 mb-3">
                             <label class="form-label">Edition</label>
@@ -264,26 +238,26 @@
                             <input type="number" name="publication_year" class="form-control" value="{% now 'Y' %}" min="1900" max="{% now 'Y' %}">
                         </div>
                     </div>
-
+                    
                     <div class="mb-3">
                         <label class="form-label">ISBN</label>
                         <input type="text" name="isbn" class="form-control" placeholder="978-3-16-148410-0">
                         <div class="form-text">International Standard Book Number (optional)</div>
                     </div>
-
+                    
                     <div class="mb-3">
                         <label class="form-label">Keywords</label>
                         <input type="text" name="keywords" class="form-control" placeholder="fiction, novel, bestseller, adventure">
                         <div class="form-text">Comma separated keywords for better discoverability</div>
                     </div>
-
+                    
                     <!-- Pricing -->
                     <h6 class="text-muted mt-4 mb-3"><i class="fas fa-tag me-2" style="color: #DAA520;"></i>Pricing</h6>
-
+                    
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Price (ETB)</label>
-                            <input type="number" name="price" class="form-control" step="0.01" min="0" value="0" id="priceInput">
+                            <input type="number" name="price" class="form-control" step="0.01" min="0.01" value="0" id="priceInput">
                         </div>
                         <div class="col-md-6 mb-3">
                             <div class="form-check mt-4">
@@ -292,10 +266,10 @@
                             </div>
                         </div>
                     </div>
-
+                    
                     <!-- Files -->
                     <h6 class="text-muted mt-4 mb-3"><i class="fas fa-file me-2" style="color: #DAA520;"></i>Files</h6>
-
+                    
                     <div class="mb-3">
                         <label class="form-label required-field">Book File (PDF/EPUB)</label>
                         <div class="file-upload-wrapper">
@@ -306,22 +280,20 @@
                             </div>
                             <input type="file" name="file" class="form-control" accept="application/pdf,.pdf,application/epub+zip,.epub" required onchange="updateFileLabel(this, 'fileLabel')">
                         </div>
-                        <div class="error-message" id="fileError">Book file is required.</div>
                     </div>
-
+                    
                     <div class="mb-3">
-                        <label class="form-label required-field">Cover Image</label>
+                        <label class="form-label">Cover Image</label>
                         <div class="file-upload-wrapper">
-                            <div class="file-upload-label required-empty" id="coverLabel">
+                            <div class="file-upload-label" id="coverLabel">
                                 <i class="fas fa-image"></i>
                                 <span>Click to upload cover image</span>
-                                <div class="small text-muted">Recommended: 600x900px, JPG or PNG (Max 5MB)</div>
+                                <div class="small text-muted">Recommended: 600x900px, JPG or PNG</div>
                             </div>
-                            <input type="file" name="cover_image" class="form-control" accept="image/jpeg,image/jpg,image/png,.jpg,.jpeg,.png" required onchange="updateFileLabel(this, 'coverLabel')">
+                            <input type="file" name="cover_image" class="form-control" accept="image/jpeg,image/png,.jpg,.jpeg,.png" onchange="updateFileLabel(this, 'coverLabel')">
                         </div>
-                        <div class="error-message" id="coverError">Cover image is required.</div>
                     </div>
-
+                    
                     <div class="mb-3">
                         <label class="form-label">Sample File (Optional)</label>
                         <div class="file-upload-wrapper">
@@ -330,27 +302,27 @@
                                 <span>Click to upload sample (optional)</span>
                                 <div class="small text-muted">First few pages of your book (PDF)</div>
                             </div>
-                            <input type="file" name="sample_file" class="form-control" accept=".pdf,application/pdf" onchange="updateFileLabel(this, 'sampleLabel')">
+                            <input type="file" name="sample_file" class="form-control" accept=".pdf" onchange="updateFileLabel(this, 'sampleLabel')">
                         </div>
                     </div>
-
+                    
                     <div class="divider"></div>
-
+                    
                     <!-- Submit Action Buttons -->
                     <div class="mb-4">
                         <label class="form-label fw-bold">Choose Action</label>
                         <div class="submit-info" id="submitInfo">
                             <i class="fas fa-paper-plane me-2"></i>
-                            <strong>Submit for Review:</strong> Your book will be sent to the review team immediately.
+                            <strong>Submit for Review:</strong> Your book will be sent to the review team immediately. 
                             You will receive notifications about the review progress.
                         </div>
                         <div class="draft-info" id="draftInfo" style="display: none;">
                             <i class="fas fa-save me-2"></i>
-                            <strong>Save as Draft:</strong> Your book will be saved as a draft.
+                            <strong>Save as Draft:</strong> Your book will be saved as a draft. 
                             You can edit it later and submit when ready.
                         </div>
                     </div>
-
+                    
                     <div class="action-buttons">
                         <button type="submit" name="submit_action" value="draft" class="btn btn-outline-gold" id="draftBtn">
                             <i class="fas fa-save me-2"></i> Save as Draft
@@ -359,7 +331,7 @@
                             <i class="fas fa-paper-plane me-2"></i> Submit for Review
                         </button>
                     </div>
-
+                    
                     <div class="text-center mt-3">
                         <small class="text-muted">
                             <i class="fas fa-info-circle me-1"></i>
@@ -372,275 +344,247 @@
         </div>
     </div>
 </div>
-{% endblock %}
 
-{% block extra_js %}
 <script>
-(function() {
-    'use strict';
-
-    // ============================================
     // Toggle price field based on free checkbox
-    // ============================================
     function togglePrice() {
-        const isFreeCheckbox = document.getElementById('is_free');
+        const isFree = document.getElementById('is_free').checked;
         const priceInput = document.getElementById('priceInput');
-        if (!isFreeCheckbox || !priceInput) return;
-
-        if (isFreeCheckbox.checked) {
+        if (isFree) {
             priceInput.value = 0;
             priceInput.disabled = true;
-            priceInput.removeAttribute('required');
         } else {
             priceInput.disabled = false;
-            if (parseFloat(priceInput.value) <= 0) priceInput.value = 0;
+            priceInput.value = 0;
         }
     }
-    window.togglePrice = togglePrice;
 
-    // ============================================
-    // Update file upload label when file selected
-    // ============================================
+    // Update file upload label
     function updateFileLabel(input, labelId) {
         const label = document.getElementById(labelId);
-        if (!label) return;
-
         if (input.files && input.files[0]) {
             const fileName = input.files[0].name;
             const fileSize = (input.files[0].size / 1024 / 1024).toFixed(2);
-            label.innerHTML =
-                '<i class="fas fa-check-circle" style="color: #28a745;"></i>' +
-                '<span>' + fileName + '</span>' +
-                '<div class="small text-muted">' + fileSize + ' MB - Click to change</div>';
+            label.innerHTML = `
+                <i class="fas fa-check-circle" style="color: #28a745;"></i>
+                <span>${fileName}</span>
+                <div class="small text-muted">${fileSize} MB - Click to change</div>
+            `;
             label.style.borderColor = '#28a745';
             label.style.background = '#d4edda';
-            label.classList.remove('required-empty');
-
-            // Clear inline error if present
-            const errorEl = document.getElementById(labelId.replace('Label', 'Error'));
-            if (errorEl) errorEl.classList.remove('show');
         } else {
-            // Reset to default state
+            // Reset to default state based on which label it is
             if (labelId === 'fileLabel') {
-                label.innerHTML =
-                    '<i class="fas fa-file-pdf"></i>' +
-                    '<span>Click to upload or drag and drop</span>' +
-                    '<div class="small text-muted">Supported formats: PDF, EPUB (Max 50MB)</div>';
+                label.innerHTML = `
+                    <i class="fas fa-file-pdf"></i>
+                    <span>Click to upload or drag and drop</span>
+                    <div class="small text-muted">Supported formats: PDF, EPUB (Max 50MB)</div>
+                `;
             } else if (labelId === 'coverLabel') {
-                label.innerHTML =
-                    '<i class="fas fa-image"></i>' +
-                    '<span>Click to upload cover image</span>' +
-                    '<div class="small text-muted">Recommended: 600x900px, JPG or PNG (Max 5MB)</div>';
-                label.classList.add('required-empty');
+                label.innerHTML = `
+                    <i class="fas fa-image"></i>
+                    <span>Click to upload cover image</span>
+                    <div class="small text-muted">Recommended: 600x900px, JPG or PNG</div>
+                `;
             } else if (labelId === 'sampleLabel') {
-                label.innerHTML =
-                    '<i class="fas fa-file-alt"></i>' +
-                    '<span>Click to upload sample (optional)</span>' +
-                    '<div class="small text-muted">First few pages of your book (PDF)</div>';
+                label.innerHTML = `
+                    <i class="fas fa-file-alt"></i>
+                    <span>Click to upload sample (optional)</span>
+                    <div class="small text-muted">First few pages of your book (PDF)</div>
+                `;
             }
             label.style.borderColor = '#dee2e6';
             label.style.background = '#f8f9fa';
         }
     }
-    window.updateFileLabel = updateFileLabel;
 
-    // ============================================
     // Show/hide info based on button hover
-    // ============================================
-    const submitBtn = document.getElementById('submitBtn');
-    const draftBtn = document.getElementById('draftBtn');
-    const submitInfo = document.getElementById('submitInfo');
-    const draftInfo = document.getElementById('draftInfo');
+    document.getElementById('submitBtn').addEventListener('mouseenter', function() {
+        document.getElementById('submitInfo').style.display = 'block';
+        document.getElementById('draftInfo').style.display = 'none';
+    });
 
-    if (submitBtn && draftBtn && submitInfo && draftInfo) {
-        submitBtn.addEventListener('mouseenter', function() {
-            submitInfo.style.display = 'block';
-            draftInfo.style.display = 'none';
-        });
-        draftBtn.addEventListener('mouseenter', function() {
-            submitInfo.style.display = 'none';
-            draftInfo.style.display = 'block';
-        });
-        submitBtn.addEventListener('mouseleave', function() {
-            submitInfo.style.display = 'block';
-            draftInfo.style.display = 'none';
-        });
-        draftBtn.addEventListener('mouseleave', function() {
-            submitInfo.style.display = 'block';
-            draftInfo.style.display = 'none';
-        });
-    }
+    document.getElementById('draftBtn').addEventListener('mouseenter', function() {
+        document.getElementById('submitInfo').style.display = 'none';
+        document.getElementById('draftInfo').style.display = 'block';
+    });
 
-    // ============================================
+    document.getElementById('submitBtn').addEventListener('mouseleave', function() {
+        document.getElementById('submitInfo').style.display = 'block';
+        document.getElementById('draftInfo').style.display = 'none';
+    });
+
+    document.getElementById('draftBtn').addEventListener('mouseleave', function() {
+        document.getElementById('submitInfo').style.display = 'block';
+        document.getElementById('draftInfo').style.display = 'none';
+    });
+
     // Form validation
-    // ============================================
-    const uploadForm = document.getElementById('uploadForm');
-    if (uploadForm) {
-        uploadForm.addEventListener('submit', function(e) {
-            const titleEl = document.querySelector('input[name="title"]');
-            const descEl = document.querySelector('textarea[name="description"]');
-            const genreEl = document.querySelector('select[name="genre"]');
-            const langEl = document.querySelector('select[name="language"]');
-            const fileEl = document.querySelector('input[name="file"]');
-            const coverEl = document.querySelector('input[name="cover_image"]');
+    document.getElementById('uploadForm').addEventListener('submit', function(e) {
+        const title = document.querySelector('input[name="title"]').value.trim();
+        const description = document.querySelector('textarea[name="description"]').value.trim();
+        const genre = document.querySelector('select[name="genre"]').value;
+        const language = document.querySelector('select[name="language"]').value;
+        const file = document.querySelector('input[name="file"]');
 
-            const title = titleEl ? titleEl.value.trim() : '';
-            const description = descEl ? descEl.value.trim() : '';
-            const genre = genreEl ? genreEl.value : '';
-            const language = langEl ? langEl.value : '';
+        if (!title) {
+            e.preventDefault();
+            alert('Please enter a book title.');
+            document.querySelector('input[name="title"]').focus();
+            return;
+        }
 
-            if (!title) {
+        if (description.length < 50) {
+            e.preventDefault();
+            alert('Please provide a description of at least 50 characters.');
+            document.querySelector('textarea[name="description"]').focus();
+            return;
+        }
+
+        if (!genre) {
+            e.preventDefault();
+            alert('Please select a genre.');
+            document.querySelector('select[name="genre"]').focus();
+            return;
+        }
+
+        if (!language) {
+            e.preventDefault();
+            alert('Please select a language.');
+            document.querySelector('select[name="language"]').focus();
+            return;
+        }
+
+        // Validate file is uploaded
+        if (!file.files || file.files.length === 0) {
+            e.preventDefault();
+            alert('Please upload your book file.');
+            file.focus();
+            return;
+        }
+
+        // Validate file size if file is uploaded
+        if (file.files && file.files[0]) {
+            const fileSize = file.files[0].size / 1024 / 1024;
+            if (fileSize > 50) {
                 e.preventDefault();
-                alert('Please enter a book title.');
-                if (titleEl) titleEl.focus();
-                return false;
+                alert('File size exceeds 50MB limit. Please compress your file.');
+                file.value = '';
+                updateFileLabel(file, 'fileLabel');
+                return;
             }
+        }
 
-            if (description.length < 50) {
+        // Confirm submission if submitting
+        const submitAction = document.activeElement.value;
+        if (submitAction === 'submit') {
+            if (!confirm('Are you sure you want to submit this book for review? Once submitted, you will need to wait for the review process to complete.')) {
                 e.preventDefault();
-                alert('Please provide a description of at least 50 characters.');
-                if (descEl) descEl.focus();
-                return false;
+                return;
             }
+        }
+    });
 
-            if (!genre) {
-                e.preventDefault();
-                alert('Please select a genre.');
-                if (genreEl) genreEl.focus();
-                return false;
-            }
-
-            if (!language) {
-                e.preventDefault();
-                alert('Please select a language.');
-                if (langEl) langEl.focus();
-                return false;
-            }
-
-            // Validate book file
-            if (!fileEl || !fileEl.files || fileEl.files.length === 0) {
-                e.preventDefault();
-                alert('Please upload your book file.');
-                const fileErr = document.getElementById('fileError');
-                if (fileErr) fileErr.classList.add('show');
-                if (fileEl) fileEl.focus();
-                return false;
-            }
-
-            if (fileEl.files && fileEl.files[0]) {
-                const fileSize = fileEl.files[0].size / 1024 / 1024;
-                if (fileSize > 50) {
-                    e.preventDefault();
-                    alert('Book file size exceeds 50MB limit. Please compress your file.');
-                    fileEl.value = '';
-                    updateFileLabel(fileEl, 'fileLabel');
-                    return false;
-                }
-            }
-
-            // ============================================
-            // Validate cover image is uploaded (REQUIRED)
-            // ============================================
-            if (!coverEl || !coverEl.files || coverEl.files.length === 0) {
-                e.preventDefault();
-                alert('Please upload a cover image. This field is required.');
-                const coverErr = document.getElementById('coverError');
-                if (coverErr) coverErr.classList.add('show');
-                const coverLabel = document.getElementById('coverLabel');
-                if (coverLabel) coverLabel.classList.add('required-empty');
-                if (coverEl) coverEl.focus();
-                return false;
-            }
-
-            if (coverEl.files && coverEl.files[0]) {
-                const coverType = coverEl.files[0].type;
-                const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
-                if (!allowedTypes.includes(coverType)) {
-                    e.preventDefault();
-                    alert('Cover image must be JPG or PNG format.');
-                    coverEl.value = '';
-                    updateFileLabel(coverEl, 'coverLabel');
-                    return false;
-                }
-
-                const coverSize = coverEl.files[0].size / 1024 / 1024;
-                if (coverSize > 5) {
-                    e.preventDefault();
-                    alert('Cover image size exceeds 5MB limit. Please use a smaller image.');
-                    coverEl.value = '';
-                    updateFileLabel(coverEl, 'coverLabel');
-                    return false;
-                }
-            }
-
-            // Confirm submission if submitting for review
-            const submitAction = document.activeElement ? document.activeElement.value : '';
-            if (submitAction === 'submit') {
-                if (!confirm('Are you sure you want to submit this book for review? Once submitted, you will need to wait for the review process to complete.')) {
-                    e.preventDefault();
-                    return false;
-                }
-            }
-
-            return true;
-        });
-    }
-
-    // ============================================
     // Drag and drop support
-    // ============================================
-    document.querySelectorAll('.file-upload-wrapper').forEach(function(wrapper) {
+    document.querySelectorAll('.file-upload-wrapper').forEach(wrapper => {
         const input = wrapper.querySelector('input[type="file"]');
         const label = wrapper.querySelector('.file-upload-label');
-        if (!input || !label) return;
-
+        
         wrapper.addEventListener('dragover', function(e) {
             e.preventDefault();
             label.style.borderColor = '#DAA520';
             label.style.background = '#fff8f0';
         });
-
+        
         wrapper.addEventListener('dragleave', function(e) {
             e.preventDefault();
-            label.style.borderColor = label.classList.contains('required-empty') ? '#dc3545' : '#dee2e6';
-            label.style.background = label.classList.contains('required-empty') ? '#fff5f5' : '#f8f9fa';
+            label.style.borderColor = '#dee2e6';
+            label.style.background = '#f8f9fa';
         });
-
+        
         wrapper.addEventListener('drop', function(e) {
             e.preventDefault();
             label.style.borderColor = '#dee2e6';
             label.style.background = '#f8f9fa';
-
             if (e.dataTransfer.files.length > 0) {
-                // Assign files to the input
-                try {
-                    input.files = e.dataTransfer.files;
-                } catch (err) {
-                    // Fallback: create a DataTransfer
-                    const dt = new DataTransfer();
-                    for (let i = 0; i < e.dataTransfer.files.length; i++) {
-                        dt.items.add(e.dataTransfer.files[i]);
-                    }
-                    input.files = dt.files;
-                }
+                input.files = e.dataTransfer.files;
                 updateFileLabel(input, label.id);
             }
         });
     });
 
-    // ============================================
-    // Initialize
-    // ============================================
+    // Initialize price field
     togglePrice();
 
-    // Mark cover label as required-empty on load (if no file)
-    const coverLabel = document.getElementById('coverLabel');
-    const coverInput = document.querySelector('input[name="cover_image"]');
-    if (coverLabel && coverInput && (!coverInput.files || coverInput.files.length === 0)) {
-        coverLabel.classList.add('required-empty');
-    }
-
     console.log('Upload form loaded successfully!');
-})();
 </script>
 {% endblock %}
+<script>
+(function() {
+  function validateUploadForm(e) {
+    var errors = [];
+    var title = (document.querySelector('[name=title]') || {}).value || '';
+    var desc = (document.querySelector('[name=description]') || {}).value || '';
+    var genre = (document.querySelector('[name=genre]') || {}).value || '';
+    var lang = (document.querySelector('[name=language]') || {}).value || '';
+    var isFree = (document.getElementById('isFreeCheckbox') || {}).checked;
+    var priceEl = document.getElementById('bookPrice') || document.querySelector('[name=price]');
+    var price = priceEl ? parseFloat(priceEl.value) : NaN;
+    var fileInput = document.getElementById('ebookFile') || document.querySelector('[name=book_file], [name=file]');
+    var file = fileInput && fileInput.files && fileInput.files[0];
+
+    if (title.trim().length < 2) errors.push('Title is required.');
+    if (desc.trim().length < 20) errors.push('Description must be at least 20 characters.');
+    if (!genre) errors.push('Select a genre.');
+    if (!lang) errors.push('Select a language.');
+    if (!isFree) {
+      if (!(price > 0)) errors.push('Price cannot be zero. Enter a positive price, or mark the book as free.');
+    }
+    if (!file) {
+      errors.push('Please upload a PDF file.');
+    } else {
+      var n = (file.name || '').toLowerCase();
+      if (!n.endsWith('.pdf')) errors.push('Only PDF or EPUB files are allowed.');
+      if (file.size > 50 * 1024 * 1024) errors.push('PDF must be 50 MB or smaller.');
+    }
+    if (errors.length) {
+      e.preventDefault();
+      alert(errors.join('\\n'));
+      return false;
+    }
+    // free => force price 0
+    if (isFree && priceEl) priceEl.value = '0';
+    return true;
+  }
+  var form = document.getElementById('uploadForm') || document.querySelector('form[enctype="multipart/form-data"]');
+  if (form) form.addEventListener('submit', validateUploadForm);
+
+  var fileInput = document.getElementById('ebookFile') || document.querySelector('[name=book_file], [name=file]');
+  if (fileInput) {
+    fileInput.setAttribute('accept', 'application/pdf,.pdf,application/epub+zip,.epub');
+    fileInput.addEventListener('change', function() {
+      var f = this.files && this.files[0];
+      if (!f) return;
+      if (!(f.name || '').toLowerCase().endsWith('.pdf')) {
+        alert('Only PDF or EPUB files are allowed.');
+        this.value = '';
+      }
+    });
+  }
+  var freeCb = document.getElementById('isFreeCheckbox');
+  var priceEl = document.getElementById('bookPrice') || document.querySelector('[name=price]');
+  if (freeCb && priceEl) {
+    freeCb.addEventListener('change', function() {
+      if (this.checked) {
+        priceEl.value = '0';
+        priceEl.removeAttribute('required');
+        priceEl.min = '0';
+      } else {
+        priceEl.setAttribute('required', 'required');
+        priceEl.min = '0.01';
+        if (parseFloat(priceEl.value) <= 0) priceEl.value = '';
+      }
+    });
+  }
+})();
+</script>

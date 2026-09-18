@@ -201,20 +201,32 @@ def notify_author_royalty_paid(author, total_amount, transaction_reference, paym
         )
     except Exception as e:
         logger.warning("In-app notification failed: %s", e)
+
     try:
-        from django.core.mail import send_mail
-        from django.conf import settings
-        email = getattr(author, "email", None)
-        if email:
-            send_mail(
-                subject=f"[Abay] {title}",
-                message=message + "\n\nYou can review your payments in the author payments section.",
-                from_email=getattr(settings, "DEFAULT_FROM_EMAIL", None) or getattr(settings, "EMAIL_HOST_USER", None) or "noreply@abay.local",
-                recipient_list=[email],
-                fail_silently=True,
+        from books.services.email_service import email_user
+        body = (
+            message
+            + "\n\nYou can review your payments in the author payments section."
+        )
+        # ensure real newlines
+        body = message + "\n\nYou can review your payments in the author payments section."
+        body = message + chr(10) + chr(10) + "You can review your payments in the author payments section."
+        ok = email_user(
+            author,
+            f"[Abay] {title}",
+            body,
+            fail_silently=True,
+        )
+        if ok:
+            logger.info("Royalty email sent to %s", getattr(author, "email", None))
+        else:
+            logger.warning(
+                "Royalty email not sent (missing email or SMTP misconfigured) for user=%s",
+                getattr(author, "username", author),
             )
     except Exception as e:
         logger.warning("Royalty email failed: %s", e)
+
 
 
 def report_to_csv_bytes(report) -> bytes:

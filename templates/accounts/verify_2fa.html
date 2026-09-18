@@ -1,60 +1,40 @@
-{% extends 'base.html' %}
-{% load static %}
-
-{% block title %}Verify 2FA - Abay Repository{% endblock %}
-
+{% extends "base.html" %}
+{% block title %}Verify login — Abay Repository{% endblock %}
 {% block content %}
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-5">
-            <div class="card shadow-sm">
-                <div class="card-header bg-white border-0 text-center py-3">
-                    <h4 class="mb-0"><i class="fas fa-lock me-2" style="color:#DAA520;"></i>Two-Factor Authentication</h4>
-                </div>
-                <div class="card-body text-center">
-                    {% if messages %}
-                        {% for message in messages %}
-                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show text-start">
-                                {{ message }}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                            </div>
-                        {% endfor %}
-                    {% endif %}
-
-                    <p class="mb-2">A verification code was sent to</p>
-                    <p class="fw-bold">{{ email }}</p>
-                    <p class="text-muted small">Code expires in a few minutes. You can also use a backup code.</p>
-
-                    <form method="POST" class="text-start">
-                        {% csrf_token %}
-                        <div class="mb-3">
-                            <label for="token" class="form-label">Verification or backup code</label>
-                            <input type="text" class="form-control form-control-lg text-center"
-                                   id="token" name="token" placeholder="6-digit or backup code"
-                                   autocomplete="one-time-code" required autofocus>
-                        </div>
-                        <button type="submit" class="btn btn-gold w-100">
-                            <i class="fas fa-check-circle me-2"></i>Verify
-                        </button>
-                    </form>
-
-                    <form method="POST" class="mt-3">
-                        {% csrf_token %}
-                        <input type="hidden" name="resend" value="1">
-                        <button type="submit" class="btn btn-link text-gold">
-                            <i class="fas fa-redo me-1"></i>Resend code
-                        </button>
-                    </form>
-
-                    <hr>
-                    <a href="{% url 'accounts:login' %}" class="text-muted small">Back to login</a>
-                </div>
+<div class="container mt-5 mb-5">
+  <div class="row justify-content-center">
+    <div class="col-md-5">
+      <div class="card border-0 shadow-sm" style="border-radius:12px;">
+        <div class="card-body p-4">
+          <h4 class="mb-2" style="color:#B8860B;"><i class="fas fa-shield-alt me-2"></i>Two-factor verification</h4>
+          <p class="text-muted">We sent a 6-digit code to <strong>{{ email }}</strong>. Enter it below to finish signing in.</p>
+          {% if messages %}
+            {% for message in messages %}
+              <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+          <form method="post" action="{% url 'accounts:verify_2fa' %}">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label class="form-label">Verification code</label>
+              <input type="text" name="token" class="form-control form-control-lg text-center"
+                     maxlength="20" autocomplete="one-time-code" inputmode="numeric"
+                     placeholder="000000" required autofocus
+                     style="letter-spacing:0.3em;font-weight:600;">
+              <div class="form-text">You can also enter a backup code.</div>
             </div>
+            <button type="submit" class="btn w-100 mb-2" style="background:#DAA520;font-weight:600;">Verify and continue</button>
+          </form>
+          <form method="post" action="{% url 'accounts:verify_2fa' %}" class="mt-2">
+            {% csrf_token %}
+            <input type="hidden" name="resend" value="1">
+            <button type="submit" class="btn btn-link btn-sm p-0" style="color:#B8860B;">Resend code to email</button>
+          </form>
+          <hr>
+          <a href="{% url 'accounts:login' %}" class="small text-muted">← Back to login</a>
         </div>
+      </div>
     </div>
+  </div>
 </div>
-<style>
-.btn-gold { background: linear-gradient(135deg,#DAA520,#B8860B); color:#1A1A1A; border:none; font-weight:600; padding:10px 24px; border-radius:8px; width:100%; }
-.text-gold { color:#DAA520; text-decoration:none; }
-</style>
 {% endblock %}

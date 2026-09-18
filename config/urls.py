@@ -14,7 +14,13 @@ urlpatterns = [
     # ============================================
     path('admin/logs/', admin_logs, name='admin_logs'),  # must be before admin.site
     path('sw.js', reader_service_worker, name='reader_sw_root'),
-    path('admin/', admin.site.urls),
+    # SAR 6.3: non-obvious admin path (set ADMIN_URL_PATH in .env, default obfuscated)
+    path(
+        getattr(settings, 'ADMIN_URL_PATH', 'secure-abay-admin') + '/',
+        admin.site.urls,
+    ),
+    # Legacy /admin/ redirects away (do not expose admin there)
+    path('admin/', RedirectView.as_view(url='/', permanent=False)),
     
     # ============================================
     # HOME
@@ -39,6 +45,11 @@ urlpatterns = [
 # ============================================
 # SERVE MEDIA & STATIC FILES IN DEVELOPMENT
 # ============================================
+from config.views import secure_media_serve
+from django.urls import re_path
+# Always use secure media handler (never execute SVG/HTML from /media/)
+urlpatterns += [
+    re_path(r'^media/(?P<path>.*)$', secure_media_serve, name='secure_media'),
+]
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -1,67 +1,44 @@
-{% extends 'base.html' %}
-{% load static %}
-
-{% block title %}Setup 2FA - Abay Repository{% endblock %}
-
+{% extends "base.html" %}
+{% block title %}Enable two-factor authentication{% endblock %}
 {% block content %}
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow-sm">
-                <div class="card-header bg-white border-0 py-3">
-                    <h4 class="mb-0">
-                        <i class="fas fa-shield-alt me-2" style="color:#DAA520;"></i>
-                        Two-Factor Authentication
-                    </h4>
-                </div>
-                <div class="card-body">
-                    {% if messages %}
-                        {% for message in messages %}
-                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
-                                {{ message }}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                            </div>
-                        {% endfor %}
-                    {% endif %}
+<div class="container mt-5 mb-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card border-0 shadow-sm" style="border-radius:12px;">
+        <div class="card-body p-4">
+          <h4 style="color:#B8860B;"><i class="fas fa-shield-alt me-2"></i>Email two-factor authentication</h4>
+          <p class="text-muted">
+            When 2FA is on, each login requires your password <strong>and</strong> a one-time code
+            sent to your email. This protects your account if the password is stolen.
+          </p>
+          {% if messages %}{% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+          {% endfor %}{% endif %}
 
-                    {% if already_enabled %}
-                        <div class="alert alert-success">
-                            <i class="fas fa-check-circle me-1"></i>
-                            2FA is already enabled for <strong>{{ email }}</strong>.
-                        </div>
-                        <a href="{% url 'accounts:backup_codes' %}" class="btn btn-outline-dark me-2">
-                            <i class="fas fa-list me-1"></i> View backup codes
-                        </a>
-                        <a href="{% url 'accounts:disable_2fa' %}" class="btn btn-outline-danger">
-                            Disable 2FA
-                        </a>
-                    {% else %}
-                        <p>
-                            Protect your account with a one-time code sent to your email
-                            <strong>{{ email }}</strong> every time you log in.
-                        </p>
-                        <ul class="text-muted small">
-                            <li>You will receive a 6-digit code by email after entering your password.</li>
-                            <li>Backup codes are provided in case you lose email access.</li>
-                        </ul>
-                        <form method="POST">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-gold w-100">
-                                <i class="fas fa-lock me-2"></i>Enable Two-Factor Authentication
-                            </button>
-                        </form>
-                    {% endif %}
-                    <hr>
-                    <a href="{% url 'accounts:profile' %}" class="text-gold">
-                        <i class="fas fa-arrow-left me-1"></i>Back to Profile
-                    </a>
-                </div>
-            </div>
+          {% if already_enabled %}
+            <div class="alert alert-success">Two-factor authentication is <strong>enabled</strong> for your account.</div>
+            <p>Codes are sent to: <strong>{{ request.user.email }}</strong></p>
+            <a class="btn me-2" style="background:#DAA520;font-weight:600;" href="{% url 'accounts:backup_codes' %}">View backup codes</a>
+            <a class="btn btn-outline-secondary" href="{% url 'accounts:disable_2fa' %}">Disable 2FA</a>
+          {% else %}
+            {% if not request.user.email %}
+              <div class="alert alert-warning">Add an email address in your profile before enabling 2FA.</div>
+              <a href="{% url 'accounts:profile_edit' %}" class="btn" style="background:#DAA520;">Edit profile</a>
+            {% else %}
+              <p>Verification codes will be emailed to: <strong>{{ request.user.email }}</strong></p>
+              <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn w-100" style="background:#DAA520;font-weight:600;">
+                  Enable email 2FA
+                </button>
+              </form>
+            {% endif %}
+          {% endif %}
+          <hr>
+          <a href="{% url 'accounts:profile' %}" class="small">← Back to profile</a>
         </div>
+      </div>
     </div>
+  </div>
 </div>
-<style>
-.btn-gold { background: linear-gradient(135deg,#DAA520,#B8860B); color:#1A1A1A; border:none; font-weight:600; padding:10px 24px; border-radius:8px; }
-.text-gold { color:#DAA520; text-decoration:none; }
-</style>
 {% endblock %}

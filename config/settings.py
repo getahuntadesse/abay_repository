@@ -63,6 +63,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'core.middleware.SecurityHeadersMiddleware',
+    'config.admin_security.AdminPathSecurityMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -161,6 +162,9 @@ except ImportError:
 # =============================================
 
 LOGIN_URL = '/accounts/login/'
+# Obfuscated Django admin path (SAR 6.3) — change in production .env
+ADMIN_URL_PATH = config('ADMIN_URL_PATH', default='secure-abay-admin')
+
 LOGIN_REDIRECT_URL = '/dashboard/'
 LOGOUT_REDIRECT_URL = '/'
 
@@ -223,6 +227,8 @@ CORS_PREFLIGHT_MAX_AGE = 86400
 # =============================================
 
 FILE_UPLOAD_MAX_MEMORY_SIZE = 5242880  # 5MB
+DATA_UPLOAD_MAX_MEMORY_SIZE = 52428800  # 50MB
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 1000
 FILE_UPLOAD_PERMISSIONS = 0o644
 
 # =============================================
@@ -268,9 +274,17 @@ EMAIL_HOST = config('EMAIL_HOST', default='smtp.gmail.com')
 EMAIL_PORT = config('EMAIL_PORT', default=587, cast=int)
 EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=True, cast=bool)
 EMAIL_USE_SSL = config('EMAIL_USE_SSL', default=False, cast=bool)
+# Django forbids USE_TLS and USE_SSL together — prefer TLS on port 587
+if EMAIL_USE_SSL and EMAIL_USE_TLS:
+    EMAIL_USE_TLS = False
 EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
 DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='noreply@abay.abrehot.org.et')
+SERVER_EMAIL = config('SERVER_EMAIL', default=DEFAULT_FROM_EMAIL)
+EMAIL_TIMEOUT = config('EMAIL_TIMEOUT', default=20, cast=int)
+# If using Gmail, set DEFAULT_FROM_EMAIL to the same address as EMAIL_HOST_USER.
+# Development SSL tip: if you see SSL errors, set in .env:
+#   EMAIL_BACKEND=django.core.mail.backends.console.EmailBackend
 
 # =============================================
 # 14. CRISPY FORMS
@@ -702,3 +716,22 @@ SITE_NAME = config('SITE_NAME', default='Abay Repository')
 WEBHOOK_VERIFY_STRICT = config('WEBHOOK_VERIFY_STRICT', default=True, cast=bool)
 CHAPA_WEBHOOK_SECRET = config('CHAPA_WEBHOOK_SECRET', default='')  # optional; falls back to CHAPA_SECRET_KEY
 PAYPAL_WEBHOOK_ID = config('PAYPAL_WEBHOOK_ID', default='')  # from PayPal developer dashboard
+
+
+# ---------------------------------------------------------------------------
+# SAR hardening — upload whitelist & security (Ethio telecom assessment)
+# ---------------------------------------------------------------------------
+MAX_UPLOAD_SIZE = 50 * 1024 * 1024  # 50 MB
+ALLOWED_UPLOAD_EXTENSIONS = ['.pdf', '.epub', '.jpg', '.jpeg', '.png']
+ALLOWED_UPLOAD_MIME_TYPES = [
+    'application/pdf',
+    'application/epub+zip',
+    'application/zip',
+    'image/jpeg',
+    'image/png',
+]
+# Admin IP allowlist (comma-separated). Empty = allow all (still need strong password + 2FA).
+ADMIN_ALLOWED_IPS = [ip.strip() for ip in config('ADMIN_ALLOWED_IPS', default='').split(',') if ip.strip()]
+# Login lockout
+LOGIN_MAX_ATTEMPTS = config('LOGIN_MAX_ATTEMPTS', default=5, cast=int)
+LOGIN_LOCKOUT_SECONDS = config('LOGIN_LOCKOUT_SECONDS', default=900, cast=int)

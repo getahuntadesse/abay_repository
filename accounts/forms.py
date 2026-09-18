@@ -53,9 +53,12 @@ class ClientRegistrationForm(UserCreationForm):
     """Client/Reader registration form"""
     email = forms.EmailField(
         required=True,
+        label='Email address',
+        error_messages={'required': 'Email is required for registration and account security.'},
         widget=forms.EmailInput(attrs={
             'class': 'form-control',
-            'placeholder': 'Enter your email'
+            'placeholder': 'Enter your email',
+            'autocomplete': 'email',
         })
     )
     full_name = forms.CharField(
@@ -126,8 +129,10 @@ class ClientRegistrationForm(UserCreationForm):
         return phone
     
     def clean_email(self):
-        email = self.cleaned_data.get('email')
-        if CustomUser.objects.filter(email=email).exists():
+        email = (self.cleaned_data.get('email') or '').strip()
+        if not email:
+            raise forms.ValidationError('Email is required.')
+        if CustomUser.objects.filter(email__iexact=email).exists():
             raise forms.ValidationError('A user with this email already exists.')
         return email
     
@@ -200,10 +205,12 @@ class AuthorRegistrationForm(UserCreationForm):
     )
     email = forms.EmailField(
         required=True,
+        label='Email address',
+        error_messages={'required': 'Email is required for registration, 2FA, and password reset.'},
         widget=forms.EmailInput(attrs={
             'class': 'form-control',
-            'readonly': True,
-            'style': 'background-color: #e9ecef; cursor: not-allowed;'
+            'placeholder': 'Enter your email',
+            'autocomplete': 'email',
         })
     )
     phone = forms.CharField(
@@ -378,8 +385,10 @@ class AuthorRegistrationForm(UserCreationForm):
         return national_id
     
     def clean_email(self):
-        email = self.cleaned_data.get('email')
-        if email and CustomUser.objects.filter(email=email).exists():
+        email = (self.cleaned_data.get('email') or '').strip()
+        if not email:
+            raise ValidationError('Email is required.')
+        if CustomUser.objects.filter(email__iexact=email).exists():
             raise ValidationError('A user with this email already exists.')
         return email
     

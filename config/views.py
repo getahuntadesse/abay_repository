@@ -549,3 +549,50 @@ def handler403(request, exception):
     except Exception:
         # Fallback if template doesn't exist
         return render(request, '403.html', {}, status=403)
+
+
+def secure_media_serve(request, path):
+    """
+    Serve media with security headers. Blocks dangerous types.
+    Prefer Nginx in production; this is a safe fallback for DEBUG and small deploys.
+    """
+    import mimetypes
+    import os
+    from django.conf import settings
+    from django.http import FileResponse, Http404, HttpResponse
+    from django.views.static import serve as django_serve
+
+    # Reject path traversal
+    if ".." in path or path.startswith("/"):
+        raise Http404()
+
+    full = os.path.normpath(os.path.join(settings.MEDIA_ROOT, path))
+    if not full.startswith(os.path.normpath(settings.MEDIA_ROOT)):
+        raise Http404()
+    if not os.path.isfile(full):
+        raise Http404()
+
+    ext = os.path.splitext(full)[1].lower()
+    blocked = {
+        ".svg", ".svgz", ".html", ".htm", ".xhtml", ".php", ".phtml",
+        ".js", ".mjs", ".exe", ".sh", ".bat", ".asp", ".aspx", ".jsp",
+    }
+    if ext in blocked:
+        return HttpResponse(
+            "This file type cannot be served.",
+            status=403,
+            content_type="text/plain",
+        )
+
+    content_type, _ = mimetypes.guess_type(full)
+    content_type = content_type or "application/octet-stream"
+    # Never serve as HTML/SVG
+    if any(x in content_type for x in ("html", "svg", "javascript", "xml")):
+        content_type = "application/octet-stream"
+
+    response = FileResponse(open(full, "rb"), content_type=content_type)
+    response["X-Content-Type-Options"] = "nosniff"
+    response["Content-Security-Policy"] = "default-src 'none'; sandbox"
+    if content_type == "application/octet-stream":
+        response["Content-Disposition"] = f'attachment; filename="{os.path.basename(full)}"'
+    return response

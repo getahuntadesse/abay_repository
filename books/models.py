@@ -1,5 +1,21 @@
 # books/models.py
 from django.db import models
+
+def validate_book_file_field(value):
+    from books.utils.secure_upload import validate_book_file
+    ok, err = validate_book_file(value)
+    if not ok:
+        from django.core.exceptions import ValidationError
+        raise ValidationError(err)
+
+def validate_cover_image_field(value):
+    from books.utils.secure_upload import validate_cover_image
+    ok, err = validate_cover_image(value)
+    if not ok:
+        from django.core.exceptions import ValidationError
+        raise ValidationError(err)
+
+
 from django.contrib.auth import get_user_model
 from django.utils import timezone
 from django.core.validators import MinValueValidator, MaxValueValidator
@@ -88,9 +104,9 @@ class Book(models.Model):
     genre = models.ForeignKey(Genre, on_delete=models.SET_NULL, null=True, blank=True, related_name='books')
     
     # Files
-    file = models.FileField(upload_to='books/files/%Y/%m/', blank=True, null=True)
-    cover_image = models.ImageField(upload_to='books/covers/%Y/%m/', blank=True, null=True)
-    sample_file = models.FileField(upload_to='books/samples/%Y/%m/', blank=True, null=True, help_text="Sample/Preview file")
+    file = models.FileField(upload_to='books/files/%Y/%m/', blank=True, null=True, validators=[validate_book_file_field])
+    cover_image = models.ImageField(upload_to='books/covers/%Y/%m/', blank=True, null=True, validators=[validate_cover_image_field])
+    sample_file = models.FileField(upload_to='books/samples/%Y/%m/', blank=True, null=True, help_text="Sample/Preview file", validators=[validate_book_file_field])
     
     # Pricing
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)

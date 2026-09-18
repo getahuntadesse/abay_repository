@@ -436,23 +436,38 @@
                     <div class="alert alert-success">
                         <i class="fas fa-check-circle me-2"></i>
                         Two-Factor Authentication is <strong>ENABLED</strong>
+                        <span class="d-block small mt-1">Login codes are sent to <strong>{{ user.email|default:"your email" }}</strong>.</span>
                     </div>
                     <div class="mt-2 d-flex flex-wrap gap-2">
-                        <button class="btn btn-outline-warning btn-sm" onclick="alert('Backup codes feature is coming soon.')">
+                        <a href="{% url 'accounts:backup_codes' %}" class="btn btn-outline-warning btn-sm">
                             <i class="fas fa-save me-1"></i> View Backup Codes
-                        </button>
-                        <button class="btn btn-outline-danger btn-sm" onclick="alert('Disable 2FA feature is coming soon.')">
+                        </a>
+                        <a href="{% url 'accounts:disable_2fa' %}" class="btn btn-outline-danger btn-sm">
                             <i class="fas fa-times me-1"></i> Disable 2FA
-                        </button>
+                        </a>
+                        <a href="{% url 'accounts:setup_2fa' %}" class="btn btn-outline-secondary btn-sm">
+                            <i class="fas fa-cog me-1"></i> Manage 2FA
+                        </a>
                     </div>
                 {% else %}
                     <div class="alert alert-info">
                         <i class="fas fa-info-circle me-2"></i>
-                        Two-Factor Authentication is <strong>DISABLED</strong>
+                        Two-Factor Authentication is <strong>DISABLED</strong>.
+                        {% if user.email %}
+                          Codes will be emailed to <strong>{{ user.email }}</strong> when you sign in.
+                        {% else %}
+                          <span class="text-danger">Add an email in Edit Profile before enabling 2FA.</span>
+                        {% endif %}
                     </div>
-                    <button class="btn btn-gold" onclick="alert('2FA setup feature is coming soon.')">
+                    {% if user.email %}
+                    <a href="{% url 'accounts:setup_2fa' %}" class="btn btn-gold">
                         <i class="fas fa-shield-alt me-2"></i> Enable 2FA
-                    </button>
+                    </a>
+                    {% else %}
+                    <a href="{% url 'accounts:profile_edit' %}" class="btn btn-gold">
+                        <i class="fas fa-envelope me-2"></i> Add email to enable 2FA
+                    </a>
+                    {% endif %}
                 {% endif %}
             </div>
 

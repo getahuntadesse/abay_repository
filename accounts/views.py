@@ -1,5 +1,8 @@
+from django.contrib.auth import get_user_model
+UserModel = get_user_model()
 # accounts/views.py - Updated with logging
 from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse, reverse_lazy
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -330,6 +333,10 @@ def is_ip_blocked(ip):
     return cache.get(key, False)
 
 
+from django.conf import settings as _settings
+LOGIN_MAX_ATTEMPTS = int(getattr(_settings, "LOGIN_MAX_ATTEMPTS", 5))
+LOGIN_LOCKOUT_SECONDS = int(getattr(_settings, "LOGIN_LOCKOUT_SECONDS", 900))
+
 def get_login_attempts(ip):
     key = f"login_attempts_{ip}"
     return cache.get(key, 0)
@@ -338,9 +345,9 @@ def get_login_attempts(ip):
 def increment_login_attempts(ip):
     key = f"login_attempts_{ip}"
     attempts = cache.get(key, 0) + 1
-    cache.set(key, attempts, 1800)
+    cache.set(key, attempts, LOGIN_LOCKOUT_SECONDS)
     if attempts >= 10:
-        cache.set(f"blocked_ip_{ip}", True, 3600)
+        cache.set(f"blocked_ip_{ip}", True, LOGIN_LOCKOUT_SECONDS)
         logger.warning(f"IP {ip} blocked due to too many failed login attempts")
     return attempts
 
@@ -454,7 +461,7 @@ def login_view(request):
             remember = form.cleaned_data.get('remember', False)
             
             attempts = get_login_attempts(client_ip)
-            if attempts >= 5:
+            if attempts >= LOGIN_MAX_ATTEMPTS:
                 logger.warning(f"AUTH - Too many attempts for {username} from {client_ip}")
                 messages.error(request, f'Too many failed attempts. Please wait {30 - (attempts - 5) * 3} minutes.')
                 return render(request, 'accounts/login.html', {'form': form})
@@ -485,6 +492,14 @@ def login_view(request):
                 return redirect(role_based_redirect(user))
             else:
                 attempts = increment_login_attempts(client_ip)
+                # Per-username throttle (SAR 6.4)
+                ukey = f'login_user_{username.lower()}'
+                u_attempts = cache.get(ukey, 0) + 1
+                cache.set(ukey, u_attempts, LOGIN_LOCKOUT_SECONDS)
+                if u_attempts >= LOGIN_MAX_ATTEMPTS:
+                    messages.error(request, 'Account temporarily locked due to too many failed attempts. Try again in 15 minutes.')
+                    return render(request, 'accounts/login.html', {'form': form})
+
                 remaining = 5 - attempts
                 
                 # Log failed login
@@ -2003,14 +2018,34 @@ def profile_view(request):
 
 @login_required
 def profile_edit(request):
+    """Edit profile for all roles — email is required (2FA / password reset)."""
     if request.method == 'POST':
         user = request.user
-        user.full_name = sanitize_input(request.POST.get('full_name', user.full_name))
-        user.phone = sanitize_input(request.POST.get('phone', user.phone))
-        user.address = sanitize_input(request.POST.get('address', user.address))
-        user.region = sanitize_input(request.POST.get('region', user.region))
-        user.zone = sanitize_input(request.POST.get('zone', user.zone))
-        user.woreda = sanitize_input(request.POST.get('woreda', user.woreda))
+        full_name = sanitize_input(request.POST.get('full_name', user.full_name) or '')
+        email = (request.POST.get('email') or '').strip()
+        phone = sanitize_input(request.POST.get('phone', user.phone) or '')
+        user.full_name = full_name
+        user.phone = phone
+        user.address = sanitize_input(request.POST.get('address', user.address) or '')
+        user.region = sanitize_input(request.POST.get('region', user.region) or '')
+        user.zone = sanitize_input(request.POST.get('zone', user.zone) or '')
+        user.woreda = sanitize_input(request.POST.get('woreda', user.woreda) or '')
+        if request.POST.get('bio') is not None and hasattr(user, 'bio'):
+            user.bio = sanitize_input(request.POST.get('bio', '') or '')
+        if request.POST.get('gender') is not None and hasattr(user, 'gender'):
+            user.gender = sanitize_input(request.POST.get('gender', '') or '')
+
+        # Email required for all users
+        if not email or '@' not in email:
+            messages.error(request, 'A valid email address is required (used for 2FA codes and password reset).')
+            return render(request, 'accounts/profile_edit.html', {'user': user})
+        # Unique email (exclude self)
+        from django.contrib.auth import get_user_model
+        User = get_user_model()
+        if User.objects.filter(email__iexact=email).exclude(pk=user.pk).exists():
+            messages.error(request, 'This email is already used by another account.')
+            return render(request, 'accounts/profile_edit.html', {'user': user})
+        user.email = email
 
         if request.FILES.get('profile_image'):
             if request.FILES['profile_image'].size > 5 * 1024 * 1024:
@@ -2020,10 +2055,133 @@ def profile_edit(request):
             user.profile_image = request.FILES['profile_image']
 
         user.save()
-        
         logger.info(f"Profile updated for user: {user.username} (ID: {user.id})")
-        
         messages.success(request, 'Profile updated successfully!')
         return redirect('accounts:profile')
 
     return render(request, 'accounts/profile_edit.html', {'user': request.user})
+
+
+# ---------------------------------------------------------------------------
+# Password reset via email (all roles / dashboards)
+# ---------------------------------------------------------------------------
+from django.contrib.auth.views import (
+    PasswordResetView,
+    PasswordResetConfirmView,
+)
+from django.contrib.auth.forms import PasswordResetForm, SetPasswordForm
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
+from django.contrib.sites.shortcuts import get_current_site
+from urllib.parse import urlparse
+
+
+class AbayPasswordResetForm(PasswordResetForm):
+    """Ensure active users with a matching email receive the reset message."""
+
+    def get_users(self, email):
+        email_field = UserModel.EMAIL_FIELD
+        active_users = UserModel._default_manager.filter(
+            **{f"{email_field}__iexact": email, "is_active": True}
+        )
+        return (u for u in active_users if u.has_usable_password())
+
+    def send_mail(
+        self,
+        subject_template_name,
+        email_template_name,
+        context,
+        from_email,
+        to_email,
+        html_email_template_name=None,
+    ):
+        from django.template import loader
+        from books.services.email_service import send_app_email, get_from_email
+
+        subject = loader.render_to_string(subject_template_name, context)
+        subject = "".join(subject.splitlines())
+        body = loader.render_to_string(email_template_name, context)
+        html = None
+        if html_email_template_name:
+            try:
+                html = loader.render_to_string(html_email_template_name, context)
+            except Exception:
+                html = None
+        send_app_email(
+            subject,
+            body,
+            to_email,
+            html_message=html,
+            fail_silently=False,
+        )
+
+
+class AbayPasswordResetView(PasswordResetView):
+    template_name = "accounts/password_reset.html"
+    email_template_name = "accounts/password_reset_email.txt"
+    html_email_template_name = "accounts/password_reset_email.html"
+    subject_template_name = "accounts/password_reset_subject.txt"
+    form_class = AbayPasswordResetForm
+    success_url = reverse_lazy("accounts:password_reset_done")
+
+    def get_from_email(self):
+        try:
+            from books.services.email_service import get_from_email
+            return get_from_email()
+        except Exception:
+            return getattr(settings, "DEFAULT_FROM_EMAIL", None)
+
+    def form_valid(self, form):
+        from django.http import HttpResponseRedirect
+        try:
+            self._send_reset_emails(form)
+        except Exception as e:
+            logger.exception("Password reset email failed: %s", e)
+            messages.error(
+                self.request,
+                "Could not send the reset email. Check email settings or contact support.",
+            )
+            return self.form_invalid(form)
+        return HttpResponseRedirect(self.get_success_url())
+
+    def _send_reset_emails(self, form):
+        from django.template import loader
+        from books.services.email_service import send_app_email, get_from_email
+
+        email = form.cleaned_data["email"]
+        site_url = getattr(settings, "SITE_URL", "") or ""
+        if site_url:
+            parsed = urlparse(site_url)
+            domain = parsed.netloc or self.request.get_host()
+            protocol = parsed.scheme or ("https" if self.request.is_secure() else "http")
+        else:
+            domain = self.request.get_host()
+            protocol = "https" if self.request.is_secure() else "http"
+
+        for user in form.get_users(email):
+            uid = urlsafe_base64_encode(force_bytes(user.pk))
+            token = default_token_generator.make_token(user)
+            context = {
+                "email": email,
+                "domain": domain,
+                "site_name": "Abay Repository",
+                "uid": uid,
+                "user": user,
+                "token": token,
+                "protocol": protocol,
+            }
+            subject = loader.render_to_string(self.subject_template_name, context)
+            subject = "".join(subject.splitlines())
+            body = loader.render_to_string("accounts/password_reset_email.txt", context)
+            try:
+                html = loader.render_to_string(self.html_email_template_name, context)
+            except Exception:
+                html = None
+            send_app_email(subject, body, user.email, html_message=html, fail_silently=False)
+            logger.info("Password reset email sent to %s", user.email)
+
+
+class AbayPasswordResetConfirmView(PasswordResetConfirmView):
+    template_name = "accounts/password_reset_confirm.html"
+    success_url = reverse_lazy("accounts:password_reset_complete")

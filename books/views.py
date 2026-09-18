@@ -1798,35 +1798,24 @@ def upload_book(request):
             else:
                 is_free = False
 
-        # PDF or EPUB — accept book_file or file field names
+        # Secure upload validation (magic bytes + whitelist) — SAR 6.1 / 6.2
+        from books.utils.secure_upload import (
+            validate_book_file, validate_cover_image, validate_sample_file,
+        )
         upload = request.FILES.get('book_file') or request.FILES.get('file')
-        if not upload:
-            errors.append('Please upload a PDF or EPUB file of the book.')
-        else:
-            name_lower = (upload.name or '').lower()
-            content_type = (getattr(upload, 'content_type', '') or '').lower()
-            is_pdf = name_lower.endswith('.pdf') or 'pdf' in content_type
-            is_epub = (
-                name_lower.endswith('.epub')
-                or 'epub' in content_type
-                or content_type in ('application/epub+zip', 'application/epub')
-            )
-            if not (is_pdf or is_epub):
-                errors.append('Only PDF or EPUB files are allowed for the eBook upload.')
-            if getattr(upload, 'size', 0) and upload.size > 50 * 1024 * 1024:
-                errors.append('eBook file must be 50 MB or smaller.')
+        ok, err = validate_book_file(upload)
+        if not ok:
+            errors.append(err)
 
         cover = request.FILES.get('cover_image')
-        if cover:
-            cname = (cover.name or '').lower()
-            if not any(cname.endswith(ext) for ext in ('.jpg', '.jpeg', '.png')):
-                errors.append('Cover image must be JPG or PNG only.')
+        ok, err = validate_cover_image(cover)
+        if not ok:
+            errors.append(err)
 
         sample = request.FILES.get('sample_file')
-        if sample:
-            sname = (sample.name or '').lower()
-            if not sname.endswith('.pdf'):
-                errors.append('Sample/preview file must be a PDF.')
+        ok, err = validate_sample_file(sample)
+        if not ok:
+            errors.append(err)
 
         try:
             page_count_i = int(page_count) if page_count not in (None, '') else 0
@@ -2054,6 +2043,25 @@ def edit_book(request, book_id):
         isbn = request.POST.get('isbn', '').strip()
         book.isbn = isbn if isbn else None
         
+        # SAR 6.1/6.2 secure validation on edit
+        from books.utils.secure_upload import (
+            validate_book_file, validate_cover_image, validate_sample_file,
+        )
+        if request.FILES.get('file'):
+            ok, err = validate_book_file(request.FILES.get('file'))
+            if not ok:
+                messages.error(request, err)
+                return redirect(request.path)
+        if request.FILES.get('cover_image'):
+            ok, err = validate_cover_image(request.FILES.get('cover_image'))
+            if not ok:
+                messages.error(request, err)
+                return redirect(request.path)
+        if request.FILES.get('sample_file'):
+            ok, err = validate_sample_file(request.FILES.get('sample_file'))
+            if not ok:
+                messages.error(request, err)
+                return redirect(request.path)
         if request.FILES.get('file'):
             if book.status != Book.STATUS_DRAFT:
                 current_version = book.versions.filter(is_current=True).first()
@@ -2135,6 +2143,12 @@ def author_revision_submit(request, book_id):
     if request.method == 'POST':
         revision_notes = request.POST.get('revision_notes', '')
         file = request.FILES.get('file')
+        from books.utils.secure_upload import validate_book_file
+        if file:
+            ok, err = validate_book_file(file)
+            if not ok:
+                messages.error(request, err)
+                return redirect(request.path)
         
         if not file:
             messages.error(request, 'Please upload the revised file.')

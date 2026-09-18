@@ -26,13 +26,29 @@ class SecurityHeadersMiddleware(MiddlewareMixin):
     """
 
     def process_response(self, request, response):
-        # Skip for static files and media files — they don't need security headers
-        if request.path.startswith('/static/') or request.path.startswith('/media/'):
+        path = request.path or ""
+
+        # SAR 6.1: media must never execute scripts (stored XSS via SVG/HTML)
+        if path.startswith("/media/"):
+            response["X-Content-Type-Options"] = "nosniff"
+            response["Content-Security-Policy"] = (
+                "default-src 'none'; script-src 'none'; object-src 'none'; "
+                "sandbox; base-uri 'none'"
+            )
+            ct = (response.get("Content-Type") or "").lower()
+            if any(x in ct for x in ("html", "svg", "xml", "javascript", "text/")):
+                response["Content-Type"] = "application/octet-stream"
+                response["Content-Disposition"] = "attachment"
             return response
 
-        # Only inject security headers on HTML responses
-        content_type = response.get('Content-Type', '')
-        if 'text/html' not in content_type:
+        if path.startswith("/static/"):
+            response.setdefault("X-Content-Type-Options", "nosniff")
+            return response
+
+        # HTML app responses
+        content_type = response.get("Content-Type", "")
+        if "text/html" not in content_type:
+            response.setdefault("X-Content-Type-Options", "nosniff")
             return response
 
         self._add_basic_security_headers(request, response)
