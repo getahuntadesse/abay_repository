@@ -206,13 +206,17 @@ class SecurityHeadersMiddleware(MiddlewareMixin):
         Prevent sensitive authenticated pages from being stored in browser or
         proxy caches.  Public pages keep their existing cache headers.
         """
-        # Only enforce no-store on authenticated user sessions
-        if request.user.is_authenticated:
-            # Don't override if the view already set explicit cache directives
-            if 'Cache-Control' not in response:
-                response['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
-                response['Pragma'] = 'no-cache'
-                response['Expires'] = '0'
+        # request.user may be missing if this middleware runs before AuthenticationMiddleware
+        user = getattr(request, "user", None)
+        try:
+            authenticated = bool(user is not None and getattr(user, "is_authenticated", False))
+        except Exception:
+            authenticated = False
+        if authenticated:
+            if "Cache-Control" not in response:
+                response["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+                response["Pragma"] = "no-cache"
+                response["Expires"] = "0"
 
     def _remove_sensitive_headers(self, response):
         """Strip headers that leak server technology details."""
