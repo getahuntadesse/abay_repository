@@ -8575,3 +8575,10 @@ AttributeError: 'WSGIRequest' object has no attribute 'user'
 [2026-09-19 09:14:07] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
 [2026-09-19 09:14:07] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
 [2026-09-19 09:14:07] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-20 10:33:53] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-20 10:54:24] INFO django.server - "GET /accounts/dashboard/admin/ HTTP/1.1" 302 0
+[2026-09-20 10:54:24] INFO django.server - "GET /accounts/login/?next=/accounts/dashboard/admin/ HTTP/1.1" 200 64909
+[2026-09-20 10:54:24] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-20 10:54:25] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-20 10:54:25] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-20 10:54:25] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
