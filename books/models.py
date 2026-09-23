@@ -18,6 +18,7 @@ def validate_cover_image_field(value):
 
 from django.contrib.auth import get_user_model
 from django.utils import timezone
+from decimal import Decimal
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.urls import reverse
 import uuid
@@ -109,7 +110,13 @@ class Book(models.Model):
     sample_file = models.FileField(upload_to='books/samples/%Y/%m/', blank=True, null=True, help_text="Sample/Preview file", validators=[validate_book_file_field])
     
     # Pricing
-    price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    price = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=Decimal("0.00"),
+        validators=[MinValueValidator(Decimal("0.00"))],
+        help_text="Book price in ETB. Must be >= 0.",
+    )
     is_free = models.BooleanField(default=False)
     
     # Status and Workflow
@@ -288,19 +295,33 @@ class Book(models.Model):
         }
         return status_map.get(self.status, {'label': self.status, 'color': 'secondary', 'icon': 'fa-circle'})
 
+    def clean(self):
+        """Reject negative prices (Improper Validation of Book Price fix)."""
+        super().clean()
+        if self.price is not None and self.price < 0:
+            from django.core.exceptions import ValidationError
+            raise ValidationError({"price": "Book price cannot be negative."})
+        if getattr(self, "is_free", False):
+            self.price = Decimal("0.00")
+
     def save(self, *args, **kwargs):
         # Auto-set submitted_at when status changes to SUBMITTED
         if self.status == self.STATUS_SUBMITTED and not self.submitted_at:
             self.submitted_at = timezone.now()
-        
+
         # Auto-set published_at when status changes to PUBLISHED
         if self.status == self.STATUS_PUBLISHED and not self.published_at:
             self.published_at = timezone.now()
-        
+
+        # Enforce non-negative price even if clean() was skipped
+        if self.price is not None and self.price < 0:
+            from django.core.exceptions import ValidationError
+            raise ValidationError("Book price cannot be negative.")
+
         # If book is free, set price to 0
-        if self.is_free:
-            self.price = 0
-        
+        if self.is_free or self.price == 0:
+            self.price = Decimal("0.00")
+
         super().save(*args, **kwargs)
 
 

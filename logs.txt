@@ -8755,3 +8755,31 @@ AttributeError: 'WSGIRequest' object has no attribute 'user'
 [2026-09-23 11:09:37] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
 [2026-09-23 11:09:37] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
 [2026-09-23 11:09:37] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:35:13] INFO django.utils.autoreload - C:\abay_repository\books\models.py changed, reloading.
+[2026-09-23 11:35:13] INFO django.utils.autoreload - C:\abay_repository\books\models.py changed, reloading.
+[2026-09-23 11:35:13] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-23 11:35:13] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-23 11:35:42] INFO django.utils.autoreload - C:\abay_repository\payments\urls.py changed, reloading.
+[2026-09-23 11:35:42] INFO django.utils.autoreload - C:\abay_repository\payments\urls.py changed, reloading.
+[2026-09-23 11:35:43] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-23 11:35:43] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-23 11:36:47] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-23 11:36:47] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-23 11:37:02] INFO django.server - "GET / HTTP/1.1" 200 91312
+[2026-09-23 11:37:02] INFO django.server - "GET /media/books/covers/2026/09/pychology_b5LmZgq.png HTTP/1.1" 200 363640
+[2026-09-23 11:37:04] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:37:04] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:37:04] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:37:04] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:37:04] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:37:06] AUTH INFO - AUTH - User logged out: checker, IP=127.0.0.1
+[2026-09-23 11:37:06] INFO accounts.views - AUTH - User logged out: checker, IP=127.0.0.1
+[2026-09-23 11:37:06] INFO accounts.views - AUTH - User logged out: checker, IP=127.0.0.1
+[2026-09-23 11:37:06] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-09-23 11:37:06] INFO django.server - "GET / HTTP/1.1" 200 90237
+[2026-09-23 11:37:06] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:37:06] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:37:06] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:37:06] INFO django.server - "GET /media/books/covers/2026/09/pychology_b5LmZgq.png HTTP/1.1" 200 363640
+[2026-09-23 11:37:06] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:37:07] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0

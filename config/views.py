@@ -551,48 +551,141 @@ def handler403(request, exception):
         return render(request, '403.html', {}, status=403)
 
 
+# ---------------------------------------------------------------------------
+# Media security: block XSS types + enforce paywall / authorization
+# ---------------------------------------------------------------------------
+BLOCKED_MEDIA_EXTENSIONS = {
+    ".svg", ".svgz", ".html", ".htm", ".xhtml", ".xml", ".xsl", ".xslt",
+    ".php", ".phtml", ".php3", ".php4", ".php5", ".php7", ".phar",
+    ".asp", ".aspx", ".jsp", ".jspx", ".js", ".mjs", ".ts",
+    ".exe", ".dll", ".so", ".bat", ".cmd", ".com", ".msi",
+    ".sh", ".bash", ".ps1", ".vbs", ".wsf", ".cgi",
+    ".pl", ".py", ".rb", ".jar", ".war", ".class",
+    ".htaccess", ".htpasswd", ".shtml", ".cfg", ".ini",
+    ".wasm", ".swf", ".xap",
+}
+
+PROTECTED_MEDIA_PREFIXES = (
+    "books/files/",
+    "books/samples/",
+    "books/versions/",
+)
+
+
+def _user_may_access_book_file(user, relative_path: str) -> bool:
+    """
+    Authorization for manuscript / sample files.
+    Staff (admin/maker/checker): allowed
+    Book author: allowed
+    Client with completed purchase of a published book: allowed
+    Free published books: allowed for authenticated users
+    Rejected/draft/unpurchased paid: denied
+    """
+    if not user or not getattr(user, "is_authenticated", False):
+        return False
+
+    role = getattr(user, "role", None)
+    if role in ("admin", "maker", "checker") or getattr(user, "is_staff", False) or getattr(user, "is_superuser", False):
+        return True
+
+    try:
+        from books.models import Book
+        from payments.models import Purchase
+
+        book = (
+            Book.objects.filter(file=relative_path).first()
+            or Book.objects.filter(sample_file=relative_path).first()
+        )
+        if book is None:
+            return False
+
+        if getattr(book, "author_id", None) == user.id:
+            return True
+
+        if getattr(book, "status", None) != getattr(Book, "STATUS_PUBLISHED", "published"):
+            return False
+
+        if getattr(book, "is_free", False) or book.price == 0:
+            return True
+
+        return Purchase.objects.filter(
+            user=user, book=book, status="completed"
+        ).exists()
+    except Exception as exc:
+        logger.exception("Authorization check failed for %s: %s", relative_path, exc)
+        return False
+
+
 def secure_media_serve(request, path):
     """
-    Serve media with security headers. Blocks dangerous types.
-    Prefer Nginx in production; this is a safe fallback for DEBUG and small deploys.
+    Secure media handler — only safe way to serve /media/.
+
+    Fixes:
+      - Stored XSS via SVG (block scriptable types)
+      - Missing Authorization / Paywall Bypass (auth + purchase required for manuscripts)
     """
     import mimetypes
     import os
     from django.conf import settings
-    from django.http import FileResponse, Http404, HttpResponse
-    from django.views.static import serve as django_serve
+    from django.http import FileResponse, Http404, HttpResponse, HttpResponseForbidden
 
-    # Reject path traversal
-    if ".." in path or path.startswith("/"):
+    # 1. Path traversal
+    if ".." in path or path.startswith("/") or "\\" in path:
         raise Http404()
 
     full = os.path.normpath(os.path.join(settings.MEDIA_ROOT, path))
-    if not full.startswith(os.path.normpath(settings.MEDIA_ROOT)):
+    media_root = os.path.normpath(settings.MEDIA_ROOT)
+    if not full.startswith(media_root + os.sep) and full != media_root:
         raise Http404()
     if not os.path.isfile(full):
         raise Http404()
 
     ext = os.path.splitext(full)[1].lower()
-    blocked = {
-        ".svg", ".svgz", ".html", ".htm", ".xhtml", ".php", ".phtml",
-        ".js", ".mjs", ".exe", ".sh", ".bat", ".asp", ".aspx", ".jsp",
-    }
-    if ext in blocked:
+
+    # 2. Block dangerous extensions (Stored XSS)
+    if ext in BLOCKED_MEDIA_EXTENSIONS:
+        logger.warning(
+            "Blocked media request for dangerous type: path=%s ip=%s",
+            path, request.META.get("REMOTE_ADDR"),
+        )
         return HttpResponse(
             "This file type cannot be served.",
             status=403,
             content_type="text/plain",
         )
 
+    # 3. Authorization for protected manuscript paths
+    normalized = path.replace("\\", "/").lstrip("/")
+    if any(normalized.startswith(prefix) for prefix in PROTECTED_MEDIA_PREFIXES):
+        if not _user_may_access_book_file(request.user, normalized):
+            logger.warning(
+                "Unauthorized media access: path=%s user=%s ip=%s",
+                path,
+                getattr(request.user, "username", "anon"),
+                request.META.get("REMOTE_ADDR"),
+            )
+            if not request.user.is_authenticated:
+                from django.contrib.auth.views import redirect_to_login
+                return redirect_to_login(request.get_full_path())
+            return HttpResponseForbidden(
+                "You do not have permission to access this file. "
+                "Purchase the book or contact support."
+            )
+
+    # 4. Safe content-type
     content_type, _ = mimetypes.guess_type(full)
     content_type = content_type or "application/octet-stream"
-    # Never serve as HTML/SVG
-    if any(x in content_type for x in ("html", "svg", "javascript", "xml")):
+    if any(x in content_type.lower() for x in ("html", "svg", "javascript", "xml")):
         content_type = "application/octet-stream"
 
     response = FileResponse(open(full, "rb"), content_type=content_type)
     response["X-Content-Type-Options"] = "nosniff"
     response["Content-Security-Policy"] = "default-src 'none'; sandbox"
+    response["X-Frame-Options"] = "DENY"
+    response["Cache-Control"] = "private, no-store"
+
     if content_type == "application/octet-stream":
-        response["Content-Disposition"] = f'attachment; filename="{os.path.basename(full)}"'
+        response["Content-Disposition"] = (
+            f'attachment; filename="{os.path.basename(full)}"'
+        )
     return response

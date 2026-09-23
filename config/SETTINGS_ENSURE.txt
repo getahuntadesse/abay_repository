@@ -1,0 +1,5 @@
+Ensure in config/settings.py:
+LOGIN_MAX_ATTEMPTS = 5
+LOGIN_LOCKOUT_SECONDS = 900
+ALLOWED_UPLOAD_EXTENSIONS = ['.pdf', '.epub', '.jpg', '.jpeg', '.png']  # no .svg
+# Shared cache (Redis) so lockout works across workers

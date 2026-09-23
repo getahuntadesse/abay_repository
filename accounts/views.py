@@ -328,33 +328,52 @@ def get_client_ip(request):
     return ip
 
 
-def is_ip_blocked(ip):
-    key = f"blocked_ip_{ip}"
-    return cache.get(key, False)
-
-
 from django.conf import settings as _settings
 LOGIN_MAX_ATTEMPTS = int(getattr(_settings, "LOGIN_MAX_ATTEMPTS", 5))
 LOGIN_LOCKOUT_SECONDS = int(getattr(_settings, "LOGIN_LOCKOUT_SECONDS", 900))
 
-def get_login_attempts(ip):
-    key = f"login_attempts_{ip}"
-    return cache.get(key, 0)
+
+def _attempt_key(ip, username=""):
+    """Track failures per IP and per username to stop distributed + targeted attacks."""
+    uname = (username or "").strip().lower()[:150]
+    return f"login_attempts:{ip}:{uname}"
 
 
-def increment_login_attempts(ip):
-    key = f"login_attempts_{ip}"
-    attempts = cache.get(key, 0) + 1
+def _block_key(ip):
+    return f"login_blocked:{ip}"
+
+
+def is_ip_blocked(ip):
+    return bool(cache.get(_block_key(ip)))
+
+
+def get_login_attempts(ip, username=""):
+    return int(cache.get(_attempt_key(ip, username), 0))
+
+
+def increment_login_attempts(ip, username=""):
+    key = _attempt_key(ip, username)
+    attempts = int(cache.get(key, 0)) + 1
     cache.set(key, attempts, LOGIN_LOCKOUT_SECONDS)
-    if attempts >= 10:
-        cache.set(f"blocked_ip_{ip}", True, LOGIN_LOCKOUT_SECONDS)
-        logger.warning(f"IP {ip} blocked due to too many failed login attempts")
+
+    # Also count pure-IP failures
+    ip_key = _attempt_key(ip, "")
+    ip_attempts = int(cache.get(ip_key, 0)) + 1
+    cache.set(ip_key, ip_attempts, LOGIN_LOCKOUT_SECONDS)
+
+    if attempts >= LOGIN_MAX_ATTEMPTS or ip_attempts >= LOGIN_MAX_ATTEMPTS * 3:
+        cache.set(_block_key(ip), True, LOGIN_LOCKOUT_SECONDS)
+        logger.warning(
+            "IP %s blocked after %s failed attempts (user=%s)",
+            ip, attempts, username,
+        )
     return attempts
 
 
-def reset_login_attempts(ip):
-    cache.delete(f"login_attempts_{ip}")
-    cache.delete(f"blocked_ip_{ip}")
+def reset_login_attempts(ip, username=""):
+    cache.delete(_attempt_key(ip, username))
+    cache.delete(_attempt_key(ip, ""))
+    cache.delete(_block_key(ip))
 
 
 def validate_password_strength(password):
@@ -460,10 +479,10 @@ def login_view(request):
             password = form.cleaned_data.get('password')
             remember = form.cleaned_data.get('remember', False)
             
-            attempts = get_login_attempts(client_ip)
+            attempts = get_login_attempts(client_ip, username)
             if attempts >= LOGIN_MAX_ATTEMPTS:
                 logger.warning(f"AUTH - Too many attempts for {username} from {client_ip}")
-                messages.error(request, f'Too many failed attempts. Please wait {30 - (attempts - 5) * 3} minutes.')
+                messages.error(request, f'Too many failed attempts. Please try again in {LOGIN_LOCKOUT_SECONDS // 60} minutes.')
                 return render(request, 'accounts/login.html', {'form': form})
             
             user = authenticate(request, username=username, password=password)
@@ -491,7 +510,7 @@ def login_view(request):
                 messages.success(request, f'Welcome back, {user.full_name}!')
                 return redirect(role_based_redirect(user))
             else:
-                attempts = increment_login_attempts(client_ip)
+                attempts = increment_login_attempts(client_ip, username)
                 # Per-username throttle (SAR 6.4)
                 ukey = f'login_user_{username.lower()}'
                 u_attempts = cache.get(ukey, 0) + 1

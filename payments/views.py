@@ -428,9 +428,9 @@ def author_payments(request):
 @login_required
 def payment_dashboard(request):
     """
-    Payment dashboard for admin/maker/finance
+    Payment dashboard for admin/finance only (maker excluded)
     """
-    if request.user.role not in ['admin', 'maker', 'finance']:
+    if request.user.role not in ['admin', 'finance']:
         messages.error(request, 'You are not authorized to view this page.')
         return redirect('home')
     
@@ -505,7 +505,7 @@ def calculate_all_payments(request):
     """
     Calculate all pending payments
     """
-    if request.user.role not in ['admin', 'maker', 'finance']:
+    if request.user.role not in ['admin', 'finance']:
         messages.error(request, 'You are not authorized to perform this action.')
         return redirect('home')
     
@@ -542,7 +542,7 @@ def process_author_payment(request, author_id):
         if not request.user.is_authenticated:
             return respond(False, 'Please log in again.', 401)
 
-        if getattr(request.user, 'role', None) not in ('admin', 'maker', 'finance'):
+        if getattr(request.user, 'role', None) not in ('admin', 'finance'):
             return respond(False, 'Not authorized to record royalty payments.', 403)
 
         if request.method != 'POST':
@@ -615,7 +615,7 @@ def payment_detail(request, payment_id):
     """
     payment = get_object_or_404(Payment, id=payment_id)
     
-    if request.user.role not in ['admin', 'maker', 'finance'] and request.user != payment.author:
+    if request.user.role not in ['admin', 'finance'] and request.user != payment.author:
         messages.error(request, 'You are not authorized to view this page.')
         return redirect('home')
     
@@ -628,9 +628,9 @@ def payment_detail(request, payment_id):
 @login_required
 def author_payment_detail(request, author_id):
     """
-    View all payments for a specific author (admin/maker view)
+    View all payments for a specific author (admin/finance view)
     """
-    if request.user.role not in ['admin', 'maker', 'finance']:
+    if request.user.role not in ['admin', 'finance']:
         messages.error(request, 'You are not authorized to view this page.')
         return redirect('home')
     
@@ -661,7 +661,7 @@ def process_batch_payment(request):
     """
     Process batch payments for selected authors (API endpoint)
     """
-    if request.user.role not in ['admin', 'maker', 'finance']:
+    if request.user.role not in ['admin', 'finance']:
         return JsonResponse({'success': False, 'error': 'Permission denied'}, status=403)
     
     if request.method != 'POST':
@@ -1178,7 +1178,8 @@ def paypal_return(request):
 # ---------------------------------------------------------------------------
 
 def _finance_staff(user):
-    return getattr(user, "role", None) in ("admin", "maker", "finance")
+    """Finance functions: admin and finance only. Maker is editorial — no financial access."""
+    return getattr(user, "role", None) in ("admin", "finance")
 
 
 @login_required
@@ -1270,7 +1271,7 @@ def finance_report_detail(request, report_id):
 @login_required
 def mark_author_payments_paid(request, author_id):
     """Finance officer confirms Telebirr royalty payout completed."""
-    if request.user.role not in ['admin', 'maker', 'finance']:
+    if request.user.role not in ['admin', 'finance']:
         messages.error(request, 'Not authorized.')
         return redirect('home')
     if request.method != 'POST':
@@ -1296,7 +1297,7 @@ def mark_author_payments_paid(request, author_id):
 @login_required
 def author_payout_info(request, author_id):
     """JSON: author phone + pending amount for payout modal."""
-    if request.user.role not in ['admin', 'maker', 'finance']:
+    if request.user.role not in ['admin', 'finance']:
         return JsonResponse({'error': 'forbidden'}, status=403)
     author = get_object_or_404(CustomUser, id=author_id, role='author')
     phone = (
@@ -1324,7 +1325,7 @@ def finance_confirm_purchase(request):
     Finance/admin: mark a pending book purchase completed using a transaction reference.
     Used when Telebirr H5 fails or webhook cannot reach the server.
     """
-    if getattr(request.user, 'role', None) not in ('admin', 'maker', 'finance'):
+    if getattr(request.user, 'role', None) not in ('admin', 'finance'):
         messages.error(request, 'Not authorized.')
         return redirect('home')
     if request.method != 'POST':
@@ -1379,7 +1380,7 @@ def finance_report_export(request, report_id, fmt):
     from payments.services.finance import report_to_csv_bytes, report_to_pdf_bytes
     from django.http import HttpResponse
 
-    if getattr(request.user, 'role', None) not in ('admin', 'maker', 'finance'):
+    if getattr(request.user, 'role', None) not in ('admin', 'finance'):
         messages.error(request, 'Not authorized.')
         return redirect('home')
 
@@ -1405,7 +1406,7 @@ def finance_export_current(request, fmt):
     from payments.services.finance import generate_finance_report, report_to_csv_bytes, report_to_pdf_bytes
     from django.http import HttpResponse
 
-    if getattr(request.user, 'role', None) not in ('admin', 'maker', 'finance'):
+    if getattr(request.user, 'role', None) not in ('admin', 'finance'):
         messages.error(request, 'Not authorized.')
         return redirect('home')
 
