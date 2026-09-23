@@ -1,12 +1,9 @@
 """
-Secure file upload validation — Ethio telecom SAR 6.1 / 6.2 remediation.
+Secure file upload validation — blocks Stored XSS via SVG and other dangerous types.
 
-Rules:
-  - Never trust client Content-Type
-  - Validate magic bytes (file signatures)
-  - Strict extension whitelist
-  - Block SVG/HTML/scriptable and executable types (stored XSS)
-  - Sanitize filenames (no path traversal)
+Already present in the repo; ensure this (or equivalent) is used on every
+cover / book / sample upload path and that ALLOWED_UPLOAD_EXTENSIONS in
+settings does NOT include .svg.
 """
 from __future__ import annotations
 
@@ -32,6 +29,7 @@ COVER_MAGIC = {
     ".png": (b"\x89PNG\r\n\x1a\n",),
 }
 
+# Explicit blocklist — never allow these even if someone adds them to whitelist
 BLOCKED_EXTENSIONS = {
     ".svg", ".svgz", ".html", ".htm", ".xhtml", ".xml", ".xsl", ".xslt",
     ".php", ".phtml", ".php3", ".php4", ".php5", ".php7", ".phar",
@@ -46,74 +44,56 @@ BLOCKED_EXTENSIONS = {
 MALICIOUS_CONTENT = (
     b"<?php", b"<?=", b"<script", b"javascript:", b"vbscript:",
     b"eval(", b"base64_decode", b"system(", b"exec(", b"shell_exec",
-    b"passthru(", b"popen(", b"proc_open", b"assert(",
-    b"<iframe", b"onerror=", b"onload=", b"<?xml",
+    b"passthru(", b"popen(", b"<iframe", b"onload=", b"onerror=",
 )
 
 
-def extension(name: str) -> str:
-    return os.path.splitext((name or "").lower().strip())[1]
+def extension(filename: str) -> str:
+    return os.path.splitext(filename or "")[1].lower()
 
 
-def sanitize_filename(name: str, allowed_ext: Optional[str] = None) -> str:
-    name = os.path.basename(name or "file")
-    name = name.replace("\x00", "")
-    stem, ext = os.path.splitext(name)
-    stem = re.sub(r"[^a-zA-Z0-9._-]", "_", stem)[:80] or "file"
-    ext = (allowed_ext or ext).lower()
-    if not ext.startswith("."):
-        ext = "." + ext if ext else ""
-    return f"{stem}_{uuid.uuid4().hex[:8]}{ext}"
-
-
-def _read_head(f, n: int = 64) -> bytes:
+def _read_head(uploaded_file, n: int = 32) -> bytes:
+    pos = uploaded_file.tell()
     try:
-        pos = f.tell()
-    except Exception:
-        pos = 0
-    try:
-        f.seek(0)
-        data = f.read(n) or b""
-        return data
+        uploaded_file.seek(0)
+        data = uploaded_file.read(n)
     finally:
         try:
-            f.seek(pos)
+            uploaded_file.seek(pos)
         except Exception:
             pass
+    return data or b""
 
 
-def _contains_malware_signature(f, limit: int = 8192) -> bool:
-    head = _read_head(f, limit)
-    low = head.lower()
-    return any(p in low for p in MALICIOUS_CONTENT)
+def _contains_malware_signature(uploaded_file) -> bool:
+    head = _read_head(uploaded_file, 8192).lower()
+    return any(sig in head for sig in MALICIOUS_CONTENT)
+
+
+def sanitize_filename(filename: str) -> str:
+    name = os.path.basename(filename or "file")
+    name = re.sub(r"[^\w.\-]", "_", name)
+    if len(name) > 180:
+        root, ext = os.path.splitext(name)
+        name = root[:170] + ext
+    return name or f"upload_{uuid.uuid4().hex[:8]}"
 
 
 def validate_book_file(uploaded_file) -> Tuple[bool, str]:
     if not uploaded_file:
-        return False, "Please upload a PDF or EPUB file of the book."
+        return True, ""
     name = getattr(uploaded_file, "name", "") or ""
     ext = extension(name)
     if ext in BLOCKED_EXTENSIONS:
-        return False, f"File type {ext} is not allowed for security reasons."
+        return False, f"File type {ext} is not allowed."
     if ext not in BOOK_EXTENSIONS:
-        return False, "Only PDF or EPUB files are allowed for the eBook."
-    size = getattr(uploaded_file, "size", 0) or 0
-    if size <= 0:
-        return False, "Uploaded file is empty."
-    if size > 50 * 1024 * 1024:
-        return False, "eBook file must be 50 MB or smaller."
-    head = _read_head(uploaded_file, 16)
-    if not any(head.startswith(m) for m in BOOK_MAGIC.get(ext, ())):
-        return False, "File content does not match a valid PDF or EPUB (signature check failed)."
-    if ext == ".pdf" and _contains_malware_signature(uploaded_file):
-        # PDF can embed JS rarely; we still block obvious script tags in head
-        pass
-    # Double extension tricks: report.pdf.html
-    lowered = name.lower()
-    for bad in BLOCKED_EXTENSIONS:
-        if lowered.endswith(bad) or f"{bad}." in lowered:
-            if not lowered.endswith(ext):
-                return False, "Suspicious file name rejected."
+        return False, f"Only {', '.join(sorted(BOOK_EXTENSIONS))} files are allowed."
+    head = _read_head(uploaded_file, 8)
+    magic_ok = any(head.startswith(m) for m in BOOK_MAGIC.get(ext, ()))
+    if not magic_ok:
+        return False, "File content does not match its extension (signature check failed)."
+    if _contains_malware_signature(uploaded_file):
+        return False, "File contains blocked content."
     return True, ""
 
 
@@ -122,16 +102,14 @@ def validate_cover_image(uploaded_file) -> Tuple[bool, str]:
         return True, ""
     name = getattr(uploaded_file, "name", "") or ""
     ext = extension(name)
-    if ext in BLOCKED_EXTENSIONS or ext in {".svg", ".svgz", ".gif", ".webp", ".bmp"}:
-        return False, "Cover image must be JPG or PNG only (SVG and other types are blocked)."
+    if ext in BLOCKED_EXTENSIONS or ext == ".svg" or ext == ".svgz":
+        return False, "SVG and other scriptable image types are not allowed for covers."
     if ext not in COVER_EXTENSIONS:
-        return False, "Cover image must be JPG or PNG only."
-    size = getattr(uploaded_file, "size", 0) or 0
-    if size > 5 * 1024 * 1024:
-        return False, "Cover image must be 5 MB or smaller."
-    head = _read_head(uploaded_file, 16)
-    if not any(head.startswith(m) for m in COVER_MAGIC.get(ext, ())):
-        return False, "Cover file is not a valid JPG or PNG (signature check failed)."
+        return False, f"Only {', '.join(sorted(COVER_EXTENSIONS))} covers are allowed."
+    head = _read_head(uploaded_file, 8)
+    magic_ok = any(head.startswith(m) for m in COVER_MAGIC.get(ext, ()))
+    if not magic_ok:
+        return False, "Cover file content is not a valid image (signature check failed)."
     try:
         uploaded_file.seek(0)
         kind = imghdr.what(uploaded_file)
@@ -153,20 +131,3 @@ def validate_sample_file(uploaded_file) -> Tuple[bool, str]:
     if not uploaded_file:
         return True, ""
     return validate_book_file(uploaded_file)
-
-
-def validate_generic_document(uploaded_file, allowed_exts=None) -> Tuple[bool, str]:
-    """For annotated/revision PDFs."""
-    allowed_exts = set(allowed_exts or {".pdf"})
-    if not uploaded_file:
-        return True, ""
-    name = getattr(uploaded_file, "name", "") or ""
-    ext = extension(name)
-    if ext in BLOCKED_EXTENSIONS:
-        return False, f"File type {ext} is not allowed."
-    if ext not in allowed_exts:
-        return False, f"Only {', '.join(sorted(allowed_exts))} files are allowed."
-    head = _read_head(uploaded_file, 8)
-    if ext == ".pdf" and not head.startswith(b"%PDF"):
-        return False, "File is not a valid PDF."
-    return True, ""

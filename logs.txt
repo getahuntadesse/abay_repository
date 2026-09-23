@@ -8582,3 +8582,176 @@ AttributeError: 'WSGIRequest' object has no attribute 'user'
 [2026-09-20 10:54:25] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
 [2026-09-20 10:54:25] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
 [2026-09-20 10:54:25] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-21 09:59:58] AUTH INFO - AUTH - Login successful: User=admin, IP=127.0.0.1, Role=admin
+[2026-09-21 09:59:58] INFO accounts.views - AUTH - Login successful: User=admin, IP=127.0.0.1, Role=admin
+[2026-09-21 09:59:58] INFO accounts.views - AUTH - Login successful: User=admin, IP=127.0.0.1, Role=admin
+[2026-09-21 09:59:58] INFO django.server - "POST /accounts/login/?next=/accounts/dashboard/admin/ HTTP/1.1" 302 0
+[2026-09-21 09:59:58] AUTH INFO - Admin dashboard accessed by: admin
+[2026-09-21 09:59:58] INFO accounts.views - Admin dashboard accessed by: admin
+[2026-09-21 09:59:58] INFO accounts.views - Admin dashboard accessed by: admin
+[2026-09-21 09:59:59] INFO django.server - "GET /accounts/dashboard/admin/ HTTP/1.1" 200 105151
+[2026-09-21 09:59:59] INFO django.server - "GET /static/images/logo.png HTTP/1.1" 304 0
+[2026-09-21 09:59:59] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-21 09:59:59] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-21 09:59:59] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-21 09:59:59] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-21 09:59:59] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-21 09:59:59] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 92054
+[2026-09-21 10:00:09] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 91889
+[2026-09-21 10:00:19] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 91868
+[2026-09-21 10:00:19] INFO config.admin_security - Admin path access IP=127.0.0.1 user=admin path=/secure-abay-admin/
+[2026-09-21 10:00:19] INFO django.server - "GET /secure-abay-admin/ HTTP/1.1" 200 22745
+[2026-09-21 10:00:19] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-21 10:00:19] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-21 10:00:19] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-21 10:00:19] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-21 10:00:20] WARNING django.server - "GET /static/favicon.ico HTTP/1.1" 404 1893
+[2026-09-21 10:00:23] AUTH INFO - Admin dashboard accessed by: admin
+[2026-09-21 10:00:23] INFO accounts.views - Admin dashboard accessed by: admin
+[2026-09-21 10:00:23] INFO accounts.views - Admin dashboard accessed by: admin
+[2026-09-21 10:00:23] INFO django.server - "GET /accounts/dashboard/admin/ HTTP/1.1" 200 104816
+[2026-09-21 10:00:23] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-21 10:00:23] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-21 10:00:23] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-21 10:00:23] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-21 10:00:23] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-21 10:00:23] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-21 10:00:32] INFO django.server - "GET / HTTP/1.1" 200 91294
+[2026-09-21 10:00:32] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-21 10:00:32] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-21 10:00:32] INFO django.server - "GET /static/images/Abrehot.jpg HTTP/1.1" 304 0
+[2026-09-21 10:00:32] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-21 10:00:32] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-21 10:00:32] INFO django.server - "GET /media/books/covers/2026/09/pychology_b5LmZgq.png HTTP/1.1" 200 363640
+[2026-09-21 10:00:32] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-21 10:00:35] INFO django.server - "GET /books/browse/ HTTP/1.1" 200 101902
+[2026-09-21 10:00:35] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-21 10:00:35] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-21 10:00:35] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-21 10:00:35] INFO django.server - "GET /media/books/covers/2026/09/pychology_b5LmZgq.png HTTP/1.1" 200 363640
+[2026-09-21 10:00:35] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-21 11:00:29] INFO django.server - "GET / HTTP/1.1" 200 91294
+[2026-09-21 11:00:29] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-21 11:00:29] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-21 11:00:29] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-21 11:00:29] INFO django.server - "GET /media/books/covers/2026/09/pychology_b5LmZgq.png HTTP/1.1" 200 363640
+[2026-09-21 11:00:29] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-21 11:00:30] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:06:42] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-23 11:06:42] INFO django.utils.autoreload - Watching for file changes with StatReloader
+[2026-09-23 11:07:06] INFO django.server - "GET / HTTP/1.1" 200 89883
+[2026-09-23 11:07:06] INFO django.server - "GET /static/images/Abrehot.jpg HTTP/1.1" 200 72716
+[2026-09-23 11:07:06] INFO django.server - "GET /static/images/logo.png HTTP/1.1" 200 157968
+[2026-09-23 11:07:06] INFO django.server - "GET /media/books/covers/2026/09/pychology_b5LmZgq.png HTTP/1.1" 200 363640
+[2026-09-23 11:07:07] INFO django.server - "GET /static/images/favicon.ico HTTP/1.1" 200 3362
+[2026-09-23 11:07:08] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:07:08] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:07:08] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:07:08] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:07:10] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64909
+[2026-09-23 11:07:10] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:07:10] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:07:10] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:07:10] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:07:10] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:07:14] INFO django.server - "POST /accounts/login/ HTTP/1.1" 200 65675
+[2026-09-23 11:07:14] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:07:14] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:07:14] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:07:14] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:07:15] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:07:29] AUTH INFO - AUTH - Login successful: User=admin, IP=127.0.0.1, Role=admin
+[2026-09-23 11:07:29] INFO accounts.views - AUTH - Login successful: User=admin, IP=127.0.0.1, Role=admin
+[2026-09-23 11:07:29] INFO accounts.views - AUTH - Login successful: User=admin, IP=127.0.0.1, Role=admin
+[2026-09-23 11:07:29] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-09-23 11:07:29] AUTH INFO - Admin dashboard accessed by: admin
+[2026-09-23 11:07:29] INFO accounts.views - Admin dashboard accessed by: admin
+[2026-09-23 11:07:29] INFO accounts.views - Admin dashboard accessed by: admin
+[2026-09-23 11:07:29] INFO django.server - "GET /accounts/dashboard/admin/ HTTP/1.1" 200 105151
+[2026-09-23 11:07:29] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:07:29] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:07:29] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:07:30] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:07:30] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:07:30] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 90998
+[2026-09-23 11:07:40] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 90995
+[2026-09-23 11:07:50] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 91245
+[2026-09-23 11:08:00] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 91082
+[2026-09-23 11:08:10] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 91169
+[2026-09-23 11:08:20] INFO django.server - "GET /admin/logs/?limit=500&rotated=1 HTTP/1.1" 200 91030
+[2026-09-23 11:08:22] AUTH INFO - AUTH - User logged out: admin, IP=127.0.0.1
+[2026-09-23 11:08:22] INFO accounts.views - AUTH - User logged out: admin, IP=127.0.0.1
+[2026-09-23 11:08:22] INFO accounts.views - AUTH - User logged out: admin, IP=127.0.0.1
+[2026-09-23 11:08:22] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-09-23 11:08:22] INFO django.server - "GET / HTTP/1.1" 200 90237
+[2026-09-23 11:08:22] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:08:22] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:08:23] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:08:23] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:08:23] INFO django.server - "GET /media/books/covers/2026/09/pychology_b5LmZgq.png HTTP/1.1" 200 363640
+[2026-09-23 11:08:23] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:08:24] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64909
+[2026-09-23 11:08:24] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:08:24] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:08:24] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:08:25] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:08:25] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:08:35] AUTH INFO - 2FA OTP stored user_id=2 ttl=900s session=True
+[2026-09-23 11:08:35] INFO accounts.two_factor - 2FA OTP stored user_id=2 ttl=900s session=True
+[2026-09-23 11:08:35] INFO accounts.two_factor - 2FA OTP stored user_id=2 ttl=900s session=True
+[2026-09-23 11:08:38] INFO books.services.email_service - Email sent to ['tadessegetahun37@gmail.com'] | subject=Your Abay Repository Verification Code
+[2026-09-23 11:08:38] INFO books.services.email_service - Email sent to ['tadessegetahun37@gmail.com'] | subject=Your Abay Repository Verification Code
+[2026-09-23 11:08:38] AUTH INFO - 2FA OTP emailed to user_id=2 email=tadessegetahun37@gmail.com
+[2026-09-23 11:08:38] INFO accounts.two_factor - 2FA OTP emailed to user_id=2 email=tadessegetahun37@gmail.com
+[2026-09-23 11:08:38] INFO accounts.two_factor - 2FA OTP emailed to user_id=2 email=tadessegetahun37@gmail.com
+[2026-09-23 11:08:38] AUTH INFO - AUTH - 2FA challenge started: User=maker, IP=127.0.0.1
+[2026-09-23 11:08:38] INFO accounts.views - AUTH - 2FA challenge started: User=maker, IP=127.0.0.1
+[2026-09-23 11:08:38] INFO accounts.views - AUTH - 2FA challenge started: User=maker, IP=127.0.0.1
+[2026-09-23 11:08:38] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-09-23 11:08:38] INFO django.server - "GET /accounts/2fa/verify/ HTTP/1.1" 200 61071
+[2026-09-23 11:08:38] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:08:38] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:08:38] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:08:38] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:08:38] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:09:08] AUTH INFO - 2FA OTP verified via session user_id=2
+[2026-09-23 11:09:08] INFO accounts.two_factor - 2FA OTP verified via session user_id=2
+[2026-09-23 11:09:08] INFO accounts.two_factor - 2FA OTP verified via session user_id=2
+[2026-09-23 11:09:08] AUTH INFO - AUTH - 2FA verified login: User=maker
+[2026-09-23 11:09:08] INFO accounts.views - AUTH - 2FA verified login: User=maker
+[2026-09-23 11:09:08] INFO accounts.views - AUTH - 2FA verified login: User=maker
+[2026-09-23 11:09:08] INFO django.server - "POST /accounts/2fa/verify/ HTTP/1.1" 302 0
+[2026-09-23 11:09:08] INFO books.views - Maker dashboard: 0 new submissions found
+[2026-09-23 11:09:08] INFO books.views - Maker dashboard: 0 new submissions found
+[2026-09-23 11:09:08] INFO django.server - "GET /books/maker/dashboard/ HTTP/1.1" 200 84866
+[2026-09-23 11:09:08] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:09:08] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:09:08] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:09:08] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:09:08] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:09:16] AUTH INFO - AUTH - User logged out: maker, IP=127.0.0.1
+[2026-09-23 11:09:16] INFO accounts.views - AUTH - User logged out: maker, IP=127.0.0.1
+[2026-09-23 11:09:16] INFO accounts.views - AUTH - User logged out: maker, IP=127.0.0.1
+[2026-09-23 11:09:16] INFO django.server - "GET /accounts/logout/ HTTP/1.1" 302 0
+[2026-09-23 11:09:16] INFO django.server - "GET / HTTP/1.1" 200 90237
+[2026-09-23 11:09:16] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:09:16] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:09:16] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:09:16] INFO django.server - "GET /media/books/covers/2026/09/pychology_b5LmZgq.png HTTP/1.1" 200 363640
+[2026-09-23 11:09:16] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:09:18] INFO django.server - "GET /accounts/login/ HTTP/1.1" 200 64909
+[2026-09-23 11:09:18] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:09:18] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:09:18] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:09:18] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:09:18] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:09:36] AUTH INFO - AUTH - Login successful: User=checker, IP=127.0.0.1, Role=checker
+[2026-09-23 11:09:36] INFO accounts.views - AUTH - Login successful: User=checker, IP=127.0.0.1, Role=checker
+[2026-09-23 11:09:36] INFO accounts.views - AUTH - Login successful: User=checker, IP=127.0.0.1, Role=checker
+[2026-09-23 11:09:36] INFO django.server - "POST /accounts/login/ HTTP/1.1" 302 0
+[2026-09-23 11:09:36] INFO django.server - "GET /books/checker/dashboard/ HTTP/1.1" 200 77350
+[2026-09-23 11:09:36] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:09:36] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:09:37] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:09:37] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
+[2026-09-23 11:09:37] INFO django.server - "GET /favicon.ico HTTP/1.1" 302 0
